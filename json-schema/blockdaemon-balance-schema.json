@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/blockdaemon/json-schema/blockdaemon-balance-schema.json",
+  "title": "Blockdaemon Account Balance",
+  "description": "Balance record returned by the Blockdaemon Data API getBalancesByAddress endpoint.",
+  "type": "object",
+  "required": ["currency", "confirmed_balance"],
+  "properties": {
+    "currency": {
+      "type": "object",
+      "required": ["asset_path", "symbol"],
+      "properties": {
+        "asset_path": { "type": "string" },
+        "symbol": { "type": "string" },
+        "name": { "type": "string" },
+        "decimals": { "type": "integer", "minimum": 0 },
+        "type": { "type": "string", "enum": ["native", "erc20", "erc721", "erc1155", "spl", "trc20", "other"] },
+        "contract": { "type": "string" }
+      }
+    },
+    "confirmed_balance": { "type": "string", "description": "Confirmed balance as integer in smallest unit." },
+    "pending_balance": { "type": "string" },
+    "confirmed_block": { "type": "integer", "minimum": 0 },
+    "confirmed_nonce": { "type": "integer", "minimum": 0 }
+  }
+}

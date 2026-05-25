@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockdaemon RPC API — Ethereum
+  description: JSON-RPC access to Ethereum mainnet and testnets via the Blockdaemon shared RPC tier.
+  tags:
+  - Blockdaemon
+  - RPC
+  - Ethereum
+  - JSON-RPC
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    BLOCKDAEMON_API_KEY: BLOCKDAEMON_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rpc-ethereum
+    baseUri: https://svc.blockdaemon.com
+    description: Ethereum JSON-RPC endpoint.
+    resources:
+    - name: ethereum-rpc
+      path: /ethereum/mainnet/native
+      operations:
+      - name: ethrpccall
+        method: POST
+        description: Send any Ethereum JSON-RPC method (eth_blockNumber, eth_getBalance, eth_call, eth_sendRawTransaction,
+          etc.) per the Ethereum RPC spec.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: JSON-RPC 2.0 request body with jsonrpc, id, method, params.
+          required: true
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{env.BLOCKDAEMON_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: rpc-ethereum-rest
+    port: 8080
+    description: REST adapter that forwards JSON-RPC calls.
+    resources:
+    - path: /v1/ethereum/rpc
+      name: ethereum-rpc
+      description: Forward a JSON-RPC request to Ethereum mainnet.
+      operations:
+      - method: POST
+        name: ethrpccall
+        description: Forward Ethereum JSON-RPC body.
+        call: rpc-ethereum.ethrpccall
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rpc-ethereum-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Ethereum JSON-RPC.
+    tools:
+    - name: blockdaemon-ethereum-rpc
+      description: Send an Ethereum JSON-RPC request.
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rpc-ethereum.ethrpccall
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

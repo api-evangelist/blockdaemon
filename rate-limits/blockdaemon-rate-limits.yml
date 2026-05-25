@@ -1,0 +1,92 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Blockdaemon
+providerId: blockdaemon
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - Blockchain
+  - Rate Limiting
+  - Compute Units
+description: Reconciled rate limits for the Blockdaemon API Suite. Limits are enforced either as Requests-Per-Second
+  / Requests-Per-Minute or as monthly Compute Unit quotas. Exceeding allowances triggers a 429 response.
+sources:
+  - https://docs.blockdaemon.com/docs/rate-limits
+  - https://docs.blockdaemon.com/docs/compute-units
+  - https://docs.blockdaemon.com/docs/subscription-management
+responseCodes:
+  throttled: 429
+  quotaExceeded: 429
+algorithm: token-bucket
+limits:
+  - product: Staking API
+    metric: requestsPerMinute
+    limit: 250
+    notes: Enforced at entry point. Support can increase for institutional customers.
+  - product: Staking Reporting API
+    metric: computeUnits
+    cuPerRequest: 1
+    notes: All protocols covered. Counts against subscription CU allotment.
+  - product: RPC API
+    metric: requestsPerSecond
+    tieredLimits:
+      - tier: Free
+        rps: 5
+      - tier: Starter
+        rps: 100
+      - tier: Growth
+        rps: 200
+      - tier: Enterprise
+        rps: custom
+    notes: Plan-tier dependent. Shared RPC tier; Dedicated Nodes have no rate limit.
+  - product: REST API
+    metric: requestsPerSecond
+    notes: Matches the RPC tier; aligned with RPC limits.
+  - product: Dedicated Nodes
+    metric: none
+    notes: No rate limit; bare-metal capacity governed by node spec.
+  - product: DeFi API
+    metric: computeUnits
+    notes: Plan-dependent; CU cost varies per endpoint (40–255 CU per request).
+cuPerEndpoint:
+  - endpoint: /bridge/getprice
+    cu: 40
+  - endpoint: /bridge/getquotes
+    cu: 85
+  - endpoint: /bridge/swap
+    cu: 80
+  - endpoint: /bridge/swaps
+    cu: 95
+  - endpoint: /bridge/swapWithApproval
+    cu: 110
+  - endpoint: /dex/getprice
+    cu: 70
+  - endpoint: /dex/getquotes
+    cu: 100
+  - endpoint: /dex/swap
+    cu: 55
+  - endpoint: /dex/swaps
+    cu: 115
+  - endpoint: /dex/swapWithApproval
+    cu: 85
+  - endpoint: /lendborrow/deposit
+    cu: 230
+  - endpoint: /lendborrow/borrow
+    cu: 225
+  - endpoint: /lendborrow/repay
+    cu: 255
+  - endpoint: /lendborrow/withdraw
+    cu: 205
+  - endpoint: /lendborrow/getpools
+    cu: 135
+  - endpoint: /lendborrow/getuserpositions
+    cu: 115
+  - endpoint: /tokens
+    cu: 60
+mitigations:
+  - batching
+  - caching
+  - deduplication
+dashboard: https://app.blockdaemon.com

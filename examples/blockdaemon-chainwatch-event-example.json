@@ -1,0 +1,27 @@
+{
+  "description": "Sample Chain Watch unified event delivered to a webhook Target for an Ethereum address rule.",
+  "headers": {
+    "X-Blockdaemon-Signature": "sha256=...",
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "id": "01HXKZ4F2X8K9R7H8N3MQP1V5T",
+    "type": "unified_confirmed_transaction",
+    "protocol": "ethereum",
+    "network": "mainnet",
+    "block_number": 21500000,
+    "block_hash": "0xabc...",
+    "tx_hash": "0xdef...",
+    "occurred_at": "2026-05-25T14:32:11Z",
+    "rule_id": "rule_01HXKZ1QZ8C5DPN9TQX5T2WJM",
+    "target_id": "tgt_01HXKZ1QZ8C5DPN9TQX5T2WJM",
+    "variable_id": "var_01HXKZ1QZ8C5DPN9TQX5T2WJM",
+    "payload": {
+      "from": "0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+      "to": "0x1234567890abcdef1234567890abcdef12345678",
+      "value": "1500000000000000000",
+      "currency": "ETH",
+      "status": "success"
+    }
+  }
+}

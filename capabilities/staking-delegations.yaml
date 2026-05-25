@@ -1,0 +1,94 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockdaemon Staking API — Delegations
+  description: Construct delegation, undelegation, exit, withdraw, and reward-claim transactions across
+    Ethereum, Solana, Cosmos, Polkadot, Polygon, NEAR, Cardano, Avalanche, and Binance Chain.
+  tags:
+  - Blockdaemon
+  - Staking
+  - Delegations
+  - Rewards
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    BLOCKDAEMON_API_KEY: BLOCKDAEMON_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: staking-delegations
+    baseUri: https://svc.blockdaemon.com
+    description: Staking delegation transaction endpoints.
+    resources:
+    - name: stake
+      path: /boss/v1/{protocol}/{network}/staking-intents
+      operations:
+      - name: createstakingintent
+        method: POST
+        description: Create an unsigned staking intent (stake/delegate/undelegate/withdraw/claim) per the protocol
+          schema.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: protocol
+          in: path
+          type: string
+          required: true
+        - name: network
+          in: path
+          type: string
+          required: true
+        - name: body
+          in: body
+          type: object
+          required: true
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{env.BLOCKDAEMON_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: staking-delegations-rest
+    port: 8080
+    description: REST adapter for staking intent creation.
+    resources:
+    - path: /v1/{protocol}/{network}/staking-intents
+      name: stake
+      description: REST surface for delegation intents.
+      operations:
+      - method: POST
+        name: createstakingintent
+        description: Create a delegation intent.
+        call: staking-delegations.createstakingintent
+        with:
+          protocol: rest.path.protocol
+          network: rest.path.network
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: staking-delegations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for staking intents.
+    tools:
+    - name: blockdaemon-create-staking-intent
+      description: Create a staking intent (stake/undelegate/withdraw/claim).
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: staking-delegations.createstakingintent
+      with:
+        protocol: tools.protocol
+        network: tools.network
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

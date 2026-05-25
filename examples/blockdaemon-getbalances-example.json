@@ -1,0 +1,27 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://svc.blockdaemon.com/v1/ethereum/mainnet/account/0xab5801a7d398351b8be11c439e05c5b3259aec9b",
+    "headers": {
+      "X-API-Key": "${BLOCKDAEMON_API_KEY}"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": [
+      {
+        "currency": {
+          "asset_path": "ethereum/native/eth",
+          "symbol": "ETH",
+          "name": "Ether",
+          "decimals": 18,
+          "type": "native"
+        },
+        "confirmed_balance": "12345678900000000000",
+        "pending_balance": "0",
+        "confirmed_block": 21500000,
+        "confirmed_nonce": 42
+      }
+    ]
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/blockdaemon/json-schema/blockdaemon-event-schema.json",
+  "title": "Blockdaemon Chain Watch Unified Event",
+  "description": "Unified event envelope used by Blockdaemon Chain Watch event-streaming targets.",
+  "type": "object",
+  "required": ["id", "type", "protocol", "network", "block_number", "occurred_at"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": {
+      "type": "string",
+      "enum": [
+        "unified_block",
+        "unified_confirmed_transaction",
+        "unified_confirmed_transaction_log",
+        "unified_confirmed_transaction_trace",
+        "unified_confirmed_balance",
+        "unified_event",
+        "unified_reorg",
+        "unified_staking_reward",
+        "unified_staking_status",
+        "unified_trustline"
+      ]
+    },
+    "protocol": { "type": "string" },
+    "network": { "type": "string" },
+    "block_number": { "type": "integer", "minimum": 0 },
+    "block_hash": { "type": "string" },
+    "tx_hash": { "type": "string" },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "rule_id": { "type": "string" },
+    "target_id": { "type": "string" },
+    "variable_id": { "type": "string" },
+    "payload": { "type": "object", "description": "Event-type-specific payload." }
+  }
+}

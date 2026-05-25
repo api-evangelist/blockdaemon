@@ -1,0 +1,82 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Blockdaemon RPC API — Bitcoin
+  description: JSON-RPC access to Bitcoin mainnet via the Blockdaemon shared RPC tier.
+  tags:
+  - Blockdaemon
+  - RPC
+  - Bitcoin
+  - JSON-RPC
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    BLOCKDAEMON_API_KEY: BLOCKDAEMON_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: rpc-bitcoin
+    baseUri: https://svc.blockdaemon.com
+    description: Bitcoin JSON-RPC endpoint (whitelisted methods).
+    resources:
+    - name: bitcoin-rpc
+      path: /bitcoin/mainnet/native
+      operations:
+      - name: btcrpccall
+        method: POST
+        description: Send a Bitcoin JSON-RPC method (getblockchaininfo, getblockhash, getrawtransaction, sendrawtransaction,
+          etc.) restricted to the whitelisted Bitcoin RPC method set.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: JSON-RPC 2.0 request body.
+          required: true
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{env.BLOCKDAEMON_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: rpc-bitcoin-rest
+    port: 8080
+    description: REST adapter that forwards Bitcoin JSON-RPC calls.
+    resources:
+    - path: /v1/bitcoin/rpc
+      name: bitcoin-rpc
+      description: Forward a JSON-RPC request to Bitcoin.
+      operations:
+      - method: POST
+        name: btcrpccall
+        description: Forward Bitcoin JSON-RPC body.
+        call: rpc-bitcoin.btcrpccall
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: rpc-bitcoin-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Bitcoin JSON-RPC.
+    tools:
+    - name: blockdaemon-bitcoin-rpc
+      description: Send a Bitcoin JSON-RPC request (whitelisted methods only).
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: rpc-bitcoin.btcrpccall
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

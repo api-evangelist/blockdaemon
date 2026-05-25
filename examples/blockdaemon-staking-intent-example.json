@@ -1,0 +1,38 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://svc.blockdaemon.com/boss/v1/ethereum/mainnet/staking-intents",
+    "headers": {
+      "X-API-Key": "${BLOCKDAEMON_API_KEY}",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "stakes": [
+        {
+          "amount": "32000000000",
+          "withdrawal_credentials": "0x010000000000000000000000ab5801a7d398351b8be11c439e05c5b3259aec9b",
+          "fee_recipient": "0xab5801a7d398351b8be11c439e05c5b3259aec9b"
+        }
+      ]
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "stake_intent_id": "01HXKZ3M5W8C5DPN9TQX5T2WJM",
+      "ethereum": {
+        "stakes": [
+          {
+            "stake_intent_id": "01HXKZ3M5W8C5DPN9TQX5T2WJM",
+            "validator_public_key": "0x...",
+            "withdrawal_credentials": "0x010000000000000000000000ab5801a7d398351b8be11c439e05c5b3259aec9b",
+            "amount": "32000000000",
+            "deposit_data_root": "0x..."
+          }
+        ],
+        "contract_address": "0x00000000219ab540356cbb839cbe05303d7705fa",
+        "unsigned_transaction_serialized": "0x..."
+      }
+    }
+  }
+}

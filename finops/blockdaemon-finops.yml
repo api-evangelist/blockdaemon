@@ -1,0 +1,97 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Blockdaemon
+providerId: blockdaemon
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - FinOps
+  - Cost Management
+  - FOCUS
+  - Blockchain
+  - Compute Units
+description: FOCUS-aligned FinOps definition for the Blockdaemon API Suite. Compute Unit metering across all
+  Data, RPC, Staking, Staking Reporting, DeFi, Token, Events, and Management endpoints, billed against
+  subscription tier with overage at Enterprise contract rates.
+sources:
+  - https://docs.blockdaemon.com/docs/compute-units
+  - https://docs.blockdaemon.com/docs/subscription-management
+  - https://docs.blockdaemon.com/docs/rate-limits
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Blockdaemon
+serviceCategory: Blockchain Infrastructure
+billingModel:
+  pricingCategory: Subscription with Usage Overage
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+    - Subscription
+    - Usage
+    - Purchase
+    - Tax
+    - Credit
+    - Adjustment
+  primaryUnit: compute_unit
+  secondaryUnits:
+    - request
+    - validator
+    - node
+focusColumns:
+  ServiceName: Blockdaemon API Suite
+  ServiceCategory: Blockchain Infrastructure
+  ProviderName: Blockdaemon
+  PublisherName: Blockdaemon
+  InvoiceIssuerName: Blockdaemon
+  PricingCategory: Subscription with Usage Overage
+  PricingUnit: ComputeUnit
+  BillingCurrency: USD
+meters:
+  - name: compute_units
+    unit: compute_unit
+    aggregation: sum
+    dimensions:
+      - product
+      - endpoint
+      - api_key
+      - workspace
+  - name: requests
+    unit: request
+    aggregation: sum
+    dimensions:
+      - product
+      - endpoint
+      - api_key
+      - protocol
+      - network
+  - name: validators
+    unit: validator
+    aggregation: count
+    dimensions:
+      - protocol
+      - network
+  - name: dedicated_nodes
+    unit: node
+    aggregation: count
+    dimensions:
+      - protocol
+      - network
+      - region
+reporting:
+  apis:
+    - https://docs.blockdaemon.com/reference/management-metrics-quota-usage
+    - https://docs.blockdaemon.com/reference/management-metrics-request-usage
+    - https://docs.blockdaemon.com/reference/compute-units-usage-events
+  dashboards:
+    - https://app.blockdaemon.com
+discounts:
+  - name: Annual subscription
+    description: Annual auto-renewal subscriptions on Starter and Growth plans.
+  - name: Enterprise commit
+    description: Custom volume discounts on dedicated nodes, staking validators, vault deployments.

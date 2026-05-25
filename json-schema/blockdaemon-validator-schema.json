@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api-evangelist.github.io/blockdaemon/json-schema/blockdaemon-validator-schema.json",
+  "title": "Blockdaemon Validator",
+  "description": "Validator record returned by the Blockdaemon Staking API across PoS protocols.",
+  "type": "object",
+  "required": ["pubkey", "protocol", "network", "status"],
+  "properties": {
+    "pubkey": { "type": "string", "description": "Validator public key or address." },
+    "protocol": { "type": "string", "examples": ["ethereum", "solana", "cosmos", "polkadot", "polygon", "near", "cardano", "avalanche", "binance"] },
+    "network": { "type": "string", "examples": ["mainnet", "holesky", "testnet"] },
+    "status": { "type": "string", "enum": ["pending", "active", "exiting", "exited", "slashed", "deactivating"] },
+    "activation_epoch": { "type": "integer" },
+    "exit_epoch": { "type": "integer" },
+    "stake_amount": { "type": "string" },
+    "effective_balance": { "type": "string" },
+    "delegators_count": { "type": "integer" },
+    "withdrawal_credentials": { "type": "string" },
+    "fee_recipient": { "type": "string" },
+    "mev_enabled": { "type": "boolean" },
+    "slashed": { "type": "boolean" }
+  }
+}

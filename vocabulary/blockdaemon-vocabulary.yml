@@ -1,0 +1,120 @@
+specification: API Evangelist Vocabulary
+specificationVersion: '0.1'
+provider: Blockdaemon
+providerId: blockdaemon
+created: '2026-05-25'
+modified: '2026-05-25'
+description: Operational vocabulary mapping Blockdaemon platform concepts across blockchain infrastructure,
+  staking, custody, data, and DeFi capabilities.
+tags:
+  - Blockchain
+  - Web3
+  - Vocabulary
+concepts:
+  - id: bd:Provider
+    label: Blockchain Infrastructure Provider
+    description: An organization operating production node infrastructure, staking validators, indexed data
+      services, and custody for institutional clients.
+  - id: bd:Protocol
+    label: Blockchain Protocol
+    description: A distinct blockchain network specification (e.g., Ethereum, Bitcoin, Solana).
+  - id: bd:Network
+    label: Blockchain Network
+    description: A specific deployment of a protocol (mainnet, testnet, holesky, devnet).
+  - id: bd:Block
+    label: Block
+    description: An ordered batch of confirmed transactions in a blockchain.
+  - id: bd:Transaction
+    label: Transaction
+    description: A signed state transition recorded on a blockchain.
+  - id: bd:Account
+    label: Account
+    description: An on-chain identity (address) able to hold balances and send transactions.
+  - id: bd:Balance
+    label: Balance
+    description: The amount of a currency or token held by an account at a given block height.
+  - id: bd:Node
+    label: Blockchain Node
+    description: A protocol-specific software process that maintains chain state and serves RPC requests.
+  - id: bd:DedicatedNode
+    label: Dedicated Node
+    description: A node provisioned exclusively for one customer with no rate limit and configurable capacity.
+  - id: bd:Validator
+    label: Validator
+    description: A node staked into a proof-of-stake network's active set, producing or attesting blocks.
+  - id: bd:Delegation
+    label: Delegation
+    description: A transfer of stake from a delegator to a validator without transferring ownership.
+  - id: bd:Reward
+    label: Staking Reward
+    description: Tokens distributed to validators and delegators for producing/attesting blocks.
+  - id: bd:Slashing
+    label: Slashing
+    description: A protocol-enforced penalty applied to misbehaving validators.
+  - id: bd:MEVReward
+    label: MEV Reward
+    description: Maximal extractable value distributed alongside protocol-issued rewards.
+  - id: bd:MPCWallet
+    label: MPC Wallet
+    description: A wallet whose private key is split into shares using threshold cryptography.
+  - id: bd:Vault
+    label: Institutional Vault
+    description: A self-hosted MPC vault with governance, transaction policies, and approval workflows.
+  - id: bd:AutomatedApprover
+    label: Automated Approver
+    description: A policy engine that programmatically approves signing requests against pre-defined rules.
+  - id: bd:DEX
+    label: Decentralized Exchange
+    description: An on-chain venue for swapping tokens via automated market makers or order books.
+  - id: bd:Bridge
+    label: Cross-Chain Bridge
+    description: A protocol for moving assets between blockchain networks.
+  - id: bd:LendingPool
+    label: Lending Pool
+    description: An on-chain pool of collateral and borrowable assets (e.g., Aave, Compound).
+  - id: bd:Swap
+    label: Swap
+    description: A transaction that exchanges one token for another via a DEX or bridge.
+  - id: bd:Token
+    label: Token
+    description: A fungible or non-fungible on-chain asset.
+  - id: bd:ComputeUnit
+    label: Compute Unit
+    description: Blockdaemon's metering unit representing the computational cost of an API call.
+  - id: bd:Rule
+    label: Chain Watch Rule
+    description: A configured pattern for matching on-chain events.
+  - id: bd:Target
+    label: Chain Watch Target
+    description: A configured destination (webhook/Kafka/WebSocket) for matched events.
+  - id: bd:Variable
+    label: Chain Watch Variable
+    description: A reusable scoping list of addresses, validators, or token IDs referenced by rules.
+  - id: bd:Event
+    label: Unified Event
+    description: A normalized Chain Watch event in unified format across all supported protocols.
+  - id: bd:Webhook
+    label: Webhook
+    description: An HTTP callback delivering Chain Watch events to a customer endpoint.
+  - id: bd:KYB
+    label: Business Verification
+    description: Know-Your-Business onboarding required for institutional customers.
+relations:
+  - subject: bd:Validator
+    predicate: bd:operatedBy
+    object: bd:Provider
+  - subject: bd:Delegation
+    predicate: bd:delegatesTo
+    object: bd:Validator
+  - subject: bd:Reward
+    predicate: bd:accruesFor
+    object: bd:Delegation
+  - subject: bd:Swap
+    predicate: bd:executedOn
+    object: bd:DEX
+  - subject: bd:Event
+    predicate: bd:matchedBy
+    object: bd:Rule
+  - subject: bd:Rule
+    predicate: bd:deliversTo
+    object: bd:Target

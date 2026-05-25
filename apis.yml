@@ -1,0 +1,529 @@
+aid: blockdaemon
+url: https://raw.githubusercontent.com/api-evangelist/blockdaemon/refs/heads/main/apis.yml
+apis:
+- aid: blockdaemon:blockdaemon-data-api
+  name: Blockdaemon Data API
+  tags:
+  - Blockchain
+  - Data
+  - Indexer
+  - Unified
+  - Ubiquity
+  humanURL: https://docs.blockdaemon.com/reference/data-api-overview
+  properties:
+  - url: https://docs.blockdaemon.com/reference/data-api-overview
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/rest-api-overview
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/supported-protocols-and-networks
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/historical-data
+    type: Documentation
+  - type: NaftikoCapability
+    url: capabilities/data-blocks-transactions.yaml
+  - type: NaftikoCapability
+    url: capabilities/data-accounts-balances.yaml
+  - type: NaftikoCapability
+    url: capabilities/data-protocols.yaml
+  description: Unified, multi-chain REST data API (formerly Ubiquity) providing fully indexed blockchain data
+    across 50+ networks. Lookup blocks by number or hash, fetch transactions, account balances for one or many
+    addresses, UTXO inputs/outputs, fee estimation, financial reports, and protocol metadata through a single
+    consistent interface. Each call is metered in Compute Units.
+- aid: blockdaemon:blockdaemon-rpc-api
+  name: Blockdaemon RPC API
+  tags:
+  - Blockchain
+  - RPC
+  - Nodes
+  - JSON-RPC
+  humanURL: https://docs.blockdaemon.com/reference/rpc-api-overview
+  properties:
+  - url: https://docs.blockdaemon.com/reference/rpc-api-overview
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/rpc-api
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/listprotocols
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/websocket-support-for-nodes
+    type: Documentation
+  - type: NaftikoCapability
+    url: capabilities/rpc-ethereum.yaml
+  - type: NaftikoCapability
+    url: capabilities/rpc-bitcoin.yaml
+  - type: NaftikoCapability
+    url: capabilities/rpc-solana.yaml
+  description: Production-ready shared and dedicated JSON-RPC and REST node endpoints across 50+ protocols
+    including Bitcoin, Ethereum, Solana, Polygon, Arbitrum, Avalanche, Base, Optimism, Cosmos, Polkadot, NEAR,
+    Cardano, Stellar, XRP, Tron, Monad, Hyperliquid, and Layer-2s. Supports HTTPS and WebSocket; rate-limited
+    by Requests-Per-Second tier (5–200 RPS plan-dependent).
+- aid: blockdaemon:blockdaemon-staking-api
+  name: Blockdaemon Staking API
+  tags:
+  - Blockchain
+  - Staking
+  - Validators
+  - Rewards
+  humanURL: https://docs.blockdaemon.com/reference/staking-api-overview
+  properties:
+  - url: https://docs.blockdaemon.com/reference/staking-api-overview
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-ethereum
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-cosmos
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-near
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-polkadot
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorials-polygon
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-cardano
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-binance
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/staking-api-tutorial-avalanche
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/staking-sdk
+    type: Documentation
+  - type: NaftikoCapability
+    url: capabilities/staking-validators.yaml
+  - type: NaftikoCapability
+    url: capabilities/staking-delegations.yaml
+  description: Institutional staking-as-a-service API for creating validators and signed staking, unstaking,
+    delegation, consolidation, exit, and reward-claim transactions across Ethereum, Solana, Cosmos, Polkadot,
+    Polygon, NEAR, Cardano, Avalanche, Binance, and other proof-of-stake networks. Rate-limited at 250
+    requests/minute; supports MEV rewards and Fireblocks/WalletConnect signing flows.
+- aid: blockdaemon:blockdaemon-staking-reporting-api
+  name: Blockdaemon Staking Reporting API
+  tags:
+  - Blockchain
+  - Staking
+  - Reporting
+  - Rewards
+  - FinOps
+  humanURL: https://docs.blockdaemon.com/reference/stakingreporting-api-overview
+  properties:
+  - url: https://docs.blockdaemon.com/reference/stakingreporting-api-overview
+    type: Documentation
+  - type: NaftikoCapability
+    url: capabilities/staking-reporting.yaml
+  description: Standardized staking-reward and yield-reporting API delivering historical and current stake,
+    validator status, reward, slashing, and financial summaries across all supported PoS networks for audit,
+    accounting, and tax purposes. 1 Compute Unit per request regardless of protocol.
+- aid: blockdaemon:blockdaemon-defi-api
+  name: Blockdaemon DeFi API
+  tags:
+  - Blockchain
+  - DeFi
+  - DEX
+  - Bridge
+  - Lending
+  - Borrowing
+  humanURL: https://docs.blockdaemon.com/docs/defi-api-overview
+  properties:
+  - url: https://docs.blockdaemon.com/docs/defi-api-overview
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/defi-api-supported-protocols
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/defi-api-authentication
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/transaction-batching
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/eip-5792-transaction-batching
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/eip-7702-transaction-batching
+    type: Documentation
+  - type: NaftikoCapability
+    url: capabilities/defi-dex-swap.yaml
+  - type: NaftikoCapability
+    url: capabilities/defi-bridge-swap.yaml
+  - type: NaftikoCapability
+    url: capabilities/defi-lend-borrow.yaml
+  description: Single REST interface (formerly Expand Network) into multiple DeFi protocols — DEX swaps and
+    aggregation across 200+ DEXs, cross-chain bridge swaps and aggregation, and lending/borrowing on Aave V2/V3
+    and Compound V2/V3. Supports same-chain and cross-chain swaps, configurable slippage, EIP-5792/EIP-7702
+    transaction batching, and combined approval+swap calls.
+- aid: blockdaemon:blockdaemon-token-pricing-api
+  name: Blockdaemon Token Pricing API
+  tags:
+  - Blockchain
+  - Tokens
+  - Pricing
+  - Market Data
+  humanURL: https://docs.blockdaemon.com/reference/gettokens
+  properties:
+  - url: https://docs.blockdaemon.com/reference/gettokens
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/gettokentags
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/available-currencies-and-tokens
+    type: Documentation
+  description: Token metadata, tag, and pricing API — name, symbol, decimals, logo URI, and category tags
+    (e.g., stablecoins) with token quote pricing for display, filtering, and FX calculations across supported
+    EVM and non-EVM chains. Currently in Beta.
+- aid: blockdaemon:blockdaemon-events-api
+  name: Blockdaemon Chain Watch Events API
+  tags:
+  - Blockchain
+  - Events
+  - Streaming
+  - Webhooks
+  - Real-Time
+  humanURL: https://docs.blockdaemon.com/docs/chain-watch
+  properties:
+  - url: https://docs.blockdaemon.com/docs/chain-watch
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/overview-events
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/events-quickstart
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/events-unified-format
+    type: Documentation
+  - url: https://docs.blockdaemon.com/docs/event-types
+    type: Documentation
+  - url: https://github.com/Blockdaemon/chain_sink
+    type: Tool
+  - url: https://github.com/Blockdaemon/demo-event-streaming
+    type: CodeExamples
+  - type: NaftikoCapability
+    url: capabilities/events-rules-targets.yaml
+  - type: NaftikoCapability
+    url: capabilities/events-variables.yaml
+  - type: Webhook
+    url: https://docs.blockdaemon.com/reference/webhook-receive
+  description: Real-time push-based on-chain event streaming for institutional wallets and finance systems.
+    Configure Targets (webhook/Kafka/WebSocket), Rules, Variables, and Variable Values to monitor transactions,
+    balances, staking rewards, reorgs, trustlines, and contract events in a unified format across all supported
+    protocols. Includes webhook verification challenge and message-origin validation.
+- aid: blockdaemon:blockdaemon-management-api
+  name: Blockdaemon Management API
+  tags:
+  - Blockchain
+  - Administration
+  - Metrics
+  - Audit
+  - FinOps
+  humanURL: https://docs.blockdaemon.com/reference/management
+  properties:
+  - url: https://docs.blockdaemon.com/reference/management
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/compute-units-usage-events
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/management-metrics-quota-usage
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/management-metrics-request-usage
+    type: Documentation
+  - url: https://docs.blockdaemon.com/reference/get-organization-audit-logs
+    type: Documentation
+  - type: NaftikoCapability
+    url: capabilities/management-usage.yaml
+  description: Programmatic access to current period Compute Unit usage, request usage, and organization
+    audit logs. Powers usage dashboards, FinOps reporting, and quota alerting for organizations subscribed to
+    the Blockdaemon API Suite.
+- aid: blockdaemon:blockdaemon-wallet-transact-api
+  name: Blockdaemon Wallet Transact API
+  tags:
+  - Blockchain
+  - Wallet
+  - Transactions
+  - Multi-Chain
+  humanURL: https://docs.blockdaemon.com/docs/wallet-transact
+  properties:
+  - url: https://docs.blockdaemon.com/docs/wallet-transact
+    type: Documentation
+  - url: https://github.com/Blockdaemon/demo-buildervault-wallettransact
+    type: CodeExamples
+  description: A wallet-application toolbox for scaling wallet operations on top of indexed multi-chain
+    infrastructure. Combines balance lookups, transaction construction, broadcasting, and event streaming for
+    custodial and non-custodial wallet builders.
+- aid: blockdaemon:blockdaemon-builder-vault-tsm
+  name: Blockdaemon Builder Vault TSM
+  tags:
+  - Blockchain
+  - Wallet
+  - MPC
+  - Custody
+  - TSM
+  humanURL: https://docs.blockdaemon.com/docs/blockdaemon-wallet-overview
+  properties:
+  - url: https://docs.blockdaemon.com/docs/blockdaemon-wallet-overview
+    type: Documentation
+  - url: https://github.com/Blockdaemon/buildervault-web3-provider
+    type: SDK
+  - url: https://github.com/Blockdaemon/demo-buildervault-token-deployment
+    type: CodeExamples
+  - url: https://github.com/Blockdaemon/builder-vault-helm
+    type: Tool
+  - url: https://github.com/Blockdaemon/workshop-buildervault-xdc
+    type: CodeExamples
+  description: Threshold Signature Scheme (TSM) MPC wallet platform for builders. Customizable, deployable
+    on-premises or in cloud, with EVM Web3 provider, Kubernetes Helm chart, and reference integrations for
+    ERC-token deployment and multi-chain signing.
+- aid: blockdaemon:blockdaemon-institutional-vault
+  name: Blockdaemon Institutional Vault
+  tags:
+  - Blockchain
+  - Wallet
+  - MPC
+  - Custody
+  - Institutional
+  humanURL: https://docs.blockdaemon.com/docs/blockdaemon-wallet-overview
+  properties:
+  - url: https://docs.blockdaemon.com/docs/blockdaemon-wallet-overview
+    type: Documentation
+  - url: https://github.com/Blockdaemon/automated-approver-service
+    type: ReferenceImplementation
+  description: Self-hosted MPC wallet for institutional hot, warm, and cold storage with granular governance,
+    transaction policies, role-based approvals, and an Automated Approver Service for policy-driven signing.
+name: Blockdaemon
+tags:
+- Blockchain
+- Web3
+- Staking
+- Validators
+- Custody
+- MPC
+- Wallets
+- Nodes
+- RPC
+- DeFi
+- Indexer
+- Tokenization
+- Institutional
+- Crypto
+kind: contract
+image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+access: 3rd-Party
+common:
+- type: Portal
+  url: https://www.blockdaemon.com
+- type: Documentation
+  url: https://docs.blockdaemon.com
+- url: https://docs.blockdaemon.com/docs/homepage-guides
+  name: Guides Home
+  type: Documentation
+- url: https://docs.blockdaemon.com/reference/blockdaemon-api-suite
+  name: Blockdaemon API Suite
+  type: Portal
+- url: https://docs.blockdaemon.com/docs/apisuite-overview
+  name: API Suite Overview
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/api-suite-dashboard
+  name: API Suite Dashboard
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/quick-start-blockdaemon-api-suite
+  name: API Suite Quickstart
+  type: GettingStarted
+- url: https://docs.blockdaemon.com/docs/send-your-first-api-request
+  name: Send Your First API Request
+  type: GettingStarted
+- url: https://docs.blockdaemon.com/docs/authentication
+  name: Authentication
+  type: Authentication
+- url: https://docs.blockdaemon.com/docs/error-handling
+  name: Error Handling
+  type: Errors
+- url: https://docs.blockdaemon.com/docs/rate-limits
+  name: Rate Limits
+  type: RateLimits
+- url: https://docs.blockdaemon.com/docs/compute-units
+  name: Compute Units
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/pagination
+  name: Pagination
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/historical-data
+  name: Historical Data
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/supported-chains
+  name: Supported Chains
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/business-verification-kyb
+  name: Business Verification (KYB)
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/subscription-management
+  name: Subscription Management
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/mcp
+  name: MCP Server
+  type: Documentation
+- url: https://docs.blockdaemon.com/llms.txt
+  name: LLMs.txt Index
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/blockchain-nodes
+  name: Dedicated Nodes
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/custom-solutions
+  name: Custom Solutions
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/earn-overview
+  name: Earn Stack Overview
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/widget
+  name: Earn Widget
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/widget-embed-guide
+  name: Earn Widget Embed Guide
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/canton-overview
+  name: Canton Network
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/tempo
+  name: Tempo Network
+  type: Documentation
+- url: https://docs.blockdaemon.com/docs/layerzero-overview
+  name: LayerZero / Animoca-Blockdaemon DVN
+  type: Documentation
+- url: https://status.blockdaemon.com/
+  name: Blockdaemon Status
+  type: StatusPage
+- url: https://www.blockdaemon.com/support
+  name: Support Portal
+  type: Support
+- url: https://www.blockdaemon.com/legal/terms-of-service
+  type: TermsOfService
+- url: https://www.blockdaemon.com/legal/privacy-policy
+  type: PrivacyPolicy
+- url: https://www.blockdaemon.com/blog
+  type: Blog
+- url: https://www.blockdaemon.com/press
+  name: Press
+  type: Blog
+- url: https://www.blockdaemon.com/about
+  name: About Blockdaemon
+  type: AboutUs
+- url: https://www.blockdaemon.com/careers
+  name: Careers
+  type: Careers
+- url: https://www.blockdaemon.com/contact
+  name: Contact
+  type: Contact
+- url: https://www.linkedin.com/company/blockdaemon
+  name: Blockdaemon LinkedIn
+  type: LinkedIn
+- url: https://twitter.com/Blockdaemon
+  name: Blockdaemon X
+  type: X
+- url: https://github.com/Blockdaemon
+  type: GitHubOrganization
+- url: https://github.com/Blockdaemon/buildervault-web3-provider
+  name: BuilderVault Web3 Provider
+  type: SDK
+- url: https://github.com/Blockdaemon/builder-vault-helm
+  name: BuilderVault Helm Chart
+  type: Tool
+- url: https://github.com/Blockdaemon/automated-approver-service
+  name: Institutional Vault Automated Approver Service
+  type: ReferenceImplementation
+- url: https://github.com/Blockdaemon/chain_sink
+  name: Chain Sink
+  type: Tool
+- url: https://github.com/Blockdaemon/demo-event-streaming
+  name: Chain Watch Event Streaming Demo
+  type: CodeExamples
+- url: https://github.com/Blockdaemon/demo-stakingAPI
+  name: Staking API Demo
+  type: CodeExamples
+- url: https://github.com/Blockdaemon/demo-buildervault-token-deployment
+  name: BuilderVault Token Deployment Demo
+  type: CodeExamples
+- url: https://github.com/Blockdaemon/demo-buildervault-wallettransact
+  name: BuilderVault Wallet Transact Demo
+  type: CodeExamples
+- url: https://github.com/Blockdaemon/solana-accountsdb-plugin-kafka
+  name: Solana AccountsDB Kafka Plugin
+  type: Tool
+- url: https://github.com/Blockdaemon/solana-cluster
+  name: Solana Cluster Snapshot Tools
+  type: Tool
+- url: https://github.com/Blockdaemon/agave-snapshot-gossip-client
+  name: Solana SSDN Gossip Client
+  type: Tool
+- url: https://github.com/Blockdaemon/agave-snapshot-uploader
+  name: Solana SSDN Snapshot Uploader
+  type: Tool
+- url: https://github.com/Blockdaemon/pyth-exporter
+  name: Pyth Network Prometheus Exporter
+  type: Tool
+- url: https://github.com/Blockdaemon/pyth-go
+  name: Pyth Go Client
+  type: SDK
+- url: https://github.com/Blockdaemon/EVM-trackooor
+  name: EVM Trackooor
+  type: Tool
+- url: https://github.com/Blockdaemon/validator-ownership-verification
+  name: Validator Ownership Verification
+  type: Tool
+- url: https://github.com/Blockdaemon/prototype-eip7702-gas-sponsorship
+  name: EIP-7702 Gas Sponsorship Prototype
+  type: CodeExamples
+- url: https://github.com/Blockdaemon/media-kit
+  name: Media Kit
+  type: BrandAssets
+- url: plans/blockdaemon-plans-pricing.yml
+  type: Plans
+- url: rate-limits/blockdaemon-rate-limits.yml
+  type: RateLimits
+- url: finops/blockdaemon-finops.yml
+  type: FinOps
+- url: json-ld/blockdaemon-context.jsonld
+  type: JSONLD
+- url: vocabulary/blockdaemon-vocabulary.yml
+  type: Vocabulary
+- type: Features
+  data:
+  - Unified Data API (Ubiquity) across 50+ blockchains with consistent block, transaction, balance, UTXO, and fee endpoints
+  - Shared and Dedicated JSON-RPC + WebSocket nodes for Bitcoin, Ethereum, Solana, Polygon, Arbitrum, Avalanche, Base, Optimism, Cosmos, Polkadot, NEAR, Cardano, Stellar, XRP, Tron, Monad, Hyperliquid, and more
+  - Institutional Staking API across Ethereum, Solana, Cosmos, Polkadot, Polygon, NEAR, Cardano, Avalanche, Binance
+  - Staking Reporting API for unified rewards, validator status, and financial summaries
+  - DeFi API (expand.network) with DEX, bridge, and lending aggregation across 200+ protocols
+  - Token Pricing & Metadata API (Beta) with tag-based filtering
+  - Chain Watch event streaming with webhooks, Kafka, and WebSocket targets
+  - Management API with current-period Compute Unit and request metrics plus audit logs
+  - Builder Vault TSM — MPC wallet platform with EVM Web3 provider, Helm chart, and ERC-token demos
+  - Institutional Vault — self-hosted MPC vault with Automated Approver Service for policy-driven signing
+  - Wallet Transact toolbox for scaling multi-chain wallet operations
+  - Earn Widget — no-code embeddable staking and DeFi UI across Ethereum, Solana, and more
+  - LayerZero DVN — Animoca-Blockdaemon DVN for cross-chain messaging
+  - Canton Network super validators, validators, and Canton Wallet Gateway for institutional tokenization
+  - Tempo Network validators, TIP-20 issuance, TIP-403 compliance, stablecoin gas support
+  - Solana Snapshot Delivery Network (SSDN) gossip client, uploader, and AccountsDB Kafka plugin
+  - Pyth Network publisher tooling — Prometheus exporter and Go client
+  - EIP-5792 and EIP-7702 transaction batching support in the DeFi API
+  - Compute Unit metering with XS/S/M/L/XL/Egress/Batch tiers
+  - Triple-mode authentication: Bearer, X-API-Key header, or apiKey query parameter
+  - MCP server at docs.blockdaemon.com/mcp for AI agent access to docs and APIs
+  - Status page at status.blockdaemon.com with per-component health
+  - SOC 2 Type II (June 2025) and ISO 27001 (July 2022) certifications; OFAC compliant
+  - 70+ points of presence globally; offices in San Francisco, Galway, London, Singapore, Newcastle, NYC, Abu Dhabi
+  - 400+ institutional customers including Goldman Sachs, Microsoft, JP Morgan, Citi Ventures
+  - $110B+ digital assets secured; $10B+ staked on Blockdaemon validators; 250K+ nodes launched; 80+ protocols
+  sources:
+  - https://www.blockdaemon.com
+  - https://docs.blockdaemon.com
+  - https://docs.blockdaemon.com/llms.txt
+  - https://docs.blockdaemon.com/docs/rate-limits
+  - https://docs.blockdaemon.com/docs/compute-units
+  - https://docs.blockdaemon.com/docs/subscription-management
+  - https://docs.blockdaemon.com/docs/supported-chains
+  - https://www.blockdaemon.com/about
+  updated: '2026-05-25'
+created: '2026-05-25T00:00:00.000Z'
+modified: '2026-05-25'
+position: Consuming
+description: Blockdaemon is an institutional blockchain infrastructure company founded in 2017 by Konstantin
+  Richter. It runs production node infrastructure, staking, indexed data, DeFi, custody, and tokenization
+  services across 80+ blockchain protocols for 400+ institutional clients including Goldman Sachs, Microsoft,
+  JP Morgan, and Citi Ventures. The Blockdaemon API Suite bundles a unified Data API (Ubiquity), JSON-RPC
+  nodes, a Staking API, Staking Reporting API, DeFi aggregator (expand.network), Token Pricing API, Chain
+  Watch event streaming, and a Management API. Wallet products include Builder Vault TSM (MPC for builders),
+  Institutional Vault (self-hosted MPC custody with Automated Approver Service), and Wallet Transact. Earn
+  Stack covers a no-code embeddable Earn Widget plus liquid staking and restaking. Compute Unit metering,
+  triple-mode authentication, an MCP server, and SOC 2 Type II / ISO 27001 certifications round out the
+  platform. $110B+ in digital assets secured and $10B+ staked on Blockdaemon validators.
+maintainers:
+- FN: Kin Lane
+  email: info@apievangelist.com
+  X: apievangelist
+  url: https://apievangelist.com
+specificationVersion: '0.16'

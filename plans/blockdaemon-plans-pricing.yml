@@ -1,0 +1,191 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Blockdaemon
+providerId: blockdaemon
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - Blockchain
+  - Staking
+  - Nodes
+  - DeFi
+description: 'Reconciled plans for the Blockdaemon API Suite. Source: docs.blockdaemon.com/docs/subscription-management.
+  Plans bundle Compute Unit allotment, Requests-Per-Second, support SLA, key count, and product mix.'
+sources:
+  - https://docs.blockdaemon.com/docs/subscription-management
+  - https://docs.blockdaemon.com/docs/apisuite-overview
+  - https://docs.blockdaemon.com/docs/rate-limits
+  - https://docs.blockdaemon.com/docs/compute-units
+  - https://docs.blockdaemon.com/docs/quick-start-blockdaemon-api-suite
+plans:
+  - id: blockdaemon-free
+    name: Free
+    type: free
+    description: Up to 3M Compute Units/month, 5 RPS, 8-hour weekday support, one test API key. For evaluation
+      and prototyping.
+    entries:
+      - label: Compute Units (monthly)
+        name: compute_units
+        type: included
+        metric: compute_unit
+        limit: 3000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Requests per second
+        name: rps
+        type: included
+        metric: request
+        limit: 5
+        timeFrame: second
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+      - label: Test API keys
+        name: test_keys
+        type: included
+        metric: key
+        limit: 1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0.00'
+        userMultiplied: false
+    elements:
+      - name: Access to all API Suite products with limited usage
+      - name: One test API key
+      - name: 8-hour weekday support
+  - id: blockdaemon-starter
+    name: Starter
+    type: subscription
+    description: 65M Compute Units/month, 100 RPS, 24-hour weekday support, one test key plus ten live keys,
+      multi-product custom solutions.
+    entries:
+      - label: Compute Units (monthly)
+        name: compute_units
+        type: included
+        metric: compute_unit
+        limit: 65000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        userMultiplied: false
+      - label: Requests per second
+        name: rps
+        type: included
+        metric: request
+        limit: 100
+        timeFrame: second
+        geo: global
+        unit: 1
+        userMultiplied: false
+      - label: Test API keys
+        name: test_keys
+        type: included
+        metric: key
+        limit: 1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        userMultiplied: false
+      - label: Live API keys
+        name: live_keys
+        type: included
+        metric: key
+        limit: 10
+        timeFrame: usage
+        geo: global
+        unit: 1
+        userMultiplied: false
+    elements:
+      - name: Custom solutions from API Suite products
+      - name: Auto-scaling
+      - name: Team collaboration
+      - name: 24-hour weekday support
+  - id: blockdaemon-growth
+    name: Growth
+    type: subscription
+    description: 365M Compute Units/month, 200 RPS, 24/7 support access.
+    entries:
+      - label: Compute Units (monthly)
+        name: compute_units
+        type: included
+        metric: compute_unit
+        limit: 365000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        userMultiplied: false
+      - label: Requests per second
+        name: rps
+        type: included
+        metric: request
+        limit: 200
+        timeFrame: second
+        geo: global
+        unit: 1
+        userMultiplied: false
+    elements:
+      - name: All Starter features
+      - name: 24/7 support access
+      - name: Higher RPS ceiling
+  - id: blockdaemon-enterprise
+    name: Enterprise
+    type: enterprise
+    description: Custom Compute Units and RPS, 24/7/365 response, dedicated support team, custom SLAs, custom
+      contracts. Required for Dedicated Nodes, Institutional Vault, and Builder Vault deployments.
+    entries:
+      - label: Compute Units (monthly)
+        name: compute_units
+        type: metered
+        metric: compute_unit
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        userMultiplied: false
+      - label: Requests per second
+        name: rps
+        type: metered
+        metric: request
+        limit: -1
+        timeFrame: second
+        geo: global
+        unit: 1
+        userMultiplied: false
+    elements:
+      - name: Custom CU and RPS
+      - name: 24/7/365 response time
+      - name: Dedicated support team
+      - name: Custom SLAs
+      - name: Dedicated Nodes
+      - name: Institutional Vault and Builder Vault TSM deployments
+      - name: Custom solutions and on-prem options
+computeUnitBands:
+  - band: XS
+    units: 1
+    description: Lowest-intensity calls (e.g., eth_protocolVersion).
+  - band: S
+    units: 5
+  - band: M
+    units: 10
+  - band: L
+    units: 50
+  - band: XL
+    units: 100
+  - band: Egress
+    units: custom
+  - band: BatchQueries
+    units: custom
+billing:
+  proRated: true
+  cycle: monthly
+  autoRenewal: annualOption
+  paymentMethods:
+    - card
+    - invoice
