@@ -3,19 +3,18 @@
   "feeds": [
     {
       "source": "https://www.blockdaemon.com/blog",
-      "feed_url": "https://www.blockdaemon.com/blog",
-      "title": "",
-      "saved": 0,
-      "method": "none"
+      "feed_url": "",
+      "saved": 1,
+      "method": "agent-scrape"
     },
     {
       "source": "https://www.blockdaemon.com/press",
-      "feed_url": "https://www.blockdaemon.com/press",
-      "title": "",
-      "saved": 0,
-      "method": "none"
+      "feed_url": "",
+      "saved": 1,
+      "method": "agent-scrape"
     }
   ],
-  "post_count": 0,
-  "fetched": "2026-06-14T20:42:17Z"
+  "post_count": 3,
+  "fetched": "2026-06-27T12:27:50Z",
+  "agent_pulled": "2026-06-27"
 }

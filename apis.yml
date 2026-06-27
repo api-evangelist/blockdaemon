@@ -19,11 +19,11 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/docs/historical-data
     type: Documentation
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/data-blocks-transactions.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/data-accounts-balances.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/data-protocols.yaml
   description: Unified, multi-chain REST data API (formerly Ubiquity) providing fully indexed blockchain data
     across 50+ networks. Lookup blocks by number or hash, fetch transactions, account balances for one or many
@@ -46,11 +46,11 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/docs/websocket-support-for-nodes
     type: Documentation
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/rpc-ethereum.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/rpc-bitcoin.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/rpc-solana.yaml
   description: Production-ready shared and dedicated JSON-RPC and REST node endpoints across 50+ protocols
     including Bitcoin, Ethereum, Solana, Polygon, Arbitrum, Avalanche, Base, Optimism, Cosmos, Polkadot, NEAR,
@@ -85,9 +85,9 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/reference/staking-sdk
     type: Documentation
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/staking-validators.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/staking-delegations.yaml
   description: Institutional staking-as-a-service API for creating validators and signed staking, unstaking,
     delegation, consolidation, exit, and reward-claim transactions across Ethereum, Solana, Cosmos, Polkadot,
@@ -105,7 +105,7 @@ apis:
   properties:
   - url: https://docs.blockdaemon.com/reference/stakingreporting-api-overview
     type: Documentation
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/staking-reporting.yaml
   description: Standardized staking-reward and yield-reporting API delivering historical and current stake,
     validator status, reward, slashing, and financial summaries across all supported PoS networks for audit,
@@ -133,11 +133,11 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/docs/eip-7702-transaction-batching
     type: Documentation
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/defi-dex-swap.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/defi-bridge-swap.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/defi-lend-borrow.yaml
   description: Single REST interface (formerly Expand Network) into multiple DeFi protocols — DEX swaps and
     aggregation across 200+ DEXs, cross-chain bridge swaps and aggregation, and lending/borrowing on Aave V2/V3
@@ -182,14 +182,14 @@ apis:
   - url: https://docs.blockdaemon.com/docs/event-types
     type: Documentation
   - url: https://github.com/Blockdaemon/chain_sink
-    type: Tool
+    type: Tools
   - url: https://github.com/Blockdaemon/demo-event-streaming
     type: CodeExamples
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/events-rules-targets.yaml
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/events-variables.yaml
-  - type: Webhook
+  - type: Webhooks
     url: https://docs.blockdaemon.com/reference/webhook-receive
   description: Real-time push-based on-chain event streaming for institutional wallets and finance systems.
     Configure Targets (webhook/Kafka/WebSocket), Rules, Variables, and Variable Values to monitor transactions,
@@ -215,7 +215,7 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/reference/get-organization-audit-logs
     type: Documentation
-  - type: NaftikoCapability
+  - type: X-NaftikoCapability
     url: capabilities/management-usage.yaml
   description: Programmatic access to current period Compute Unit usage, request usage, and organization
     audit logs. Powers usage dashboards, FinOps reporting, and quota alerting for organizations subscribed to
@@ -249,11 +249,11 @@ apis:
   - url: https://docs.blockdaemon.com/docs/blockdaemon-wallet-overview
     type: Documentation
   - url: https://github.com/Blockdaemon/buildervault-web3-provider
-    type: SDK
+    type: SDKs
   - url: https://github.com/Blockdaemon/demo-buildervault-token-deployment
     type: CodeExamples
   - url: https://github.com/Blockdaemon/builder-vault-helm
-    type: Tool
+    type: Tools
   - url: https://github.com/Blockdaemon/workshop-buildervault-xdc
     type: CodeExamples
   description: Threshold Signature Scheme (TSM) MPC wallet platform for builders. Customizable, deployable
@@ -322,7 +322,7 @@ common:
   type: Authentication
 - url: https://docs.blockdaemon.com/docs/error-handling
   name: Error Handling
-  type: Errors
+  type: ErrorCodes
 - url: https://docs.blockdaemon.com/docs/rate-limits
   name: Rate Limits
   type: RateLimits
@@ -408,16 +408,16 @@ common:
   type: GitHubOrganization
 - url: https://github.com/Blockdaemon/buildervault-web3-provider
   name: BuilderVault Web3 Provider
-  type: SDK
+  type: SDKs
 - url: https://github.com/Blockdaemon/builder-vault-helm
   name: BuilderVault Helm Chart
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/automated-approver-service
   name: Institutional Vault Automated Approver Service
   type: ReferenceImplementation
 - url: https://github.com/Blockdaemon/chain_sink
   name: Chain Sink
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/demo-event-streaming
   name: Chain Watch Event Streaming Demo
   type: CodeExamples
@@ -432,28 +432,28 @@ common:
   type: CodeExamples
 - url: https://github.com/Blockdaemon/solana-accountsdb-plugin-kafka
   name: Solana AccountsDB Kafka Plugin
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/solana-cluster
   name: Solana Cluster Snapshot Tools
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/agave-snapshot-gossip-client
   name: Solana SSDN Gossip Client
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/agave-snapshot-uploader
   name: Solana SSDN Snapshot Uploader
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/pyth-exporter
   name: Pyth Network Prometheus Exporter
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/pyth-go
   name: Pyth Go Client
-  type: SDK
+  type: SDKs
 - url: https://github.com/Blockdaemon/EVM-trackooor
   name: EVM Trackooor
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/validator-ownership-verification
   name: Validator Ownership Verification
-  type: Tool
+  type: Tools
 - url: https://github.com/Blockdaemon/prototype-eip7702-gas-sponsorship
   name: EIP-7702 Gas Sponsorship Prototype
   type: CodeExamples
