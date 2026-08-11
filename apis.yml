@@ -19,12 +19,6 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/docs/historical-data
     type: Documentation
-  - type: X-NaftikoCapability
-    url: capabilities/data-blocks-transactions.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/data-accounts-balances.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/data-protocols.yaml
   description: Unified, multi-chain REST data API (formerly Ubiquity) providing fully indexed blockchain data
     across 50+ networks. Lookup blocks by number or hash, fetch transactions, account balances for one or many
     addresses, UTXO inputs/outputs, fee estimation, financial reports, and protocol metadata through a single
@@ -46,12 +40,6 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/docs/websocket-support-for-nodes
     type: Documentation
-  - type: X-NaftikoCapability
-    url: capabilities/rpc-ethereum.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/rpc-bitcoin.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/rpc-solana.yaml
   description: Production-ready shared and dedicated JSON-RPC and REST node endpoints across 50+ protocols
     including Bitcoin, Ethereum, Solana, Polygon, Arbitrum, Avalanche, Base, Optimism, Cosmos, Polkadot, NEAR,
     Cardano, Stellar, XRP, Tron, Monad, Hyperliquid, and Layer-2s. Supports HTTPS and WebSocket; rate-limited
@@ -85,10 +73,6 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/reference/staking-sdk
     type: Documentation
-  - type: X-NaftikoCapability
-    url: capabilities/staking-validators.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/staking-delegations.yaml
   description: Institutional staking-as-a-service API for creating validators and signed staking, unstaking,
     delegation, consolidation, exit, and reward-claim transactions across Ethereum, Solana, Cosmos, Polkadot,
     Polygon, NEAR, Cardano, Avalanche, Binance, and other proof-of-stake networks. Rate-limited at 250
@@ -105,8 +89,6 @@ apis:
   properties:
   - url: https://docs.blockdaemon.com/reference/stakingreporting-api-overview
     type: Documentation
-  - type: X-NaftikoCapability
-    url: capabilities/staking-reporting.yaml
   description: Standardized staking-reward and yield-reporting API delivering historical and current stake,
     validator status, reward, slashing, and financial summaries across all supported PoS networks for audit,
     accounting, and tax purposes. 1 Compute Unit per request regardless of protocol.
@@ -133,12 +115,6 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/docs/eip-7702-transaction-batching
     type: Documentation
-  - type: X-NaftikoCapability
-    url: capabilities/defi-dex-swap.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/defi-bridge-swap.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/defi-lend-borrow.yaml
   description: Single REST interface (formerly Expand Network) into multiple DeFi protocols — DEX swaps and
     aggregation across 200+ DEXs, cross-chain bridge swaps and aggregation, and lending/borrowing on Aave V2/V3
     and Compound V2/V3. Supports same-chain and cross-chain swaps, configurable slippage, EIP-5792/EIP-7702
@@ -185,10 +161,6 @@ apis:
     type: Tools
   - url: https://github.com/Blockdaemon/demo-event-streaming
     type: CodeExamples
-  - type: X-NaftikoCapability
-    url: capabilities/events-rules-targets.yaml
-  - type: X-NaftikoCapability
-    url: capabilities/events-variables.yaml
   - type: Webhooks
     url: https://docs.blockdaemon.com/reference/webhook-receive
   description: Real-time push-based on-chain event streaming for institutional wallets and finance systems.
@@ -215,8 +187,6 @@ apis:
     type: Documentation
   - url: https://docs.blockdaemon.com/reference/get-organization-audit-logs
     type: Documentation
-  - type: X-NaftikoCapability
-    url: capabilities/management-usage.yaml
   description: Programmatic access to current period Compute Unit usage, request usage, and organization
     audit logs. Powers usage dashboards, FinOps reporting, and quota alerting for organizations subscribed to
     the Blockdaemon API Suite.
