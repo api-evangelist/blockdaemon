@@ -141,6 +141,12 @@ apis:
   name: Blockdaemon Chain Watch Events API
   tags:
   - Blockchain
+  - Event
+  - Streaming
+  - Webhook
+  - Real-Time
+  tags_raw:
+  - Blockchain
   - Events
   - Streaming
   - Webhooks
@@ -194,6 +200,11 @@ apis:
   name: Blockdaemon Wallet Transact API
   tags:
   - Blockchain
+  - Wallets
+  - Transaction
+  - Multi-Chain
+  tags_raw:
+  - Blockchain
   - Wallet
   - Transactions
   - Multi-Chain
@@ -209,6 +220,12 @@ apis:
 - aid: blockdaemon:blockdaemon-builder-vault-tsm
   name: Blockdaemon Builder Vault TSM
   tags:
+  - Blockchain
+  - Wallets
+  - MPC
+  - Custody
+  - TSM
+  tags_raw:
   - Blockchain
   - Wallet
   - MPC
@@ -232,6 +249,12 @@ apis:
 - aid: blockdaemon:blockdaemon-institutional-vault
   name: Blockdaemon Institutional Vault
   tags:
+  - Blockchain
+  - Wallets
+  - MPC
+  - Custody
+  - Institutional
+  tags_raw:
   - Blockchain
   - Wallet
   - MPC
