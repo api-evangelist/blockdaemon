@@ -28,6 +28,11 @@ apis:
   tags:
   - Blockchain
   - RPC
+  - Node
+  - JSON-RPC
+  tags_raw:
+  - Blockchain
+  - RPC
   - Nodes
   - JSON-RPC
   humanURL: https://docs.blockdaemon.com/reference/rpc-api-overview
@@ -47,6 +52,11 @@ apis:
 - aid: blockdaemon:blockdaemon-staking-api
   name: Blockdaemon Staking API
   tags:
+  - Blockchain
+  - Staking
+  - Validator
+  - Rewards
+  tags_raw:
   - Blockchain
   - Staking
   - Validators
@@ -270,6 +280,21 @@ apis:
     transaction policies, role-based approvals, and an Automated Approver Service for policy-driven signing.
 name: Blockdaemon
 tags:
+- Blockchain
+- Web3
+- Staking
+- Validator
+- Custody
+- MPC
+- Wallets
+- Node
+- RPC
+- DeFi
+- Indexer
+- Tokenization
+- Institutional
+- Crypto
+tags_raw:
 - Blockchain
 - Web3
 - Staking
