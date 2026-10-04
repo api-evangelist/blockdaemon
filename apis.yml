@@ -297,6 +297,7 @@ tags:
 - Tokenization
 - Institutional
 - Crypto
+- Ethereum
 tags_raw:
 - Blockchain
 - Web3
@@ -312,6 +313,7 @@ tags_raw:
 - Tokenization
 - Institutional
 - Crypto
+- Ethereum
 kind: contract
 deliveryModel:
   model: saas
