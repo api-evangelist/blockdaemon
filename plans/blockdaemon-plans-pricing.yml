@@ -194,3 +194,58 @@ billing:
   paymentMethods:
     - card
     - invoice
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - metered
+  - subscription
+  units:
+  - object
+  - request
+  plans:
+  - name: Free
+    access: free
+    model: free
+    model_how: derived
+    units:
+    - object
+    - other
+    - request
+    periods:
+    - month
+    - per-use
+    - second
+  - name: Starter
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - object
+    - other
+    - request
+    periods:
+    - month
+    - per-use
+    - second
+  - name: Growth
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - other
+    - request
+    periods:
+    - month
+    - second
+  - name: Enterprise
+    access: enterprise
+    model: metered
+    model_how: derived
+    units:
+    - other
+    - request
+    periods:
+    - month
+    - second
