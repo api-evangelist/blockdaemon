@@ -1,0 +1,905 @@
+# Blockdaemon Docs Documentation
+
+> We power the blockchain economy. Visit Blockdaemon docs to see how we connect institutions and developers to leading networks. ‍
+
+## Guides: INTRODUCTION
+- [Overview](https://docs.blockdaemon.com/docs/homepage-guides.md)
+- [Create Your Blockdaemon Account](https://docs.blockdaemon.com/docs/setting-up-a-blockdaemon-account.md): Access a multichain API, launch blockchain nodes, stake directly from the app, view staking dashboards, and more.
+- [Send Your First API Request](https://docs.blockdaemon.com/docs/send-your-first-api-request.md)
+- [Supported Chains](https://docs.blockdaemon.com/docs/supported-chains.md)
+- [Authentication](https://docs.blockdaemon.com/docs/authentication.md)
+- [Historical Data](https://docs.blockdaemon.com/docs/historical-data.md)
+- [Compute Units](https://docs.blockdaemon.com/docs/compute-units.md)
+- [Pagination](https://docs.blockdaemon.com/docs/pagination.md)
+- [Rate Limits](https://docs.blockdaemon.com/docs/rate-limits.md)
+- [Error Handling](https://docs.blockdaemon.com/docs/error-handling.md)
+- [Business Verification (KYB)](https://docs.blockdaemon.com/docs/business-verification-kyb.md): Seamless onboarding with Blockdaemon's KYB (Know Your Business).
+
+## Guides: STAKING
+- [Validator Infrastructure and APIs](https://docs.blockdaemon.com/docs/staking-introduction.md): Institutional-grade staking at Blockdaemon
+- [Avalanche](https://docs.blockdaemon.com/docs/avalanche-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-avalanche.md)
+- [Binance](https://docs.blockdaemon.com/docs/binance-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-binance.md)
+- [Cardano](https://docs.blockdaemon.com/docs/cardano-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-cardano.md)
+- [Cosmos](https://docs.blockdaemon.com/docs/cosmos-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-cosmos.md)
+  - Staking In-App
+    - [Dashboard Overview](https://docs.blockdaemon.com/docs/cosmos-dashboard.md): Learn how to keep track of your ATOM validators performance via Blockdaemon Cosmos Dashboard.
+    - [Stake ATOM](https://docs.blockdaemon.com/docs/stake-cosmos.md): Learn how to stake ATOM with your connected wallet.
+    - [Unstake ATOM](https://docs.blockdaemon.com/docs/unstake-atom.md): Easily unstake your ATOM from the staking pool.
+    - [Withdraw Rewards](https://docs.blockdaemon.com/docs/withdraw-atom.md): Learn how to withdraw rewards from a single transaction.
+  - Staking via Integrations
+    - [Stake ATOM from Fireblocks via WalletConnect](https://docs.blockdaemon.com/docs/stake-atom-from-fireblocks-via-walletconnect.md)
+- [Ethereum](https://docs.blockdaemon.com/docs/ethereum-protocol-info.md)
+  - [Ethereum Pectra Upgrade](https://docs.blockdaemon.com/docs/ethereum-pectra-upgrade.md): Ethereum’s Pectra Hard Fork: Discover how Ethereum's Pectra update will transform ETH staking.
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-ethereum.md): How to send a transaction using Blockdaemon's Ethereum Staking API.
+  - Staking In-App
+    - [Dashboard Overview](https://docs.blockdaemon.com/docs/ethereum-dashboard.md): Keep track of your ETH validators performance via Blockdaemon Ethereum Dashboard.
+    - [ETH Validator Statuses](https://docs.blockdaemon.com/docs/eth-validator-statuses.md): A detailed account of Blockdaemon Ethereum Dashboard statuses and what they indicate.
+    - [How to Stake](https://docs.blockdaemon.com/docs/stake-eth-in-app.md)
+    - [How to Restake with Eigenlayer](https://docs.blockdaemon.com/docs/eigenlayer-restaking.md): Restake rewards with Eigenlayer via Blockdaemon app.
+    - [How to Manage Validators](https://docs.blockdaemon.com/docs/eth-managing-validators.md)
+    - [How to Add Validator(s)](https://docs.blockdaemon.com/docs/how-to-add-validators-ethereum.md): Add one or multiple validators to the Ethereum staking dashboard.
+    - [How to Exit Validator(s)](https://docs.blockdaemon.com/docs/how-to-exit-validators-ethereum.md): A step-by-step guide to exit and remove validator(s) from the dashboard.
+    - [How to Download Staking Reports](https://docs.blockdaemon.com/docs/how-to-download-staking-reports-ethereum.md): Generate a staking report with date range and timezone settings.
+  - Staking via Integrations
+    - [Stake ETH via BitGo](https://docs.blockdaemon.com/docs/stake-eth-via-bitgo.md)
+    - [Stake ETH via Fireblocks (Blockdaemon App)](https://docs.blockdaemon.com/docs/how-to-stake-eth-on-fireblocks-using-bdapp.md)
+    - [Stake ETH via Fireblocks (API)](https://docs.blockdaemon.com/docs/stake-eth-on-fireblocks-using-the-blockdaemon-staking-api.md)
+    - [Stake ETH via Fireblocks (App)](https://docs.blockdaemon.com/docs/stake-eth-via-fireblocks-app.md): Stake ETH to Blockdaemon validators from Fireblocks using either legacy 32 ETH validators or compounding validators.
+- [NEAR](https://docs.blockdaemon.com/docs/near-specific-info.md): Learn about NEAR staking, consensus, tokenomics, and delegation
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-near.md)
+  - Staking In-App
+    - [Dashboard Overview](https://docs.blockdaemon.com/docs/near-dashboard.md): Learn how to keep track of your Near delegation's performance via Blockdaemon Near dashboard.
+    - [How to Add Wallet Addresses](https://docs.blockdaemon.com/docs/how-to-add-wallet-addresses-near.md): Discover how easy it is to add wallets to the Blockdaemon NEAR Dashboard.
+    - [How to Remove Wallet Addresses](https://docs.blockdaemon.com/docs/how-to-remove-wallet-addresses-near.md): A step-by-step guide for you to learn how to remove wallets from the Blockdaemon NEAR Dashboard.
+    - [Stake NEAR](https://docs.blockdaemon.com/docs/stake-near.md): Learn how to stake NEAR with your connected wallet.
+    - [Unstake NEAR](https://docs.blockdaemon.com/docs/unstake-near.md): Easily unstake your NEAR tokens from the staking pool.
+    - [Withdraw NEAR](https://docs.blockdaemon.com/docs/withdraw-near.md): Learn how to withdraw NEAR from a single transaction.
+  - [Stake NEAR from Fireblocks via WalletConnect](https://docs.blockdaemon.com/docs/stake-near-from-fireblocks-via-walletconnect.md)
+- [Polkadot](https://docs.blockdaemon.com/docs/polkadot-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial-polkadot.md): View some examples showing how to use Blockdaemon Polkadot Staking API.
+- [Polygon](https://docs.blockdaemon.com/docs/polygon-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorials-polygon.md): View an example showing how to use Blockdaemon Polygon Staking API.
+  - Staking In-App
+    - [Dashboard Overview](https://docs.blockdaemon.com/docs/polygon-dashboard.md): Learn how to keep track of your POL delegation's performance via Blockdaemon Polygon Dashboard.
+    - [How to Add Wallet Addresses](https://docs.blockdaemon.com/docs/how-to-add-wallets-pol.md): Discover how easy it is to add wallets to the Blockdaemon Polygon Dashboard.
+    - [How to Remove Wallet Addresses](https://docs.blockdaemon.com/docs/how-to-remove-wallets-pol.md): A step-by-step guide for you to learn how to remove wallets from the Blockdaemon Polygon Dashboard.
+    - [Stake POL](https://docs.blockdaemon.com/docs/stake-pol.md)
+    - [Unstake POL](https://docs.blockdaemon.com/docs/unstake-pol.md)
+    - [Withdraw POL](https://docs.blockdaemon.com/docs/withdraw-pol.md)
+    - [Restake Rewards](https://docs.blockdaemon.com/docs/restake-rewards-pol.md)
+    - [Withdraw Rewards](https://docs.blockdaemon.com/docs/withdraw-rewards-pol.md)
+    - [How to Download Staking Reports](https://docs.blockdaemon.com/docs/how-to-download-staking-reports-pol.md): Learn how to download a .csv report from Blockdaemon Polygon Dashboard.
+  - Staking via Integrations
+    - [Stake POL from Fireblocks via WalletConnect](https://docs.blockdaemon.com/docs/stake-pol-from-fireblocks-via-walletconnect.md)
+- [Solana](https://docs.blockdaemon.com/docs/solana-specific-info.md)
+  - [Staking API](https://docs.blockdaemon.com/docs/staking-api-tutorial.md)
+  - Staking In-App
+    - [Dashboard Overview](https://docs.blockdaemon.com/docs/solana-dashboard.md): Learn how to keep track of your SOL wallet performance via Blockdaemon Solana Dashboard.
+    - [How to Add Wallets](https://docs.blockdaemon.com/docs/how-to-add-wallets-solana.md): Discover how easy it is to add wallets to the Blockdaemon Solana Dashboard.
+    - [How to Remove Wallets](https://docs.blockdaemon.com/docs/how-to-remove-wallets-solana.md): A step-by-step guide for you to learn how to remove wallets from the Blockdaemon Solana Dashboard.
+    - [Stake SOL](https://docs.blockdaemon.com/docs/stake-sol.md)
+    - [Unstake SOL](https://docs.blockdaemon.com/docs/unstake-sol.md): Easily unstake your SOL tokens from the staking pool.
+    - [Withdraw SOL](https://docs.blockdaemon.com/docs/withdraw-sol.md): Learn how to withdraw SOL from a single transaction.
+    - [How to Download Staking Reports](https://docs.blockdaemon.com/docs/how-to-download-solana-staking-reports.md): Discover how to download a Staking Report from Blockdaemon Solana Dashboard in this step-by-step guide.
+  - Staking via Integrations
+    - [Stake SOL via Fireblocks](https://docs.blockdaemon.com/docs/stake-sol-with-blockdaemon-via-fireblocks.md)
+  - [Solana Stake for Builders Validator](https://docs.blockdaemon.com/docs/solana-stake-for-builders-validator.md)
+- [TON / The Open Network](https://docs.blockdaemon.com/docs/staking-ton.md)
+  - [GRAM Multi-Nominator Pool Delegation](https://docs.blockdaemon.com/docs/ton-multi-nominator-pool-delegation.md)
+- [Stacks](https://docs.blockdaemon.com/docs/staking-stacks.md)
+  - [Stack STX](https://docs.blockdaemon.com/docs/how-to-stacks.md): Overview of Stacking and How to Stack STX with the Leather Wallet (Leather Earn).
+
+## Guides: EARN STACK
+- [Overview](https://docs.blockdaemon.com/docs/earn-overview.md): Start here to understand and integrate Blockdaemon Earn Stack
+- [Widget](https://docs.blockdaemon.com/docs/widget.md): Learn about Earn Widget integration, customization and features
+  - [Widget Embed Guide](https://docs.blockdaemon.com/docs/widget-embed-guide.md): How to easily add staking and DeFi to your application
+  - [Staking Within The Widget](https://docs.blockdaemon.com/docs/staking-within-the-widget.md): The Earn Widget provides a slim, reusable, and consistent multi-network staking platform
+    - [Ethereum: Stake](https://docs.blockdaemon.com/docs/widget-staking-ethereum.md): Delegate ETH through the Earn Widget and start earning rewards.
+    - [Ethereum: Unstake](https://docs.blockdaemon.com/docs/copy-of-ethereum.md): Unstake ETH with the Earn Widget to prepare for claiming
+    - [Ethereum: Claim](https://docs.blockdaemon.com/docs/copy-of-ethereum-unstake.md): Claim ETH with the Earn Widget
+    - [Solana: Stake](https://docs.blockdaemon.com/docs/solana-stake-flow.md): Delegate SOL through the Earn Widget and start earning rewards.
+    - [Solana: Unstake](https://docs.blockdaemon.com/docs/solana-unstake-from-the-earn-widget.md): Unstake SOL with the Earn Widget to prepare for withdrawal
+    - [Solana: Withdraw](https://docs.blockdaemon.com/docs/solana-withdraw-using-the-earn-widget.md): Withdraw SOL with Earn Widget
+- [DeFi API](https://docs.blockdaemon.com/docs/defi-api-overview.md)
+  - [How to Deposit in Vaults](https://docs.blockdaemon.com/docs/lend-and-borrow-defi.md): Lending and borrowing protocols let you deposit assets as collateral to earn interest, and borrow other assets against that collateral. This guide walks you through the entire flow — from fetching…
+  - [Transaction Batching](https://docs.blockdaemon.com/docs/transaction-batching.md)
+    - [EIP-5792 Transaction Batching](https://docs.blockdaemon.com/docs/eip-5792-transaction-batching.md)
+    - [EIP-7702 Transaction Batching](https://docs.blockdaemon.com/docs/eip-7702-transaction-batching.md)
+  - [Supported Protocols](https://docs.blockdaemon.com/docs/defi-api-supported-protocols.md): A comprehensive list of all DeFi protocols supported by expand.network by Blockdaemon.
+  - [Asset Swap](https://docs.blockdaemon.com/docs/defi-api-asset-swap.md)
+    - [Execute a Cross Chain Swap](https://docs.blockdaemon.com/docs/defi-api-execute-a-cross-chain-swap.md)
+    - [Execute a Same Chain Swap](https://docs.blockdaemon.com/docs/defi-api-execute-a-local-swap.md)
+
+## Guides: NODES & BLOCKCHAIN DATA
+- [Dedicated Nodes](https://docs.blockdaemon.com/docs/blockchain-nodes.md): Blockdaemon offers nodes-as-a-service for uncompromised connectivity, security, and performance.
+  - [How to Deploy a Node](https://docs.blockdaemon.com/docs/how-to-deploy-a-node.md): Running your own node allows you to access transaction data, blockchain history, and more.
+  - [WebSocket Support for Nodes](https://docs.blockdaemon.com/docs/websocket-support-for-nodes.md)
+  - [Algorand](https://docs.blockdaemon.com/docs/algorand.md)
+    - [How to Connect to Algorand Mainnet](https://docs.blockdaemon.com/docs/how-to-connect-to-algorand-mainnet.md)
+    - [Registering Your Relay Node on the Algorand Mainnet](https://docs.blockdaemon.com/docs/registering-your-relay-node-on-the-mainnet.md)
+  - [Arbitrum](https://docs.blockdaemon.com/docs/arbitrum.md)
+    - [How to Connect to Arbitrum](https://docs.blockdaemon.com/docs/how-to-connect-to-arbitrum.md)
+    - [ARB RPC Methods](https://docs.blockdaemon.com/docs/arb-rpc-methods.md)
+  - [Avalanche](https://docs.blockdaemon.com/docs/avalanche.md)
+    - [How to Connect to Avalanche](https://docs.blockdaemon.com/docs/how-to-connect-to-avalanche.md)
+  - [Base](https://docs.blockdaemon.com/docs/base-nodes.md)
+    - [How to Connect to Base](https://docs.blockdaemon.com/docs/how-to-connect-to-base.md)
+    - [Base RPC Methods](https://docs.blockdaemon.com/docs/base-rpc-methods.md)
+    - [Flashblocks Support on Base](https://docs.blockdaemon.com/docs/flashblocks-support-on-base.md)
+  - [Bitcoin](https://docs.blockdaemon.com/docs/bitcoin-overview.md)
+    - [How to Connect to Bitcoin](https://docs.blockdaemon.com/docs/how-to-connect-to-bitcoin.md)
+    - [Bitcoin RPC Methods](https://docs.blockdaemon.com/docs/whitelisted-methods.md)
+  - [Bitcoin Cash](https://docs.blockdaemon.com/docs/bitcoin-cash.md)
+    - [How to Connect to Bitcoin Cash](https://docs.blockdaemon.com/docs/how-to-connect-to-bitcoin-cash.md)
+    - [Bitcoin Cash RPC Methods](https://docs.blockdaemon.com/docs/bitcoin-cash-rpc-methods.md)
+  - [BNB](https://docs.blockdaemon.com/docs/bnb.md)
+    - [How to Connect to BNB](https://docs.blockdaemon.com/docs/how-to-connect-to-bnb.md)
+  - [Botanix](https://docs.blockdaemon.com/docs/botanix-2.md)
+    - [How to Connect to Botanix](https://docs.blockdaemon.com/docs/how-to-connect-to-botanix.md)
+    - [Botanix RPC Methods](https://docs.blockdaemon.com/docs/botanix-methods.md)
+  - [Canton](https://docs.blockdaemon.com/docs/canton-overview.md): High-level overview of the Canton Network architecture, concepts, and infrastructure components.
+    - [Canton Validator](https://docs.blockdaemon.com/docs/canton-validator.md): High-level overview of Canton validators and why they matters for institutions
+    - [Canton Super Validator](https://docs.blockdaemon.com/docs/canton-super-validator.md): Learn the types and roles of Canton super validators and how they differ from standard validators.
+    - [Understanding the Canton Wallet Gateway](https://docs.blockdaemon.com/docs/understanding-the-canton-wallet-gateway.md): Solving validator‑agnostic signing for institutional tokenization
+  - [Cardano](https://docs.blockdaemon.com/docs/cardano.md)
+    - [How to Connect to Cardano](https://docs.blockdaemon.com/docs/how-to-connect-to-cardano.md)
+    - [Key Cardano Features](https://docs.blockdaemon.com/docs/key-cardano-features.md)
+    - [Cardano Annual Percentage Yield (APY)](https://docs.blockdaemon.com/docs/cardano-annual-percentage-yield.md)
+  - [Cosmos](https://docs.blockdaemon.com/docs/cosmos.md)
+    - [How to Connect to Cosmos](https://docs.blockdaemon.com/docs/how-to-connect-to-cosmos.md)
+    - [Cosmos Governance](https://docs.blockdaemon.com/docs/cosmos-governance.md): Get to know what Cosmos governance entails.
+  - [Dogecoin](https://docs.blockdaemon.com/docs/dogecoin.md)
+    - [How to Connect to Dogecoin](https://docs.blockdaemon.com/docs/how-to-connect-to-dogecoin.md)
+    - [Dogecoin RPC Methods](https://docs.blockdaemon.com/docs/dogecoin-rpc-methods.md)
+  - [Ethereum](https://docs.blockdaemon.com/docs/ethereum.md)
+    - [Execution Clients](https://docs.blockdaemon.com/docs/ethereum-execution-clients.md): An overview of each client, their primary features and ideal use cases.
+    - [Consensus Clients](https://docs.blockdaemon.com/docs/ethereum-consensus-clients.md)
+    - [How to Connect to Ethereum](https://docs.blockdaemon.com/docs/how-to-connect-to-ethereum.md)
+    - [Ethereum RPC Methods](https://docs.blockdaemon.com/docs/ethereum-rpc-methods.md)
+    - [Erigon RPC methods](https://docs.blockdaemon.com/docs/erigon-rpc-methods.md)
+    - [GraphQL Queries on Ethereum Nodes](https://docs.blockdaemon.com/docs/graphql-queries-on-ethereum-nodes.md): Learn how to use GraphQL to query read-only data from your Ethereum node.
+  - [Flow](https://docs.blockdaemon.com/docs/flow.md)
+    - [How to Connect to Flow](https://docs.blockdaemon.com/docs/how-to-connect-to-flow.md)
+  - [Hyperliquid](https://docs.blockdaemon.com/docs/hyperliquid.md)
+    - [How to Connect to Hyperliquid](https://docs.blockdaemon.com/docs/how-to-connect-to-hyperliquid.md)
+  - [Kusama](https://docs.blockdaemon.com/docs/kusama.md)
+    - [How to Connect to Kusama](https://docs.blockdaemon.com/docs/how-to-connect-to-kusama.md)
+    - [How to Connect to Kusama Asset Hub](https://docs.blockdaemon.com/docs/how-to-connect-to-kusama-asset-hub.md)
+    - [How to Set Blockdaemon as Proxy for Nomination](https://docs.blockdaemon.com/docs/how-to-set-blockdaemon-as-proxy-for-nomination.md)
+  - [Linea](https://docs.blockdaemon.com/docs/linea.md)
+    - [How to Connect to Linea](https://docs.blockdaemon.com/docs/how-to-connect-to-linea.md)
+    - [Linea RPC Methods](https://docs.blockdaemon.com/docs/linea-rpc-methods.md)
+  - [Litecoin](https://docs.blockdaemon.com/docs/litecoin.md)
+    - [How to Connect to Litecoin](https://docs.blockdaemon.com/docs/how-to-connect-to-litecoin.md)
+    - [Litecoin RPC Methods](https://docs.blockdaemon.com/docs/litecoin-rpc-methods.md)
+  - [Near](https://docs.blockdaemon.com/docs/near.md)
+    - [How to Connect to Near](https://docs.blockdaemon.com/docs/how-to-connect-to-near.md)
+    - [Near RPC Methods](https://docs.blockdaemon.com/docs/near-rpc-methods.md)
+  - [Optimism](https://docs.blockdaemon.com/docs/optimism.md)
+    - [How to Connect to Optimism](https://docs.blockdaemon.com/docs/how-to-connect-to-optimism.md)
+  - [Polkadot](https://docs.blockdaemon.com/docs/polkadot.md)
+    - [How to Connect to Polkadot](https://docs.blockdaemon.com/docs/how-to-connect-to-polkadot.md)
+    - [How to Connect to Polkadot Asset Hub](https://docs.blockdaemon.com/docs/how-to-connect-to-polkadot-asset-hub.md)
+    - [Blockdaemon & Polkadot](https://docs.blockdaemon.com/docs/blockdaemon-and-polkadot.md)
+    - [Polkadot’s Consensus Mechanisms](https://docs.blockdaemon.com/docs/polkadots-consensus-mechanisms.md): ‘’
+    - [Nominated Proof of Stake (NPoS)](https://docs.blockdaemon.com/docs/polkadot-npos.md)
+    - [Parachains](https://docs.blockdaemon.com/docs/parachains-polkadot.md)
+    - [Substrate](https://docs.blockdaemon.com/docs/substrate-polkadot.md)
+    - [Slashing](https://docs.blockdaemon.com/docs/polkadot-slashing.md)
+    - [Staking Rewards](https://docs.blockdaemon.com/docs/polkadot-staking-rewards.md)
+    - [Treasury](https://docs.blockdaemon.com/docs/treasury.md)
+  - [Polygon](https://docs.blockdaemon.com/docs/polygon.md)
+    - [How to Connect to Polygon](https://docs.blockdaemon.com/docs/how-to-connect-to-polygon.md)
+  - [Provenance](https://docs.blockdaemon.com/docs/provenance.md)
+    - [How to Connect to Provenance](https://docs.blockdaemon.com/docs/how-to-connect-to-provenance.md)
+  - [Robinhood Chain](https://docs.blockdaemon.com/docs/robinhood.md): An overview of Robinhood Chain, the Ethereum-compatible L2 for onchain finance
+    - [How to Connect to Robinhood Chain](https://docs.blockdaemon.com/docs/how-to-connect-to-robinhood.md): Access your Blockdaemon-provided Robinhood Chain nodes via cURL
+  - [Solana](https://docs.blockdaemon.com/docs/solana.md)
+    - [How to Connect to Solana](https://docs.blockdaemon.com/docs/how-to-connect-to-solana.md)
+    - [Understanding Solana Validators](https://docs.blockdaemon.com/docs/understanding-solana-validators.md)
+    - [Solana Consensus Mechanism](https://docs.blockdaemon.com/docs/solana-consensus-mechanism.md)
+    - [Solana Nodes Performance](https://docs.blockdaemon.com/docs/solana-nodes-performance.md)
+    - [Participate in Solana Staking](https://docs.blockdaemon.com/docs/participate-in-solana-staking.md)
+    - [Staking Rewards](https://docs.blockdaemon.com/docs/solana-staking-rewards.md)
+    - [MEV Rewards](https://docs.blockdaemon.com/docs/mev-rewards.md)
+    - [Solana Archival Nodes](https://docs.blockdaemon.com/docs/solana-archival-nodes.md): Full-history Solana data for institutional use
+  - [Soneium](https://docs.blockdaemon.com/docs/soneium.md)
+    - [How to Connect to Soneium](https://docs.blockdaemon.com/docs/how-to-connect-to-soneium.md)
+    - [Soneium RPC Methods](https://docs.blockdaemon.com/docs/soneium-rpc-methods.md)
+  - [Stellar](https://docs.blockdaemon.com/docs/stellar.md)
+    - [How to Connect to Stellar](https://docs.blockdaemon.com/docs/how-to-connect-to-stellar.md)
+    - [What Is Horizon?](https://docs.blockdaemon.com/docs/what-is-horizon.md)
+    - [Stellar Nodes: Watcher or Validator](https://docs.blockdaemon.com/docs/stellar-nodes-watcher-or-validator.md)
+    - [How To Use SDKs On A Stellar Node](https://docs.blockdaemon.com/docs/how-to-use-sdks-on-a-stellar-node.md)
+    - [Stellar Quarterly Testnet Reset](https://docs.blockdaemon.com/docs/stellar-quarterly-testnet-reset.md)
+    - [Rate Limiting for Stellar Horizon](https://docs.blockdaemon.com/docs/rate-limiting-for-stellar-horizon.md)
+  - [Tempo](https://docs.blockdaemon.com/docs/tempo.md): High-level overview of the Tempo Network architecture, concepts, and infrastructure components.
+    - [Getting Started with Tempo](https://docs.blockdaemon.com/docs/getting-started-with-tempo.md): Everything your organization needs to understand Tempo Network, how staking and validation work, and the services Blockdaemon provides to help you participate with confidence.
+    - [Managing Transactions with Stablecoin Gas](https://docs.blockdaemon.com/docs/managing-transactions-with-stablecoin-gas.md): How stablecoin gas works on Tempo and how to format your transactions to utilize it
+    - [Issuing Assets: The TIP-20 Standard & TIP-403 Compliance](https://docs.blockdaemon.com/docs/issuing-assets-the-tip-20-standard-tip-403-compliance.md): How to enforce native compliance and access controls for institutional token issuance on Tempo
+  - [Tron](https://docs.blockdaemon.com/docs/tron.md)
+    - [How to Connect to Tron](https://docs.blockdaemon.com/docs/dedicated-nodes-how-to-connect-to-tron.md)
+    - [Tron RPC Methods](https://docs.blockdaemon.com/docs/dedicated-nodes-tron-rpc-methods.md)
+    - [Tron REST Methods](https://docs.blockdaemon.com/docs/dedicated-nodes-tron-rest-methods.md)
+  - [Unichain](https://docs.blockdaemon.com/docs/unichain.md)
+    - [How to Connect to Unichain](https://docs.blockdaemon.com/docs/how-to-connect-to-unichain.md)
+  - [XRP](https://docs.blockdaemon.com/docs/xrp.md)
+    - [How to Connect to XRP](https://docs.blockdaemon.com/docs/how-to-connect-to-xrp.md)
+    - [XRP RPC Methods](https://docs.blockdaemon.com/docs/xrp-rpc-methods.md)
+    - [Sending A Transaction To An XRP Ledger](https://docs.blockdaemon.com/docs/sending-a-transaction-to-an-xrp-ledger.md): Learn how easy it is to send a transaction to an XRP ledger.
+  - [zkSync](https://docs.blockdaemon.com/docs/zksync.md)
+    - [How to Connect to zkSync](https://docs.blockdaemon.com/docs/how-to-connect-to-zksync.md)
+    - [zkSync RPC Methods](https://docs.blockdaemon.com/docs/zksync-rpc-methods.md)
+  - [Stable](https://docs.blockdaemon.com/docs/stable.md)
+- [Events](https://docs.blockdaemon.com/docs/overview-events.md)
+  - [Quickstart](https://docs.blockdaemon.com/docs/events-quickstart.md)
+    - [Step 1. Get Supported Protocols and Networks](https://docs.blockdaemon.com/docs/step-1-get-supported-protocols-and-networks.md): Check out a wide range of supported protocols and networks for seamless integration.
+    - [Step 2. Create a New Target](https://docs.blockdaemon.com/docs/step-2-create-a-new-target.md): Learn how to configure targets for event streaming.
+    - [Step 3. Create a Variable](https://docs.blockdaemon.com/docs/step-3-create-a-variable.md): Create a variable to monitor transactions for specific wallets or addresses.
+    - [Step 4. Add Variable Values](https://docs.blockdaemon.com/docs/step-4-add-variable-values.md): This section will contain a variable values details and how they work.
+    - [Step 5. Create a Rule](https://docs.blockdaemon.com/docs/step-5-create-a-rule.md): Easily create new rules for event handling and management.
+  - [Events Unified Format](https://docs.blockdaemon.com/docs/events-unified-format.md): Explore the standardized unified format for events across various protocols and networks.
+  - [Event Coverage](https://docs.blockdaemon.com/docs/event-coverage.md): Check which event types, protocols, and networks are supported together before building a rule.
+  - [Event Types](https://docs.blockdaemon.com/docs/event-types.md)
+    - [Unified Block](https://docs.blockdaemon.com/docs/unified-block.md)
+    - [Unified Reorg](https://docs.blockdaemon.com/docs/unified-reorg.md)
+    - [Unified Confirmed Balance](https://docs.blockdaemon.com/docs/unified-confirmed-balance.md)
+    - [Unified Confirmed Transaction](https://docs.blockdaemon.com/docs/unified-confirmed-transaction.md)
+    - [Unified Confirmed Transaction Trace](https://docs.blockdaemon.com/docs/unified-confirmed-transaction-trace.md)
+    - [Unified Confirmed Transaction Log](https://docs.blockdaemon.com/docs/unified-confirmed-transaction-log.md)
+    - [Unified Staking Reward](https://docs.blockdaemon.com/docs/unified-staking-reward.md)
+    - [Unified Staking Status](https://docs.blockdaemon.com/docs/unified-staking-status.md)
+    - [Unified Event](https://docs.blockdaemon.com/docs/unified-event.md): Stellar-specific event type triggered when a smart contract emits an event on the Stellar network.
+    - [Unified Trustline](https://docs.blockdaemon.com/docs/unified-trustline.md): Event type triggered when a trustline is created, updated, or removed on the Stellar or XRP Ledger networks.
+    - [Unified Pending Transaction](https://docs.blockdaemon.com/docs/unified-pending-transaction.md)
+  - [Backfill](https://docs.blockdaemon.com/docs/backfill.md): Event Streaming doesn't replay history past its own retention window. Here's how to backfill missed data from Blockdaemon's other APIs instead.
+  - [Chain Sink](https://docs.blockdaemon.com/docs/chain-sink.md): An open-source binary that reads Event Streaming over WebSocket and writes it into storage you control.
+    - [Kafka via Chain Sink](https://docs.blockdaemon.com/docs/kafka-via-chain-sink.md): Chain Sink relays the WebSocket stream into a topic on a Kafka cluster you run.
+  - [Delivery Guarantees](https://docs.blockdaemon.com/docs/delivery-guarantees.md): Understand the delivery contract for Event Streaming before you build against it: at-least-once delivery, no ordering guarantee, and how to deduplicate.
+  - [Scale and Filtering](https://docs.blockdaemon.com/docs/scale-and-filtering.md): How many addresses a variable can hold, how rule conditions combine, and what's in the event envelope.
+  - [Webhook Streaming](https://docs.blockdaemon.com/docs/webhook-streaming.md): Blockdaemon delivers events to a webhook you control. Covers the setup flow and the security options available for it.
+  - [WebSocket Streaming](https://docs.blockdaemon.com/docs/websocket-streaming.md): An alternative to webhooks for receiving events — you connect out to Blockdaemon instead of exposing an endpoint for Blockdaemon to call.
+- [API Suite](https://docs.blockdaemon.com/docs/apisuite-overview.md): Explore the enhanced features and improvements in our revamped API Suite
+  - [QuickStart](https://docs.blockdaemon.com/docs/quick-start-blockdaemon-api-suite.md): 👋 Welcome to the Blockdaemon API Suite!
+  - API Experiences
+    - [Wallet Transact](https://docs.blockdaemon.com/docs/wallet-transact.md): Scale Your Wallet Operations with Indexed, Multi-Chain Infrastructure.
+    - [Chain Watch](https://docs.blockdaemon.com/docs/chain-watch.md): Sync your wallet and finance systems in real-time with on-chain events and stream data to your institution.
+    - [Custom Solutions](https://docs.blockdaemon.com/docs/custom-solutions.md): Explore a custom APIs & node offerings of Blockdaemon API Suite.
+  - [API Suite Dashboard](https://docs.blockdaemon.com/docs/api-suite-dashboard.md): Get real-time insights and control over your API interactions with the API Suite dashboard.
+  - [Subscription Management](https://docs.blockdaemon.com/docs/subscription-management.md): Upgrade your blockchain experience with our subscription and checkout services.
+- [RPC API](https://docs.blockdaemon.com/docs/rpc-api.md)
+  - [Algorand](https://docs.blockdaemon.com/docs/algorand-3.md): Access Algorand with Blockdaemon RPC API
+    - [Algorand via Algod API](https://docs.blockdaemon.com/docs/access-algorand-rpc-via-algod-api.md)
+    - [Algorand via Indexer API](https://docs.blockdaemon.com/docs/access-algorand-rpc-via-indexer-api.md)
+  - [Arbitrum One](https://docs.blockdaemon.com/docs/access-arbitrum-one-rpc.md)
+  - [Arc](https://docs.blockdaemon.com/docs/access-arc-rpc.md)
+  - [Avalanche](https://docs.blockdaemon.com/docs/access-avalanche-rpc.md)
+  - [Base](https://docs.blockdaemon.com/docs/access-base-rpc.md)
+  - [Bitcoin](https://docs.blockdaemon.com/docs/access-bitcoin-rpc.md)
+  - [Bitcoin Cash](https://docs.blockdaemon.com/docs/access-bitcoin-cash-rpc.md)
+  - [Cosmos](https://docs.blockdaemon.com/docs/cosmos-1.md): Access Cosmos with Blockdaemon RPC API
+    - [Cosmos via Tendermint REST API](https://docs.blockdaemon.com/docs/access-cosmos-rpc-via-tendermint-rest.md)
+    - [Cosmos REST API](https://docs.blockdaemon.com/docs/access-cosmos-rpc-via-rest-api.md)
+    - [Cosmos via Tendermint RPC API](https://docs.blockdaemon.com/docs/access-cosmos-rpc-via-tendermint-rpc.md)
+  - [Dogecoin](https://docs.blockdaemon.com/docs/access-dogecoin-rpc.md)
+  - [Ethereum](https://docs.blockdaemon.com/docs/access-ethereum-rpc-api.md)
+  - [Ethereum Beacon API](https://docs.blockdaemon.com/docs/access-ethereum-beacon-api.md)
+  - [Hyperliquid](https://docs.blockdaemon.com/docs/access-hyperliquid-rpc.md)
+  - [Ink](https://docs.blockdaemon.com/docs/access-ink-rpc.md)
+  - [Kusama](https://docs.blockdaemon.com/docs/kusama-1.md): Access Kusama with Blockdaemon RPC API
+    - [Kusama via Substrate RPC API](https://docs.blockdaemon.com/docs/access-kusama-rpc-via-substrate-rpc-api.md)
+    - [Kusama via Substrate Sidecar API](https://docs.blockdaemon.com/docs/access-kusama-rpc-via-substrate-sidecar-api.md)
+    - [Kusama via Polkadot REST API](https://docs.blockdaemon.com/docs/kusama-via-polkadot-rest-api.md): Use the Polkadot REST API to call native Kusama REST methods through Blockdaemon-hosted endpoints.
+  - [Litecoin](https://docs.blockdaemon.com/docs/access-litecoin-rpc.md)
+  - [Monad](https://docs.blockdaemon.com/docs/access-monad-rpc.md)
+  - [Near](https://docs.blockdaemon.com/docs/access-near-rpc.md)
+  - [Optimism](https://docs.blockdaemon.com/docs/access-optimism-rpc.md)
+  - [Polkadot](https://docs.blockdaemon.com/docs/polkadot-1.md): Access Polkadot with Blockdaemon RPC API
+    - [Polkadot via Substrate RPC API](https://docs.blockdaemon.com/docs/access-polkadot-rpc-via-substrate-rpc-api.md)
+    - [Polkadot via Substrate Sidecar API](https://docs.blockdaemon.com/docs/access-polkadot-rpc-via-substrate-sidecar-api.md)
+    - [Polkadot via Polkadot REST API](https://docs.blockdaemon.com/docs/polkadot-via-polkadot-rest-api.md): Use the Polkadot REST API to call native Polkadot REST methods through Blockdaemon-hosted endpoints.
+  - [Polygon](https://docs.blockdaemon.com/docs/access-polygon-rpc.md): Access Polygon with Blockdaemon RPC API
+    - [Polygon via Ethereum API](https://docs.blockdaemon.com/docs/access-polygon-rpc-via-ethereum-api.md)
+    - [Polygon via Tendermint REST API](https://docs.blockdaemon.com/docs/access-polygon-rpc-via-tendermint-rest.md)
+    - [Polygon via Tendermint RPC API](https://docs.blockdaemon.com/docs/access-polygon-rpc-via-tendermint-rpc.md)
+  - [Robinhood](https://docs.blockdaemon.com/docs/access-robinhood-rpc.md): How to Access Robinhood Chain via Blockdaemon RPC API
+  - [Solana](https://docs.blockdaemon.com/docs/access-solana-rpc.md)
+  - [Soneium](https://docs.blockdaemon.com/docs/access-soneium-rpc.md)
+  - [Soroban](https://docs.blockdaemon.com/docs/access-soroban-rpc.md)
+  - [Stable](https://docs.blockdaemon.com/docs/access-stable-rpc.md)
+  - [Stellar](https://docs.blockdaemon.com/docs/access-stellar-rpc.md)
+  - [Tempo](https://docs.blockdaemon.com/docs/connecting-to-tempo-blockdaemon-rpc-endpoints.md): How to connect to Blockdaemon Tempo RPC Endpoints
+  - [Tron](https://docs.blockdaemon.com/docs/access-tron-rpc-api.md)
+  - [Full Node HTTP Tron API](https://docs.blockdaemon.com/docs/access-full-node-http-tron-rpc.md)
+  - [Solidity Full Node Tron API](https://docs.blockdaemon.com/docs/access-solidity-full-node-tron-rpc.md)
+  - [X Layer](https://docs.blockdaemon.com/docs/access-xlayer-rpc.md)
+  - [XRP](https://docs.blockdaemon.com/docs/access-xrp-rpc.md)
+- [LayerZero](https://docs.blockdaemon.com/docs/layerzero-overview.md): Introducing Animoca-Blockdaemon DVNs, transforming cross-chain transactions for easy swaps and transfers.
+  - [Animoca-Blockdaemon DVN Addresses](https://docs.blockdaemon.com/docs/blockdaemon-dvn-addresses.md)
+
+## Guides: WALLET & KEY MANAGEMENT
+- [Institutional Vault](https://docs.blockdaemon.com/docs/blockdaemon-wallet-overview.md): Find out what Institutional Vault is and how it works
+
+## Guides: SUPPORT
+- [AI Optimization](https://docs.blockdaemon.com/docs/ai-optimization.md): Streamline your Blockdaemon documentation experience with our AI‑powered support.
+- [Subscribe to the Blockdaemon StatusPage](https://docs.blockdaemon.com/docs/how-to-subscribe-to-the-blockdaemon-statuspage.md): 🚨 Stay updated on Blockdaemon services by subscribing to the StatusPage.
+- [Error codes](https://docs.blockdaemon.com/docs/error-codes.md)
+  - [address_checksum_invalid](https://docs.blockdaemon.com/docs/address_checksum_invalid.md)
+  - [authentication_required](https://docs.blockdaemon.com/docs/authentication_required.md)
+  - [bad_gateway](https://docs.blockdaemon.com/docs/bad_gateway.md)
+  - [block_not_found](https://docs.blockdaemon.com/docs/block_not_found.md)
+  - [event_rule_not_found](https://docs.blockdaemon.com/docs/event_rule_not_found.md)
+  - [event_target_not_found](https://docs.blockdaemon.com/docs/event_target_not_found.md)
+  - [event_variable_not_found](https://docs.blockdaemon.com/docs/event_variable_not_found.md)
+  - [gas_estimation_failed](https://docs.blockdaemon.com/docs/gas_estimation_failed.md)
+  - [insufficient_balance](https://docs.blockdaemon.com/docs/insufficient_balance.md)
+  - [internal_error](https://docs.blockdaemon.com/docs/internal_error.md)
+  - [invalid_address](https://docs.blockdaemon.com/docs/invalid_address.md)
+  - [invalid_api_key](https://docs.blockdaemon.com/docs/invalid_api_key.md)
+  - [invalid_chain_id](https://docs.blockdaemon.com/docs/invalid_chain_id.md)
+  - [invalid_parameter](https://docs.blockdaemon.com/docs/invalid_parameter.md)
+  - [missing_parameter](https://docs.blockdaemon.com/docs/missing_parameter.md)
+  - [nonce_too_high](https://docs.blockdaemon.com/docs/nonce_too_high.md)
+  - [nonce_too_low](https://docs.blockdaemon.com/docs/nonce_too_low.md)
+  - [not_implemented](https://docs.blockdaemon.com/docs/not_implemented.md)
+  - [permission_denied](https://docs.blockdaemon.com/docs/permission_denied.md)
+  - [rate_limited](https://docs.blockdaemon.com/docs/rate_limited.md)
+  - [route_not_found](https://docs.blockdaemon.com/docs/route_not_found.md)
+  - [service_unavailable](https://docs.blockdaemon.com/docs/service_unavailable.md)
+  - [swap_not_found](https://docs.blockdaemon.com/docs/swap_not_found.md)
+  - [transaction_already_exists](https://docs.blockdaemon.com/docs/transaction_already_exists.md)
+  - [unsupported_chain](https://docs.blockdaemon.com/docs/unsupported_chain.md)
+
+## Guides: MCP SERVER
+- [Docs MCP](https://docs.blockdaemon.com/docs/mcp.md)
+- [DeFi MCP](https://docs.blockdaemon.com/docs/defi-mcp.md): Connect an AI assistant or IDE to Blockdaemon's DeFi APIs over the Model Context Protocol — no HTTP client code required.
+
+## Reference: INTRODUCTION
+- [Homepage](https://docs.blockdaemon.com/reference/homepage-api.md)
+- [Blockdaemon APIs](https://docs.blockdaemon.com/reference/blockdaemon-api-suite.md): Discover the Blockdaemon API Suite - streamlining institutional staking and simplifying blockchain operations.
+
+## Reference: STAKING
+- Staking API
+  - [Overview](https://docs.blockdaemon.com/reference/staking-api-overview.md): Simplify and streamline institutional cryptocurrency staking with the Blockdaemon Staking API
+  - [HTTP Message Signatures](https://docs.blockdaemon.com/reference/http-message-signatures.md): Learn how to verify HTTP Message Signatures using Blockdaemon's Staking API
+  - [Staking SDK](https://docs.blockdaemon.com/reference/staking-sdk.md): Explore Blockdaemon's Staking SDK to decode, validate transactions, and ensure security with open-source libraries
+  - [Security Audit Certificate](https://docs.blockdaemon.com/reference/security-audit-certificate.md)
+  - General
+    - [List of customer's staking plans](https://docs.blockdaemon.com/reference/listcustomerplans.md): This endpoint allows you to get a list of your staking plans.  Staking plans are created by Blockdaemon on your behalf. They are a means to deploy white-label validators or get access to public…
+    - [List Your Stake Intents](https://docs.blockdaemon.com/reference/liststakeintents.md): Retrieve a list of all outstanding stake intents.
+  - Avalanche
+    - [Avalanche API Quickstart](https://docs.blockdaemon.com/reference/avalanche-api-overview.md): Overview and setup for Blockdaemon Avalanche Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postavaxstakeintent.md): Returns an unsigned transaction that can be used to delegate your tokens to a Blockdaemon validator.
+  - Binance
+    - [BNB API Quickstart](https://docs.blockdaemon.com/reference/bnb-api-overview.md): Overview and setup for Blockdaemon BNB Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postbinancestakeintent.md): Blockdaemon reserves the right to free any allocated resources if the transaction is not confirmed in time.
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/postbinancedeactivationintent.md): Create transaction to undelegate given amount of BNB from a validator.
+    - [Lists Deactivation Intents](https://docs.blockdaemon.com/reference/getbinancedeactivationintents.md): Retrieve a list of deactivation intents.
+    - [Get Deactivatable Amount](https://docs.blockdaemon.com/reference/getbinancedeactivatableamount.md): Returns the total staked amount that can be deactivated across all wallets of the user.  You can specify the optional `wallets` parameter to get the total deactivatable amount in specific wallets.
+    - [Post restake Intent](https://docs.blockdaemon.com/reference/postbinancerestakeintent.md): Create transaction to move given amount of ATOMs from one validator to another.
+    - [Lists Restake Intents](https://docs.blockdaemon.com/reference/getbinancerestakeintents.md): List restake intents
+  - Cardano
+    - [Cardano API Quickstart](https://docs.blockdaemon.com/reference/cardano-api-overview.md): Overview and setup for Blockdaemon Cardano Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postcardanostakeintent.md): Return an unsigned transaction that can be used to stake your tokens with the Blockdaemon staking pool.
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/postcardanodeactivationintent.md): Create a transaction for deactivating staked Cardano tokens.
+    - [List Deactivation Intents](https://docs.blockdaemon.com/reference/getcardanodeactivationintents.md): Retrieve a list of all outstanding deactivation intents.
+    - [Post Rewards Withdrawal Intent](https://docs.blockdaemon.com/reference/postcardanorewardswithdrawalintent.md): Creates a new withdrawal intent that withdraws only the accumulated rewards. Staked tokens stay untouched and keep earning rewards.
+    - [List Rewards Withdrawal Intents](https://docs.blockdaemon.com/reference/getcardanorewardswithdrawalintents.md): Retrieve a list of all outstanding rewards withdrawal intents.
+    - [Broadcast Transaction](https://docs.blockdaemon.com/reference/submittransaction.md): Submits a signed transaction to the Cardano network.
+  - Cosmos
+    - [Cosmos API Quickstart](https://docs.blockdaemon.com/reference/cosmos-api-overview.md): Overview and setup for Blockdaemon Cosmos Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postcosmosstakeintent.md): Blockdaemon reserves the right to free any allocated resources if the transaction is not confirmed in time.
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/postcosmosdeactivationintent.md): Create transaction to undelegate given amount of ATOMs from a validator.
+    - [Lists Deactivation Intents](https://docs.blockdaemon.com/reference/getcosmosdeactivationintents.md): Retrieve a list of deactivation intents.
+    - [Post Rewards Withdrawal Intent](https://docs.blockdaemon.com/reference/postcosmosrewardswithdrawalintent.md): Creates a new withdrawal intent that withdraws only the accumulated rewards. Staked tokens stay untouched and keep earning rewards.
+    - [Get Deactivatable Amount](https://docs.blockdaemon.com/reference/getcosmosdeactivatableamount.md): Returns the total staked amount that can be deactivated across all wallets of the user.  You can specify the optional `wallets` parameter to get the total deactivatable amount in specific wallets.
+    - [Get Withdrawable Rewards Amount](https://docs.blockdaemon.com/reference/getcosmoswithdrawablerewardsamount.md): Returns the total accumulated rewards amount that can be withdrawn across all wallets of the user.  You can specify the optional `wallets` parameter to get the total accumulated rewards amount in…
+    - [Post restake Intent](https://docs.blockdaemon.com/reference/postcosmosrestakeintent.md): Create transaction to move given amount of ATOMs from one validator to another.
+    - [Lists Restake Intents](https://docs.blockdaemon.com/reference/getcosmosrestakeintents.md): List restake intents
+  - Ethereum
+    - [Withdrawal Address to Staking Configuration](https://docs.blockdaemon.com/reference/eth-withdrawal-mapping.md): Learn how to specify a particular withdrawal address and it will ensure validators are deployed to a particular region.
+    - [Ethereum API Quickstart](https://docs.blockdaemon.com/reference/ethereum-api-overview.md): Overview and setup for Blockdaemon Ethereum Staking API.
+    - [Validator Batches - Gas Usage](https://docs.blockdaemon.com/reference/validator-batches-gas-usage.md): Learn about recommended gas limits when staking ETH with the Blockdaemon's Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postethereumstakeintent.md): Reserves one or more available validators and returns an unsigned transaction. Supports 0x01 withdrawal address types. The validators will remain reserved for 90 days or until the returned…
+    - [Exit Ethereum Validator](https://docs.blockdaemon.com/reference/exitethereumvalidator.md): Generates an Ethereum voluntary exit message and broadcasts it to the network.
+    - [Exit Ethereum Validators](https://docs.blockdaemon.com/reference/exitethereumvalidators.md): Generates an Ethereum voluntary exit message and broadcasts it to the network. With most error codes, a list of the correctly processed validators is returned. Use it to check which validators will…
+    - [List of Ethereum voluntary exits](https://docs.blockdaemon.com/reference/listethereumexits.md): Lists all the Ethereum voluntary exits that have been generated by the system.
+    - [Generate a validator full exit intent message](https://docs.blockdaemon.com/reference/postethereumwithdrawalintentexit.md): Generates an exit message that a user can sign as part of an exit transaction and submit to the official Ethereum withdrawal smart contract. The response includes the withdrawal contract address for…
+    - [Generate a validator partial withdrawal intent message](https://docs.blockdaemon.com/reference/postethereumwithdrawalintentpartial.md): Generates an partial withdrawal message that a user can sign as part of an exit transaction and submit to the official Ethereum withdrawal smart contract. The response includes the withdrawal…
+    - [Generate a Signed Voluntary Exit Message](https://docs.blockdaemon.com/reference/generatesignedvoluntaryexit.md): Generates a voluntary exit message, but does not broadcast it to the network. Instead, the signed message is returned as part of the response. You can use the [Native Ubiquity API for…
+    - [Generate an Ethereum Launchpad Deposit File](https://docs.blockdaemon.com/reference/generateethereumlaunchpaddeposit.md): Generates an Ethereum Launchpad deposit string for one or more validators. The resulting JSON file will allow you to execute the deposit manually on the official [Ethereum Deposit…
+    - [Estimate Ethereum validators progress in the pending-queued queue](https://docs.blockdaemon.com/reference/pendingqueuedprogress.md): Retrieve Ethereum validator in the pending-queued queue
+    - [Estimate Ethereum validators progress in the active-exiting queue](https://docs.blockdaemon.com/reference/activeexitingqueueprogress.md): Retrieve Ethereum validator in the active-exiting queue
+    - [Get Ethereum Withdrawable Amount](https://docs.blockdaemon.com/reference/getethwithdrawableamount.md): Returns the total staked amount that can be withdrawn across a customer's 0x02 validators on the network with the given withdrawal address. Withdrawable amount per validator is calculated as…
+    - [Post Top up Intent](https://docs.blockdaemon.com/reference/postethereumtopupintent.md): Adds additional balance to one or more eligible validators and returns an unsigned transaction. Only withdrawal credentials of type **0x02** are supported. If a validator uses 0x01 credentials or if…
+    - [Generate validator consolidation intent](https://docs.blockdaemon.com/reference/postethereumcompoundingintent.md): Generates a signed intent message to consolidate validator balances by transferring funds from a source validator to a target validator. This operation enables balance consolidation and can also…
+  - Solana
+    - [Solana API Quickstart](https://docs.blockdaemon.com/reference/solana-api-overview.md): Overview and setup for Blockdaemon Solana Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postsolanastakeintent.md): Returns an unsigned transaction that can be used to delegate your tokens to the validator specified in the request.
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/postsolanadeactivationintent.md): This endpoint is used to request deactivation transactions that will be executed against available addresses. The API will automatically select which stake addresses need to be deactivated in order…
+    - [List Deactivation Intents](https://docs.blockdaemon.com/reference/getsolanadeactivationintents.md): Retrieve a list of all outstanding deactivation intents.
+    - [Cancel Deactivation Intent](https://docs.blockdaemon.com/reference/cancelsolanadeactivationintent.md): Cancels a previously issued deactivation intent by specifying its ID.
+    - [Get Deactivatable Amount](https://docs.blockdaemon.com/reference/getsolanadeactivatableamount.md): Returns the total staked amount that can be deactivated across all wallets of the user. If any prior deactivation intent was left unsigned, it will be automatically canceled.  You can specify the…
+    - [Post Withdrawal Intent](https://docs.blockdaemon.com/reference/postsolanawithdrawalintent.md): This endpoint is used to request withdrawal transactions that will be executed against available deactivated accounts. If you request more funds than are currently unlocked, the API will return an…
+    - [List Withdrawal Intents](https://docs.blockdaemon.com/reference/getsolanawithdrawalintents.md): Retrieve a list of all outstanding withdrawal intents
+    - [Cancel Withdrawal Intent](https://docs.blockdaemon.com/reference/cancelsolanawithdrawalintent.md): Cancels a previously issued withdrawal intent by specifying its ID.
+    - [Get Withdrawable Amount](https://docs.blockdaemon.com/reference/getsolanawithdrawableamount.md): Returns total amount that can be withdrawn across all wallets of the user. If any prior withdrawal intent was left unsigned, it will be automatically canceled.  You can specify the optional `wallets`…
+    - [Get Stake Accounts](https://docs.blockdaemon.com/reference/getstakeaccountssolana.md): Retrieve all of the stake accounts.
+  - NEAR
+    - [NEAR API Quickstart](https://docs.blockdaemon.com/reference/near-api-overview.md): Overview and setup for Blockdaemon NEAR Staking API.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postnearstakeintent.md): Returns an unsigned transaction that can be used to delegate your tokens to a Blockdaemon validator.
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/postneardeactivationintent.md): Create a transaction for deactivating staked NEAR tokens.  The Post Deactivation Intent endpoint returns an unsigned transaction, which once signed and broadcasted starts the deactivation process.…
+    - [List Deactivation Intents](https://docs.blockdaemon.com/reference/getneardeactivationintents.md): Retrieve a list of all outstanding deactivation intents.
+    - [Cancel Deactivation Intent](https://docs.blockdaemon.com/reference/cancelneardeactivationintent.md): Cancels a previously issued deactivation intent by specifying its ID.
+    - [Get Deactivatable Amount](https://docs.blockdaemon.com/reference/getneardeactivatableamount.md): Returns the total staked amount that can be deactivated across all wallets of the user.  You can specify the optional `wallets` parameter to get the total deactivatable amount in specific wallets.
+    - [Post Withdrawal Intent](https://docs.blockdaemon.com/reference/postnearwithdrawalintent.md): Returns an unsigned transaction that can be used to withdraw your stake after it was deactivated through the [Post Deactivation…
+    - [List Withdrawal Intents](https://docs.blockdaemon.com/reference/getnearwithdrawalintents.md): Retrieve a list of all outstanding withdrawal intents.
+    - [Get Withdrawable Amount](https://docs.blockdaemon.com/reference/getnearwithdrawableamount.md): Returns total amount that can be withdrawn across all wallets of the user.  You can specify the optional `wallets` parameter to get the total withdrawable amount in specific wallets.
+  - Polkadot
+    - [Polkadot API Quickstart](https://docs.blockdaemon.com/reference/polkadot-api-overview.md): Overview and setup for Blockdaemon Polkadot Staking API.
+  - Polygon
+    - [Polygon API Quickstart](https://docs.blockdaemon.com/reference/polygon-api-overview.md): Overview and setup for Blockdaemon Polygon Staking API.
+    - [Post Bootstrapping Intent](https://docs.blockdaemon.com/reference/postpolygonbootstrappingintent.md): Creates a new account bootstrapping intent transaction.  Returns an unsigned transaction that sets up the user’s wallet for delegation. It is required to sign and send this transaction only once, the…
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/postpolygonstakeintent.md): Returns an unsigned transaction for delegation. Before using this endpoint, the user must sign and submit the unsigned transaction returned by [Post Bootstrapping…
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/postpolygondeactivationintent.md): Creates a new unbond intent that opts out of the delegation program. The user is getting back both their stake and the earned reward. The reward is sent immediately, but the stake gets locked for the…
+    - [Lists Deactivation Intents](https://docs.blockdaemon.com/reference/getpolygondeactivationintents.md): Returns deactivation requests (only unclaimed stakes) for a **given wallet address**.  Deactivation requests are stored in the blockchain and provide the user with an unbond nonce for each. Nonces…
+    - [Cancel Deactivation Intent](https://docs.blockdaemon.com/reference/cancelpolygondeactivationintent.md): Cancels a previously issued deactivation intent by specifying its ID.
+    - [Post Withdrawal Intent](https://docs.blockdaemon.com/reference/postpolygonwithdrawalintent.md): Creates a new unstake intent to fully withdraw a stake. It should be used only after the unbonding period has passed. If no unbond nonce is specified, transactions for all available unstakes will be…
+    - [Post Rewards Restake Intent](https://docs.blockdaemon.com/reference/postpolygonrewardsrestakeintent.md): Creates a new restake intent that restakes token rewards to the validator and increases the delegation stake.
+    - [Post Rewards Withdrawal Intent](https://docs.blockdaemon.com/reference/postpolygonrewardswithdrawalintent.md): Creates a new withdrawal intent that withdraws only the accumulated rewards. Staked tokens stay untouched and keep earning rewards.
+- Staking API V2
+  - [Overview](https://docs.blockdaemon.com/reference/staking-api-v2-overview.md): Simplify and streamline institutional cryptocurrency staking with the Blockdaemon Staking API
+  - TON
+    - [Create Notification](https://docs.blockdaemon.com/reference/createnotification.md): Issues an exit validator request notification to Blockdaemon
+  - Solana
+    - [Migrating Solana from v1 to v2](https://docs.blockdaemon.com/reference/migrating-solana-from-v1-to-v2-staking.md): How to upgrade from Solana API v1 to v2 and access new features and better performance.
+    - [Solana API V2 Quickstart](https://docs.blockdaemon.com/reference/solana-api-v2-quickstart.md): Overview and setup for Blockdaemon Solana Staking API V2.
+    - [Post Deactivation Intent](https://docs.blockdaemon.com/reference/builddeactivatetransaction.md): Returns an unsigned transaction to deactivate SOL from an active stake account
+    - [Get the Blockdaemon nonce account](https://docs.blockdaemon.com/reference/getnonceaccount.md): Get the Blockdaemon nonce account associated provided delegator_address
+    - [Post Split Intent](https://docs.blockdaemon.com/reference/buildsplittransaction.md): Returns an unsigned transaction transaction that can be used to  split to divide an existing stake account into two separate accounts, each holding a  specified portion of the original stake’s SOL.
+    - [Post Stake Intent](https://docs.blockdaemon.com/reference/buildstaketransaction.md): Returns a unsigned transaction to stake SOL to a newly created stake account
+    - [Post Withdrawal Intent](https://docs.blockdaemon.com/reference/buildwithdrawtransaction.md): Returns an unsigned transaction to withdraw a specified amount of SOL from an deactivated stake account
+    - [Get Solana Stake Accounts](https://docs.blockdaemon.com/reference/getstakes.md): Get the status of Solana stakes by payer address
+    - [Post Solana Stake Accounts](https://docs.blockdaemon.com/reference/getstakesbyaccounts.md): Get the status of Solana stakes by stake account addresses
+- Staking Reporting API
+  - [Overview](https://docs.blockdaemon.com/reference/stakingreporting-api-overview.md)
+  - Cardano Staking Reporting
+    - [Cardano Reporting API Overview](https://docs.blockdaemon.com/reference/cardano-reporting-api-overview.md)
+    - [Get the Stake and Rewards of a Pool](https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-pool-cardano.md): Returns the staking balance and rewards earned during the most recent epoch for a pool.
+    - [Get the Stake and Rewards for Multiple Pools](https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-pools-cardano.md): Returns the staking balance and rewards earned during the most recent epoch for multiple staking pools.
+    - [Get the Stake and Rewards of a Delegator](https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-delegator-cardano.md): Returns the staking balance and rewards earned during the most recent epoch for a delegator.
+    - [Get the Stake and Rewards for Multiple Delegators](https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-delegators-cardano.md): Returns the staking balance and rewards earned during the most recent epoch for multiple delegators.
+    - [Get the Historical Stake and Rewards of a Pool](https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-pool-cardano.md): Returns the historical stake and rewards allocated to a given staking pool.
+    - [Get the Historical Stake and Rewards for Multiple Pools](https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-pools-cardano.md): Returns the historical stake and rewards allocated to multiple staking pools.
+    - [Get the Historical Stake and Rewards of a Delegator](https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-delegator-cardano.md): Returns the historical stake and rewards allocated to a given delegator.
+    - [Get the Historical Stake and Rewards for Multiple Delegators](https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-delegators-cardano.md): Returns the historical stake and rewards allocated to multiple staking delegators.
+  - Cosmos Staking Reporting
+    - [Cosmos Reporting API Overview](https://docs.blockdaemon.com/reference/cosmos-reporting-api-overview.md)
+    - [Get the Health of the Protocol Rewards Processing](https://docs.blockdaemon.com/reference/gethealth-cosmos.md): Returns the health of the protocol rewards processing system.
+    - [Get a Stream of Rewards](https://docs.blockdaemon.com/reference/getrewards-cosmos.md): Returns 0 or more reward objects in a streaming fashion using ndjson.
+    - [Get a Stream of Rewards for a Single Address](https://docs.blockdaemon.com/reference/getrewardssingle-cosmos.md): Returns 0 or more reward objects in a streaming fashion using ndjson.
+    - [Get a Stream of Yield Summaries](https://docs.blockdaemon.com/reference/getyields-cosmos.md): Returns a stream of yield summaries for the specified time range. Results are streamed in [NDJSON](https://ndjson.org/) format.
+    - [Get a Stream of Statuses](https://docs.blockdaemon.com/reference/getstatuses-cosmos.md): Returns 0 or more status objects in a streaming fashion using ndjson.
+    - [Get Status for an Address](https://docs.blockdaemon.com/reference/getstatus-cosmos.md): Returns a status object for an address.
+  - Ethereum Staking Reporting
+    - [Ethereum Reporting API Overview](https://docs.blockdaemon.com/reference/ethereum-api-v2-overview.md)
+    - [Get the Protocol Rewards Processing Health](https://docs.blockdaemon.com/reference/gethealth-ethereum.md): The status of reward processing, rewards are available upto and including the indicated `processedEpoch`.     The processing status is degraded if the following is `true`:        (currentChainEpoch -…
+    - [Get a Stream of Rewards](https://docs.blockdaemon.com/reference/getrewards-ethereum.md): Returns the total rewards for the queried period in a streaming fashion using `ndjson`. The total reward returned is derived from the sum of fields in the response `metadata`:      Total Reward =…
+    - [Get a Stream of Rewards for a Single Address](https://docs.blockdaemon.com/reference/getrewardssingle-ethereum.md): Returns the total rewards for the queried period in a streaming fashion using `ndjson`. The total reward returned is derived from the sum of fields in the response `metadata`:      Total Reward =…
+    - [Get a Stream of Yield Summaries](https://docs.blockdaemon.com/reference/getyields-ethereum.md): Returns a **network-wide** stream of yield summaries for the specified time range. Results are streamed in [NDJSON](https://ndjson.org/) format.  For more details on yield metrics and how they are…
+    - [Get a Yield for a Validator Address](https://docs.blockdaemon.com/reference/getyield-validator-ethereum.md): Returns yield data for the specified validator address. For more details on yield metrics and how they are calculated, see the [Yield Metrics…
+    - [Get a Stream of Validator Statuses](https://docs.blockdaemon.com/reference/getstatuses-ethereum.md): Returns 0 or more status objects in a streaming fashion using `ndjson`.
+    - [Get Validator Status for an Address](https://docs.blockdaemon.com/reference/getstatus-ethereum.md): Returns a status object for a Validator address.
+    - [Get Public Keys Associated with a Withdrawal Address](https://docs.blockdaemon.com/reference/get_v2-ethereum-network-pubkeys.md): Retrieves a list of validator public keys that are associated with the provided withdrawal address on the specified Ethereum network.
+    - [Get Deposit Records](https://docs.blockdaemon.com/reference/getdeposits.md): Retrieves deposit records filtered by either a withdrawal address or a validator public key (exactly one must be provided).
+    - [Get Stats for an address](https://docs.blockdaemon.com/reference/getstatsethereum.md): Returns stats for an address including 30 and 90 days of yield and rewards data based  on utc days  If an address is not currently monitored a 404 is returned, on the first query for an address data…
+    - [Preemptively add an address to the stats tracking](https://docs.blockdaemon.com/reference/putstatsethereum.md)
+  - Polkadot Staking Reporting
+    - [Polkadot Reporting API Overview](https://docs.blockdaemon.com/reference/polkadot-reporting-api-overview.md)
+    - [Get the Status of a Nominator](https://docs.blockdaemon.com/reference/getstatusnominator.md): Returns the current status by a user-defined nominator address.
+    - [Get a List of Statuses for Multiple Nominators](https://docs.blockdaemon.com/reference/getstatusnominators.md): Returns the current status by a user-defined list of nominator addresses.
+    - [Get the Stake & Rewards of a Nominator](https://docs.blockdaemon.com/reference/getstakeandrewardsnominator.md): Returns the current stake & rewards allocated by a user-defined nominator address.
+    - [Get a List of Stake & Rewards for Multiple Nominators](https://docs.blockdaemon.com/reference/getstakeandrewardsnominators.md): Returns the current stake & rewards allocated by a user-defined list of nominator addresses.
+    - [Get the Historical Stake & Rewards of a Nominator](https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominator.md): Returns the historical stake & rewards allocated by a user-defined nominator address.
+    - [Get a List of Historical Stake & Rewards for Multiple Nominators](https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominators.md): Returns the historical stake & rewards allocated to multiple given nominator addresses.
+    - [Verify the Staking Activity of a Nominator](https://docs.blockdaemon.com/reference/verifystakingactivitynominator.md): Returns true if a given nominator address is active, false otherwise.
+    - [Verify the Staking Activity of Multiple Nominators](https://docs.blockdaemon.com/reference/verifystakingactivitynominators.md): Returns true if a given nominator address is active, false otherwise (for each address from a list).
+    - [Get the Status of a Validator](https://docs.blockdaemon.com/reference/getstatusvalidator2.md): Returns the current status of a given validator address.
+    - [Get the Status of Multiple Validators](https://docs.blockdaemon.com/reference/getstatusvalidators1.md): Returns the current status of multiple given validator addresses.
+    - [Get the Stake & Rewards of a Validator](https://docs.blockdaemon.com/reference/getstakeandrewardsvalidator2.md): Returns the current stakes & rewards allocated to  a given validator address.
+    - [Get a List of Stake & Rewards for Multiple Validators](https://docs.blockdaemon.com/reference/getstakeandrewardsvalidators2.md): Returns the current stake & rewards allocated to multiple validator addresses.
+    - [Get the Historical Stake & Rewards of a Validator](https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidator1.md): Returns the historical stake & rewards allocated to a given validator address.
+    - [Get a List of Historical Stake & Rewards for Multiple Validators](https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidators2.md): Returns the historical stake & rewards allocated to multiple validator addresses.
+    - [Verify the Staking Activity of a Validator](https://docs.blockdaemon.com/reference/verifystakingactivityvalidator2.md): Returns true if a given validator address is active, false otherwise.
+    - [Verify the Staking Activity of Multiple Validators](https://docs.blockdaemon.com/reference/verifystakingactivityvalidators2.md): Returns true if a given validator address is active, false otherwise (for each address from a list).
+  - Polygon Staking Reporting
+    - [Polygon Reporting API Overview](https://docs.blockdaemon.com/reference/polygon-reporting-api-overview.md)
+    - [Get the Protocol Rewards Processing Health](https://docs.blockdaemon.com/reference/gethealth-polygon.md): Reward processing is optimal if all rewards up to the `lastProcessedCheckpoint - 1` are available, as rewards are calculated after an epoch ends.     The processing status is degraded if the…
+    - [Get a Stream of Rewards](https://docs.blockdaemon.com/reference/getrewards-polygon.md): Returns 0 or more reward objects in a streaming fashion using `ndjson`.
+    - [Get a Stream of Rewards for a Single Address](https://docs.blockdaemon.com/reference/getrewardssingle-polygon.md): Returns 0 or more reward objects in a streaming fashion using `ndjson`.
+    - [Get a Stream of Statuses](https://docs.blockdaemon.com/reference/getstatuses-polygon.md): Returns 0 or more status objects in a streaming fashion using `ndjson`.
+    - [Get Status for an Address](https://docs.blockdaemon.com/reference/getstatus-polygon.md): Returns a status object for an address.
+  - Solana Staking Reporting
+    - [Solana Reporting API Overview](https://docs.blockdaemon.com/reference/solana-reporting-api-overview.md)
+    - [Get the Protocol Rewards Processing Health](https://docs.blockdaemon.com/reference/gethealth-solana.md): The status of reward processing, if optimal then all rewards data up to the indicated metadata fields are available the processing status is degraded if any of the following are true:    *…
+    - [Get a Stream of Rewards](https://docs.blockdaemon.com/reference/getrewards-solana.md): Returns 0 or more reward objects in a streaming fashion using `ndjson`.
+    - [Get a Stream of Rewards for a Single Address](https://docs.blockdaemon.com/reference/getrewardssingle-solana.md): Returns 0 or more reward objects in a streaming fashion using `ndjson`. Must specify either a start and end time or an epoch
+    - [Get a Stream of Yield Summaries](https://docs.blockdaemon.com/reference/getyields-solana.md): Returns a **network-wide** stream of yield summaries for the specified type and time range. Results are streamed in [NDJSON](https://ndjson.org/) format.  For more details on yield metrics and how…
+    - [Get a Yield for a Validator Address](https://docs.blockdaemon.com/reference/getyield-validator-solana.md): Returns yield data for the specified validator address within a given type.   For more details on yield metrics and how they are calculated, see the [Yield Metrics…
+    - [Get a Stream of Statuses](https://docs.blockdaemon.com/reference/getstatuses-solana.md): Returns 0 or more status objects in a streaming fashion using `ndjson`.
+    - [Get Status for an Address](https://docs.blockdaemon.com/reference/getstatus-solana.md): Returns a status object for an address.
+    - [Get Stats for an address](https://docs.blockdaemon.com/reference/getstatssolana.md): Returns stats for an address including 30 and 90 days of yield and rewards data based  on utc days  If an address is not currently monitored a 404 is returned, on the first query for an address data…
+    - [Preemptively add an address to the stats tracking](https://docs.blockdaemon.com/reference/putstatssolana.md)
+
+## Reference: EARN STACK
+- DeFi API
+  - [Authentication](https://docs.blockdaemon.com/reference/defi-api-authentication.md)
+  - Account Abstraction
+    - [Get Paymaster Data](https://docs.blockdaemon.com/reference/aagetpaymasterdata.md): This endpoint retrieves the paymaster data necessary for account abstraction. It returns a payload containing the paymasterData, a verification hash, and validity timestamps (mockValidUntil and…
+    - [Get Signature Message](https://docs.blockdaemon.com/reference/aagetsignaturemessage.md): This endpoint retrieves a hexadecimal signature message that must be signed by the sender as part of the account abstraction process. The signed message serves as a critical authorization component…
+    - [Get User Ops](https://docs.blockdaemon.com/reference/aagetuserops.md): Retrieves a user operation object that can be signed and submitted to the bundler. Used in account abstraction flows to gather the required transaction data.  > 💡  **Compute Unit Value:** `5` (Fixed)
+    - [Send User Ops](https://docs.blockdaemon.com/reference/aasenduserops.md): This endpoint generates and returns the necessary paymaster parameters for account abstraction. It constructs a user operation payload including sender, recipient, gas, and call data details which…
+  - Account
+    - [Get User Allowance](https://docs.blockdaemon.com/reference/accountv1allowance.md): ![Beta](https://img.shields.io/badge/Status-Beta-yellow) <br/> Retrieves the approved allowance for a specific ERC-20 token, indicating how many tokens a designated spender is authorized to withdraw…
+    - [Get User Portfolio](https://docs.blockdaemon.com/reference/accountv1portfolio.md): ![Beta](https://img.shields.io/badge/Status-Beta-yellow) <br/> Provides a snapshot of a wallet’s asset portfolio across supported blockchains, including native tokens and detailed EVM token…
+  - Bridge
+    - [Create Bridge Swap Transaction](https://docs.blockdaemon.com/reference/bridgeswap.md): Enables seamless, cross-chain token exchanges by swapping assets between supported blockchain networks. This endpoint processes the swap transaction securely and efficiently, converting tokens from…
+    - [Get Bridge Swap Price](https://docs.blockdaemon.com/reference/bridgeprice.md): This endpoint provides a real‑time swap quotation for transferring tokens between two blockchain networks using a designated bridge. It calculates the estimated amount of destination tokens that you…
+    - [Get Bridge Swap Quotes](https://docs.blockdaemon.com/reference/bridgequotes.md): Retrieves a comprehensive list of swap quotations from multiple bridges for a specified token pair pool. By aggregating swap quotes across various bridges, it enables users to compare rates and…
+    - [Aggregate Bridge Swap](https://docs.blockdaemon.com/reference/bridgeswaps.md): Aggregates swap quotes from all bridges supporting a specified token pair. It allows users to customize their query to prioritize either the best output or the lowest gas costs. The response provides…
+    - [Create Bridge Swap Transaction with Approval](https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md): Generates both token approval and swap transactions in a single call with configurable slippage protection.  > 💡  **Compute Unit Value:** `110` (Fixed)
+    - [Get Bridge Transaction Details](https://docs.blockdaemon.com/reference/bridgetransactions.md): Retrieves detailed information about a specific cross-chain bridge transaction using its transaction hash. It returns key data such as source and destination addresses, block details, transaction…
+    - [Unlock Tokens for Bridge Swap](https://docs.blockdaemon.com/reference/bridgeunlock.md): Initiates the unlocking process for assets on the destination blockchain that were previously locked during a bridging operation. This endpoint triggers the release of tokens, making them available…
+    - [Get User Bridge Tokens](https://docs.blockdaemon.com/reference/bridgetokens.md): Returns a comprehensive list of tokens that the all the bridge currently supports. The response includes each token’s symbol and its corresponding blockchain address, enabling users to easily…
+    - [Add Liquidity](https://docs.blockdaemon.com/reference/bridgeaddliquidity.md): This endpoint enables you to add liquidity to a cross-chain bridge by depositing a specified amount of tokens from a source blockchain. Upon a successful call, the API returns comprehensive details…
+    - [Get Liquidity](https://docs.blockdaemon.com/reference/bridgegetliquidity.md): Retrieves the balance of a specific token pair within a liquidity pool for a given account. This endpoint allows users to query the current liquidity provided to a bridge by an account, facilitating…
+    - [Get Route](https://docs.blockdaemon.com/reference/bridgegetroute.md): Retrieves an optimal bridging path between two blockchain networks, detailing the sequence of operations, tokens, intermediary addresses, swap paths, fees, gas estimates, and minimum tokens received.…
+    - [Get Signature](https://docs.blockdaemon.com/reference/bridgegetsignature.md): Retrieves the signature and transaction metadata for a cross-chain swap identified by its transaction hash. The response includes chain IDs, locked token amounts, the recipient address, and a…
+    - [Get Supported Chains](https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md): Retrieves an up-to-date list of blockchain networks that are supported by the bridging service. The response includes each network’s name (e.g., Ethereum, Arbitrum, Optimism) and its unique chain…
+    - [Get Supported Tokens](https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md): Returns a comprehensive list of tokens that the bridge currently supports. The response includes each token’s symbol and its corresponding blockchain address, enabling users to easily determine which…
+    - [Remove Liquidity](https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md): Removes user-provided liquidity from one or more blockchain networks in a single transaction, streamlining cross-chain asset management. The response includes details such as chain IDs, addresses,…
+  - Chain
+    - [Create Account](https://docs.blockdaemon.com/reference/chaincreateaccount.md): Creates a new blockchain account by funding it with an initial transaction, using the recipient’s public key as the account identifier. The response includes details like chain ID, funding source,…
+    - [Create Fee Transaction](https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md): Initiates a fee-collection transaction on the blockchain, deducting a default or customizable basis-point fee from the sender. The response returns chain ID, addresses, gas limits, and nonce,…
+    - [Decode Transaction](https://docs.blockdaemon.com/reference/chaindecodetransaction.md): Decodes a raw, signed transaction into a human-readable format, revealing fields like nonce, gas price, recipient, value, and signature components. This helps developers and users audit or debug…
+    - [Estimate Gas](https://docs.blockdaemon.com/reference/chainestimategas.md): Estimates the gas required for a proposed transaction on EVM-compatible chains by simulating its execution. The response provides an approximate gas limit, helping developers set optimal fees and…
+    - [Generic Smart Contract Method](https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md): Executes read-only (view) functions on verified smart contracts, enabling queries like token balances or exchange rates without gas costs. The result includes on-chain data returned by the invoked…
+    - [Get Approval Data](https://docs.blockdaemon.com/reference/chaingetapprovaldata.md): Retrieves token approval allowances granted by a specified address, listing spender addresses, token symbols, and allowed amounts. It also provides risk factors and value-at-risk metrics, aiding in…
+    - [Get Balance](https://docs.blockdaemon.com/reference/chaingetbalance.md): retrieves the current token balance for a specified wallet address on supported blockchain networks, with optional filtering by asset codes and issuers. It returns precise balance data essential for…
+    - [Get Block](https://docs.blockdaemon.com/reference/chaingetblock.md): Retrieves comprehensive information about a specific block in the blockchain, including its hash, number, timestamp, and all contained transactions. It provides essential data for developers and…
+    - [Get Events](https://docs.blockdaemon.com/reference/chaingetevents.md): Retrieves blockchain events emitted within a specified ledger range (up to 10 hours from the latest ledger), providing detailed information on event types, ledger numbers, closing times, and unique…
+    - [Get Gas Fees](https://docs.blockdaemon.com/reference/chaingetgasfees.md): Retrieves detailed gas fee metrics for a specified user address over a defined block range, including total fees spent and current gas prices.  > 💡  **Compute Unit Value:** `70` (Fixed)
+    - [Get Gas Price](https://docs.blockdaemon.com/reference/chaingetgasprice.md): Fetches the current gas price from the specified blockchain network.  > 💡  **Compute Unit Value:** `25` (Fixed)
+    - [Get Historical Rewards](https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md): Retrieves historical staking reward data for specified addresses, including transaction hashes, unique IDs (UTXO or node), and the staked amount with start/end timestamps. The response also provides…
+    - [Get Latest Ledger](https://docs.blockdaemon.com/reference/chaingetlatestledger.md): Fetches the most recent finalized block from the blockchain and returns comprehensive real-time information about its state. The endpoint provides key block metadata—including the block number, hash,…
+    - [Get Stake Positions](https://docs.blockdaemon.com/reference/chaingetstakepositions.md): Retrieves details about staked native assets for a specified address, including the total amount staked across all validators and a breakdown of each position. For every stake, it provides the staked…
+    - [Get Storage](https://docs.blockdaemon.com/reference/chaingetstorage.md): Accesses and returns detailed storage data for a specified smart contract, including its state variables, code, and ledger entries. This endpoint leverages base64-encoded keys to accurately retrieve…
+    - [Get Sui Balance](https://docs.blockdaemon.com/reference/chaingetsuibalance.md): Retrieves the current or historical token balance for a specified SUI blockchain address, with the option to specify a block number for precise point-in-time analysis.  > 💡  **Compute Unit Value:**…
+    - [Get Token Address](https://docs.blockdaemon.com/reference/chaingettokenaddress.md): Maps token symbols to their corresponding smart contract addresses on specified blockchain networks, enabling developers to verify and interact with tokens in decentralized applications. The response…
+    - [Get Transaction](https://docs.blockdaemon.com/reference/chaingettransaction.md): Retrieves comprehensive details for a specific blockchain transaction (hash, block number, sender/recipient, status, fee/gas metrics). Also provides the full encoded input, signature components, and…
+    - [Get User Transactions](https://docs.blockdaemon.com/reference/chaingetusertransactions.md): Retrieves historical transaction details for one or more user addresses over a defined block range, including both simple native transfers and complex contract interactions. For each transaction, the…
+    - [Register Coin](https://docs.blockdaemon.com/reference/chainregistercoin.md): This API creates a payload to register a coin on the Aptos wallet address.  > 💡  **Compute Unit Value:** `55` (Fixed)
+    - [Send Transaction](https://docs.blockdaemon.com/reference/chainsendtransaction.md): Submits a signed transaction to the blockchain for processing. This endpoint broadcasts the transaction data to the network and returns a unique transaction hash that can be used to track its…
+    - [Simulate Transaction](https://docs.blockdaemon.com/reference/chainsimulatetransaction.md): Simulates a signed transaction in the current network context without broadcasting, returning an encoded outcome, potential events, and resource cost metrics (CPU, memory). The response also includes…
+  - DEX
+    - [Create DEX Swap Transaction](https://docs.blockdaemon.com/reference/dexswap.md): Enables users to perform token swaps on a DEX by supplying source tokens, desired output tokens, and other trade parameters. This endpoint calculates the optimal path (or uses a given path) across…
+    - [Get DEX Swap Price](https://docs.blockdaemon.com/reference/dexprice.md): Retrieves a swap quotation for a given token pair or a series of tokens along a specified path. By providing an input amount (amountIn), the endpoint calculates and returns the estimated output…
+    - [Create DEX Swap Transaction with Approval](https://docs.blockdaemon.com/reference/dexswapwithapproval.md): Generates both token approval and swap transactions in a single call with configurable slippage protection.  > 💡  **Compute Unit Value:** `85` (Fixed)
+    - [Get DEX Swap Quotes](https://docs.blockdaemon.com/reference/dexquotes.md): Retrieves a comprehensive list of swap quotations from multiple DEXs for a specified token pair pool. By aggregating swap quotes across various DEXs, it enables users to compare rates and identify…
+    - [Aggregate DEX Swap](https://docs.blockdaemon.com/reference/dexswaps.md): Aggregates swap quotes from all DEXs supporting a specified token pair. It allows users to customize their query to prioritize either the best output or the lowest gas costs. The response provides…
+    - [Add Liquidity](https://docs.blockdaemon.com/reference/dexaddliquidity.md): Allows users to deposit token pairs into decentralized exchange pools with adjustable slippage protection and gas settings. The response includes essential transaction details (chain ID, addresses,…
+    - [Cancel Order](https://docs.blockdaemon.com/reference/dexcancelorder.md): Generates an unsigned limit-order cancellation message, which must be signed using the Blockdaemon SDK for final on-chain execution. This endpoint provides EIP-712 domain data, type definitions, and…
+    - [Create Order](https://docs.blockdaemon.com/reference/dexcreateorder.md): Generates an unsigned limit order message for decentralized trading, specifying parameters for maker/taker assets, amounts, fees, and execution conditions. The endpoint returns EIP-712 domain data,…
+    - [Fill Order](https://docs.blockdaemon.com/reference/dexfillorder.md): Facilitates the execution (“filling”) of an existing limit order on a decentralized exchange by specifying the order ID, taker address, and offered token amount. The endpoint returns transaction data…
+    - [Get Active Amount](https://docs.blockdaemon.com/reference/dexgetactiveamount.md): Retrieves the active making amount of a specific token held by a maker. This endpoint returns the maker’s address, the token’s contract address, and the current active amount available for order…
+    - [Get Historical Time Series](https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md): Retrieves a chronological series of historical price data (transaction hash, timestamp, trade price) for a specified DEX pool. This time series data supports thorough price analysis, backtesting, and…
+    - [Get Historical Transactions](https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md): Retrieves a chronological list of swap transactions for a specified DEX pool within a defined block range, returning transaction hashes, addresses, and gas metrics. Block-level details (e.g., block…
+    - [Get Individual Position](https://docs.blockdaemon.com/reference/dexgetindividualposition.md): Retrieves aggregated liquidity metrics and pool-specific breakdowns (pool identifiers, addresses, contributed amounts) for a given wallet across multiple DEX pools. This endpoint also supports a…
+    - [Get Liquidity By Tick](https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md): Retrieves detailed liquidity distribution data for a specified pool on a DEX, segmented by individual ticks. This granular breakdown helps users analyze how liquidity is allocated across different…
+    - [Get Liquidity Sources](https://docs.blockdaemon.com/reference/dexgetliquiditysources.md): Returns a list of liquidity sources available for a specified DEX aggregator, filtered by the blockchain network. This helps users identify all supported liquidity providers or pools, enabling…
+    - [Get Maker Orders](https://docs.blockdaemon.com/reference/dexgetmakerorders.md): Retrieves all active limit orders posted by a specific maker on a DEX, returning details such as order IDs, asset pairs, prices, quantities, and status. This comprehensive overview helps users…
+    - [Get Orders](https://docs.blockdaemon.com/reference/dexgetorders.md): Fetches all active orders on a specified DEX, filtered by maker and taker assets. It returns order details (IDs, asset addresses, pricing, etc.) to support real-time order book monitoring and trading…
+    - [Get Pool](https://docs.blockdaemon.com/reference/dexgetpool.md): Retrieves pools of all tick spacing and pool fees along with the pool and tokens individual liquidity for a specific token pair.  > 💡  **Compute Unit Value:** `105` (Fixed)
+    - [Get Pool Chart Data](https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md): Provides historical data (open, close, high, low) for a specified liquidity pool over defined block ranges. Detailed transaction info (e.g., block numbers, trade prices, and token amounts) is…
+    - [Get Pool Individual Liquidity](https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md): Retrieves a list of users contributing liquidity to a specified pool, along with their token positions and associated block numbers. The response also includes pagination details, streamlining…
+    - [Get Pool Liquidity](https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md): Retrieves the total current liquidity in a specified DEX pool, indicating the pool’s market depth and trading capacity. This aggregated liquidity value helps users assess the pool’s overall health…
+    - [Get Pool Trade Data](https://docs.blockdaemon.com/reference/dexgetpooltradedata.md): Extracts detailed trading activity from a specific liquidity pool over a defined block range. It returns transaction data—including transfers, swaps, burns, and mints—with key details such as block…
+    - [Get Route](https://docs.blockdaemon.com/reference/dexgetroute.md): Returns detailed routing information for a token swap between a specified token pair. It provides a breakdown of the swap path, including each liquidity source involved, the corresponding swap…
+    - [Get Token ID Price](https://docs.blockdaemon.com/reference/dexgettokenidprice.md): Retrieves detailed mapping and pricing information for tokens on DEXs. By default, it returns data for the top 100 trending tokens, offering a snapshot of market dynamics and token popularity.…
+    - [Get Token Liquidity](https://docs.blockdaemon.com/reference/dexgettokenliquidity.md): Retrieves detailed liquidity metrics for tokens in specified pools across supported DEX protocols. It returns the current liquidity amounts for each token, enabling users to assess market depth and…
+    - [Get User Liquidity](https://docs.blockdaemon.com/reference/dexgetuserliquidity.md): Retrieves detailed liquidity information for a specific token pair held by an account. It returns the pair’s unique address along with the total liquidity and the individual balances for each token…
+    - [Get User Token IDs](https://docs.blockdaemon.com/reference/dexgetusertokenids.md): Retrieves a list of NFT token IDs representing liquidity positions held in a user’s wallet. Each token is returned with its associated liquidity, enabling users to efficiently track and manage their…
+    - [Get Wallet Position](https://docs.blockdaemon.com/reference/dexgetwalletposition.md): Retrieves comprehensive information about a wallet’s positions across various DEX protocols. It aggregates key data—including protocol details, liquidity positions, token balances (with USD…
+    - [Publish Order](https://docs.blockdaemon.com/reference/dexpublishorder.md): This endpoint interacts with the Kyberswap protocol to manage limit orders on the decentralized exchange. It allows you to either create a new limit order or cancel an existing one, based on the…
+    - [Remove Liquidity](https://docs.blockdaemon.com/reference/dexremoveliquidity.md): Facilitates the withdrawal of liquidity from cross-chain bridges with customizable gas settings and amount specifications.  > 💡  **Compute Unit Value:** `115` (Fixed)
+  - Fungible Token
+    - [Approve](https://docs.blockdaemon.com/reference/fungibletokenapprove.md): This endpoint is used to grant permission for a designated spender to withdraw tokens from a user's ERC-20 token balance. By invoking the standard ERC-20 approve function, it sets an allowance that…
+    - [Convert Base Token to Wrap Token](https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md): Facilitates the conversion of native blockchain tokens into their corresponding wrapped token versions. Wrapped tokens are standardized ERC-20 (or similar) representations of native tokens, enabling…
+    - [Convert Wrap Token to Base Token](https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md): Enables users to convert wrapped ERC-20 tokens back to their underlying base tokens. For example, it allows for the conversion of wrapped staked Ethereum (wstETH) back to its base version (stETH).…
+    - [Get Token Details](https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md): Retrieves fundamental metadata about a specified ERC-20 token. It provides essential token details such as the token’s name, symbol, and decimal precision, which are critical for accurately…
+    - [Get Token Supply](https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md): Retrieve the returns the supply metrics of a token across different chains.  > 💡  **Compute Unit Value:** `40` (Fixed)
+    - [Get User Balance](https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md): Retrieve the balance of a specified ERC-20 token for a given user address. It provides an essential function for wallet management and decentralized finance applications by offering real-time balance…
+    - [Historical Transactions](https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md): Provides a detailed history of ERC-20 token transfer transactions associated with a specific user address within a defined block range. It is designed for wallet-related data analytics, enabling…
+    - [Historical Logs](https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md): Retrieves historical blockchain logs related to an ERC-20 token for a specified user address within a defined block range. It is designed to capture events such as token approvals and transfers,…
+    - [Historical User Transactions](https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md): Retrieves all the ERC-20 transfers for the given address.  > 💡  **Compute Unit Value:** `115` (Fixed)
+    - [Historical WETH](https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md): Fetches all Wrapped ETH (WETH) transfer transactions for a specified user address within a designated block range across supported blockchain networks.  > 💡  **Compute Unit Value:** `155` (Fixed)
+    - [Transfer](https://docs.blockdaemon.com/reference/fungibletokentransfer.md): Specifically designed to fetch all Wrapped Ether (WETH) transfer transactions for a given user address. It focuses on historical WETH activity within a user-defined block range, enabling users and…
+    - [Transfer From](https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md): Facilitates the transfer of ERC-20 tokens from one address to another using the ERC-20 allowance mechanism. It leverages the standard transferFrom function, enabling a spender (previously authorized…
+  - Lend & Borrow
+    - [Deposit](https://docs.blockdaemon.com/reference/lendborrowdeposit.md): Facilitate the deposit of assets into lending protocols by specifying the asset, deposit amount, and optionally, a recipient address. This endpoint is designed for users to start earning interest or…
+    - [Borrow](https://docs.blockdaemon.com/reference/lendborrowborrow.md): Initiates a borrowing transaction for a specified amount of tokens from supported lending markets (Aave V2/V3, Compound V2/V3), allowing configuration of asset, amount, interest rate mode,…
+    - [Repay](https://docs.blockdaemon.com/reference/lendborrowrepay.md): Process the repayment of borrowed assets to the lending protocol. Whether you’re reducing your debt or fully repaying a loan, this endpoint lets you specify the asset, amount, and repayment mode.…
+    - [Withdraw](https://docs.blockdaemon.com/reference/lendborrowwithdraw.md): Process the withdrawal of your deposited assets from the lending protocol. Specify the asset, amount, and recipient address, and use customizable gas parameters to ensure that the withdrawal is…
+    - [Deposit with approval](https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md): Returns unsigned transactions for ERC-20 approval when allowance is below the deposit amount, plus the protocol deposit transaction. Without batchOption, data is an ordered array [approveTxn?,…
+    - [Withdraw With Approval](https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md): Process the withdrawal of deposited assets from a lending protocol with automated approval handling. Returns an array of transactions: an ERC-20 approval transaction (only when required) followed by…
+    - [Allow](https://docs.blockdaemon.com/reference/lendborrowallow.md): Grants or revokes permission for designated manager addresses to operate on your account. You specify a manager's address along with a flag indicating whether they're allowed or disallowed, and the…
+    - [Bundle Actions](https://docs.blockdaemon.com/reference/lendborrowbundleactions.md): Combine multiple lending and borrowing operations into one atomic blockchain transaction. This endpoint bundles several protocol actions—each defined by its specific call data—so that they all…
+    - [Claim Rewards](https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md): Trigger a transaction to claim any accrued rewards from your participation in lending protocols. This endpoint collects your earned rewards and returns detailed transaction data, such as…
+    - [Enter Market](https://docs.blockdaemon.com/reference/lendborrowentermarket.md): Initiate the approval process required for participating in a specific lending market. For example, in Compound, entering a market is a prerequisite before depositing assets and borrowing funds. This…
+    - [Enter Market Status](https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md): Retrieves the approval status for a user’s participation in Compound protocol markets. It checks whether the necessary permissions have been granted for depositing assets into these markets and…
+    - [Exit Isolation Mode](https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md): Remove isolation mode restrictions on specific assets. If an asset is isolated due to risk management settings, this endpoint allows you to exit isolation mode—restoring full flexibility in its use…
+    - [Exit Market](https://docs.blockdaemon.com/reference/lendborrowexitmarket.md): Process your exit from a lending market. By executing this transaction, you effectively remove your participation (and any associated collateral) from the market, thereby ceasing deposit or borrowing…
+    - [Get Asset Info](https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md): Returns comprehensive asset metrics including liquidation thresholds, collateral factors, and price feed data for specified tokens in lending markets.  > 💡  **Compute Unit Value:** `110` (Fixed)
+    - [Get Claimed Rewards](https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md): Fetch the history and cumulative amount of protocol rewards you have claimed. This endpoint provides insight into your reward accrual over time, helping you track your earnings and assess the overall…
+    - [Get Governor Data](https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md): Retrieve governance and market configuration data for the lending protocol. The returned data covers the protocol’s pause statuses, configuration parameters, and asset-specific settings. This…
+    - [Get Max Amounts](https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md): Calculate the maximum amounts you can withdraw or borrow for a specific asset. Based on your collateral and current market conditions, this endpoint determines your borrowing and withdrawal limits,…
+    - [Get User Account Data](https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md): Provide detailed account metrics for a user, including available amounts for repayment, borrowing, and withdrawal, as well as the health factor—a key indicator of account risk. This endpoint is…
+    - [Migrate](https://docs.blockdaemon.com/reference/lendborrowmigrate.md): Facilitate the migration of your positions between different lending protocols. This endpoint enables you to seamlessly transfer your assets from one protocol to another, ensuring continuity of your…
+    - [Get Pool](https://docs.blockdaemon.com/reference/lendborrowpool.md): Retrieve current lending and borrowing rates (APYs) for a specified asset within a pool. You receive key metrics such as variable/stable borrow and supply rates, loan-to-value ratios, available…
+    - [Get Pools](https://docs.blockdaemon.com/reference/lendborrowpools.md): Fetch a comprehensive overview of supply and borrow APYs across multiple assets in lending pools. The endpoint aggregates data such as interest rates, liquidity, reserve sizes, and token-specific…
+    - [Set User E-Mode](https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md): Configure your E-Mode (efficiency mode) settings within the lending protocol. By selecting the appropriate category (such as default or stablecoin mode), you can optimize your borrowing power and…
+    - [Transfer](https://docs.blockdaemon.com/reference/lendborrowtransfer.md): Execute an internal transfer of deposited assets between accounts within the protocol. This operation enables you to reassign collateral or reallocate funds without exiting the system, all while…
+    - [Get User Positions](https://docs.blockdaemon.com/reference/lendborrowuserpositions.md): Deliver a comprehensive snapshot of your active lending and borrowing positions across supported markets. The response details each position’s collateral (such as aTokens and underlying assets),…
+  - Liquid Staking
+    - [Approve Withdrawal](https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md): Initiate a blockchain transaction that grants permission for a pending withdrawal request. This endpoint verifies that the specified user address is authorized to withdraw staked tokens, ensuring the…
+    - [Burn](https://docs.blockdaemon.com/reference/liquidstakingburn.md): Execute a burn transaction that permanently removes a specified amount of osETH tokens from circulation. This operation adjusts the circulating supply in accordance with the protocol’s tokenomics and…
+    - [Claim](https://docs.blockdaemon.com/reference/liquidstakingclaim.md): Process the claiming of accrued staking rewards. This endpoint allows you to collect earned rewards by specifying token amounts and adjusting gas parameters for optimal transaction speed and cost…
+    - [Decrease Allowance](https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md): Reduce the spending allowance for staked tokens by a specified amount. This transaction lets you fine-tune the approved amount that a spender can use on your behalf, with customizable gas settings to…
+    - [Delegate](https://docs.blockdaemon.com/reference/liquidstakingdelegate.md): Initiate the delegation of staked assets to a chosen operator contract. By delegating your tokens, you can potentially enhance yield or participate in network operations, with configurable gas…
+    - [Get Allowance](https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md): Retrieve the current token allowance that a designated spender is authorized to use on behalf of the token owner. Use this endpoint to verify approved limits before executing any subsequent spending…
+    - [Get APR](https://docs.blockdaemon.com/reference/liquidstakinggetapr.md): Fetch the latest Annual Percentage Rate (APR) for staking rewards across various liquid staking protocols (such as Lido, Stader, Chorus One, EigenLayer, Benqi, and Jito) on different networks. This…
+    - [Get Protocol APR](https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md): Obtain historical APR data for Lido on Ethereum over the past seven days. The response includes timestamped APR values along with associated block numbers, as well as a simple moving average (SMA)…
+    - [Get Rewards](https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md): Retrieve comprehensive staking metrics for a given user address. The response details historical reward events, cumulative reward totals (both in ETH and equivalent currency), average APR, and…
+    - [Get Stake](https://docs.blockdaemon.com/reference/liquidstakinggetstake.md): Query the current staked token balance for a specific address across supported liquid staking protocols. The returned data (e.g., stETH and wstETH amounts) allows users to monitor their staking…
+    - [Get Withdrawal Requests](https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md): Fetch a list of all withdrawal request identifiers (typically represented as NFT IDs) associated with a specific user address. This endpoint is useful for tracking the status of pending withdrawal…
+    - [Get Withdrawal Status](https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md): Check the detailed status of a specific withdrawal request using its NFT token ID. The response provides key information such as the amounts of stETH and shares involved, the timestamp of the…
+    - [Increase Allowance](https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md): Increases the spending allowance for staked tokens with configurable gas parameters and amount specifications.  > 💡  **Compute Unit Value:** `60` (Fixed)
+    - [Mint](https://docs.blockdaemon.com/reference/liquidstakingmint.md): Initiate a transaction to mint new osETH tokens by specifying the desired amount. This operation creates osETH in accordance with the protocol's staking rules and enables participation in liquid…
+    - [Request Withdrawal](https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md): Submit a request to withdraw a specified amount of staked tokens. This endpoint processes withdrawal requests by requiring parameters such as the withdrawal amount and owner address, and supports…
+    - [Restake](https://docs.blockdaemon.com/reference/liquidstakingrestake.md): Execute a restaking transaction—specifically on EigenLayer—that allows you to reinvest your liquid staking tokens. This endpoint supports token-specific parameters and configurable gas settings,…
+    - [Stake](https://docs.blockdaemon.com/reference/liquidstakingstake.md): Initiate a staking transaction to deposit tokens into a protocol such as Lido. By converting ETH into stETH, you can participate in liquid staking, with the ability to specify the staking amount and…
+    - [Undelegate](https://docs.blockdaemon.com/reference/liquidstakingundelegate.md): Process the undelegation of staked assets from an operator contract, effectively reversing the delegation action. This endpoint enables you to reclaim your staked tokens with configurable gas…
+    - [Unwrap](https://docs.blockdaemon.com/reference/liquidstakingunwrap.md): Convert wrapped stETH (wstETH) back into its underlying stETH tokens. Specify the amount to unwrap and adjust gas parameters as needed to optimize the conversion process within the liquid staking…
+    - [Wrap](https://docs.blockdaemon.com/reference/liquidstakingwrap.md): Initiate the conversion of stETH tokens into their wrapped version (wstETH). This wrapping process enables enhanced flexibility or additional functionality within the protocol, and supports…
+  - NFT
+    - [Get Balance](https://docs.blockdaemon.com/reference/nftgetbalance.md): Retrieves the quantity of NFTs held by a specific wallet address for a given collection across multiple blockchain networks. This endpoint allows users and developers to quickly determine the number…
+    - [Get Metadata](https://docs.blockdaemon.com/reference/nftgetmetadata.md): Fetches comprehensive metadata for a specified NFT collection, including key details such as the collection’s name, symbol, attributes, images, and additional descriptive information. This endpoint…
+    - [Get Owner](https://docs.blockdaemon.com/reference/nftgetowner.md): Identifies and retrieves the current owner of a specific NFT within a collection on supported blockchain networks. By providing the necessary identifiers or parameters, this endpoint returns the…
+    - [Historical Logs](https://docs.blockdaemon.com/reference/nfthistoricallogs.md): Extracts detailed historical event logs for NFT collections within a specified block range on Ethereum. Designed to support different NFT standards (such as ERC721 and ERC1155), the endpoint returns…
+    - [Historical Transactions](https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md): Retrieves a chronological list of historical NFT transactions for a specified collection on Ethereum, with customizable block ranges, pagination, and sorting. The response includes comprehensive…
+  - Oracle
+    - [Get Price](https://docs.blockdaemon.com/reference/oraclegetprice.md): Fetch the price of a specified token in USDT from supported oracle protocols on both EVM and non-EVM chains. This endpoint allows you to retrieve real-time or historical pricing data for a token by…
+    - [Get Supported Tokens](https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md): This endpoint retrieves a comprehensive list of tokens available for price feeds and data verification. It returns a mapping of token symbols to their contract addresses, aggregating data from…
+  - RWA
+    - [Burn](https://docs.blockdaemon.com/reference/rwaburn.md): Executes a burn operation to permanently remove a specified quantity of custom assets from circulation. It supports multiple networks—including Stellar (and its testnet) as well as XRPLedger (and its…
+    - [Freeze](https://docs.blockdaemon.com/reference/rwafreeze.md): Revokes authorization for an account's trustline, effectively freezing their ability to transact with the specified asset.  > 💡  **Compute Unit Value:** `25` (Fixed)
+    - [Get All Assets](https://docs.blockdaemon.com/reference/rwagetallassets.md): Retrieves a comprehensive list of all tokenized assets associated with a specific smart contract on the blockchain. It generates an XDR hash, which is processed through the Blockdaemon SDK to fetch…
+    - [Get Asset](https://docs.blockdaemon.com/reference/rwagetasset.md): Retrieves information about a specific tokenized asset on the blockchain. It generates an XDR hash, which is processed through the Blockdaemon SDK to obtain the full asset details, including its…
+    - [Get Owner Assets](https://docs.blockdaemon.com/reference/rwagetownerassets.md): Retrieves tokenized assets owned by a specified wallet address on the blockchain by generating an XDR hash, which the Blockdaemon SDK processes to obtain complete ownership details. This endpoint…
+    - [Issue](https://docs.blockdaemon.com/reference/rwaissue.md): Creates or mints new assets on the Stellar network by executing a payment operation from issuer to distributor with specified asset codes and amounts.  > 💡  **Compute Unit Value:** `35` (Fixed)
+    - [Register](https://docs.blockdaemon.com/reference/rwaregister.md): Facilitates the creation and registration of an RWA as a token on the blockchain by interacting with smart contracts at the chain level to deploy and register the asset, providing transaction details…
+    - [Set Trustline](https://docs.blockdaemon.com/reference/rwasettrustline.md): Establishes a secure trustline relationship between an issuer and distributor with specified asset limits and authorization parameters on the Stellar network.  > 💡  **Compute Unit Value:** `30`…
+    - [Transfer](https://docs.blockdaemon.com/reference/rwatransfer.md): Enables secure on-chain transfers of both native (XLM) and custom assets between Stellar accounts. It requires the sender’s and recipient’s public addresses, the asset code, and the transfer amount.…
+    - [Unfreeze](https://docs.blockdaemon.com/reference/rwaunfreeze.md): Restores the functionality of a previously frozen asset within the RWA framework. It reactivates an asset—typically frozen for regulatory, security, or administrative reasons—so that it can resume…
+  - Stablecoin
+    - [Get Price](https://docs.blockdaemon.com/reference/stablecoingetprice.md): Retrieves the latest USDT-denominated market price for supported stablecoins (e.g., USDT, USDC), including round ID, price, and recorded timestamps.  > 💡  **Compute Unit Value:** `25` (Fixed)
+  - Support
+    - [Get API Metadata](https://docs.blockdaemon.com/reference/getapimetadatav2.md): Return the breakdown a breakdown of supported chains and protocol IDs for a given DeFi API endpoint.  > 💡  **Compute Unit Value:** `100` (Fixed)
+  - Synthetic
+    - [Deposit Pegged Token](https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md): Enables users to deposit synthetic pegged tokens into the Synthetix protocol with customizable gas settings and transaction parameters. Upon a successful transaction, the endpoint returns key details…
+    - [Get Price](https://docs.blockdaemon.com/reference/syntheticgetprice.md): Calculates the exchange rate between synthetic (pegged) tokens and protocol tokens. It accepts a specified synthetic token amount and returns the equivalent number of protocol tokens based on current…
+    - [Withdraw Pegged Token](https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md): Processes the withdrawal of synthetic tokens from the Synthetix protocol. It executes a transaction that includes configurable gas priorities and built-in security validations, ensuring that…
+  - WETH
+    - [Get Balance](https://docs.blockdaemon.com/reference/wethgetbalance.md): Retrieves the current WETH balance for a specified wallet address across multiple networks. It accepts optional parameters (RPC, chain ID, chain symbol) to target a specific network, making it ideal…
+    - [Historical Logs](https://docs.blockdaemon.com/reference/wethhistoricallogs.md): Returns a chronological history of WETH deposit and withdrawal events within a specified block range, including contract addresses, event topics, parameters, and block metadata. Users can filter by…
+  - Yield Aggregator
+    - [Add Liquidity](https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md): Constructs a transaction payload for adding liquidity to a specified market. The payload includes chain, address, gas, and function data, enabling users to deposit tokens and expand yield…
+    - [Deposit Pool](https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md): Enables users to deposit tokens into yield-generating pools on supported blockchains, specifying the target pool either via a direct poolAddress or by providing the tokenAddress with additional…
+    - [Deposit Vault](https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md): Initiates token deposits into yield-generating vaults with configurable gas parameters and flexible identification methods (via vaultAddress or tokenAddress and vaultNumber). The endpoint processes…
+    - [Get Balance](https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md): Retrieves a user’s current liquidity balance and position within yield-generating vaults or pools across supported protocols and blockchain networks. This endpoint returns a numeric value…
+    - [Get Market Data](https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md): Provides detailed financial metrics (liquidity, trading volume, token supply, PT, LP, SY) for a specified yield market. This snapshot helps users and developers monitor market performance and make…
+    - [Get Markets](https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md): Retrieves a comprehensive list of yield markets (e.g., Pendle Finance) with identifiers, expiry dates, asset addresses, and token addresses (PT, YT, SY). This data helps users discover active…
+    - [Get Market Tokens](https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md): Returns the token configuration for a given yield market, including mint/redeem token arrays and a swap configuration object. This information clarifies token flows for effective liquidity management…
+    - [Get Vaults](https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md): Fetches vault information (APY, fees, performance) for yield-generating opportunities across supported blockchains.  > 💡  **Compute Unit Value:** `115` (Fixed)
+    - [Mint](https://docs.blockdaemon.com/reference/yieldaggregatormint.md): Converts deposited assets into yield-bearing tokens (or share tokens) within a yield aggregator protocol. The response includes transaction details (chain ID, addresses, gas, reference ID) for secure…
+    - [Redeem](https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md): Converts yield-bearing tokens back into their underlying asset within a yield aggregator protocol. The response includes transaction metadata (chain ID, addresses, gas) and a unique reference ID for…
+    - [Remove Liquidity](https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md): Withdraws tokens from a yield aggregator market, supporting advanced options like dual-token removal and slippage control. The response includes chain details, addresses, gas usage, and a unique…
+    - [Swap](https://docs.blockdaemon.com/reference/yieldaggregatorswap.md): Executes token swaps within a yield aggregator protocol, providing transaction metadata (chain ID, addresses, gas, reference ID). Configurable slippage, swap path, and gas priority let users tailor…
+    - [Transfer Liquidity](https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md): Moves liquidity between markets, specifying source/destination addresses plus amounts of LP, principal, and yield tokens. Optional parameters (slippage, redeemRewards, zeroPriceImpact) fine-tune the…
+    - [Withdraw Pool](https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md): Processes withdrawals from yield-generating pools with configurable gas parameters and flexible pool identification options.  > 💡  **Compute Unit Value:** `40` (Fixed)
+    - [Withdraw Vault](https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md): Executes withdrawals from yield vaults, returning the user’s deposited tokens. Multiple identification methods (vaultAddress, tokenAddress, vaultNumber) are supported, with transaction details…
+
+## Reference: NODES & BLOCKCHAIN DATA
+- [Management API](https://docs.blockdaemon.com/reference/management.md): Usage Metrics Endpoints
+  - [Metrics on current period quota usage](https://docs.blockdaemon.com/reference/management-metrics-quota-usage.md): Returns the total Compute Units (CU) consumed in the current period.
+  - [Metrics on current period request usage](https://docs.blockdaemon.com/reference/management-metrics-request-usage.md): Get metrics on current period request usage
+- RPC API
+  - [Overview](https://docs.blockdaemon.com/reference/rpc-api-overview.md): Easily & quickly interact with on-chain data, broadcast transactions, and build applications with the Blockdaemon RPC API.
+  - [List supported protocols and networks](https://docs.blockdaemon.com/reference/listprotocols.md): Returns a list of all blockchain protocols and their supported networks available through the RPC API.
+  - [RPC WebSocket Support (BETA)](https://docs.blockdaemon.com/reference/rpc-websocket.md)
+  - Algorand
+    - [Algorand RPC](https://docs.blockdaemon.com/reference/algorand-rpc-methods.md)
+    - [Algorand Indexer](https://docs.blockdaemon.com/reference/algorand-indexer-methods-rpc-api.md)
+  - [Arbitrum One](https://docs.blockdaemon.com/reference/arbitrum-one-methods-rpc-api.md)
+  - [Arc](https://docs.blockdaemon.com/reference/arc-methods-rpc-api.md)
+  - [Avalanche](https://docs.blockdaemon.com/reference/avalanche-methods-rpc-api.md)
+  - [Base](https://docs.blockdaemon.com/reference/base-methods-rpc-api.md)
+  - Bitcoin
+    - [Bitcoin RPC](https://docs.blockdaemon.com/reference/bitcoin-methods-rpc-api.md)
+    - [Bitcoin Custom Methods](https://docs.blockdaemon.com/reference/bitcoin-custom-methods-rpc-api.md)
+  - [Bitcoin Cash](https://docs.blockdaemon.com/reference/bitcoin-cash-methods-rpc-api.md)
+    - [Bitcoin Cash Custom Methods](https://docs.blockdaemon.com/reference/bitcoin-cash-custom-methods.md)
+  - Cosmos
+    - [Cosmos RPC](https://docs.blockdaemon.com/reference/cosmos-tendermint-methods-rpc-api.md)
+    - [Cosmos REST Methods](https://docs.blockdaemon.com/reference/cosmos-rest-methods-rpc-api.md)
+  - [Dogecoin](https://docs.blockdaemon.com/reference/dogecoin-methods-rpc-api.md)
+    - [Dogecoin Custom Methods](https://docs.blockdaemon.com/reference/dogecoin-custom-methods.md)
+  - Ethereum
+    - [Ethereum RPC](https://docs.blockdaemon.com/reference/ethereum-methods-rpc-api.md)
+    - [Ethereum Custom Methods](https://docs.blockdaemon.com/reference/ethereum-custom-methods-rpc-api.md)
+    - [Ethereum Beacon Methods](https://docs.blockdaemon.com/reference/ethereum-beacon-methods-rest-api.md)
+  - [Hyperliquid](https://docs.blockdaemon.com/reference/hyperliquid-methods-rpc-api.md)
+  - [Ink](https://docs.blockdaemon.com/reference/ink-methods-rpc-api.md)
+  - Kusama
+    - [Kusama RPC](https://docs.blockdaemon.com/reference/kusama-methods-rpc-api.md)
+    - [Kusama Substrate Sidecar Methods](https://docs.blockdaemon.com/reference/kusama-rest-methods-rpc-api.md)
+    - [Kusama Polkadot REST API Methods](https://docs.blockdaemon.com/reference/kusama-polkadot-rest-api-methods.md)
+  - [Litecoin](https://docs.blockdaemon.com/reference/litecoin-methods-rpc-api.md)
+    - [Litecoin Custom Methods](https://docs.blockdaemon.com/reference/litecoin-custom-methods.md)
+  - [Monad](https://docs.blockdaemon.com/reference/monad-methods-rpc-api.md)
+  - [Near](https://docs.blockdaemon.com/reference/near-methods-rpc-api.md)
+  - [Optimism](https://docs.blockdaemon.com/reference/optimism-methods-rpc-api.md)
+  - Polkadot
+    - [Polkadot RPC](https://docs.blockdaemon.com/reference/polkadot-methods-rpc-api.md)
+    - [Polkadot Substrate Sidecar Methods](https://docs.blockdaemon.com/reference/polkadot-rest-methods-rpc-api.md)
+    - [Polkadot REST API Methods](https://docs.blockdaemon.com/reference/polkadot-polkadot-rest-api-methods.md)
+  - Polygon
+    - [Polygon RPC](https://docs.blockdaemon.com/reference/polygon-methods-rpc-api.md)
+    - [Polygon Tendermint Methods](https://docs.blockdaemon.com/reference/polygon-tendermint-methods-rpc-api.md)
+  - [Robinhood](https://docs.blockdaemon.com/reference/robinhood-methods-rpc-api.md)
+  - [Solana](https://docs.blockdaemon.com/reference/solana-methods-rpc-api.md)
+  - [Stable](https://docs.blockdaemon.com/reference/stable-methods-rpc-api.md)
+  - Stellar
+    - [Stellar RPC](https://docs.blockdaemon.com/reference/stellar-methods-rpc-api.md)
+    - [Stellar Soroban Methods](https://docs.blockdaemon.com/reference/soroban-stellar-methods-rpc-api.md)
+  - [Tempo](https://docs.blockdaemon.com/reference/tempo-methods-rpc-api.md)
+  - Tron
+    - [Tron RPC](https://docs.blockdaemon.com/reference/tron-methods-rpc-api.md)
+    - [Tron REST Methods](https://docs.blockdaemon.com/reference/tron-rest-methods-rpc-api.md)
+    - [Tron Solidity Methods](https://docs.blockdaemon.com/reference/tron-solidity-rest-methods-rpc-api.md)
+  - [X Layer](https://docs.blockdaemon.com/reference/xlayer-methods-rpc-api.md)
+  - [XRP](https://docs.blockdaemon.com/reference/xrp-methods-rpc-api.md)
+- Data API
+  - [Data API Overview](https://docs.blockdaemon.com/reference/data-api-overview.md): One blockchain API to with access to fully indexed blockchain data
+    - [Supported Protocols](https://docs.blockdaemon.com/reference/supported-protocols-and-networks.md)
+    - [Available Currencies and Tokens](https://docs.blockdaemon.com/reference/available-currencies-and-tokens.md): Get to know what currencies and tokens are supported by Blockdaemon's API suite.
+    - [Data API Compute Unit(s)](https://docs.blockdaemon.com/reference/data-api-compute-units.md)
+    - [SDKs](https://docs.blockdaemon.com/reference/sdk.md)
+  - Protocol and Endpoint Support
+    - [Get the Protocols Overview](https://docs.blockdaemon.com/reference/getprotocolslist.md): Returns a full list of all supported protocols and networks.
+    - [Get the Protocol Info](https://docs.blockdaemon.com/reference/getprotocolendpoints.md): Provides information about supported endpoints and generic protocol information.
+  - Blocks
+    - [Get the Current Block Number](https://docs.blockdaemon.com/reference/getcurrentblocknumber.md): Returns the current block number/height of the protocol.
+    - [Get the Current Block Hash](https://docs.blockdaemon.com/reference/getcurrentblockhash.md): Get the current block id (hash) of the protocol.
+    - [Get a Block by Number or Hash](https://docs.blockdaemon.com/reference/getblockbynumber.md): Get a block and all its transactions by a user-defined block number or block hash.   Use `-1` or `current` parameter to return the current block.
+    - [Get a Block Identifier by Number of Hash](https://docs.blockdaemon.com/reference/getblockidentifierbynumber.md): Get the minimal block data, block header, by a user-defined block number or block hash.   Use `-1` or `current` parameter to return the current block.
+    - [Get a List of Block Identifiers](https://docs.blockdaemon.com/reference/getblockidentifiers.md): Returns a list of minimal block data, block headers such as block hash and block number.
+    - [Get a List of Transactions](https://docs.blockdaemon.com/reference/gettxs.md): Get a List of transactions, starting with the lastest one. Each call returns an array of the entire list.
+    - [Get the Transaction Confirmations](https://docs.blockdaemon.com/reference/gettxconfirmations.md): Returns the number of transaction confirmations by a user-defined transaction hash.
+  - Balances & UTXO
+    - [Get a List of Balances for an Address](https://docs.blockdaemon.com/reference/getlistofbalancesbyaddress.md): Returns a list of account balances by a user-defined account address for the supported currencies.
+    - [Get a List of Balances for Multiple Addresses](https://docs.blockdaemon.com/reference/getlistofbalancesbyaddresses.md): Returns a list of account balances for a user-defined list of account addresses: - The filter allows up to <b>200 addresses</b> for:   - Algorand   - Bitcoin   - Solana   - Stellar   - Ethereum - The…
+    - [Get a Financial Report for an Address Between a Time Period](https://docs.blockdaemon.com/reference/getreportbyaddress.md): Returns a financial report by a user-defined account address between a time period. Default timescale is within the last 30 days.
+    - [Get a List of Transaction Inputs and Outputs](https://docs.blockdaemon.com/reference/getutxobyaccount.md): Returns the transaction inputs and outputs following the BTC's UTXO model definition by a user-definied account address.
+    - [Get Account Nonce](https://docs.blockdaemon.com/reference/getaccountnonce.md): Returns the nonce for a user-defined account address.
+  - Transactions
+    - [Get a Transaction](https://docs.blockdaemon.com/reference/gettxbyhash.md): Returns a transaction by a user-defined transaction hash.
+    - [Get a Transaction Output by Hash and Index](https://docs.blockdaemon.com/reference/gettxoutputbyhashandindex.md): Get a transaction output by a user-defined transaction hash and the transaction output index.
+    - [Get a List of Transactions for a Given Address](https://docs.blockdaemon.com/reference/gettxsbyaddress.md): Returns the transactions that an address was involved with, from newest to oldest.
+  - Fee estimator
+    - [Get the Fee Estimation](https://docs.blockdaemon.com/reference/getfeeestimate.md): Returns fee estimation in decimals.This endpoint will return 3 fee estimations: fast, medium and slow.
+- Events API
+  - [Compute Units Usage](https://docs.blockdaemon.com/reference/compute-units-usage-events.md)
+  - Protocol Support
+    - [List Supported Protocols and Networks](https://docs.blockdaemon.com/reference/get-event-protocol-overview.md): Returns all supported protocols and networks with event matching details.
+  - Target
+    - [Get all Targets](https://docs.blockdaemon.com/reference/find-targets.md): Returns a list of all targets you have access to, including details like status, type, and destination settings.
+    - [Create a Target](https://docs.blockdaemon.com/reference/add-target.md): Creates a new target. Duplicate targets are not allowed.
+    - [Get Target by ID](https://docs.blockdaemon.com/reference/find-target-by-id.md): Fetch a specific target using its ID. The request will return an error if the user doesn’t have access to the target.
+    - [Delete a Target](https://docs.blockdaemon.com/reference/delete-target.md): Delete a target using its ID.
+    - [Update a Target](https://docs.blockdaemon.com/reference/update-target.md): Updates an existing target using by ID. All fields will be replaced with the new values provided in the request body.
+    - [Partially Update a Target](https://docs.blockdaemon.com/reference/patch-target.md): Update some fields of a target using its ID. Include only the fields to be changed in the request body.
+    - [Get Target Logs](https://docs.blockdaemon.com/reference/get-target-logs-by-id.md): Returns the logs associated with the specified target ID.
+    - [Test Target Connection](https://docs.blockdaemon.com/reference/validate-verification.md): Sends a test request to the specified Target to verify it can successfully receive messages.
+    - [Validate Message for Target](https://docs.blockdaemon.com/reference/validate-message-send.md): Sends a message template to the specified target and returns whether the message is valid.
+  - Variable
+    - [Get all Variables](https://docs.blockdaemon.com/reference/find-variables.md): Returns all variables that the user has access to.
+    - [Create a Variable](https://docs.blockdaemon.com/reference/add-variable.md): Creates a new variable. Duplicate variable names are not allowed.
+    - [Get Variable by ID](https://docs.blockdaemon.com/reference/find-variable-by-id.md): Retrieves the details of a variable using its ID.
+    - [Delete a Variable](https://docs.blockdaemon.com/reference/delete-variable.md): Deletes a variable using the specified ID.
+    - [Update a Variable](https://docs.blockdaemon.com/reference/update-variable.md): Updates an existing variable using the specified ID. All fields will be replaced with the new values provided in the request body.
+  - Variable Values
+    - [Get all Variable Values](https://docs.blockdaemon.com/reference/find-variable-values.md): Returns all variables from the system that the user has access to
+    - [Create a Variable Value](https://docs.blockdaemon.com/reference/add-variable-value.md): Creates a new value for the specified variable. Duplicate values are not allowed.
+    - [Delete Variable Value by Value](https://docs.blockdaemon.com/reference/delete-variable-value-by-value.md): Deletes a specific variable value by matching the variable's ID and a provided value. Use this endpoint when you know the exact value you want to delete.
+    - [Delete Variable Value by ID](https://docs.blockdaemon.com/reference/delete-variable-value-by-id.md): Deletes a specific variable value using its ID.
+  - Rule
+    - [Get all Rules](https://docs.blockdaemon.com/reference/find-rules.md): Returns all rules in the system that the user has access to.
+    - [Create a Rule](https://docs.blockdaemon.com/reference/add-rule.md): Creates a new rule. Duplicate rules are not allowed.
+    - [Get Rule by ID](https://docs.blockdaemon.com/reference/find-rule-by-id.md): Returns the rule from the specified ID.
+    - [Delete a Rule](https://docs.blockdaemon.com/reference/delete-rule.md): Deletes the rule identified by the given ID.
+    - [Update a Rule](https://docs.blockdaemon.com/reference/update-rule.md): Update a rule by its ID with new data.
+  - Organzation
+    - [Get Organization Audit Logs](https://docs.blockdaemon.com/reference/get-organization-audit-logs.md): Returns the logs associated with the organization.
+  - Webhook Target Reference
+    - [Verification Process](https://docs.blockdaemon.com/reference/webhook-verification-process.md)
+    - [Validate Message Origin](https://docs.blockdaemon.com/reference/validate-message-origin.md)
+    - [Webhook Handling](https://docs.blockdaemon.com/reference/webhook-handling.md)
+    - [Webhook Debugging](https://docs.blockdaemon.com/reference/webhook-debugging.md)
+    - [Webhook Verification Challenge](https://docs.blockdaemon.com/reference/webhook-verification-challenge.md): Endpoint that should respond to webhook verification. challenge
+    - [Receives Webhook Messages](https://docs.blockdaemon.com/reference/webhook-receive.md): Endpoint that receives webhook messages after passing verification.
+- Tx API
+  - [Introduction](https://docs.blockdaemon.com/reference/introduction-txapi.md): Manage blockchain transactions using our API to create, send, and estimate fees.
+  - [Compute Units](https://docs.blockdaemon.com/reference/compute-units-transactions-wt.md)
+  - [Get the Supported Protocol Info](https://docs.blockdaemon.com/reference/getoverview-txapi.md): Returns the transaction endpoints supported for the given chain.
+  - [Create an Unsigned Transaction](https://docs.blockdaemon.com/reference/txcreate-txapi.md): Creates an unsigned transaction for the specified blockchain. The output is raw transaction data ready for signing.
+  - [Derive signing payload from unsigned transaction](https://docs.blockdaemon.com/reference/txderivesigningpayload.md): Create a signing payload.
+  - [Create an Unsigned Token Transfer Transaction](https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md): Creates an unsigned token transfer transaction.
+  - [Compile an Unsigned Transaction](https://docs.blockdaemon.com/reference/txcompile-txapi.md): Takes an unsigned transaction and a signature and returns a signed transaction.
+  - [Compile and Broadcast an Unsigned Transaction](https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md): Compile and broadcast an unsigned EVM transaction with signature.
+  - [Submit a Signed Transaction](https://docs.blockdaemon.com/reference/txsend-txapi.md): Submit a signed transaction to the network.  **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee.
+  - [Decode a transaction](https://docs.blockdaemon.com/reference/txdecode-txapi.md): Returns the raw json of the decoded transaction
+  - [Verify a Transaction](https://docs.blockdaemon.com/reference/txverify-txapi.md): Verifies whether a signed/unsigned transaction matches the expected input parameters.
+  - [Get the Fee Estimation](https://docs.blockdaemon.com/reference/txestimatefee-txapi.md): Returns the estimated fee for a given chain.
+- Token Price API
+  - [Token Price API Introduction](https://docs.blockdaemon.com/reference/introduction-token-price.md)
+  - [Get Chains](https://docs.blockdaemon.com/reference/getchains-pricing.md): Get a list of supported chains for token pricing.
+  - [Get Tokens](https://docs.blockdaemon.com/reference/gettokens-pricing.md): List tokens available for pricing on a specific chain.
+  - [Get Token Price](https://docs.blockdaemon.com/reference/getquotes-pricing.md): Fetch current prices for one or more tokens on a specific chain.
+
+## Reference: WALLET & KEY MANAGEMENT
+- TSM Management API
+  - Health
+    - [Health check](https://docs.blockdaemon.com/reference/healthcheck.md): Returns the health status of the TSM node
+  - Configuration
+    - [Get authentication information](https://docs.blockdaemon.com/reference/getauthenticationinfo.md): Returns information about available authentication methods
+    - [Get audit signing public key](https://docs.blockdaemon.com/reference/getauditsigningpublickey.md): Returns the public key used for signing audit logs
+  - API Keys
+    - [List API keys](https://docs.blockdaemon.com/reference/listapikeys.md): Returns a list of all API keys
+    - [Create API key](https://docs.blockdaemon.com/reference/createapikey.md): Creates a new API key
+    - [Delete API key](https://docs.blockdaemon.com/reference/deleteapikey.md): Deletes an API key by ID
+  - Metrics
+    - [Get system metrics](https://docs.blockdaemon.com/reference/getmetrics.md): Returns system metrics in either Prometheus or expvar format
+  - Profiling
+    - [Get fgprof profile](https://docs.blockdaemon.com/reference/getfgprof.md): Returns fgprof profiling data
+    - [Get pprof index](https://docs.blockdaemon.com/reference/getpprofindex.md): Returns pprof index page
+    - [Get specific pprof profile](https://docs.blockdaemon.com/reference/getpprofprofile.md): Returns a specific pprof profile
+
+## Pages
+- [FAQs](https://docs.blockdaemon.com/page/faqs.md)
+
+## Changelog
+- [Staking API v1.168.0](https://docs.blockdaemon.com/changelog/staking-api-v1-168-0.md)
+- [Institutional Vault Release v2.2.1](https://docs.blockdaemon.com/changelog/institutional-vault-release-v221.md)
+- [Institutional Vault Release v2.2.0](https://docs.blockdaemon.com/changelog/institutional-vault-release-v220.md)
+- [Builder Vault (TSM) Release 72.3.0](https://docs.blockdaemon.com/changelog/builder-vault-tsm-release-7230.md)
+- [Builder Vault (TSM) Release 72.2.0](https://docs.blockdaemon.com/changelog/builder-vault-tsm-release-7220.md)
+- [Builder Vault (TSM) Release 72.1.0](https://docs.blockdaemon.com/changelog/builder-vault-tsm-release-7210.md)
+- [Builder Vault (TSM) Release 62.2.8 LTS](https://docs.blockdaemon.com/changelog/builder-vault-tsm-release-6228-lts.md)
+- [Builder Vault (TSM) Release 70.2.3 LTS](https://docs.blockdaemon.com/changelog/builder-vault-tsm-release-7023-lts.md)
+- [Builder Vault (TSM) Release 72.0.0](https://docs.blockdaemon.com/changelog/builder-vault-tsm-release-7200.md)
+- [General](https://docs.blockdaemon.com/changelog/sanctioned.md)

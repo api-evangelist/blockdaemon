@@ -1,0 +1,156 @@
+openapi: 3.0.0
+info:
+  version: 3.0.0
+  title: Native REST API
+  description: 'Native RPC API provides a RESTful and uniform way to access blockchain resources,
+
+    with a rich and reusable model across multiple protocols/cryptocurrencies.
+
+
+    [Documentation](https://app.blockdaemon.com/docs/ubiquity)
+
+    ##### Pagination
+
+    Certain resources contain a lot of data, more than what''s practical
+
+    to return for a single request.
+
+    With the help of pagination, the data is split across multiple responses.
+
+    Each response returns a subset of the items requested, and a continuation token.
+
+
+    To get the next batch of items, copy the returned continuation token
+
+    to the continuation query parameter and repeat the request with the new URL.
+
+    In case no continuation token is returned, there is no more data available.
+
+    '
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com
+  description: Blockdaemon Production
+paths:
+  /native/v1/protocols:
+    get:
+      summary: List supported protocols and networks
+      description: Returns a list of all blockchain protocols and their supported networks available through the RPC API.
+      operationId: ListProtocols
+      responses:
+        '200':
+          $ref: '#/components/responses/ProtocolInventory'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  responses:
+    ProtocolInventory:
+      description: Protocol inventory response
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - data
+            - requestId
+            properties:
+              data:
+                type: array
+                items:
+                  type: object
+                  required:
+                  - protocol
+                  - networks
+                  properties:
+                    protocol:
+                      type: string
+                      description: Protocol name
+                    networks:
+                      type: array
+                      items:
+                        type: string
+                      description: Networks supported by the protocol
+              requestId:
+                type: string
+                description: Unique request identifier for tracing
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    UnauthorizedError:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ServerError:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+  schemas:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Error type
+        title:
+          type: string
+          description: Error title
+        status:
+          type: integer
+          description: HTTP status code
+        detail:
+          type: string
+          description: Error details
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/listprotocols.md
+  merge:
+    pages: 1
+    deduped: 0
+    conflicts_kept_first: 0

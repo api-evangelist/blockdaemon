@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-solana-withdraw-transaction-response-schema.json",
+  "title": "solanaWithdrawTransactionResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-2-0-0-openapi.yml#/components/schemas/solanaWithdrawTransactionResponse",
+  "properties": {
+    "estimated_fee": {
+      "description": "The estimated fee for the transaction.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "instruction_count": {
+      "description": "The number of instructions in the transaction.",
+      "format": "int32",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "metadata": {
+      "$ref": "#/$defs/solanaWithdrawMetadata"
+    },
+    "network": {
+      "description": "The target Solana network (allowed 'mainnet' or 'testnet').",
+      "readOnly": true,
+      "type": "string"
+    },
+    "stake_account_pubkey": {
+      "description": "The address of the stake account.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    },
+    "unsigned_transaction": {
+      "description": "Base64-encoded, serialized Solana transaction to be signed and submitted.",
+      "type": "string"
+    },
+    "withdraw_authority_pubkey": {
+      "description": "Address of the account authorized to withdraw stake and receive withdrawn funds.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unsigned_transaction",
+    "stake_account_pubkey",
+    "withdraw_authority_pubkey",
+    "instruction_count",
+    "estimated_fee"
+  ],
+  "type": "object",
+  "$defs": {
+    "solanaWithdrawMetadata": {
+      "properties": {
+        "available_withdraw_amount": {
+          "description": "Available withdrawable amount before transaction",
+          "format": "int64",
+          "type": "integer"
+        },
+        "remaining_balance": {
+          "description": "Remaining stake account balance after withdrawal",
+          "format": "int64",
+          "type": "integer"
+        },
+        "will_close_account": {
+          "description": "Whether the stake account will be closed after withdrawal",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

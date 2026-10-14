@@ -1,0 +1,145 @@
+openapi: 3.0.0
+info:
+  description: This service enables the querying of members belonging to a specific organisation
+  termsOfService: ''
+  title: Blockdaemon workspace members
+  version: 0.0.1
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- BdApiKeyAuth: []
+paths:
+  /management/v1/metrics/request-usage:
+    x-zuplo-path:
+      pathMode: open-api
+    get:
+      operationId: management-metrics-request-usage
+      summary: Metrics on current period request usage
+      description: Get metrics on current period request usage
+      tags:
+      - management
+      responses:
+        '200':
+          $ref: '#/components/responses/ManagementRequestMetricsResponse'
+        '400':
+          $ref: '#/components/responses/GenericErrorResponse'
+        '401':
+          $ref: '#/components/responses/GenericErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+        '500':
+          $ref: '#/components/responses/GenericErrorResponse'
+      x-zuplo-route:
+        custom:
+          product: management
+          fh: kubernetes
+          target_service: blockdaemon-api
+        corsPolicy: anything-goes
+        handler:
+          export: ManagementRequestMetricsHandler
+          module: $import(./modules/bd-api/metrics-handler)
+        policies:
+          inbound:
+          - management-default-policy
+components:
+  responses:
+    ManagementRequestMetricsResponse:
+      description: Ok
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - data
+            - requestId
+            properties:
+              data:
+                type: object
+                properties:
+                  usage:
+                    type: object
+                    properties:
+                      current_period:
+                        type: object
+                        properties:
+                          total_requests:
+                            type: integer
+                            format: int64
+                            description: Total number of requests made in the current billing period.
+              requestId:
+                type: string
+                description: Unique identifier for the request
+                example: 01JQFHN7PYBVQ0RDQHSZ47FJN1
+    GenericErrorResponse:
+      description: generic error response object
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+            - type
+            - title
+            - status
+            - instance
+            - trace
+            properties:
+              type:
+                type: string
+                format: uri
+                description: A URI reference identifying the problem type, pointing to the HTTP status documentation.
+                example: https://httpproblems.com/http-status/400
+              title:
+                type: string
+                description: A short, human-readable summary of the problem.
+                example: Bad Request
+              status:
+                type: integer
+                description: The HTTP status code.
+                minimum: 100
+                maximum: 599
+                example: 400
+              instance:
+                type: string
+                format: uri-reference
+                description: The URI of the request that caused the error.
+                example: /api/v1/users/123
+              trace:
+                type: object
+                required:
+                - timestamp
+                - requestId
+                properties:
+                  timestamp:
+                    type: string
+                    format: date-time
+                    description: ISO 8601 timestamp of when the error occurred.
+                    example: '2026-03-23T12:00:00.000Z'
+                  requestId:
+                    type: string
+                    description: Unique identifier for the request from context.
+                    example: 01JQFHN7PYBVQ0RDQHSZ47FJN1
+                  rayId:
+                    type: string
+                    nullable: true
+                    description: Cloudflare Ray ID from the cf-ray request header, if present.
+                    example: 7f3c2b1a4d5e6f78
+  securitySchemes:
+    BdApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+tags:
+- name: management
+  description: Management APIs
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/management-metrics-request-usage.md
+  merge:
+    pages: 1
+    deduped: 0
+    conflicts_kept_first: 0

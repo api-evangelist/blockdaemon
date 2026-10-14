@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-new-stake-intent-near-schema.json",
+  "title": "NewStakeIntentNear",
+  "description": "Request object to create a new Stake Intent for NEAR Protocol",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-1-0-0-openapi.yml#/components/schemas/NewStakeIntentNear",
+  "type": "object",
+  "required": [
+    "amount",
+    "wallet_address",
+    "public_key"
+  ],
+  "properties": {
+    "amount": {
+      "$ref": "#/$defs/NearYocto",
+      "description": "Amount of yoctoNEAR to stake. 1 NEAR = 1e24 yoctoNEAR."
+    },
+    "wallet_address": {
+      "$ref": "#/$defs/NearAddress",
+      "description": "Account to stake from (can be either [named account or implicit account](https://docs.near.org/concepts/basics/accounts/account-id/))"
+    },
+    "public_key": {
+      "$ref": "#/$defs/NearPublicKey",
+      "description": "Must be the public key of the private key that will be used to sign the returned transaction. The public key must also be added as [FullAccess](https://docs.near.org/concepts/basics/accounts/access-keys#full-access-keys) key to the `wallet_address` account."
+    },
+    "to": {
+      "$ref": "#/$defs/NearAddress",
+      "description": "Specifies validator to delegate to."
+    },
+    "plan_id": {
+      "$ref": "#/$defs/PlanId"
+    }
+  },
+  "$defs": {
+    "NearAddress": {
+      "type": "string",
+      "description": "Base58 encoded public key or registered named account. [Accounts](https://docs.near.org/concepts/basics/accounts/account-id/).",
+      "pattern": "^([a-km-zA-HJ-NP-Z1-9]{22,44})|((([a-z\\d]+[-_])*[a-z\\d]+\\.)*([a-z\\d]+[-_])*[a-z\\d]+)$"
+    },
+    "NearPublicKey": {
+      "type": "string",
+      "description": "Base58 encoded public key prefixed by ed25519, associated with the private key that will be used to sign the transaction.",
+      "pattern": "^ed25519:[a-km-zA-HJ-NP-Z1-9]{22,44}$"
+    },
+    "NearYocto": {
+      "type": "string",
+      "description": "Denomination of NEAR Protocol.",
+      "pattern": "^[1-9]\\d+$"
+    },
+    "PlanId": {
+      "type": "string",
+      "description": "This feature enables you to stake to validators from the specified plan(s). When no plan id is specified, validators across all plans that match the API route will be available for staking. If it is a shared plan, you can to stake to validators on a shared node from the specified plan."
+    }
+  }
+}

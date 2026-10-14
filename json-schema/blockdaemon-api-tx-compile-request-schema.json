@@ -1,0 +1,377 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-api-tx-compile-request-schema.json",
+  "title": "ApiTxCompileRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-transaction-api-openapi.yml#/components/schemas/ApiTxCompileRequest",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestEVM"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestStellar"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestSubstrate"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestBTC"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestTron"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestSolana"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestNear"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCompileRequestCosmos"
+    }
+  ],
+  "$defs": {
+    "ApiTxCompileRequestBTC": {
+      "title": "Api Tx Compile Request BTC",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The transaction data needed to sign.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/signature"
+          },
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required,dive"
+          }
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signatures"
+      ]
+    },
+    "ApiTxCompileRequestCosmos": {
+      "title": "Api Tx Compile Request Cosmos",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The transaction data needed to sign.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CosmosSignature"
+          },
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required,dive"
+          }
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signatures"
+      ]
+    },
+    "ApiTxCompileRequestEVM": {
+      "title": "Api Tx Compile Request EVM",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The unsigned transaction. This transaction is hex RLP encoded and should be encoded wihout the R, S and V values (this is diffrent from what the /create endpoint returns)",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "address": {
+          "type": "string",
+          "description": "The hex address."
+        },
+        "signature": {
+          "type": "string",
+          "description": "A hex encoded string of the cryptographic signature. This should include the R and S values of the signature in ASN1 encoding.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "public_key": {
+          "type": "string",
+          "description": "A hex encoded string of the sender's public key in the 32 byte compressed format.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signature",
+        "public_key"
+      ]
+    },
+    "ApiTxCompileRequestNear": {
+      "title": "Api Tx Compile Request Near",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The unsigned transaction in base64 encoding.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signature": {
+          "type": "string",
+          "description": "The signature hex encoded",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signature"
+      ]
+    },
+    "ApiTxCompileRequestSolana": {
+      "title": "Api Tx Compile Request Solana",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The transaction data needed to sign.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SolanaSignature"
+          },
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signatures"
+      ]
+    },
+    "ApiTxCompileRequestStellar": {
+      "title": "Api Tx Compile Request Stellar",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The base64 encoded transaction",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StellarSignature"
+          },
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required,dive"
+          }
+        },
+        "replace_signatures": {
+          "type": "boolean",
+          "x-go-type-skip-optional-pointer": true
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signatures"
+      ]
+    },
+    "ApiTxCompileRequestSubstrate": {
+      "title": "Api Tx Compile Request Substrate",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The hex encoded unsigned extrinsic",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signature": {
+          "type": "string",
+          "description": "A hex encoded string of the cryptographic signature.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "public_key": {
+          "type": "string",
+          "description": "The hex encoded public key",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signature_scheme": {
+          "type": "string",
+          "enum": [
+            "ed25519",
+            "sr25519"
+          ],
+          "default": "ed25519"
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signature",
+        "public_key",
+        "signature_scheme"
+      ]
+    },
+    "ApiTxCompileRequestTron": {
+      "title": "Api Tx Compile Request Tron",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The protobuf hex encoded tron transaction",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signature": {
+          "type": "string",
+          "description": "A hex encoded string of the cryptographic signature.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "public_key": {
+          "type": "string",
+          "description": "The hex encoded public key of the signer",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signature",
+        "public_key"
+      ]
+    },
+    "CosmosSignature": {
+      "type": "object",
+      "properties": {
+        "sequence": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "x-go-type-skip-optional-pointer": true
+        },
+        "signature": {
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "sign_mode": {
+          "x-go-type": "int32",
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        },
+        "public_key": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "sequence",
+        "sign_mode",
+        "signature",
+        "public_key"
+      ]
+    },
+    "SolanaSignature": {
+      "type": "object",
+      "properties": {
+        "signature": {
+          "type": "string",
+          "description": "A base58 encoded string of the cryptographic signature.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "signature"
+      ]
+    },
+    "StellarSignature": {
+      "type": "object",
+      "properties": {
+        "signature": {
+          "type": "string",
+          "description": "A hex encoded string of the cryptographic signature.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "public_key": {
+          "type": "string",
+          "description": "A hex encoded string which is the public key for the address.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "signature",
+        "public_key"
+      ]
+    },
+    "signature": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "The hex address.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signature": {
+          "type": "string",
+          "description": "A hex encoded string of the cryptographic signature. ECDSA secp256k1 signatures are expected to be ASN1 encoded.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "public_key": {
+          "type": "string",
+          "description": "A hex encoded string which is the public key for the address.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        }
+      },
+      "required": [
+        "address",
+        "signature",
+        "public_key"
+      ]
+    }
+  }
+}

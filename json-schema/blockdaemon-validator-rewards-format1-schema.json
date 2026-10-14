@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-validator-rewards-format1-schema.json",
+  "title": "ValidatorRewardsFormat1",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-reporting-api-openapi.yml#/components/schemas/ValidatorRewardsFormat1",
+  "required": [
+    "address",
+    "currency",
+    "return",
+    "timeStart",
+    "timeEnd",
+    "timeAggregation",
+    "startingBalance",
+    "metadata"
+  ],
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "description": "The public address."
+    },
+    "currency": {
+      "type": "string",
+      "description": "The cryptocurrency protocol the request relates to."
+    },
+    "return": {
+      "type": "number",
+      "format": "float",
+      "description": "The sum of the rewards for the previous UTC day. Rewards are recorded per session (four hours on Polkadot), and calculated per era (twenty-four hours on Polkadot). Thus, rewards will be calculated once per day on Polkadot."
+    },
+    "timeStart": {
+      "type": "string",
+      "description": "The timestamp, in UTC, that marks the start of the period covered."
+    },
+    "timeEnd": {
+      "type": "string",
+      "description": "The timestamp, in UTC, that marks the end of the period covered."
+    },
+    "timeAggregation": {
+      "description": "The agregation period, one of `era`, `day`, `week`, or `month`.",
+      "type": "string"
+    },
+    "startingBalance": {
+      "type": "number",
+      "description": "The staked amount at the beginning of the previous UTC day (at the timeStart).",
+      "format": "float"
+    },
+    "metadata": {
+      "$ref": "#/$defs/MetadataPolkadot"
+    }
+  },
+  "$defs": {
+    "MetadataPolkadot": {
+      "required": [
+        "commission",
+        "validatorRewards",
+        "commissionRewards"
+      ],
+      "type": "object",
+      "description": "The protocol specific data.",
+      "properties": {
+        "commission": {
+          "type": "number",
+          "format": "float",
+          "description": "The validator commission rate. It refers to the percentage of staking rewards that validators are allowed to charge for their services, it varies across validators. It’s the fee that nominators are charged by the validator. Validators have the freedom to choose their commission rate based on various factors, such as their operational costs, infrastructure requirements, and the value they provide to the network."
+        },
+        "validatorRewards": {
+          "type": "number",
+          "format": "float",
+          "description": "The rewards the validator has earned from staking activity on the network."
+        },
+        "commissionRewards": {
+          "type": "number",
+          "format": "float",
+          "description": "The fee a validator earned from its nominators."
+        },
+        "era": {
+          "type": "integer",
+          "format": "int32",
+          "description": "A unit of time. An era’s duration is exactly 1 day (24 hours). The start and end times are always 15:36:18.003 UTC. Each era consists of 6 epochs, each of which consists of 2400 slots for Polkadot."
+        }
+      }
+    }
+  }
+}

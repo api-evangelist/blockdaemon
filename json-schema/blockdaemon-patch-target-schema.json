@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-patch-target-schema.json",
+  "title": "PatchTarget",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-event-streaming-api-openapi.yml#/components/schemas/PatchTarget",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "New name for the target"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional updated description of the target"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "disconnected",
+        "active",
+        "failed"
+      ],
+      "description": "Updated status of the target"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "webhook",
+        "websocket"
+      ],
+      "description": "The type of target to update. If changed, settings should match the new type"
+    },
+    "max_buffer_count": {
+      "type": "integer",
+      "minimum": 100,
+      "maximum": 10000,
+      "description": "Maximum number of events that can be buffered before delivery"
+    },
+    "settings": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WebhookSettings"
+        },
+        {
+          "$ref": "#/$defs/WebsocketSettings"
+        },
+        {
+          "$ref": "#/$defs/EmailSettings"
+        }
+      ],
+      "description": "Updated settings specific to the target type"
+    }
+  },
+  "$defs": {
+    "EmailSettings": {
+      "title": "Email Settings",
+      "description": "Used to send notifications or alerts to a specified recipient via email.",
+      "type": "object",
+      "required": [
+        "name",
+        "email"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The display name of the recipient."
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "The recipient's email address."
+        }
+      }
+    },
+    "WebhookSettings": {
+      "title": "Webhook Settings",
+      "description": "Configuration for webhook-based targets. Includes the HTTP method, destination URL, and a secret used for signing and validating webhook messages.",
+      "type": "object",
+      "required": [
+        "method",
+        "destination",
+        "secret"
+      ],
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "The destination URL where webhook events will be sent."
+        },
+        "method": {
+          "type": "string",
+          "description": "HTTP method used to deliver webhook events.",
+          "enum": [
+            "POST",
+            "GET"
+          ]
+        },
+        "secret": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Secret key used to sign webhook payloads. Must be at least 10 characters long."
+        }
+      }
+    },
+    "WebsocketSettings": {
+      "title": "WebSocket Settings",
+      "description": "Configuration for WebSocket-based targets. Used to establish a connection and authenticate event delivery.",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "secret": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Secret used to authenticate the WebSocket connection. Must be at least 10 characters long."
+        }
+      }
+    }
+  }
+}

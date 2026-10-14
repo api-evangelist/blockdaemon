@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-quotes-request-body-schema.json",
+  "title": "QuotesRequestBody",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-pricing-api-openapi.yml#/components/schemas/QuotesRequestBody",
+  "type": "object",
+  "properties": {
+    "addresses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "An array of token addresses you want pricing data for. The `0x0000000000000000000000000000000000000000` address represents the native coin on the given chain, `ETH` on Ethereum Mainnet or `MATIC` on Polygon Mainnet. <br><br> You can use the `address` from the  [GET Tokens endpoint](https://docs.blockdaemon.com/reference/gettokens-pricing) to get the price for a particular token."
+    },
+    "units": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "An array of quotes for the currency. For example, `USD` or `EUR`."
+    }
+  }
+}

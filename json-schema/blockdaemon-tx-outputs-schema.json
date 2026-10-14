@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-tx-outputs-schema.json",
+  "title": "tx_outputs",
+  "description": "A list of transaction outputs.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-rest-api-openapi.yml#/components/schemas/tx_outputs",
+  "type": "object",
+  "properties": {
+    "total": {
+      "type": "integer",
+      "description": "The number of total items."
+    },
+    "data": {
+      "type": "array",
+      "description": "A list of output items.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The status of the given transaction output."
+          },
+          "is_spent": {
+            "type": "boolean",
+            "description": "Whether the transaction output was spent or not."
+          },
+          "value": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The amount of tokens within the given output."
+          },
+          "spent": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/tx-output-response"
+              }
+            ]
+          },
+          "mined": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/tx-output-response"
+              }
+            ]
+          },
+          "pending": {
+            "allOf": [
+              {
+                "$ref": "#/$defs/tx-output-response"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "meta": {
+      "$ref": "#/$defs/meta"
+    }
+  },
+  "$defs": {
+    "meta": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The meta details.",
+      "properties": {
+        "paging": {
+          "$ref": "#/$defs/paging"
+        }
+      }
+    },
+    "paging": {
+      "type": "object",
+      "description": "The pagination details.",
+      "properties": {
+        "next_page_token": {
+          "type": "string",
+          "description": "The next page token to use in the following request."
+        }
+      }
+    },
+    "tx-output-response": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "description": "The output index within a given transaction."
+        },
+        "tx_id": {
+          "type": "string",
+          "description": "The transaction identifier."
+        },
+        "date": {
+          "type": "integer",
+          "description": "The transaction creation unix timestamp."
+        },
+        "block_id": {
+          "type": "string",
+          "description": "The hash identifier of the block which the transaction was mined."
+        },
+        "block_number": {
+          "type": "integer",
+          "description": "The number of the block which the transaction was mined."
+        },
+        "confirmations": {
+          "type": "integer",
+          "description": "The number of confirmations the transaction took in order to be mined."
+        },
+        "meta": {
+          "description": "The meta details of the transaction.",
+          "type": "object",
+          "properties": {
+            "addresses": {
+              "description": "A list of addresses.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "index": {
+              "description": "The index number.",
+              "type": "integer"
+            },
+            "script": {
+              "description": "The script.",
+              "type": "string"
+            },
+            "script_type": {
+              "description": "The script type.",
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

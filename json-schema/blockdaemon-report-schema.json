@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-report-schema.json",
+  "title": "report",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-rest-api-openapi.yml#/components/schemas/report",
+  "type": "object",
+  "properties": {
+    "fields": {
+      "type": "array",
+      "description": "The transaction items.",
+      "items": {
+        "$ref": "#/$defs/report_field"
+      }
+    },
+    "items": {
+      "type": "integer",
+      "description": "The number of transactions in the report."
+    },
+    "limit": {
+      "type": "integer",
+      "description": "The limit number."
+    },
+    "page_size": {
+      "type": "integer",
+      "description": "The limit number provided in the request or the default."
+    },
+    "page_token": {
+      "type": "string",
+      "description": "The token to retrieve more items in the next request. Use the `next_page_token` returned from the previous response for this parameter."
+    }
+  },
+  "required": [
+    "fields",
+    "items"
+  ],
+  "$defs": {
+    "algorand_meta": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "default": "algorand_meta",
+          "description": "The type of protocol the metadata relates to."
+        },
+        "sender_reward": {
+          "type": "string",
+          "description": "The sender reward amount."
+        },
+        "recipient_reward": {
+          "type": "string",
+          "description": "The recipient reward amount."
+        },
+        "close": {
+          "type": "string",
+          "description": "The closing account."
+        },
+        "close_amount": {
+          "type": "string",
+          "description": " The closing amount."
+        },
+        "close_reward": {
+          "type": "string",
+          "description": "The closing reward."
+        }
+      }
+    },
+    "report_field": {
+      "type": "object",
+      "properties": {
+        "protocol": {
+          "type": "string",
+          "description": "The protocol the address relates to."
+        },
+        "address": {
+          "type": "string",
+          "description": "The wallet/account the transaction occurred"
+        },
+        "currency": {
+          "type": "string",
+          "description": "The currency symbol."
+        },
+        "event_id": {
+          "type": "string",
+          "description": "The ID of the event within a transaction."
+        },
+        "block": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The block number the transaction occurred on."
+        },
+        "timestamp": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The unix timestamp when the transaction was added to a block."
+        },
+        "hash": {
+          "type": "string",
+          "description": "The transaction ID."
+        },
+        "action": {
+          "type": "string",
+          "description": "The action type e.g. Transfer, Deposit, Staking Reward etc.."
+        },
+        "value": {
+          "type": "string",
+          "description": "The amount of currency involved in the transaction (smallest unit)."
+        },
+        "fee": {
+          "type": "string",
+          "description": "How much was charged as a fee for processing the transaction."
+        },
+        "sender_address": {
+          "type": "string",
+          "description": "The address where the funds originated."
+        },
+        "decimals": {
+          "type": "integer",
+          "format": "int32",
+          "description": "The number of decimals in one coin, used to convert smallest unit to 1 whole coin if needed."
+        },
+        "meta": {
+          "$ref": "#/$defs/report_field_meta"
+        }
+      },
+      "required": [
+        "action",
+        "address",
+        "block",
+        "currency",
+        "decimals",
+        "event_id",
+        "fee",
+        "hash",
+        "protocol",
+        "sender_address",
+        "timestamp",
+        "value"
+      ]
+    },
+    "report_field_meta": {
+      "description": "Additional metadata bespoke to specific protocols.",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/algorand_meta"
+        }
+      ]
+    }
+  }
+}

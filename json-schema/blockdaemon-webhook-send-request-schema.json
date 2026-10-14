@@ -1,0 +1,595 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-webhook-send-request-schema.json",
+  "title": "WebhookSendRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-webhook-target-api-openapi.yml#/components/schemas/WebhookSendRequest",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedBlockRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedConfirmedBalanceRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedConfirmedTxRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedConfirmedTxLogRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedReorgRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedStakingRewardRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageUnifiedStakingStatusRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageSystemConnectionRequest"
+    },
+    {
+      "$ref": "#/$defs/WebhookMessageSystemDroppedMessagesRequest"
+    }
+  ],
+  "$defs": {
+    "EventType": {
+      "type": "string",
+      "enum": [
+        "unified_block",
+        "unified_confirmed_tx",
+        "unified_confirmed_balance",
+        "unified_confirmed_tx_log",
+        "unified_reorg",
+        "unified_staking_reward",
+        "unified_staking_status",
+        "system.connection",
+        "system.dropped.messages"
+      ]
+    },
+    "TransactionEvmFee": {
+      "type": "object",
+      "properties": {
+        "gas_used": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        },
+        "gas_price": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        },
+        "gas_limit": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        },
+        "value": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        },
+        "max_fee_per_gas": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        },
+        "max_priority_fee_per_gas": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        }
+      }
+    },
+    "Transfer": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "event_name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        }
+      }
+    },
+    "WebhookMessageSystemConnectionData": {
+      "type": "object",
+      "properties": {
+        "target_id": {
+          "type": "string"
+        },
+        "disconnect_time": {
+          "type": "integer"
+        },
+        "connection_time": {
+          "type": "integer"
+        },
+        "previous_status": {
+          "type": "string"
+        },
+        "new_status": {
+          "type": "string"
+        }
+      }
+    },
+    "WebhookMessageSystemConnectionRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageSystemConnectionData"
+        }
+      }
+    },
+    "WebhookMessageSystemDroppedMessagesData": {
+      "type": "object",
+      "properties": {
+        "target_id": {
+          "type": "string"
+        },
+        "pending_msg_count": {
+          "type": "integer"
+        },
+        "dropped_msg_count": {
+          "type": "integer"
+        },
+        "time": {
+          "type": "string"
+        }
+      }
+    },
+    "WebhookMessageSystemDroppedMessagesRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageSystemDroppedMessagesData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedBlockData": {
+      "type": "object",
+      "properties": {
+        "block_number": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "block_hash": {
+          "type": "string"
+        },
+        "parent_hash": {
+          "type": "string"
+        },
+        "block_timestamp": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "block_number",
+        "block_hash",
+        "block_timestamp",
+        "parent_hash"
+      ]
+    },
+    "WebhookMessageUnifiedBlockRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedBlockData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedConfirmedBalanceData": {
+      "type": "object",
+      "properties": {
+        "block_number": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "block_hash": {
+          "type": "string"
+        },
+        "block_timestamp": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "address": {
+          "type": "string"
+        },
+        "asset": {
+          "type": "string"
+        },
+        "value": {
+          "type": "integer",
+          "x-go-type": "big.Int"
+        }
+      },
+      "required": [
+        "block_number",
+        "block_hash",
+        "block_timestamp",
+        "address",
+        "asset"
+      ]
+    },
+    "WebhookMessageUnifiedConfirmedBalanceRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedConfirmedBalanceData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedConfirmedTxData": {
+      "type": "object",
+      "properties": {
+        "block_number": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "block_hash": {
+          "type": "string"
+        },
+        "tx_id": {
+          "type": "string"
+        },
+        "tx_hash": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Transfer"
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        "fee": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Transfer"
+            },
+            {
+              "$ref": "#/$defs/TransactionEvmFee"
+            }
+          ]
+        }
+      },
+      "required": [
+        "block_number",
+        "block_hash",
+        "timestamp",
+        "tx_id",
+        "status"
+      ]
+    },
+    "WebhookMessageUnifiedConfirmedTxLogData": {
+      "type": "object",
+      "required": [
+        "block_number",
+        "block_hash",
+        "timestamp",
+        "tx_id",
+        "status"
+      ],
+      "properties": {
+        "block_number": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "block_hash": {
+          "type": "string"
+        },
+        "tx_id": {
+          "type": "string"
+        },
+        "tx_hash": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Transfer"
+          },
+          "x-go-type-skip-optional-pointer": true
+        }
+      }
+    },
+    "WebhookMessageUnifiedConfirmedTxLogRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedConfirmedTxLogData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedConfirmedTxRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedConfirmedTxData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedReorgData": {
+      "type": "object",
+      "properties": {
+        "block_number": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "block_hash": {
+          "type": "string"
+        },
+        "block_timestamp": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "block_number",
+        "block_hash",
+        "block_timestamp"
+      ]
+    },
+    "WebhookMessageUnifiedReorgRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedReorgData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedStakingRewardData": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "start_balance": {
+          "type": "integer",
+          "x-go-type": "*big.Int"
+        },
+        "return": {
+          "type": "integer",
+          "x-go-type": "*big.Int"
+        },
+        "start_time": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "end_time": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "period": {
+          "type": "string"
+        },
+        "metadata": {
+          "type": "object",
+          "x-go-type-skip-optional-pointer": true,
+          "x-go-type": "map[string]any"
+        }
+      },
+      "required": [
+        "address",
+        "start_balance",
+        "return"
+      ]
+    },
+    "WebhookMessageUnifiedStakingRewardRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedStakingRewardData"
+        }
+      }
+    },
+    "WebhookMessageUnifiedStakingStatusData": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "metadata": {
+          "type": "object",
+          "x-go-type-skip-optional-pointer": true,
+          "x-go-type": "map[string]any"
+        }
+      },
+      "required": [
+        "address",
+        "status",
+        "timestamp"
+      ]
+    },
+    "WebhookMessageUnifiedStakingStatusRequest": {
+      "type": "object",
+      "required": [
+        "protocol",
+        "network",
+        "chain_id",
+        "event_type",
+        "data"
+      ],
+      "properties": {
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        },
+        "chain_id": {
+          "type": "string"
+        },
+        "event_type": {
+          "$ref": "#/$defs/EventType"
+        },
+        "data": {
+          "$ref": "#/$defs/WebhookMessageUnifiedStakingStatusData"
+        }
+      }
+    }
+  }
+}

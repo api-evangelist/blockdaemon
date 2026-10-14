@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-solana-split-transaction-response-schema.json",
+  "title": "solanaSplitTransactionResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-2-0-0-openapi.yml#/components/schemas/solanaSplitTransactionResponse",
+  "properties": {
+    "estimated_fee": {
+      "description": "The estimated fee for the transaction.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "instruction_count": {
+      "description": "The number of instructions in the transaction.",
+      "format": "int32",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "metadata": {
+      "$ref": "#/$defs/solanaSplitMetadata"
+    },
+    "network": {
+      "description": "The target Solana network (allowed 'mainnet' or 'testnet').",
+      "readOnly": true,
+      "type": "string"
+    },
+    "new_stake_account_pubkey": {
+      "description": "The new address of the stake account to receive the split amount.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    },
+    "stake_account_pubkey": {
+      "description": "The original address of the stake account to split from.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    },
+    "stake_authority_pubkey": {
+      "description": "The address of the account authorized to deactivate both the original and new stake accounts.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    },
+    "unsigned_transaction": {
+      "description": "Base64-encoded, serialized Solana transaction to be signed and submitted.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unsigned_transaction",
+    "stake_account_pubkey",
+    "new_stake_account_pubkey",
+    "stake_authority_pubkey",
+    "instruction_count",
+    "estimated_fee"
+  ],
+  "type": "object",
+  "$defs": {
+    "solanaSplitMetadata": {
+      "properties": {
+        "minimum_rent_exemption": {
+          "description": "Minimum amount of SOL (in Lamports) new stake-account needs for rent-exemption",
+          "format": "int64",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

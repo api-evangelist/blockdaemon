@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-solana-deactivate-transaction-response-schema.json",
+  "title": "solanaDeactivateTransactionResponse",
+  "description": "Response for a deactivate transaction intent",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-2-0-0-openapi.yml#/components/schemas/solanaDeactivateTransactionResponse",
+  "properties": {
+    "estimated_fee": {
+      "description": "The estimated fee for the transaction.",
+      "format": "int64",
+      "type": "integer"
+    },
+    "instruction_count": {
+      "description": "The number of instructions in the transaction.",
+      "format": "int32",
+      "minimum": 1,
+      "type": "integer"
+    },
+    "metadata": {
+      "$ref": "#/$defs/solanaDeactivateMetadata"
+    },
+    "network": {
+      "description": "The target Solana network (allowed 'mainnet' or 'testnet').",
+      "readOnly": true,
+      "type": "string"
+    },
+    "stake_account_pubkey": {
+      "description": "The address of the stake account to be deactivated.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    },
+    "stake_authority_pubkey": {
+      "description": "The address of the account with the authority to deactivate.",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{43,44}$",
+      "type": "string"
+    },
+    "unsigned_transaction": {
+      "description": "Base64-encoded, serialized Solana transaction to be signed and submitted.",
+      "type": "string"
+    }
+  },
+  "required": [
+    "unsigned_transaction",
+    "stake_account_pubkey",
+    "stake_authority_pubkey",
+    "instruction_count",
+    "estimated_fee"
+  ],
+  "type": "object",
+  "$defs": {
+    "solanaDeactivateMetadata": {
+      "properties": {
+        "current_epoch": {
+          "description": "Current epoch at build time",
+          "format": "int64",
+          "type": "integer"
+        },
+        "deactivation_epoch": {
+          "description": "Epoch when deactivation will take effect",
+          "format": "int64",
+          "type": "integer"
+        },
+        "was_active": {
+          "description": "Whether the stake account was active at build time",
+          "type": "boolean"
+        }
+      },
+      "type": "object"
+    }
+  }
+}

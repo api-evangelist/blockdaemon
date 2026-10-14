@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-reward-schema.json",
+  "title": "Reward",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-reporting-api-openapi.yml#/components/schemas/Reward",
+  "required": [
+    "address",
+    "currency",
+    "metadata",
+    "return",
+    "startingBalance",
+    "timeAggregation",
+    "timeEnd",
+    "timeStart"
+  ],
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "description": "The user-defined address."
+    },
+    "currency": {
+      "type": "string",
+      "description": "The cryptocurrency protocol the request relates to."
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata2"
+    },
+    "return": {
+      "type": "string",
+      "description": "The sum of the rewards for the previous UTC day."
+    },
+    "startingBalance": {
+      "type": "string",
+      "description": "The staked amount at the beginning of the previous UTC day (at the timeStart)."
+    },
+    "timeAggregation": {
+      "type": "string",
+      "description": "The agregation period. Either one of `epoch`, `daily`, `weekly`, or `monthly`."
+    },
+    "timeEnd": {
+      "type": "string",
+      "description": "The timestamp, in UTC, that marks the end of the period covered."
+    },
+    "timeStart": {
+      "type": "string",
+      "description": "The timestamp, in UTC, that marks the start of the period covered."
+    }
+  },
+  "$defs": {
+    "Metadata2": {
+      "required": [
+        "epoch"
+      ],
+      "type": "object",
+      "description": "The protocol specific data.",
+      "properties": {
+        "commission": {
+          "type": "number",
+          "format": "double",
+          "description": "The commission rate."
+        },
+        "epoch": {
+          "type": "integer",
+          "format": "int",
+          "description": "The epoch number the rewards were earned in."
+        }
+      }
+    }
+  }
+}

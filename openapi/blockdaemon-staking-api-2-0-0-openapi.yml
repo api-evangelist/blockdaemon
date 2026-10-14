@@ -1,0 +1,846 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: info@blockdaemon.com
+    name: Blockdaemon
+    url: https://blockdaemon.com
+  description: 'The Blockdaemon Staking API simplifies and streamlines institutional cryptocurrency staking. The API allows developers to interact with blockchain networks and perform various staking-related operations, such as delegating and undelegating tokens, in a single, unified interface.
+
+
+    With the Staking API, you can quickly and easily build and deploy applications that automate staking activities and increase efficiency in your blockchain operations.'
+  title: Staking API
+  version: 2.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://assets-global.website-files.com/633c5e06513fa35f3391a5f9/645d33beb6fa65f6cfb95eb8_BD%20Logo%20Stack%20-%20Purple.svg
+servers:
+- url: https://svc.blockdaemon.com/sia
+paths:
+  /v2/solana/{network}/deactivate-intent:
+    post:
+      description: Returns an unsigned transaction to deactivate SOL from an active stake account
+      operationId: BuildDeactivateTransaction
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solanaDeactivateTransactionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaDeactivateTransactionResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Post Deactivation Intent
+      tags:
+      - Solana
+  /v2/solana/{network}/nonce-account/{delegator_address}:
+    get:
+      description: Get the Blockdaemon nonce account associated provided delegator_address
+      operationId: GetNonceAccount
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      - description: The address of the account associated to the Blockdaemon nonce account.
+        in: path
+        name: delegator_address
+        required: true
+        schema:
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaGetNonceAccountResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get the Blockdaemon nonce account
+      tags:
+      - Solana
+  /v2/solana/{network}/split-intent:
+    post:
+      description: "Returns an unsigned transaction transaction that can be used to\n split to divide an existing stake account into two separate accounts, each holding a\n specified portion of the original stake’s SOL."
+      operationId: BuildSplitTransaction
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solanaSplitTransactionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaSplitTransactionResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Post Split Intent
+      tags:
+      - Solana
+  /v2/solana/{network}/stake-intent:
+    post:
+      description: Returns a unsigned transaction to stake SOL to a newly created stake account
+      operationId: BuildStakeTransaction
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solanaStakeTransactionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaStakeTransactionResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Post Stake Intent
+      tags:
+      - Solana
+  /v2/solana/{network}/stakes:
+    get:
+      description: Get the status of Solana stakes by payer address
+      operationId: GetStakes
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet'). Bound from path variable {network}; clients should not send this in body.
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      - description: Payer pubkey to list stakes for
+        in: query
+        name: delegator_address
+        schema:
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaGetStakesResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Get Solana Stake Accounts
+      tags:
+      - Solana
+  /v2/solana/{network}/stakes/by-accounts:
+    post:
+      description: Get the status of Solana stakes by stake account addresses
+      operationId: GetStakesByAccounts
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solanaGetStakesByAccountsRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaGetStakesResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Post Solana Stake Accounts
+      tags:
+      - Solana
+  /v2/solana/{network}/withdrawal-intent:
+    post:
+      description: Returns an unsigned transaction to withdraw a specified amount of SOL from an deactivated stake account
+      operationId: BuildWithdrawTransaction
+      parameters:
+      - description: The target Solana network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/solanaWithdrawTransactionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/solanaWithdrawTransactionResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Post Withdrawal Intent
+      tags:
+      - Solana
+  /v2/ton/{network}/notify:
+    post:
+      description: Issues an exit validator request notification to Blockdaemon
+      operationId: CreateNotification
+      parameters:
+      - description: The target TON network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tonCreateNotificationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tonCreateNotificationResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Notification
+      tags:
+      - TON
+components:
+  responses:
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Internal server error.
+    InvalidRequest:
+      content:
+        application/json:
+          schema:
+            description: Error response envelope
+            properties:
+              code:
+                description: Error code
+                example: 400
+                format: int32
+                type: integer
+              message:
+                description: Error Message
+                example: Detailed human-readable diagnostic message regarding any invalid request parameters
+                type: string
+            required:
+            - code
+            - message
+            type: object
+      description: Invalid request.
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
+      description: Header 'X-API-Key' missing.
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Resource not found
+  schemas:
+    Error:
+      description: Error response envelope
+      properties:
+        code:
+          description: Error code
+          example: 500
+          format: int32
+          type: integer
+        message:
+          description: Error Message
+          example: A descriptive error message
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    UnauthorizedError:
+      description: Error response envelope
+      properties:
+        code:
+          description: Error code
+          example: 401
+          format: int32
+          type: integer
+        message:
+          description: Error Message
+          example: A human-readable diagnostic message detailing any authorization failure
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    tonCreateNotificationRequest:
+      properties:
+        network:
+          description: The target TON network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        pool_address:
+          description: The customer's TON pool address
+          example: 0QBObTB6xSvahuI__XXtuQiaLwD9sCtdhyIYICM8GXEPPTJJ
+          pattern: ^(?:EQ|UQ|kQ|0Q|Ef|Uf|kf|0f)[A-Za-z0-9_-]{46}$
+          type: string
+      required:
+      - pool_address
+      type: object
+    tonCreateNotificationResponse:
+      type: object
+    solanaDeactivateMetadata:
+      properties:
+        current_epoch:
+          description: Current epoch at build time
+          example: 620
+          format: int64
+          type: integer
+        deactivation_epoch:
+          description: Epoch when deactivation will take effect
+          example: 621
+          format: int64
+          type: integer
+        was_active:
+          description: Whether the stake account was active at build time
+          example: true
+          type: boolean
+      type: object
+    solanaDeactivateTransactionRequest:
+      description: Request to build a deactivate transaction
+      properties:
+        delegator_address:
+          description: Wallet that will pay the transaction fee.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_account_pubkey:
+          description: Stake account to deactivate.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - delegator_address
+      - stake_account_pubkey
+      type: object
+    solanaDeactivateTransactionResponse:
+      description: Response for a deactivate transaction intent
+      properties:
+        estimated_fee:
+          description: The estimated fee for the transaction.
+          example: 5000
+          format: int64
+          type: integer
+        instruction_count:
+          description: The number of instructions in the transaction.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/solanaDeactivateMetadata'
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_account_pubkey:
+          description: The address of the stake account to be deactivated.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        stake_authority_pubkey:
+          description: The address of the account with the authority to deactivate.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        unsigned_transaction:
+          description: Base64-encoded, serialized Solana transaction to be signed and submitted.
+          type: string
+      required:
+      - unsigned_transaction
+      - stake_account_pubkey
+      - stake_authority_pubkey
+      - instruction_count
+      - estimated_fee
+      type: object
+    solanaGetNonceAccountResponse:
+      properties:
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        nonce_account:
+          description: The address of the nonce account.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        nonce_account_authority:
+          description: The address of the nonce account authority.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - nonce_account
+      - nonce_account_authority
+      type: object
+    solanaSplitMetadata:
+      properties:
+        minimum_rent_exemption:
+          description: Minimum amount of SOL (in Lamports) new stake-account needs for rent-exemption
+          example: 500
+          format: int64
+          type: integer
+      type: object
+    solanaSplitTransactionRequest:
+      properties:
+        amount:
+          description: The amount of funds you want to move from the specified stake-account to the new stake-account (in Lamports).
+          example: 1000
+          format: int64
+          type: integer
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_account_pubkey:
+          description: The address of the stake account to split
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - stake_account_pubkey
+      - amount
+      type: object
+    solanaSplitTransactionResponse:
+      properties:
+        estimated_fee:
+          description: The estimated fee for the transaction.
+          example: 1000000000
+          format: int64
+          type: integer
+        instruction_count:
+          description: The number of instructions in the transaction.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/solanaSplitMetadata'
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        new_stake_account_pubkey:
+          description: The new address of the stake account to receive the split amount.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        stake_account_pubkey:
+          description: The original address of the stake account to split from.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        stake_authority_pubkey:
+          description: The address of the account authorized to deactivate both the original and new stake accounts.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        unsigned_transaction:
+          description: Base64-encoded, serialized Solana transaction to be signed and submitted.
+          type: string
+      required:
+      - unsigned_transaction
+      - stake_account_pubkey
+      - new_stake_account_pubkey
+      - stake_authority_pubkey
+      - instruction_count
+      - estimated_fee
+      type: object
+    solanaStakeMetadata:
+      properties:
+        minimum_rent_exemption:
+          description: Minimum amount of SOL (in Lamports) new stake-account needs for rent-exemption
+          example: 500
+          format: int64
+          type: integer
+        total_cost:
+          description: 'Sum total of: rent exemption, deposit and estimated fee'
+          example: 1500
+          format: int64
+          type: integer
+      type: object
+    solanaStakeTransactionRequest:
+      properties:
+        amount:
+          description: The amount of funds you want to stake (in Lamports).
+          format: int64
+          type: integer
+        delegator_address:
+          description: The address of the account that will pay the transaction fee.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        validator_vote_pubkey:
+          description: The public address of the validator node that you intend to delegate your tokens to.
+          example: XrrvMBatuWaW55pmTJp4mTS2ZyURtXyUi6TpoMQ2kN5
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - delegator_address
+      - amount
+      - validator_vote_pubkey
+      type: object
+    solanaStakeTransactionResponse:
+      properties:
+        estimated_fee:
+          description: The estimated fee for the transaction.
+          example: 1000000000
+          format: int64
+          type: integer
+        instruction_count:
+          description: The number of instructions in the transaction.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/solanaStakeMetadata'
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_account_pubkey:
+          description: The address of the stake account.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        unsigned_transaction:
+          description: Base64-encoded, serialized Solana transaction to be signed and submitted.
+          type: string
+        validator_vote_pubkey:
+          description: The address of the validator vote account.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - unsigned_transaction
+      - stake_account_pubkey
+      - validator_vote_pubkey
+      - instruction_count
+      - estimated_fee
+      type: object
+    solanaWithdrawMetadata:
+      properties:
+        available_withdraw_amount:
+          description: Available withdrawable amount before transaction
+          example: 621
+          format: int64
+          type: integer
+        remaining_balance:
+          description: Remaining stake account balance after withdrawal
+          example: 0
+          format: int64
+          type: integer
+        will_close_account:
+          description: Whether the stake account will be closed after withdrawal
+          example: true
+          type: boolean
+      type: object
+    solanaWithdrawTransactionRequest:
+      properties:
+        amount:
+          description: The amount of funds you want to withdraw (in Lamports).
+          example: 621
+          format: int64
+          type: integer
+        delegator_address:
+          description: Wallet that will pay the transaction fee.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_account_pubkey:
+          description: The address of the stake account.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - delegator_address
+      - stake_account_pubkey
+      - amount
+      type: object
+    solanaWithdrawTransactionResponse:
+      properties:
+        estimated_fee:
+          description: The estimated fee for the transaction.
+          example: 1000000000
+          format: int64
+          type: integer
+        instruction_count:
+          description: The number of instructions in the transaction.
+          example: 1
+          format: int32
+          minimum: 1
+          type: integer
+        metadata:
+          $ref: '#/components/schemas/solanaWithdrawMetadata'
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_account_pubkey:
+          description: The address of the stake account.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        unsigned_transaction:
+          description: Base64-encoded, serialized Solana transaction to be signed and submitted.
+          type: string
+        withdraw_authority_pubkey:
+          description: Address of the account authorized to withdraw stake and receive withdrawn funds.
+          example: 75q6kcecNQhawj1dCmPWhfootfQBnZh7iWnNjoXTJv79
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      required:
+      - unsigned_transaction
+      - stake_account_pubkey
+      - withdraw_authority_pubkey
+      - instruction_count
+      - estimated_fee
+      type: object
+    solanaGetStakesResponse:
+      properties:
+        network:
+          example: mainnet
+          readOnly: true
+          type: string
+        stakes:
+          items:
+            $ref: '#/components/schemas/solanaStakeStatusSummary'
+          type: array
+      type: object
+    solanaStakeStatusSummary:
+      properties:
+        activation_epoch:
+          format: int64
+          type: integer
+        activation_state:
+          description: Cluster activation state from getStakeActivation
+          type: string
+        activation_timestamp:
+          type: string
+        active_stake:
+          format: int64
+          type: integer
+        balance:
+          format: int64
+          type: integer
+        deactivation_epoch:
+          format: int64
+          type: integer
+        deactivation_epoch_text:
+          description: Carries "Infinity" sentinel or numeric as string when needed
+          type: string
+        delegated_validator:
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        inactive_stake:
+          format: int64
+          type: integer
+        rent_exempt_reserve:
+          format: int64
+          type: integer
+        stake_account_pubkey:
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        staker_pubkey:
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+        state:
+          type: string
+        withdrawer_pubkey:
+          description: SDK-enriched fields
+          pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+          type: string
+      type: object
+    solanaGetStakesByAccountsRequest:
+      description: Request to fetch stakes status by stake account addresses.
+      properties:
+        network:
+          description: The target Solana network (allowed 'mainnet' or 'testnet'). Bound from path variable {network}; clients should not send this in body.
+          example: mainnet
+          readOnly: true
+          type: string
+        stake_accounts:
+          description: List of stake account addresses to look up
+          items:
+            pattern: ^[1-9A-HJ-NP-Za-km-z]{43,44}$
+            type: string
+          minItems: 1
+          type: array
+      required:
+      - stake_accounts
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      description: When signing up for a staking account, you are provided with an API key. To authenticate a Staking API request, pass your API key in the `X-API-Key` header.
+      in: header
+      name: X-API-Key
+      type: apiKey
+tags:
+- name: TON
+  x-displayName: TON
+- description: Solana endpoints
+  name: Solana
+  x-displayName: Solana
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/builddeactivatetransaction.md
+  - https://docs.blockdaemon.com/reference/buildsplittransaction.md
+  - https://docs.blockdaemon.com/reference/buildstaketransaction.md
+  - https://docs.blockdaemon.com/reference/buildwithdrawtransaction.md
+  - https://docs.blockdaemon.com/reference/createnotification.md
+  - https://docs.blockdaemon.com/reference/getnonceaccount.md
+  - https://docs.blockdaemon.com/reference/getstakes.md
+  - https://docs.blockdaemon.com/reference/getstakesbyaccounts.md
+  merge:
+    pages: 8
+    deduped: 45
+    conflicts_kept_first: 0

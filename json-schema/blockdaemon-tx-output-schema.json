@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-tx-output-schema.json",
+  "title": "tx_output",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-rest-api-openapi.yml#/components/schemas/tx_output",
+  "type": "object",
+  "properties": {
+    "status": {
+      "type": "string",
+      "description": "The result status of the transaction output.",
+      "enum": [
+        "mined",
+        "unknown"
+      ]
+    },
+    "is_spent": {
+      "type": "boolean",
+      "description": "If the transaction output was spent or not, if the value is true the `spent` transaction object will be presented."
+    },
+    "spent": {
+      "$ref": "#/$defs/tx_minify"
+    },
+    "value": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "format": "int64",
+      "description": "The amount of transaction output."
+    },
+    "mined": {
+      "$ref": "#/$defs/tx_minify"
+    }
+  },
+  "$defs": {
+    "tx_minify": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "Transaction",
+      "properties": {
+        "index": {
+          "type": "integer",
+          "description": "The output index within a given transaction."
+        },
+        "tx_id": {
+          "type": "string",
+          "description": "The transaction identifier."
+        },
+        "date": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The Unix timestamp."
+        },
+        "block_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The ID of block."
+        },
+        "block_number": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "int64",
+          "description": "The height of block."
+        },
+        "confirmations": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Total transaction confirmations."
+        }
+      }
+    }
+  }
+}

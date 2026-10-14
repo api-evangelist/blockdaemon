@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-new-stake-intent-solana-schema.json",
+  "title": "NewStakeIntentSolana",
+  "description": "Individual solana stake",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-1-0-0-openapi.yml#/components/schemas/NewStakeIntentSolana",
+  "type": "object",
+  "required": [
+    "amount",
+    "delegator_address"
+  ],
+  "properties": {
+    "amount": {
+      "$ref": "#/$defs/Lamport",
+      "description": "The amount of funds you want to stake (in Lamports)"
+    },
+    "validator_address": {
+      "$ref": "#/$defs/SolanaPublicKey",
+      "description": "The public address of the validator node that you intend to delegate your tokens to"
+    },
+    "delegator_address": {
+      "$ref": "#/$defs/SolanaPublicKey",
+      "description": "The address sending the funds to be staked"
+    },
+    "staking_authority": {
+      "$ref": "#/$defs/SolanaPublicKey",
+      "description": "The stake authority can be considered the manager of the stake account. It is used to sign transactions for the following operations but doesn’t have control over the funds:\n* Delegating stake\n* Deactivating the stake delegation\n* Splitting the stake account (creating a new stake account with a portion of the funds)\n* Merging two stake accounts into one\n* Setting a new stake authority\n* **Note:** When not specified, this will default to the delegator_address"
+    },
+    "withdrawal_authority": {
+      "$ref": "#/$defs/SolanaPublicKey",
+      "description": "The withdraw authority is used to sign transactions for the following operations:\n* Withdrawing an un-delegated stake into a wallet address\n* Setting a new withdrawal authority\n* Setting a new stake authority (thus, the withdrawal authority is the ultimate owner of the account)\n* **Note:** When not specified, this will default to the delegator_address"
+    },
+    "plan_id": {
+      "$ref": "#/$defs/PlanId"
+    }
+  },
+  "$defs": {
+    "Lamport": {
+      "type": "string",
+      "description": "Denomination of the cryptocurrency Solana.",
+      "pattern": "^[1-9]\\d+$"
+    },
+    "PlanId": {
+      "type": "string",
+      "description": "This feature enables you to stake to validators from the specified plan(s). When no plan id is specified, validators across all plans that match the API route will be available for staking. If it is a shared plan, you can to stake to validators on a shared node from the specified plan."
+    },
+    "SolanaPublicKey": {
+      "type": "string",
+      "description": "Public Key of an asymmetric key-pair.",
+      "format": "base58",
+      "pattern": "^[1-9A-HJ-NP-Za-km-z]{44}$"
+    }
+  }
+}

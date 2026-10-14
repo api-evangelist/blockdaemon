@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-dex-swap-request-schema.json",
+  "title": "_dex_swap_Request",
+  "description": "The request body for a /defi/v1/dex/swap",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-defi-api-openapi.yml#/components/schemas/_dex_swap_Request",
+  "type": "object",
+  "properties": {
+    "dexId": {
+      "type": "string",
+      "description": "The unique ID to specify the decentralized exchange (DEX) within a particular blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-dexs-protocols).",
+      "enum": [
+        "1000",
+        "1001",
+        "1900",
+        "1300",
+        "1301",
+        "1305",
+        "1306",
+        "1307",
+        "1308",
+        "1309",
+        "1310",
+        "1100",
+        "1101",
+        "1200",
+        "1201",
+        "2900",
+        "2901",
+        "2800",
+        "2808",
+        "2809",
+        "1500",
+        "1400",
+        "1402",
+        "2300",
+        "2100",
+        "2101",
+        "2500",
+        "2501",
+        "2700",
+        "2600",
+        "2400",
+        "2401",
+        "1600",
+        "1602",
+        "1604",
+        "1605",
+        "1607",
+        "1608",
+        "1700",
+        "1701",
+        "1702",
+        "1703",
+        "1704",
+        "1706",
+        "1707",
+        "2200",
+        "2201",
+        "2202",
+        "2203",
+        "2204",
+        "2205",
+        "2206",
+        "3000",
+        "3001",
+        "3100",
+        "3300",
+        "3301",
+        "3500",
+        "3501",
+        "3400",
+        "3401",
+        "3600",
+        "3800",
+        "3700"
+      ]
+    },
+    "path": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Ordered array of token contract addresses defining the swap route. Provide [tokenInAddress, tokenOutAddress] for a direct swap. Example (WETH→USDC on Ethereum): ['0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48']."
+    },
+    "amountIn": {
+      "type": "string",
+      "description": "Amount of the input token to provide, specified in the token's smallest denomination (base units). Do not send human-readable decimal values. Examples: to swap 1 WETH (18 decimals), use \"1000000000000000000\"; to swap 1 USDC (6 decimals), use \"1000000\"."
+    },
+    "amountOutMin": {
+      "type": "string",
+      "description": "Minimum acceptable output amount in the token's smallest denomination (base units). Provides slippage protection — the transaction reverts if the output falls below this value. Set to \"0\" to disable slippage protection. Examples: to require at least 0.99 USDC (6 decimals), use \"990000\"; to require at least 0.99 WETH (18 decimals), use \"990000000000000000\"."
+    },
+    "to": {
+      "type": "string",
+      "description": "Blockchain address of the token recipient. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). Output tokens are delivered to this address after the swap."
+    },
+    "deadline": {
+      "type": "string",
+      "description": "Transaction expiry time as a Unix timestamp in seconds (not milliseconds). The transaction will revert if not submitted before this time. Example: to set a 20-minute deadline, use current Unix timestamp + 1200."
+    },
+    "from": {
+      "type": "string",
+      "description": "Blockchain address of the token sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance of the input token and will sign the transaction."
+    },
+    "gas": {
+      "type": "string",
+      "description": "Maximum number of gas units to allocate for the transaction, as an integer string (e.g., '200000'). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei."
+    },
+    "gasPriority": {
+      "type": "string",
+      "description": "Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost."
+    },
+    "slippage": {
+      "type": "string",
+      "description": "Maximum acceptable slippage as a percentage of the swap value. Valid range: 0 to 100 (e.g., 1 = up to 1% slippage). Defaults to 1. The transaction reverts if the output deviates more than this percentage from the quoted price."
+    },
+    "enableFee": {
+      "type": "boolean",
+      "description": "Flag to include a basis points fee transaction alongside the main transaction when set to true."
+    },
+    "batchOption": {
+      "type": "string",
+      "description": "Transaction batching standard to use. Supported values: 'EIP-5792' (wallet-level batching via wallet_sendCalls) or 'EIP-7702' (EOA code delegation via batcherContract). Requires batcherContract when using EIP-7702.",
+      "enum": [
+        "EIP-5792",
+        "EIP-7702"
+      ]
+    },
+    "batcherContract": {
+      "type": "string",
+      "description": "The EOA address of the batcher that will be used to execute the transaction when using EIP-7702 batching. If not provided, the default batcher contract for the chain will be used."
+    },
+    "simulate": {
+      "type": "boolean",
+      "description": "When true, dry-runs the transaction batch via eth_simulateV1 and returns a simulate field with status and error on each transaction."
+    },
+    "poolFees": {
+      "type": "string",
+      "description": "Fee tier of the target liquidity pool in basis points (1 bp = 0.01%). Common values for Uniswap V3-style AMMs: 100 (0.01%), 500 (0.05%), 3000 (0.3%), 10000 (1%). If omitted, the pool yielding the highest output amount is selected automatically."
+    }
+  },
+  "required": [
+    "path",
+    "amountIn",
+    "to",
+    "deadline",
+    "from"
+  ]
+}

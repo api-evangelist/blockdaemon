@@ -1,0 +1,224 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-mcp-candidate.py
+source:
+- openapi/blockdaemon-defi-api-openapi.yml
+- openapi/blockdaemon-event-streaming-api-openapi.yml
+- openapi/blockdaemon-native-rest-api-openapi.yml
+- openapi/blockdaemon-pricing-api-openapi.yml
+- openapi/blockdaemon-rest-api-openapi.yml
+- openapi/blockdaemon-sepior-threshold-security-module-tsm-management-api-openapi.yml
+- openapi/blockdaemon-staking-api-1-0-0-openapi.yml
+- openapi/blockdaemon-staking-api-2-0-0-openapi.yml
+- openapi/blockdaemon-staking-reporting-api-openapi.yml
+- openapi/blockdaemon-transaction-api-openapi.yml
+- openapi/blockdaemon-webhook-target-api-openapi.yml
+- openapi/blockdaemon-workspace-members-openapi.yml
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: derived
+note: No MCP server was found. No probe result in the dossier. Candidate tools below are derived from the 363 operation(s) in the provider's own
+  OpenAPI (40 listed); they describe what a server WOULD expose, not one that exists.
+tools:
+- name: account_v1_allowance
+  operationId: accountV1Allowance
+  method: GET
+  path: /account/v1/allowance
+  description: Get User Allowance
+- name: get protocol overview
+  operationId: get protocol overview
+  method: GET
+  path: /streaming/v2/
+  description: List Supported Protocols and Networks
+- name: list_protocols
+  operationId: ListProtocols
+  method: GET
+  path: /native/v1/protocols
+  description: List supported protocols and networks
+- name: get_chains
+  operationId: GetChains
+  method: GET
+  path: /allowed_chains
+  description: Get Chains
+- name: get_protocols_list
+  operationId: GetProtocolsList
+  method: GET
+  path: /
+  description: Get the Protocols Overview
+- name: list_api_keys
+  operationId: listApiKeys
+  method: GET
+  path: /management/apikey
+  description: List API keys
+- name: post_avax_stake_intent
+  operationId: postAvaxStakeIntent
+  method: POST
+  path: /v1/avalanche/{network}/stake-intents
+  description: Post Stake Intent
+- name: build_deactivate_transaction
+  operationId: BuildDeactivateTransaction
+  method: POST
+  path: /v2/solana/{network}/deactivate-intent
+  description: Post Deactivation Intent
+- name: get historical stake and rewards for multiple delegators
+  operationId: Get Historical Stake and Rewards for multiple Delegators
+  method: POST
+  path: /v1/cardano/mainnet/delegator/history
+  description: Get the Historical Stake and Rewards for Multiple Delegators
+- name: get_overview
+  operationId: GetOverview
+  method: GET
+  path: /{blockchain_id}
+  description: Get the Supported Protocol Info
+- name: webhook verification challenge
+  operationId: webhook verification challenge
+  method: GET
+  path: /
+  description: Webhook Verification Challenge
+- name: management_metrics_request_usage
+  operationId: management-metrics-request-usage
+  method: GET
+  path: /management/v1/metrics/request-usage
+  description: Metrics on current period request usage
+- name: account_v1_portfolio
+  operationId: accountV1Portfolio
+  method: GET
+  path: /account/v1/portfolio
+  description: Get User Portfolio
+- name: get organization audit logs
+  operationId: get organization audit logs
+  method: GET
+  path: /streaming/v2/organization/audit-logs
+  description: Get Organization Audit Logs
+- name: get_tokens
+  operationId: GetTokens
+  method: GET
+  path: /allowed_tokens/{chain_id}
+  description: Get Tokens
+- name: get_protocol_endpoints
+  operationId: GetProtocolEndpoints
+  method: GET
+  path: /{protocol}/{network}
+  description: Get the Protocol Info
+- name: create_api_key
+  operationId: createApiKey
+  method: POST
+  path: /management/apikey
+  description: Create API key
+- name: get_binance_deactivatable_amount
+  operationId: getBinanceDeactivatableAmount
+  method: GET
+  path: /v1/binance/{network}/deactivatable-amount
+  description: Get Deactivatable Amount
+- name: get_nonce_account
+  operationId: GetNonceAccount
+  method: GET
+  path: /v2/solana/{network}/nonce-account/{delegator_address}
+  description: Get the Blockdaemon nonce account
+- name: get historical stake and rewards of delegator
+  operationId: Get Historical Stake and Rewards of Delegator
+  method: POST
+  path: /v1/cardano/mainnet/delegator/history/{address}
+  description: Get the Historical Stake and Rewards of a Delegator
+- name: tx_compile
+  operationId: TxCompile
+  method: POST
+  path: /{blockchain_id}/compile
+  description: Compile an Unsigned Transaction
+- name: webhook receive
+  operationId: webhook receive
+  method: POST
+  path: /
+  description: Receives Webhook Messages
+- name: getapimetadatav2
+  operationId: getapimetadatav2
+  method: GET
+  path: /defi/v1
+  description: Get API Metadata
+- name: find rules
+  operationId: find rules
+  method: GET
+  path: /streaming/v2/rules
+  description: Get all Rules
+- name: get_quotes
+  operationId: GetQuotes
+  method: POST
+  path: /quotes/{chain_id}
+  description: Get Token Price
+- name: get_list_of_balances_by_address
+  operationId: GetListOfBalancesByAddress
+  method: GET
+  path: /{protocol}/{network}/account/{address}
+  description: Get a List of Balances for an Address
+- name: delete_api_key
+  operationId: deleteApiKey
+  method: DELETE
+  path: /management/apikey/{apiKeyID}
+  description: Delete API key
+- name: post_binance_deactivation_intent
+  operationId: postBinanceDeactivationIntent
+  method: POST
+  path: /v1/binance/{network}/deactivation-intents
+  description: Post Deactivation Intent
+- name: build_split_transaction
+  operationId: BuildSplitTransaction
+  method: POST
+  path: /v2/solana/{network}/split-intent
+  description: Post Split Intent
+- name: get stake and rewards for multiple delegators
+  operationId: Get Stake and Rewards for multiple Delegators
+  method: POST
+  path: /v1/cardano/mainnet/delegator/rewards
+  description: Get the Stake and Rewards for Multiple Delegators
+- name: tx_compile_and_send
+  operationId: TxCompileAndSend
+  method: POST
+  path: /{blockchain_id}/compile_and_send
+  description: Compile and Broadcast an Unsigned Transaction
+- name: aa_getpaymasterdata
+  operationId: aaGetpaymasterdata
+  method: GET
+  path: /defi/v1/aa/getpaymasterdata
+  description: Get Paymaster Data
+- name: add rule
+  operationId: add rule
+  method: POST
+  path: /streaming/v2/rules
+  description: Create a Rule
+- name: get_account_nonce
+  operationId: GetAccountNonce
+  method: GET
+  path: /{protocol}/{network}/account/{address}/nonce
+  description: Get Account Nonce
+- name: get_audit_signing_public_key
+  operationId: getAuditSigningPublicKey
+  method: GET
+  path: /management/configuration/auditsigningpublickey
+  description: Get audit signing public key
+- name: get_binance_deactivation_intents
+  operationId: getBinanceDeactivationIntents
+  method: GET
+  path: /v1/binance/{network}/deactivation-intents
+  description: Lists Deactivation Intents
+- name: build_stake_transaction
+  operationId: BuildStakeTransaction
+  method: POST
+  path: /v2/solana/{network}/stake-intent
+  description: Post Stake Intent
+- name: get stake and rewards of delegator
+  operationId: Get Stake and Rewards of Delegator
+  method: GET
+  path: /v1/cardano/mainnet/delegator/rewards/{address}
+  description: Get the Stake and Rewards of a Delegator
+- name: tx_create
+  operationId: TxCreate
+  method: POST
+  path: /{blockchain_id}/create
+  description: Create an Unsigned Transaction
+- name: aa_getsignaturemessage
+  operationId: aaGetsignaturemessage
+  method: GET
+  path: /defi/v1/aa/getsignaturemessage
+  description: Get Signature Message

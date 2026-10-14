@@ -1,0 +1,59 @@
+generated: '2026-10-14'
+method: derived
+source: openapi/blockdaemon-defi-api-openapi.yml, openapi/blockdaemon-event-streaming-api-openapi.yml,
+  openapi/blockdaemon-pricing-api-openapi.yml, openapi/blockdaemon-rest-api-openapi.yml, openapi/blockdaemon-sepior-threshold-security-module-tsm-management-api-openapi.yml,
+  openapi/blockdaemon-staking-api-1-0-0-openapi.yml, openapi/blockdaemon-staking-api-2-0-0-openapi.yml,
+  openapi/blockdaemon-staking-reporting-api-openapi.yml, openapi/blockdaemon-transaction-api-openapi.yml,
+  openapi/blockdaemon-webhook-target-api-openapi.yml, openapi/blockdaemon-workspace-members-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can
+    create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+  sources:
+  - openapi/blockdaemon-defi-api-openapi.yml
+  - openapi/blockdaemon-event-streaming-api-openapi.yml
+  - openapi/blockdaemon-pricing-api-openapi.yml
+  - openapi/blockdaemon-rest-api-openapi.yml
+  - openapi/blockdaemon-sepior-threshold-security-module-tsm-management-api-openapi.yml
+  - openapi/blockdaemon-staking-api-2-0-0-openapi.yml
+  - openapi/blockdaemon-staking-reporting-api-openapi.yml
+  - openapi/blockdaemon-transaction-api-openapi.yml
+  - openapi/blockdaemon-webhook-target-api-openapi.yml
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: Opaque
+  description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon
+    App](https://app.blockdaemon.com).'
+  sources:
+  - openapi/blockdaemon-event-streaming-api-openapi.yml
+  - openapi/blockdaemon-pricing-api-openapi.yml
+  - openapi/blockdaemon-rest-api-openapi.yml
+  - openapi/blockdaemon-staking-reporting-api-openapi.yml
+  - openapi/blockdaemon-transaction-api-openapi.yml
+  - openapi/blockdaemon-webhook-target-api-openapi.yml
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-KEY
+  description: |-
+    When signing up for a staking account, you are provided with an API key.
+
+    To authenticate a Staking API request, pass your API key in the `X-API-Key` header.
+  sources:
+  - openapi/blockdaemon-staking-api-1-0-0-openapi.yml
+- name: BdApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: Authorization
+  sources:
+  - openapi/blockdaemon-workspace-members-openapi.yml

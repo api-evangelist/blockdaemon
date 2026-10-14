@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-yield-response-schema.json",
+  "title": "YieldResponse",
+  "description": "The yield response object",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-reporting-api-openapi.yml#/components/schemas/YieldResponse",
+  "type": "object",
+  "properties": {
+    "startTime": {
+      "description": "Epoch-based start time for reward queries.",
+      "type": "number"
+    },
+    "endTime": {
+      "description": "Epoch-based end time for reward queries.",
+      "type": "number"
+    },
+    "return": {
+      "description": "The staking return for all validators for the period",
+      "type": "string",
+      "format": "number"
+    },
+    "apr": {
+      "description": "The APR for validators based on the return, total stake of the network and assuming 82125 epochs a year",
+      "type": "string",
+      "format": "number"
+    },
+    "aprPercentage": {
+      "description": "The same as above but in percentage form",
+      "type": "string",
+      "format": "number"
+    },
+    "apy": {
+      "description": "The APY based on the above and assuming re-staking of all rewards after each epoch (Unlikely for ETH but kept in for completeness)",
+      "type": "string",
+      "format": "number"
+    },
+    "apyPercentage": {
+      "description": "The same as above but in percentage form",
+      "type": "string",
+      "format": "number"
+    },
+    "denomination": {
+      "description": "the denomination the reward is in",
+      "type": "string"
+    },
+    "stake": {
+      "description": "the total stake across the full network",
+      "type": "string",
+      "format": "number"
+    },
+    "metadata": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/YieldMetadata"
+        },
+        {
+          "$ref": "#/$defs/ValidatorYieldMetadata"
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "ValidatorYieldMetadata": {
+      "properties": {
+        "effectiveBalance": {
+          "description": "The effective balance of the validator at the start time",
+          "type": "string",
+          "format": "number"
+        },
+        "mevBlockReward": {
+          "description": "The total mev block rewards in the period",
+          "type": "string",
+          "format": "number"
+        },
+        "blockReward": {
+          "description": "The total block rewards in the period",
+          "type": "string",
+          "format": "number"
+        },
+        "syncCommitteeReward": {
+          "description": "The sync comittee rewards for the period",
+          "type": "string",
+          "format": "number"
+        },
+        "attestationReward": {
+          "description": "The attestation rewards for the period",
+          "type": "string",
+          "format": "number"
+        }
+      }
+    },
+    "YieldMetadata": {
+      "properties": {
+        "epoch": {
+          "description": "The epoch number/s that the period covers",
+          "type": "string"
+        },
+        "protocolRewards": {
+          "description": "The total protocol rewards in the period",
+          "type": "string",
+          "format": "number"
+        },
+        "mevRewards": {
+          "description": "The total mev block rewards in the period",
+          "type": "string",
+          "format": "number"
+        },
+        "blockRewards": {
+          "description": "The total block fee rewards in the period",
+          "type": "string",
+          "format": "number"
+        },
+        "totalBalance": {
+          "description": "The total balance of the validators in the network (including pending withdrawals)",
+          "type": "string",
+          "format": "number"
+        }
+      }
+    }
+  }
+}

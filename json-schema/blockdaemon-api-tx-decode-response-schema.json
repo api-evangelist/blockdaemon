@@ -1,0 +1,775 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-api-tx-decode-response-schema.json",
+  "title": "ApiTxDecodeResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-transaction-api-openapi.yml#/components/schemas/ApiTxDecodeResponse",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/ApiTxDecodeResponseEVM"
+    },
+    {
+      "$ref": "#/$defs/ApiTxDecodedBTC"
+    },
+    {
+      "$ref": "#/$defs/ApiTxDecodeResponseTron"
+    },
+    {
+      "$ref": "#/$defs/ApiTxDecodeResponseStellar"
+    },
+    {
+      "$ref": "#/$defs/ApiTxDecodeResponseSolana"
+    },
+    {
+      "$ref": "#/$defs/ApiTxDecodeResponseNear"
+    }
+  ],
+  "$defs": {
+    "ApiScriptPubKeyBTC": {
+      "type": "object",
+      "properties": {
+        "hex": {
+          "type": "string",
+          "description": "Script pub key's hex encoded data"
+        },
+        "type": {
+          "enum": [
+            "nonstandard",
+            "pubkey",
+            "pubkeyhash",
+            "witness_v0_keyhash",
+            "scripthash",
+            "witness_v0_scripthash",
+            "multisig",
+            "nulldata",
+            "witness_v1_taproot",
+            "witness_unknown"
+          ],
+          "type": "string",
+          "description": "Script type"
+        }
+      },
+      "required": [
+        "hex",
+        "type"
+      ]
+    },
+    "ApiTxDecodeResponseEVM": {
+      "title": "Api Tx Decode Response EVM",
+      "type": "object",
+      "properties": {
+        "chain_id": {
+          "type": "string",
+          "description": "The chain ID."
+        },
+        "type": {
+          "type": "string",
+          "description": "The type of transaction."
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "string"
+        },
+        "from": {
+          "description": "The sender of the transaction.",
+          "type": "string"
+        },
+        "value": {
+          "description": "The amount you wish to transfer.",
+          "type": "integer",
+          "x-go-type": "big.Int"
+        },
+        "gas": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas."
+        },
+        "maxPriorityFeePerGas": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used."
+        },
+        "maxFeePerGas": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an esitmate will be used."
+        },
+        "nonce": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The account Nonce."
+        },
+        "decoded_data": {
+          "type": "object",
+          "description": "An unlimited size byte array specifying the input data of the message call"
+        },
+        "v": {
+          "type": "string",
+          "description": "This is a signature component. This is the recovery id."
+        },
+        "r": {
+          "type": "string",
+          "description": "This is an ECDSA signature component."
+        },
+        "s": {
+          "type": "string",
+          "description": "This is an ECDSA signature component."
+        },
+        "public_key": {
+          "type": "string",
+          "description": "This is the public key of the signer of the transaction."
+        },
+        "hash": {
+          "type": "string",
+          "description": "The hash of the transaction."
+        },
+        "data": {
+          "type": "string",
+          "description": "The encoded input data of the transaction."
+        },
+        "method_hash": {
+          "type": "string",
+          "description": "This is the method signature of the contract call. It is the first 4 bytes of the input data."
+        },
+        "method_signature": {
+          "type": "string",
+          "description": "The method name called."
+        },
+        "full_method_signature": {
+          "type": "string",
+          "description": "The entire method signature including named params."
+        }
+      },
+      "required": [
+        "to"
+      ]
+    },
+    "ApiTxDecodeResponseNear": {
+      "title": "Api Tx Decode Response Near",
+      "type": "object",
+      "description": "Decoded Near transaction in human-readable format.",
+      "properties": {
+        "transaction": {
+          "$ref": "#/$defs/ApiTxDecodedResponseNearTransaction"
+        },
+        "signature": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "transaction"
+      ]
+    },
+    "ApiTxDecodeResponseSolana": {
+      "title": "Api Tx Decode Response Solana",
+      "type": "object",
+      "description": "Decoded Solana Transaction. Currently only supports decoding System and Compute-Budget Instructions.",
+      "properties": {
+        "message": {
+          "$ref": "#/$defs/SolanaMessage"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "description": "A signature of the transaction."
+          }
+        }
+      }
+    },
+    "ApiTxDecodeResponseStellar": {
+      "title": "Api Tx Decode Response Stellar",
+      "type": "object",
+      "properties": {
+        "envelope": {
+          "$ref": "#/$defs/StellarEnvelope"
+        }
+      }
+    },
+    "ApiTxDecodeResponseTron": {
+      "title": "Api Tx Decode Response Tron",
+      "type": "object",
+      "properties": {
+        "tx_id": {
+          "type": "string",
+          "description": "Transaction ID",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "signature": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Transaction signatures"
+        },
+        "raw_data_hex": {
+          "type": "string",
+          "description": "The hex encoded protobuf unsigned transaction.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "raw_data": {
+          "$ref": "#/$defs/TronRawDataTx"
+        }
+      },
+      "required": [
+        "tx_id",
+        "raw_data",
+        "raw_data_hex"
+      ]
+    },
+    "ApiTxDecodedBTC": {
+      "title": "Api Tx Decode Response BTC",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApiTxSourceDecodedBTC"
+          },
+          "description": "The source UTXOs."
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApiTxDestinationDecodedBTC"
+          }
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "ApiTxDecodedResponseNearTransaction": {
+      "type": "object",
+      "properties": {
+        "signer_id": {
+          "type": "string"
+        },
+        "public_key": {
+          "type": "string"
+        },
+        "nonce_for_public_key": {
+          "type": "number",
+          "x-go-type": "uint64"
+        },
+        "receiver_id": {
+          "type": "string"
+        },
+        "block_hash": {
+          "type": "string"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "x-go-type": "any"
+          }
+        }
+      },
+      "required": [
+        "signer_id",
+        "public_key",
+        "nonce_for_public_key",
+        "receiver_id",
+        "block_hash",
+        "actions"
+      ]
+    },
+    "ApiTxDestinationDecodedBTC": {
+      "description": "The recipient of the transaction.",
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "The destination address."
+        },
+        "value": {
+          "description": "The amount you wish to transfer, in sats.",
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "script_pub_key": {
+          "$ref": "#/$defs/ApiScriptPubKeyBTC"
+        }
+      },
+      "required": [
+        "destination",
+        "value"
+      ]
+    },
+    "ApiTxSourceBTC": {
+      "type": "object",
+      "properties": {
+        "tx_id": {
+          "type": "string",
+          "description": "UTXO's transaction ID",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "index": {
+          "type": "integer",
+          "format": "uint32",
+          "description": "UTXO's index in source transaction"
+        }
+      },
+      "required": [
+        "tx_id",
+        "index"
+      ]
+    },
+    "ApiTxSourceDecodedBTC": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiTxSourceWithSignedDataBTC"
+        },
+        {
+          "$ref": "#/$defs/ApiTxSourcePrevOutputDataBTC"
+        }
+      ]
+    },
+    "ApiTxSourcePrevOutputDataBTC": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "Amount of previous output used in input"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address that owns previous output used in input"
+        }
+      },
+      "required": [
+        "value",
+        "address"
+      ]
+    },
+    "ApiTxSourceSignedDataBTC": {
+      "type": "object",
+      "properties": {
+        "script_sig_hex": {
+          "type": "string",
+          "description": "Hex encoded tx input's script data field"
+        },
+        "tx_witness": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tx input's witness data"
+        }
+      }
+    },
+    "ApiTxSourceWithSignedDataBTC": {
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/$defs/ApiTxSourceBTC"
+        },
+        {
+          "$ref": "#/$defs/ApiTxSourceSignedDataBTC"
+        }
+      ]
+    },
+    "SolanaAccount": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the account"
+        },
+        "address": {
+          "type": "string",
+          "description": "Address of the account"
+        },
+        "is_signer": {
+          "type": "boolean",
+          "description": "True if this account is sa signer"
+        },
+        "is_writable": {
+          "type": "boolean",
+          "description": "True if this account have write permissions"
+        }
+      }
+    },
+    "SolanaAccountKeys": {
+      "type": "array",
+      "items": {
+        "description": "Account Keys",
+        "type": "string"
+      }
+    },
+    "SolanaHeader": {
+      "type": "object",
+      "properties": {
+        "num_required_signatures": {
+          "type": "integer",
+          "x-go-type": "int64",
+          "description": "Number of required signatures"
+        },
+        "num_readonly_signed_accounts": {
+          "type": "integer",
+          "x-go-type": "int64",
+          "description": "Number of read-only signed accounts"
+        },
+        "num_readonly_unsigned_accounts": {
+          "type": "integer",
+          "x-go-type": "int64",
+          "description": "Number of read-only unsigned accounts"
+        }
+      }
+    },
+    "SolanaInstruction": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Instruction name"
+        },
+        "accounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SolanaAccount"
+          }
+        },
+        "params": {
+          "$ref": "#/$defs/SolanaParams"
+        }
+      }
+    },
+    "SolanaInstructions": {
+      "type": "object",
+      "properties": {
+        "programs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SolanaProgram"
+          }
+        }
+      }
+    },
+    "SolanaMessage": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "type": "string",
+          "description": "The version of the transaction, legacy or v0."
+        },
+        "recent_block_hash": {
+          "type": "string",
+          "description": "The recent block hash of the transaction."
+        },
+        "account_keys": {
+          "$ref": "#/$defs/SolanaAccountKeys"
+        },
+        "header": {
+          "$ref": "#/$defs/SolanaHeader"
+        },
+        "instructions": {
+          "$ref": "#/$defs/SolanaInstructions"
+        }
+      }
+    },
+    "SolanaParams": {
+      "type": "object",
+      "description": "A map of the parameters passed in the instruction"
+    },
+    "SolanaProgram": {
+      "type": "object",
+      "properties": {
+        "instruction": {
+          "$ref": "#/$defs/SolanaInstruction"
+        },
+        "name": {
+          "type": "string",
+          "description": "Program name"
+        }
+      }
+    },
+    "StellarAccount": {
+      "type": "object",
+      "properties": {
+        "ed25519": {
+          "type": "string",
+          "description": "The ed25519 account address."
+        }
+      },
+      "required": [
+        "ed25519"
+      ]
+    },
+    "StellarAsset": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The asset type."
+        },
+        "code": {
+          "type": "string",
+          "description": "The asset code."
+        },
+        "issuer": {
+          "$ref": "#/$defs/StellarAccount"
+        }
+      }
+    },
+    "StellarBody": {
+      "type": "object",
+      "properties": {
+        "payment": {
+          "$ref": "#/$defs/StellarPayment"
+        }
+      },
+      "required": [
+        "payment"
+      ]
+    },
+    "StellarEnvelope": {
+      "type": "object",
+      "properties": {
+        "v1": {
+          "$ref": "#/$defs/StellarV1"
+        }
+      },
+      "required": [
+        "v1"
+      ]
+    },
+    "StellarMemo": {
+      "type": "object",
+      "properties": {
+        "hash": {
+          "type": "string",
+          "description": "The hash memo."
+        },
+        "text": {
+          "type": "string",
+          "description": "The text memo."
+        },
+        "id": {
+          "type": "integer",
+          "description": "The id memo.",
+          "x-go-type": "uint64"
+        }
+      }
+    },
+    "StellarOperations": {
+      "type": "object",
+      "properties": {
+        "source_account": {
+          "$ref": "#/$defs/StellarAccount"
+        },
+        "body": {
+          "$ref": "#/$defs/StellarBody"
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "StellarPayment": {
+      "type": "object",
+      "properties": {
+        "destination": {
+          "$ref": "#/$defs/StellarAccount"
+        },
+        "asset": {
+          "$ref": "#/$defs/StellarAsset"
+        },
+        "amount": {
+          "type": "string",
+          "description": "The quantity of assets sent to the recipient."
+        }
+      },
+      "required": [
+        "destination",
+        "asset",
+        "amount"
+      ]
+    },
+    "StellarPreconditions": {
+      "type": "object",
+      "properties": {
+        "time_bounds": {
+          "$ref": "#/$defs/StellarTimeBounds"
+        }
+      }
+    },
+    "StellarSignatures": {
+      "type": "object",
+      "properties": {
+        "signature": {
+          "type": "string",
+          "description": "The base64 encoded signature."
+        },
+        "hint": {
+          "type": "string",
+          "description": "The base64 encoded 4-byte signature hint."
+        }
+      }
+    },
+    "StellarTimeBounds": {
+      "type": "object",
+      "properties": {
+        "min_time": {
+          "type": "integer",
+          "description": "The expiration min time.",
+          "x-go-type": "uint64"
+        },
+        "max_time": {
+          "type": "integer",
+          "description": "The expiration max time.",
+          "x-go-type": "uint64"
+        }
+      }
+    },
+    "StellarTx": {
+      "type": "object",
+      "properties": {
+        "source_account": {
+          "$ref": "#/$defs/StellarAccount"
+        },
+        "fee": {
+          "type": "integer",
+          "x-go-type": "uint32"
+        },
+        "seq_num": {
+          "type": "integer",
+          "x-go-type": "int64"
+        },
+        "cond": {
+          "$ref": "#/$defs/StellarPreconditions"
+        },
+        "memo": {
+          "$ref": "#/$defs/StellarMemo"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StellarOperations"
+          }
+        }
+      },
+      "required": [
+        "source_account",
+        "fee",
+        "seq_num",
+        "operations"
+      ]
+    },
+    "StellarV1": {
+      "type": "object",
+      "properties": {
+        "tx": {
+          "$ref": "#/$defs/StellarTx"
+        },
+        "signatures": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/StellarSignatures"
+          }
+        }
+      },
+      "required": [
+        "tx"
+      ]
+    },
+    "TronContractParameter": {
+      "type": "object",
+      "properties": {
+        "type_url": {
+          "type": "string",
+          "description": "Protobuf type of contract data"
+        },
+        "value": {
+          "type": "object",
+          "x-go-type": "json.RawMessage",
+          "description": "Contract call data of transaction"
+        }
+      },
+      "required": [
+        "type_url",
+        "value"
+      ]
+    },
+    "TronRawDataTx": {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TronTxContractData"
+          }
+        },
+        "ref_block_bytes": {
+          "type": "string",
+          "description": "The height of the transaction reference block, using the 6th to 8th (exclusive) bytes of the reference block height, a total of 2 bytes",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "ref_block_hash": {
+          "type": "string",
+          "description": "The hash of the transaction reference block, using the 8th to 16th (exclusive) bytes of the reference block hash, a total of 8 bytes",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "expiration": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "Transaction expiration time, beyond which the transaction will no longer be packed",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "timestamp": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "Transaction timestamp, set as the transaction creation time",
+          "x-oapi-codegen-extra-tags": null
+        },
+        "fee_limit": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "The maximum energy cost allowed for the execution of smart contract transactions"
+        }
+      },
+      "required": [
+        "contract",
+        "ref_block_bytes",
+        "ref_block_hash",
+        "expiration",
+        "timestamp"
+      ]
+    },
+    "TronTxContractData": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type of the contract"
+        },
+        "parameter": {
+          "$ref": "#/$defs/TronContractParameter"
+        }
+      },
+      "required": [
+        "type",
+        "parameter"
+      ]
+    }
+  }
+}

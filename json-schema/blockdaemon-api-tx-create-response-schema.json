@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-api-tx-create-response-schema.json",
+  "title": "ApiTxCreateResponse",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-transaction-api-openapi.yml#/components/schemas/ApiTxCreateResponse",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseEVM"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseStellar"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseSubstrate"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseBTC"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseTron"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseSolana"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseNear"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateResponseCosmos"
+    }
+  ],
+  "$defs": {
+    "ApiTxCreateResponseBTC": {
+      "title": "Api Tx Create Response BTC",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The transaction data needed to sign."
+        }
+      },
+      "required": [
+        "unsigned_tx"
+      ]
+    },
+    "ApiTxCreateResponseCosmos": {
+      "title": "Api Tx Create Response Cosmos",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The base64 encoded unsigned transaction."
+        },
+        "gas_wanted": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "The gas limit estimate returned when simulating the transaction."
+        },
+        "gas_used": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "The gas estimate returned when simulating the transaction."
+        },
+        "account_sequence": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "The account sequence number."
+        },
+        "account_number": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "The account number."
+        }
+      },
+      "required": [
+        "unsigned_tx"
+      ]
+    },
+    "ApiTxCreateResponseEVM": {
+      "title": "Api Tx Create Response EVM",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The transaction ID."
+        },
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The unsigned transaction."
+        }
+      },
+      "required": [
+        "unsigned_tx"
+      ]
+    },
+    "ApiTxCreateResponseNear": {
+      "title": "Api Tx Create Response Near",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The transaction ID base58 encoded"
+        },
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The unsigned transaction base64 encoded"
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "id"
+      ]
+    },
+    "ApiTxCreateResponseSolana": {
+      "title": "Api Tx Create Response Solana",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The base64 encoded unsigned transaction."
+        },
+        "fee": {
+          "$ref": "#/$defs/Value"
+        },
+        "recent_block_hash": {
+          "type": "string",
+          "description": "The recent block hash used in the transaction."
+        }
+      },
+      "required": [
+        "unsigned_tx"
+      ]
+    },
+    "ApiTxCreateResponseStellar": {
+      "title": "Api Tx Create Response Stellar",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The transaction ID."
+        },
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The base64 encoded tx"
+        }
+      },
+      "required": [
+        "id",
+        "unsigned_tx"
+      ]
+    },
+    "ApiTxCreateResponseSubstrate": {
+      "title": "Api Tx Create Response Substrate",
+      "type": "object",
+      "properties": {
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The unsigned transaction."
+        },
+        "signing_payload": {
+          "type": "string",
+          "description": "The signing payload (hex encoded)"
+        }
+      },
+      "required": [
+        "unsigned_tx",
+        "signing_payload"
+      ]
+    },
+    "ApiTxCreateResponseTron": {
+      "title": "Api Tx Create Response Tron",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The transaction ID."
+        },
+        "unsigned_tx": {
+          "type": "string",
+          "description": "The hex encoded protobuf unsigned transaction."
+        }
+      },
+      "required": [
+        "id",
+        "unsigned_tx"
+      ]
+    },
+    "IntegerValue": {
+      "title": "Integer Value",
+      "type": "integer",
+      "x-go-type": "*big.Int",
+      "description": "Value as an integer in the lowest unit of the currency (for example Wei or Satoshi)"
+    },
+    "StringValue": {
+      "title": "String Value",
+      "type": "string",
+      "description": "Value as a string in human readable format. This is in the highest unit of the currecy (for example Eth or BTC)"
+    },
+    "Value": {
+      "description": "A value can either be a decimal string or the lowest unit of the currency as an integer",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IntegerValue"
+        },
+        {
+          "$ref": "#/$defs/StringValue"
+        }
+      ],
+      "x-oapi-codegen-extra-tags": {
+        "validate": "required"
+      },
+      "x-go-type": "*value.Value"
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-rewards-format1-schema.json",
+  "title": "RewardsFormat1",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-reporting-api-openapi.yml#/components/schemas/RewardsFormat1",
+  "required": [
+    "address",
+    "currency",
+    "return",
+    "timeStart",
+    "timeEnd",
+    "timeAggregation",
+    "startingBalance",
+    "metadata"
+  ],
+  "type": "object",
+  "properties": {
+    "address": {
+      "type": "string",
+      "description": "The public address."
+    },
+    "currency": {
+      "type": "string",
+      "description": "The cryptocurrency protocol the request relates to."
+    },
+    "return": {
+      "type": "number",
+      "format": "float",
+      "description": "The sum of the rewards for the previous UTC day. Rewards are recorded per session (four hours on Polkadot), and calculated per era (twenty-four hours on Polkadot). Thus, rewards will be calculated once per day on Polkadot."
+    },
+    "timeStart": {
+      "type": "string",
+      "description": "The timestamp, in UTC, that marks the start of the period covered."
+    },
+    "timeEnd": {
+      "type": "string",
+      "description": "The timestamp, in UTC, that marks the end of the period covered."
+    },
+    "timeAggregation": {
+      "description": "The agregation period, one of `era`, `day`, `week`, or `month`.",
+      "type": "string"
+    },
+    "startingBalance": {
+      "type": "number",
+      "description": "The staked amount at the beginning of the previous UTC day (at the timeStart).",
+      "format": "float"
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata1"
+    }
+  },
+  "$defs": {
+    "Metadata1": {
+      "required": [
+        "delegationAddress",
+        "era"
+      ],
+      "type": "object",
+      "description": "The protocol specifc data.",
+      "properties": {
+        "delegationAddress": {
+          "type": "string",
+          "description": "The delegation address."
+        },
+        "era": {
+          "type": "integer",
+          "format": "int32",
+          "description": "A unit of time. An era’s duration is exactly 1 day (24 hours). The start and end times are always 15:36:18.003 UTC. Each era consists of 6 epochs, each of which consists of 2400 slots for Polkadot."
+        }
+      }
+    }
+  }
+}

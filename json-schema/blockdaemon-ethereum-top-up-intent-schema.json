@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-ethereum-top-up-intent-schema.json",
+  "title": "EthereumTopUpIntent",
+  "description": "Ethereum validator top up intent",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-1-0-0-openapi.yml#/components/schemas/EthereumTopUpIntent",
+  "type": "object",
+  "required": [
+    "network",
+    "contract_address",
+    "estimated_gas",
+    "unsigned_transaction",
+    "total_amount",
+    "expiration_time",
+    "top_ups"
+  ],
+  "properties": {
+    "network": {
+      "$ref": "#/$defs/EthereumNetwork"
+    },
+    "contract_address": {
+      "$ref": "#/$defs/EthereumAddress"
+    },
+    "estimated_gas": {
+      "$ref": "#/$defs/EthereumGas"
+    },
+    "total_amount": {
+      "$ref": "#/$defs/Gwei"
+    },
+    "unsigned_transaction": {
+      "$ref": "#/$defs/UnsignedTransaction"
+    },
+    "expiration_time": {
+      "$ref": "#/$defs/ExpirationTime"
+    },
+    "top_ups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/EthereumTopUp"
+      }
+    }
+  },
+  "$defs": {
+    "EthereumAddress": {
+      "type": "string",
+      "description": "Hex-encoded Ethereum [account or smart contract address](https://ethereum.org/en/developers/docs/accounts/).",
+      "format": "hex",
+      "pattern": "^0x[a-fA-F0-9]{40}$"
+    },
+    "EthereumGas": {
+      "type": "integer",
+      "description": "Gas estimation of the transaction",
+      "format": "uint64"
+    },
+    "EthereumNetwork": {
+      "type": "string",
+      "description": "Ethereum network",
+      "enum": [
+        "mainnet",
+        "hoodi"
+      ]
+    },
+    "EthereumTopUp": {
+      "type": "object",
+      "description": "Ethereum validator top up",
+      "required": [
+        "public_key",
+        "amount",
+        "withdrawal_credentials",
+        "fee_recipient"
+      ],
+      "properties": {
+        "public_key": {
+          "$ref": "#/$defs/PublicKey"
+        },
+        "amount": {
+          "$ref": "#/$defs/Gwei"
+        },
+        "withdrawal_credentials": {
+          "$ref": "#/$defs/EthereumWithdrawalCredentials"
+        },
+        "fee_recipient": {
+          "$ref": "#/$defs/EthereumAddress"
+        }
+      }
+    },
+    "EthereumWithdrawalCredentials": {
+      "type": "string",
+      "format": "hex",
+      "pattern": "^0x0(0|1)[a-fA-F0-9]{62}$",
+      "description": "Hexadecimal encoded [withdrawal credentials](https://github.com/ethereum/consensus-specs/blob/master/specs/phase0/validator.md#withdrawal-credentials) which can be either a BLS public key or an Ethereum account address.\n\nThis parameter currently accepts ETH1 and BLS withdrawal credentials, but it is considered deprecated after the Capella/Shanghai fork. All users are now advised to use an ETH1 withdrawal address, specified through the `withdrawal_address` parameter as this is required to enable the ongoing accrual of rewards.\n\nFor more information regarding creating withdrawal credentials, please see the official [Ethereum Launchpad FAQ](https://launchpad.ethereum.org/en/faq#withdrawal-credentials)."
+    },
+    "ExpirationTime": {
+      "type": "integer",
+      "description": "Transaction expiration time",
+      "format": "int64"
+    },
+    "Gwei": {
+      "type": "string",
+      "description": "Amount of ETH (denominated in Gwei).",
+      "pattern": "^[1-9]\\d{10,}$"
+    },
+    "PublicKey": {
+      "type": "string",
+      "description": "A BLS public Key.",
+      "format": "base64"
+    },
+    "UnsignedTransaction": {
+      "type": "string",
+      "format": "base64",
+      "description": "Generated unsigned transaction smart contract call data."
+    }
+  }
+}

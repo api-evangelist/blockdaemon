@@ -1,0 +1,2452 @@
+openapi: 3.0.3
+info:
+  title: Transaction API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+paths:
+  /{blockchain_id}:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    get:
+      summary: Get the Supported Protocol Info
+      description: Returns the transaction endpoints supported for the given chain.
+      operationId: GetOverview
+      responses:
+        '200':
+          description: A list of endpoints
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OverviewResponse'
+  /{blockchain_id}/compile:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Compile an Unsigned Transaction
+      description: Takes an unsigned transaction and a signature and returns a signed transaction.
+      operationId: TxCompile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxCompileRequest'
+            examples:
+              evm:
+                summary: EVM example
+                value:
+                  unsigned_tx: e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080
+                  address: b9aca008252089481b7e08f65bdf5648606c8
+                  signature: ''
+                  public_key: ''
+              btc_single_signature:
+                summary: Bitcoin P2PKH example with a single signature for a single UTxO
+                value:
+                  unsigned_tx: 010000000131da247ea6672d26661559a06d677cf1756feebc2b8fb299a36125b68047d2050000000000ffffffff0210270000000000001976a91417e036c0c8b9e59c99cf1e2d6b7d0a4864a336f988ac729a0000000000001976a914b3d049ba9f8947c29b491cb14ddea70241ba353e88ac00000000
+                  signatures:
+                  - signature: 3045022100e4db442039a65eb2a0043647a5f88c5211dd3dcc39d4eba379301c87940587190220764dd4609b7efac2be539bdca148072ad172f53314ff68e9f8801f4b1ea754b0
+                    address: mwuimViRhJ5nMJDFiS3ZTQ73hmBH1NUjZA
+                    public_key: '0x027513c263c79dc1acde054bbb754616b67612924b98893efa73708f73441bccdb'
+              btc_multiple_signatures:
+                summary: Bitcoin P2WPKH example with multiple signatures for each UTxO
+                value:
+                  unsigned_tx: 01000000039c9aa424d4db36156a86245dccf4fe0be6feb5c51372d116358e8b5c0a47fd480200000000ffffffffc74f6e194d162b3b80e7e66f8eab7b31ea870d58a0eecaaafb4e29464d77f69c0900000000ffffffffad95de94df324097b0820d24caaeb82aa52ddcd5a07aff62161c33b23cc28bf20800000000ffffffff016c020000000000001600148dd7608be98d6bd93368f24d45b1165b74cb913700000000
+                  signatures:
+                  - signature: 30440220428fc6fd5cff7b5023699f1e32694c8cab3f8de2dc841d886f9235b2658c0ef4022059e344ea9d5a2434c416ad2164e445aa44d87daaba507bc8f8fde198ab9a5b57
+                    address: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                    public_key: 025dafb4159e25323eb2c7c684bec7de6bb5a3d17b1adc66a0025563e4081adf3f
+                  - signature: 304402207ed5e14b8fff54138b1f1e7e3d19c7f7d670c783b5aa157edca7d433eb55e4e5022067ebd3f41b788ecb109d0fb053ae895dfa172ee0556c94bdc1ab798d59753714
+                    address: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                    public_key: 025dafb4159e25323eb2c7c684bec7de6bb5a3d17b1adc66a0025563e4081adf3f
+                  - signature: 3045022100a3a2082e864caf7b3645d942a96c68da7aed2bccffbdddf5d11456440f3c960a022073ee6723e6ff1a99f78ced51a04669947f4799fdb55900ddfa4747b9eb5ec4be
+                    address: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                    public_key: 025dafb4159e25323eb2c7c684bec7de6bb5a3d17b1adc66a0025563e4081adf3f
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxSigned'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/compile_and_send:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Compile and Broadcast an Unsigned Transaction
+      description: Compile and broadcast an unsigned EVM transaction with signature.
+      operationId: TxCompileAndSend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxCompileRequest'
+            example:
+              unsigned_tx: e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080
+              address: b9aca008252089481b7e08f65bdf5648606c8
+              signature: ''
+              public_key: ''
+      responses:
+        '200':
+          description: A submitted Transaction ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxSendResponse'
+              example:
+                id: 9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/create:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Create an Unsigned Transaction
+      description: 'Creates an unsigned transaction for the specified blockchain. The output is raw transaction data ready for signing.
+
+        '
+      operationId: TxCreate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxCreateRequest'
+            examples:
+              evm:
+                summary: (EVM) Utilizing fees and nonce
+                value:
+                  from: '0x035F67C6D401514f58E6b121bc38b161cCABF7B9'
+                  to: '0xcC1d7718ce9C6aae689c95672BFC5341e5a4De77'
+                  value: 2500000000000
+                  nonce: 1010
+                  maxFeePerGas: 1000
+                  maxPriorityFeePerGas: 500
+              evm_erc20:
+                summary: (EVM) Erc-20 transfer using contract address
+                value:
+                  from: '0x035F67C6D401514f58E6b121bc38b161cCABF7B9'
+                  to: '0xaFF4481D10270F50f203E0763e2597776068CBc5'
+                  value: 0
+                  maxFeePerGas: 1000
+                  maxPriorityFeePerGas: 500
+                  data: '0xa9059cbb000000000000000000000000ecbedcf205b361eb671de51d20657ff55b3389d00000000000000000000000000000000000000000000000000000000001287a70'
+              btc_mainnet:
+                summary: (Bitcoin) Bitcoin mainnet example
+                value:
+                  from:
+                  - tx_id: effd7af88861ccb25714216ba78561a8bf2e93ebe45b2deac37da8f284591b0e
+                    index: 1
+                  to:
+                  - destination: bc1pndths0lnsvem2a0n2c6t49u462xam0n4krjl6kpfwn0nknc0cd7qmnxhf8
+                    value: 400
+                  - destination: bc1p67w73lj44z2m3x8l4ftu3ukcygjm3qyl6esjqcrpf6wn5m35gmns2szzta
+                    value: 400
+              btc_testnet:
+                summary: (Bitcoin) Bitcoin testnet example
+                value:
+                  from:
+                  - tx_id: 3419478ccb58b2683ecd6e250f96973cf9edc771e57189f85173047f4adc6024
+                    index: 4
+                  - tx_id: b6024f22e8ed126d5187a43c57f8bf8238b090129c98253adba05d8859d308dd
+                    index: 4
+                  - tx_id: 5a50bbb90725b3e7697b78b33301d79bc3c1353ff1e2020e14faf0132ddc2913
+                    index: 1
+                  to:
+                  - destination: tb1qc4sd2dtjrpta4h4euxtv73wtetupt5gclqpuep
+                    value: 2000
+      responses:
+        '200':
+          description: An unsigned transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxCreateResponse'
+              example:
+                id: '0x0a878b702b7a1c3714ad696a0a173b2ce7248d8be65274f736d8a2afbefdb552'
+                unsigned_tx: 02f86f0180838dafc985243504640582b59b94dac17f958d2ee523a2206206994597c13d831ec780b844a9059cbb000000000000000000000000ecbedcf205b361eb671de51d20657ff55b3389d00000000000000000000000000000000000000000000000000000000001287a70c0808080
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/create/token:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Create an Unsigned Token Transfer Transaction
+      description: 'Creates an unsigned token transfer transaction.
+
+        '
+      operationId: TxCreateToken
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxCreateTokenRequest'
+            example:
+              contract_address: '0xdAC17F958D2ee523a2206206994597C13D831ec7'
+              data:
+                from: '0x1440ec793aE50fA046B95bFeCa5aF475b6003f9e'
+                to: '0xecbEdcF205B361Eb671dE51d20657ff55b3389D0'
+                value: 1943000000
+      responses:
+        '200':
+          description: An unsigned transaction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxCreateResponse'
+              example:
+                id: '0x0a878b702b7a1c3714ad696a0a173b2ce7248d8be65274f736d8a2afbefdb552'
+                unsigned_tx: 02f86f0180838dafc985243504640582b59b94dac17f958d2ee523a2206206994597c13d831ec780b844a9059cbb000000000000000000000000ecbedcf205b361eb671de51d20657ff55b3389d00000000000000000000000000000000000000000000000000000000001287a70c0808080
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                type: bad-request
+                code: 16396
+                title: Bad Request
+                status: 400
+                detail: The requested address is invalid on this protocol
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/decode:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Decode a transaction
+      description: Returns the raw json of the decoded transaction
+      operationId: TxDecode
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxDecodeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxDecodeResponse'
+              examples:
+                btc_decoded_unsigned:
+                  summary: Result of decoding raw unsigned Bitcoin transaction
+                  value:
+                    from:
+                    - index: 1
+                      script_sig_hex: ''
+                      tx_id: effd7af88861ccb25714216ba78561a8bf2e93ebe45b2deac37da8f284591b0e
+                      value: 1000
+                      address: bc1pndths0lnsvem2a0n2c6t49u462xam0n4krjl6kpfwn0nknc0cd7qmnxhf8
+                    to:
+                    - value: 400
+                      destination: tb1pndths0lnsvem2a0n2c6t49u462xam0n4krjl6kpfwn0nknc0cd7qvmscng
+                      script_pub_key:
+                        hex: 51209b57783ff38333b575f35634ba9795d28dddbe75b0e5fd582974df3b4f0fc37c
+                        type: witness_v1_taproot
+                    - value: 400
+                      destination: tb1p67w73lj44z2m3x8l4ftu3ukcygjm3qyl6esjqcrpf6wn5m35gmnsac5d3j
+                      script_pub_key:
+                        hex: 5120d79de8fe55a895b898ffaa57c8f2d82225b8809fd6612060614e9d3a6e3446e7
+                        type: witness_v1_taproot
+                btc_decoded_signed:
+                  summary: Result of decoding raw signed Bitcoin transaction
+                  value:
+                    from:
+                    - index: 1
+                      script_sig_hex: 47304402204be99e5a1c70b460e4ee42b21519d20806610895d3c9e602c0743d14a0e1607202204520e9b0b468dc6096ebfedc9d73e9ce64b6480ce0c779d62d9fe401386dd80f012103786af4b32017ec640dba2d2a7e1fd5aa4a231a658e4cbc114d51c031576e19bc
+                      tx_id: 0db756f7b889a5bfa6f2af44f267b60f989c712e49a882ac5768df92e9244687
+                      value: 30959733040
+                      address: 1Kr6QSydW9bFQG1mXiPNNu6WpJGmUa9i1g
+                    - index: 3
+                      script_sig_hex: 47304402200d6426ba6a0ed95888608e6fd825b5ac36ae322db9a884372a826573db8a81820220374606c716cb28adbe849255dac627cd52a276ef9864a807aa42ec56e1a21fd8012103786af4b32017ec640dba2d2a7e1fd5aa4a231a658e4cbc114d51c031576e19bc
+                      tx_id: 3267d27306a7928b270fa12e5d756415ddc783d0969cb87dd4383e4fbf1142b3
+                      value: 25203573225
+                      address: 1Kr6QSydW9bFQG1mXiPNNu6WpJGmUa9i1g
+                    to:
+                    - value: 527560000
+                      destination: tb1qgcgc5f0f5fth60ycqh6ufdehdds39cc3fmfr0p
+                      script_pub_key:
+                        hex: 001446118a25e9a2577d3c9805f5c4b7376b6112e311
+                        type: witness_v0_keyhash
+                    - value: 525060000
+                      destination: 2MuHHjeEdcX61rqBebRB4aXGVXhqYaR5Gbb
+                      script_pub_key:
+                        hex: a91416543638a768417a36c00a08481aaef42b3dda5687
+                        type: scripthash
+                    - value: 55110572864
+                      destination: mzN3hW4cKB2WBNVPFHMkCpJqgHsUR6kWwL
+                      script_pub_key:
+                        hex: 76a914cebb2851a9c7cfe2582c12ecaf7f3ff4383d1dc088ac
+                        type: pubkeyhash
+                btc_decoded_signed_witness:
+                  summary: Result of decoding raw signed P2WPKH (with witness data) Bitcoin transaction
+                  value:
+                    from:
+                    - index: 2
+                      script_sig_hex: ''
+                      tx_id: 48fd470a5c8b8e3516d17213c5b5fee60bfef4cc5d24866a1536dbd424a49a9c
+                      tx_witness:
+                      - 30440220428fc6fd5cff7b5023699f1e32694c8cab3f8de2dc841d886f9235b2658c0ef4022059e344ea9d5a2434c416ad2164e445aa44d87daaba507bc8f8fde198ab9a5b5701
+                      - 025dafb4159e25323eb2c7c684bec7de6bb5a3d17b1adc66a0025563e4081adf3f
+                      value: 3000
+                      address: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                    - index: 9
+                      script_sig_hex: ''
+                      tx_id: 9cf6774d46294efbaacaeea0580d87ea317bab8e6fe6e7803b2b164d196e4fc7
+                      tx_witness:
+                      - 304402207ed5e14b8fff54138b1f1e7e3d19c7f7d670c783b5aa157edca7d433eb55e4e5022067ebd3f41b788ecb109d0fb053ae895dfa172ee0556c94bdc1ab798d5975371401
+                      - 025dafb4159e25323eb2c7c684bec7de6bb5a3d17b1adc66a0025563e4081adf3f
+                      value: 2000
+                      address: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                    - index: 8
+                      script_sig_hex: ''
+                      tx_id: f28bc23cb2331c1662ff7aa0d5dc2da52ab8aeca240d82b0974032df94de95ad
+                      tx_witness:
+                      - 3045022100a3a2082e864caf7b3645d942a96c68da7aed2bccffbdddf5d11456440f3c960a022073ee6723e6ff1a99f78ced51a04669947f4799fdb55900ddfa4747b9eb5ec4be01
+                      - 025dafb4159e25323eb2c7c684bec7de6bb5a3d17b1adc66a0025563e4081adf3f
+                      value: 3000
+                      address: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                    to:
+                    - value: 620
+                      destination: tb1q3htkpzlf344ajvmg7fx5tvgktd6vhyfhlq9urn
+                      script_pub_key:
+                        hex: 00148dd7608be98d6bd93368f24d45b1165b74cb9137
+                        type: witness_v0_keyhash
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/derive_signing_payload:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Derive signing payload from unsigned transaction
+      description: 'Create a signing payload.
+
+        '
+      operationId: TxDeriveSigningPayload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxDeriveSigningPayloadRequest'
+      responses:
+        '200':
+          description: A signing payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxDeriveSigningPayloadResponse'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/estimate_fee:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Get the Fee Estimation
+      description: Returns the estimated fee for a given chain.
+      operationId: TxEstimateFee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxEstimateFeeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxEstimateFeeResponse'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/send:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Submit a Signed Transaction
+      description: 'Submit a signed transaction to the network.
+
+
+        **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee.
+
+        '
+      operationId: TxSend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxSigned'
+      responses:
+        '200':
+          description: A submitted Transaction ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxSendResponse'
+              example:
+                id: 9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+  /{blockchain_id}/verify:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Verify a Transaction
+      description: Verifies whether a signed/unsigned transaction matches the expected input parameters.
+      operationId: TxVerify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxVerifyRequest'
+            examples:
+              btc_with_errors:
+                summary: Bitcoin mainnet intent verification with errors
+                value:
+                  raw_encoded_tx: 0200000000010184780560d6a6386f4664c28f4072e413cca6c6b429d45d7ebc73cb5cd8d65f4a0c00000000fdffffff012601000000000000160014858ccaca6c4e482f629fdbcc5539e695d8673ea203408ecadedc04af3bc34b0c010e0d63a2b2b2247543b5ef7795e8112df37ed0775c6a5baa1672fb2b950ae4ea7b138b1834ba4c7088c97e960dc0e0fa83184acb5d7c2024f14b181a0f77d670b063836b8942eaafb9714de6ee5bcf9b5ecfaeb76446d1ac0063036f7264010118746578742f706c61696e3b636861727365743d7574662d3800367b2270223a226272632d3230222c226f70223a226d696e74222c227469636b223a22246f6464222c22616d74223a223530303030227d6821c124f14b181a0f77d670b063836b8942eaafb9714de6ee5bcf9b5ecfaeb76446d100000000
+                  tx:
+                    from:
+                    - index: 1
+                      tx_id: 0db756f7b889a5bfa6f2af44f267b60f989c712e49a882ac5768df92e9244687
+                    to:
+                    - value: 527560000
+                      destination: bc1qgcgc5f0f5fth60ycqh6ufdehdds39cc3rajs5j
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                generic:
+                  value:
+                    type: bad-request
+                    code: 16396
+                    title: Bad Request
+                    status: 400
+                    detail: the provided input does not match the transaction
+                btc_with_errors:
+                  summary: Bitcoin mainnet intent verification with errors
+                  value:
+                    type: bad-request
+                    code: 16388
+                    title: Bad Request
+                    status: 400
+                    detail: tx hash '4a5fd6d85ccb73bc7e5dd429b4c6a6cc13e472408fc264466f38a6d660057884' input at index 0 does not match expected hash '0db756f7b889a5bfa6f2af44f267b60f989c712e49a882ac5768df92e9244687'; tx output index 12 of input at index 0 does not match expected index 1; address 'bc1qskxv4jnvfeyz7c5lm0x92w0xjhvxw04zpzg6gn' of tx output at index 0 does not match expected address 'bc1qgcgc5f0f5fth60ycqh6ufdehdds39cc3rajs5j'; amount of 294 sats of tx output at index 0 does not match expected amount of 527560000 sats
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+components:
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  schemas:
+    OverviewResponse:
+      type: object
+      properties:
+        endpoints:
+          type: array
+          items:
+            type: string
+      required:
+      - endpoints
+    Value:
+      description: A value can either be a decimal string or the lowest unit of the currency as an integer
+      oneOf:
+      - $ref: '#/components/schemas/IntegerValue'
+      - $ref: '#/components/schemas/StringValue'
+      x-oapi-codegen-extra-tags:
+        validate: required
+      x-go-type: '*value.Value'
+    ValueOptional:
+      description: A value can either be a decimal string or the lowest unit of the currency as an integer
+      oneOf:
+      - $ref: '#/components/schemas/IntegerValue'
+      - $ref: '#/components/schemas/StringValue'
+      x-go-type: '*value.Value'
+      x-go-type-skip-optional-pointer: true
+    IntegerValue:
+      title: Integer Value
+      type: integer
+      x-go-type: '*big.Int'
+      description: Value as an integer in the lowest unit of the currency (for example Wei or Satoshi)
+      example: 100000
+    StringValue:
+      title: String Value
+      type: string
+      description: Value as a string in human readable format. This is in the highest unit of the currecy (for example Eth or BTC)
+      example: '0.00001'
+    ApiTxCreateRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCreateRequestEVM'
+      - $ref: '#/components/schemas/ApiTxCreateRequestStellar'
+      - $ref: '#/components/schemas/ApiTxCreateRequestSubstrate'
+      - $ref: '#/components/schemas/ApiTxCreateRequestBTC'
+      - $ref: '#/components/schemas/ApiTxCreateRequestTron'
+      - $ref: '#/components/schemas/ApiTxCreateRequestSolana'
+      - $ref: '#/components/schemas/ApiTxCreateRequestNear'
+      - $ref: '#/components/schemas/ApiTxCreateRequestCosmos'
+    ApiTxCreateRequestEVM:
+      title: Api Tx Create Request EVM
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction. Required unless call is contract deployment.
+          type: string
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Data
+        value:
+          $ref: '#/components/schemas/Value'
+        gas:
+          type: integer
+          x-go-type: big.Int
+          description: Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas.
+        maxPriorityFeePerGas:
+          type: integer
+          x-go-type: big.Int
+          description: The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used.
+        maxFeePerGas:
+          type: integer
+          x-go-type: big.Int
+          description: The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an estimate will be used.
+        nonce:
+          type: integer
+          x-go-type: big.Int
+          description: The account Nonce.
+          example: 5
+        data:
+          description: A hex string specifying the input data of the message call
+          type: string
+          example: '0xa9059cbb000000000000000000000000e6026f60efc3d0e714f1b89c596aa484ffbd25c800000000000000000000000000000000000000000303b6ae12d00504a8ed8000'
+      required:
+      - value
+      - from
+    ApiTxCreateRequestTron:
+      title: Api Tx Create Request Tron
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: TGepTLpYNhURKFxZPqWH4HmvZQsqJKSdj8
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Contract
+        value:
+          $ref: '#/components/schemas/ValueOptional'
+        contract:
+          $ref: '#/components/schemas/ApiTxCreateRequestTronContract'
+        expiration_seconds:
+          type: integer
+          x-go-type: int64
+          description: Time in seconds the transaction will expire after creation. (Default 30 minutes)
+      required:
+      - from
+      - value
+    ApiTxCreateRequestTronContract:
+      title: Api Tx Create Request Tron Contract
+      type: object
+      properties:
+        address:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+          x-go-type-skip-optional-pointer: true
+        parameter:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Data
+          x-go-type-skip-optional-pointer: true
+        function_selector:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Data
+          x-go-type-skip-optional-pointer: true
+        data:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        fee_limit:
+          $ref: '#/components/schemas/ValueOptional'
+    ApiTxCreateRequestStellar:
+      title: Api Tx Create Request Stellar
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        fee:
+          $ref: '#/components/schemas/ValueOptional'
+        expiration_seconds:
+          type: integer
+          x-go-type: int64
+          description: Time the transaction will expire in seconds. Default is 30 minutes.
+      required:
+      - from
+      - to
+      - value
+    ApiTxCreateRequestSubstrate:
+      title: Api Tx Create Request Substrate
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        tip:
+          type: integer
+          x-go-type: big.Int
+          description: The extrinsic tip in planck (optional)
+        nonce:
+          type: integer
+          x-go-type: uint64
+          description: The account index (nonce). Will be retrieved from chain when omitted.
+        mortal_period:
+          type: integer
+          x-go-type: uint64
+      required:
+      - value
+      - from
+      - to
+    ApiTxCreateRequestBTC:
+      title: Api Tx Create Request BTC
+      type: object
+      properties:
+        from:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTxSourceBTC'
+          description: The source UTXOs.
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+        to:
+          description: The recipient of the transaction.
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTxDestinationCreateBTC'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+      x-oapi-codegen-extra-tags:
+        validate: required,dive
+      required:
+      - from
+      - to
+    ApiTxCreateRequestSolana:
+      title: Api Tx Create Request Solana
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: 6CNAHF4gK6FGjJ54QUyxC6ipS4WUdx6erpqNpS8Ar7Nq
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: 2EMBiBdZaP2mdT9WkRSH15X58xcyigSndvQFA6TBA1Aq
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        nonce_account:
+          type: string
+          description: The nonce account used for the transfer.
+          example: 8GRipryfxcsxN8mAGjy8zbFo9ezaUsh47TsPzmZbuytU
+        fee:
+          description: The prioritization fee.
+          type: integer
+          x-go-type: uint64
+      required:
+      - from
+      - to
+      - value
+    ApiTxCreateRequestNear:
+      title: Api Tx Create Request Near
+      type: object
+      properties:
+        from:
+          type: object
+          x-oapi-codegen-extra-tags:
+            validate: required
+          properties:
+            account_id:
+              description: The Near account ID.
+              type: string
+              example: test.near
+              x-oapi-codegen-extra-tags:
+                validate: required
+            public_key:
+              description: The Near public key.
+              type: string
+              example: ed25519:2u6cNYepEs2AzUHk1MNyGV8Zqs8nZ9xjxFqZXBFM8tzm
+              x-oapi-codegen-extra-tags:
+                validate: required
+          required:
+          - account_id
+          - public_key
+        to:
+          description: The Near recipient account ID.
+          type: string
+          example: test.near
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+      required:
+      - from
+      - to
+      - value
+    ApiTxCreateRequestCosmos:
+      title: Api Tx Create Request Cosmos
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: cosmos19mkwu6ne284ufqgdqnv4k6cp0qqy9x0742p3d2
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: cosmos1ext90z9hfm30hdy06mzzglu9qfu32gs33faz9k
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        gas_limit:
+          description: The maximum amount of gas the user is willing to use for the transaction.
+          type: integer
+          x-go-type: uint64
+        fee_amount:
+          description: The maximum amount in uatom the user is willing to pay in fees.
+          type: integer
+          x-go-type: uint64
+        gas_price:
+          description: The gas price in uatom the user is willing to pay per unit of gas. This will be used with the gas_used estimate returned from simulating the transaction.
+          type: number
+          x-go-type: float64
+        gas_adjustment:
+          description: The multiplier used for gas estimates as they are not consistently accurate.
+          type: number
+          x-go-type: float64
+        sign_mode:
+          description: The sign mode to be used for the transaction. This will be used in the simulated transaction to estimate gas.
+          type: integer
+          x-go-type: uint32
+      required:
+      - from
+      - to
+      - value
+    ApiTxCreateResponse:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCreateResponseEVM'
+      - $ref: '#/components/schemas/ApiTxCreateResponseStellar'
+      - $ref: '#/components/schemas/ApiTxCreateResponseSubstrate'
+      - $ref: '#/components/schemas/ApiTxCreateResponseBTC'
+      - $ref: '#/components/schemas/ApiTxCreateResponseTron'
+      - $ref: '#/components/schemas/ApiTxCreateResponseSolana'
+      - $ref: '#/components/schemas/ApiTxCreateResponseNear'
+      - $ref: '#/components/schemas/ApiTxCreateResponseCosmos'
+    ApiTxCreateResponseEVM:
+      title: Api Tx Create Response EVM
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID.
+          example: '0x711fbebdf0c7bcf352dbd6fa7064d12e1f0fed5ddb2e562df742252287b1f5b1'
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction.
+          example: 02f86f0180834c4b40852096a4848082cde49495ad61b0a150d79219dcf64e1e6cc01f0b64c4ce80b844a9059cbb000000000000000000000000e6026f60efc3d0e714f1b89c596aa484ffbd25c800000000000000000000000000000000000000000303b6ae12d00504a8ed8000c0808080
+      required:
+      - unsigned_tx
+    ApiTxCreateResponseTron:
+      title: Api Tx Create Response Tron
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID.
+          example: '0x711fbebdf0c7bcf352dbd6fa7064d12e1f0fed5ddb2e562df742252287b1f5b1'
+        unsigned_tx:
+          type: string
+          description: The hex encoded protobuf unsigned transaction.
+          example: 0a022ba0220887ae7932301801b540a0b2a7a1fc315a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a1541494e9270255e7cf4d32ed1ceb9af9bf44abd21bd121541242aa579f130bf6fea5eac12aa6b846fb8b293ab18e80770b8f2a3a1fc31
+      required:
+      - id
+      - unsigned_tx
+    ApiTxCreateResponseStellar:
+      title: Api Tx Create Response Stellar
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID.
+        unsigned_tx:
+          type: string
+          description: The base64 encoded tx
+      required:
+      - id
+      - unsigned_tx
+    ApiTxCreateResponseSolana:
+      title: Api Tx Create Response Solana
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The base64 encoded unsigned transaction.
+          example: 5T2JYdFoRsUxsJiB7qJmKTiGt1f9ajusM7LMM99APh6WRYGjSPshuRz6bziWfc6WQGonAmsagxkEd2a6mfmBrFHh
+        fee:
+          $ref: '#/components/schemas/Value'
+        recent_block_hash:
+          type: string
+          description: The recent block hash used in the transaction.
+          example: 7HNriox5z4ZsbyXRqc7DUq2jCVDeD1XjCzguZaxWccLx
+      required:
+      - unsigned_tx
+    ApiTxCreateResponseCosmos:
+      title: Api Tx Create Response Cosmos
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The base64 encoded unsigned transaction.
+          example: CpQBCpEBChwvY29zbW9zLmJhbmsudjFiZXRhMS5Nc2dTZW5kEnEKLWNvc21vczE3a3ZhZTJqY2t6cGtjdDc4eWVhbHJlM21zMmd1MjhjZG10d3N2NxItY29zbW9zMWo4cHA3enZjdTl6OHZkODgybTI4NGoyOWZuMmRzemgwNWNxdmY5GhEKBXVhdG9tEggyNjA5NDEwOBJWClIKRgofL2Nvc21vcy5jcnlwdG8uc2VjcDI1NmsxLlB1YktleRIjCiEDisMcdR4qSOfuBBqMfWYHNHvcZ06PEuYSzwwWyid8YjcSBAoCCAEY9YsUEgAaAA==
+        gas_wanted:
+          type: integer
+          x-go-type: uint64
+          description: The gas limit estimate returned when simulating the transaction.
+        gas_used:
+          type: integer
+          x-go-type: uint64
+          description: The gas estimate returned when simulating the transaction.
+        account_sequence:
+          type: integer
+          x-go-type: uint64
+          description: The account sequence number.
+        account_number:
+          type: integer
+          x-go-type: uint64
+          description: The account number.
+      required:
+      - unsigned_tx
+    ApiTxCreateResponseNear:
+      title: Api Tx Create Response Near
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID base58 encoded
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction base64 encoded
+      required:
+      - unsigned_tx
+      - id
+    ApiTxSourceBTC:
+      type: object
+      properties:
+        tx_id:
+          type: string
+          description: UTXO's transaction ID
+          example: effd7af88861ccb25714216ba78561a8bf2e93ebe45b2deac37da8f284591b0e
+          x-oapi-codegen-extra-tags:
+            validate: required
+        index:
+          type: integer
+          format: uint32
+          description: UTXO's index in source transaction
+          example: 2
+      required:
+      - tx_id
+      - index
+    ApiTxDestinationCreateBTC:
+      description: The recipient of the transaction.
+      type: object
+      properties:
+        destination:
+          type: string
+          description: The destination address.
+          example: mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+      required:
+      - destination
+      - value
+      example:
+        destination: 31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca
+        value: 50
+    ApiTxCreateResponseBTC:
+      title: Api Tx Create Response BTC
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          example: e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080
+      required:
+      - unsigned_tx
+    ApiTxCreateResponseSubstrate:
+      title: Api Tx Create Response Substrate
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction.
+        signing_payload:
+          type: string
+          description: The signing payload (hex encoded)
+      required:
+      - unsigned_tx
+      - signing_payload
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    ApiTxDeriveSigningPayloadRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxDeriveSigningPayloadRequestSubstrate'
+    ApiTxDeriveSigningPayloadRequestSubstrate:
+      title: Api Tx Derive Signing Payload Request Substrate
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The hex encoded unsigned transaction
+          x-oapi-codegen-extra-tags:
+            validate: required
+        sender_address:
+          type: string
+          description: The sender address is base58 encoding
+          x-oapi-codegen-extra-tags:
+            validate: required
+        mortal_period:
+          type: number
+          description: The number of blocks until the transaction is expired
+          default: 1000
+          x-go-type: uint64
+        tip:
+          type: number
+          x-go-type: big.Int
+        nonce:
+          type: number
+          x-go-type: uint64
+      required:
+      - unsigned_tx
+      - sender_address
+    ApiTxDeriveSigningPayloadResponse:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCreateResponseSubstrate'
+    ApiTxCreateTokenRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCreateTokenRequestEVM'
+      - $ref: '#/components/schemas/ApiTxCreateTokenRequestTron'
+      - $ref: '#/components/schemas/ApiTxCreateTokenRequestSolana'
+    ApiTxCreateTokenRequestEVM:
+      title: Api Tx Create Token Request EVM
+      type: object
+      properties:
+        contract_address:
+          description: The contract address of the token.
+          type: string
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required
+        gas:
+          type: integer
+          x-go-type: big.Int
+          description: Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas.
+        maxPriorityFeePerGas:
+          type: integer
+          x-go-type: big.Int
+          description: The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used.
+        maxFeePerGas:
+          type: integer
+          x-go-type: big.Int
+          description: The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an estimate will be used.
+        nonce:
+          type: integer
+          x-go-type: big.Int
+          description: The account Nonce.
+          example: 5
+        data:
+          $ref: '#/components/schemas/EVMTokenTransferData'
+      required:
+      - data
+      - contract_address
+    EVMTokenTransferData:
+      title: EVM Token Transfer Data
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction. Required unless call is contract deployment.
+          type: string
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+      x-oapi-codegen-extra-tags:
+        validate: dive
+      required:
+      - from
+      - to
+      - value
+    ApiTxCreateTokenRequestTron:
+      title: Api Tx Create Token Request Tron
+      type: object
+      properties:
+        contract_address:
+          description: The contract address of the token.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        from:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        fee_limit:
+          $ref: '#/components/schemas/ValueOptional'
+        expiration_seconds:
+          type: integer
+          x-go-type: int64
+          description: Time in seconds the transaction will expire after creation. (Default 30 minutes)
+      required:
+      - from
+      - to
+      - contract_address
+      - value
+      - fee_limit
+    ApiTxCreateTokenRequestSolana:
+      title: Api Tx Create Token Request Solana
+      type: object
+      properties:
+        token_address:
+          description: The mint account address of the token.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        from:
+          description: The owner's token account address to send the token from.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipients token account address to sent the token to.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        nonce_account:
+          type: string
+          description: The nonce account used for the transfer.
+          example: 8GRipryfxcsxN8mAGjy8zbFo9ezaUsh47TsPzmZbuytU
+        fee:
+          description: The prioritization fee.
+          type: integer
+          x-go-type: uint64
+      required:
+      - from
+      - to
+      - token_address
+      - value
+    StellarSignature:
+      type: object
+      properties:
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: A hex encoded string which is the public key for the address.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - signature
+      - public_key
+    SolanaSignature:
+      type: object
+      properties:
+        signature:
+          type: string
+          description: A base58 encoded string of the cryptographic signature.
+          example: 2A3yw9TAUm55Ka7EnJDM6vZPrtsjmek9bMhGBdiUGgW8aQugNp5CdyLqMNbahbJXMnQ9h2SMFHhbk2R39RSzsSef
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - signature
+    signature:
+      type: object
+      properties:
+        address:
+          type: string
+          description: The hex address.
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature. ECDSA secp256k1 signatures are expected to be ASN1 encoded.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: A hex encoded string which is the public key for the address.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - address
+      - signature
+      - public_key
+    ApiTxCompileRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCompileRequestEVM'
+      - $ref: '#/components/schemas/ApiTxCompileRequestStellar'
+      - $ref: '#/components/schemas/ApiTxCompileRequestSubstrate'
+      - $ref: '#/components/schemas/ApiTxCompileRequestBTC'
+      - $ref: '#/components/schemas/ApiTxCompileRequestTron'
+      - $ref: '#/components/schemas/ApiTxCompileRequestSolana'
+      - $ref: '#/components/schemas/ApiTxCompileRequestNear'
+      - $ref: '#/components/schemas/ApiTxCompileRequestCosmos'
+    ApiTxCompileRequestEVM:
+      title: Api Tx Compile Request EVM
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction. This transaction is hex RLP encoded and should be encoded wihout the R, S and V values (this is diffrent from what the /create endpoint returns)
+          example: 02ed82426880840c1a97ac847e881fdc82520894057cbbc4d1568530991088108ee48fd8b949167f843b9aca0080c0
+          x-oapi-codegen-extra-tags:
+            validate: required
+        address:
+          type: string
+          description: The hex address.
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature. This should include the R and S values of the signature in ASN1 encoding.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: A hex encoded string of the sender's public key in the 32 byte compressed format.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - unsigned_tx
+      - signature
+      - public_key
+    ApiTxCompileRequestBTC:
+      title: Api Tx Compile Request BTC
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          example: 02f86f0180834c4b40852096a4848082cde49495ad61b0a150d79219dcf64e1e6cc01f0b64c4ce80b844a9059cbb000000000000000000000000e6026f60efc3d0e714f1b89c596aa484ffbd25c800000000000000000000000000000000000000000303b6ae12d00504a8ed8000c0808080
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/signature'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+          example:
+          - address: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+            signature: 0x..
+            public_key: 0x..
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxCompileRequestStellar:
+      title: Api Tx Compile Request Stellar
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The base64 encoded transaction
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StellarSignature'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+        replace_signatures:
+          type: boolean
+          x-go-type-skip-optional-pointer: true
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxCompileRequestSubstrate:
+      title: Api Tx Compile Request Substrate
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The hex encoded unsigned extrinsic
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: The hex encoded public key
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature_scheme:
+          type: string
+          enum:
+          - ed25519
+          - sr25519
+          default: ed25519
+      required:
+      - unsigned_tx
+      - signature
+      - public_key
+      - signature_scheme
+    ApiTxCompileRequestTron:
+      title: Api Tx Compile Request Tron
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The protobuf hex encoded tron transaction
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: The hex encoded public key of the signer
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - unsigned_tx
+      - signature
+      - public_key
+    ApiTxCompileRequestSolana:
+      title: Api Tx Compile Request Solana
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          example: AAEAAwYqxtWdFTb3/xrAW77tXSxoksrUwfWFAj5zub2JojTbnAnmeRNLj9i/bnMMVMh6QF5AP37ejGou8zrK1/IjTymqfYQGW/wgxXxux6CxGpqQkEbj0ZY3LYwYJuNSvOf8i/0Gp9UXGSxWjuCKhF9z0peIzwNcMUWyGrNE2AYuqUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAACSA/HmJql7hyAMci43hBLdOCK44yJ2YmFxfit5l1C6ngMEAwEDAAQEAAAABAIAAgwCAAAAAOH1BQAAAAAFAAkDiBMAAAAAAAA=
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/SolanaSignature'
+          x-oapi-codegen-extra-tags:
+            validate: required
+          example:
+          - signature: 4STXcD6nnpdPqM2AsJgxr4Wfbz4ihS7xQ5eCiQw2FUMTG7vqdr4TqomTrWsos4ZAjZbAr4vceEccUKTVWCn3jSs
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxCompileRequestNear:
+      title: Api Tx Compile Request Near
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction in base64 encoding.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: The signature hex encoded
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - unsigned_tx
+      - signature
+    CosmosSignature:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          x-go-type: uint64
+          x-go-type-skip-optional-pointer: true
+        signature:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        sign_mode:
+          x-go-type: int32
+          type: string
+          x-go-type-skip-optional-pointer: true
+        public_key:
+          type: string
+      required:
+      - sequence
+      - sign_mode
+      - signature
+      - public_key
+    ApiTxCompileRequestCosmos:
+      title: Api Tx Compile Request Cosmos
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/CosmosSignature'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxSigned:
+      type: object
+      properties:
+        tx:
+          type: string
+          description: The signed TX.
+          example: 0100000001ca19af5fb94ced7e62b623d0039a398a42e60050405a1341efe475894629c131010000008b483045022100d77b002b3142013b3f825a730f5bc3ead2014266f07ba4449269af0cf6f086310220365bca1d616ba86fac42ad69efd5f92c5ed6cf16f27ebf5ab55010efc72c219d014104417eb0abe69db2eca63c84eb44266c29c24973dc81cde16ca86c9d923630cb5f797bae7d7fab13498e06146111356eb271da74add05ebda8f72ff2b2878fddb7ffffffff0410270000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac204e0000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac30750000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac48710000000000001976a914d6fa8814924b480fa7ff903b5ef61100ab4d92fe88ac00000000
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+    ApiTxSendResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID.
+          example: '0x9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c'
+      required:
+      - id
+    ApiTxDecodedBTC:
+      title: Api Tx Decode Response BTC
+      type: object
+      properties:
+        from:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTxSourceDecodedBTC'
+          description: The source UTXOs.
+        to:
+          description: The recipient of the transaction.
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTxDestinationDecodedBTC'
+      required:
+      - from
+      - to
+    ApiTxSourcePrevOutputDataBTC:
+      type: object
+      properties:
+        value:
+          type: integer
+          x-go-type: uint64
+          description: Amount of previous output used in input
+          example: 1000
+        address:
+          type: string
+          description: Address that owns previous output used in input
+          example: mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt
+      required:
+      - value
+      - address
+    ApiTxSourceSignedDataBTC:
+      type: object
+      properties:
+        script_sig_hex:
+          type: string
+          description: Hex encoded tx input's script data field
+        tx_witness:
+          type: array
+          items:
+            type: string
+          description: Tx input's witness data
+    ApiTxSourceWithSignedDataBTC:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ApiTxSourceBTC'
+      - $ref: '#/components/schemas/ApiTxSourceSignedDataBTC'
+    ApiTxSourceDecodedBTC:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/ApiTxSourceWithSignedDataBTC'
+      - $ref: '#/components/schemas/ApiTxSourcePrevOutputDataBTC'
+    ApiTxDestinationDecodedBTC:
+      description: The recipient of the transaction.
+      type: object
+      properties:
+        destination:
+          type: string
+          description: The destination address.
+          example: mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt
+        value:
+          description: The amount you wish to transfer, in sats.
+          type: integer
+          x-go-type: uint64
+        script_pub_key:
+          $ref: '#/components/schemas/ApiScriptPubKeyBTC'
+      required:
+      - destination
+      - value
+      example:
+        destination: 31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca
+        value: 50
+    ApiScriptPubKeyBTC:
+      type: object
+      properties:
+        hex:
+          type: string
+          description: Script pub key's hex encoded data
+          example: 76a9142bd55597c10ce4c3f2a381b976b6377178eb0d2488ac
+        type:
+          enum:
+          - nonstandard
+          - pubkey
+          - pubkeyhash
+          - witness_v0_keyhash
+          - scripthash
+          - witness_v0_scripthash
+          - multisig
+          - nulldata
+          - witness_v1_taproot
+          - witness_unknown
+          type: string
+          description: Script type
+      required:
+      - hex
+      - type
+    ApiTxDecodeRequest:
+      type: object
+      properties:
+        tx:
+          type: string
+          description: The encoded transaction to be decoded.
+          x-oapi-codegen-extra-tags:
+            validate: required
+      example:
+        tx: 0100000001ca19af5fb94ced7e62b623d0039a398a42e60050405a1341efe475894629c131010000008b483045022100d77b002b3142013b3f825a730f5bc3ead2014266f07ba4449269af0cf6f086310220365bca1d616ba86fac42ad69efd5f92c5ed6cf16f27ebf5ab55010efc72c219d014104417eb0abe69db2eca63c84eb44266c29c24973dc81cde16ca86c9d923630cb5f797bae7d7fab13498e06146111356eb271da74add05ebda8f72ff2b2878fddb7ffffffff0410270000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac204e0000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac30750000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac48710000000000001976a914d6fa8814924b480fa7ff903b5ef61100ab4d92fe88ac00000000
+      required:
+      - tx
+    ApiTxDecodeResponse:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxDecodeResponseEVM'
+      - $ref: '#/components/schemas/ApiTxDecodedBTC'
+      - $ref: '#/components/schemas/ApiTxDecodeResponseTron'
+      - $ref: '#/components/schemas/ApiTxDecodeResponseStellar'
+      - $ref: '#/components/schemas/ApiTxDecodeResponseSolana'
+      - $ref: '#/components/schemas/ApiTxDecodeResponseNear'
+    SolanaAccountKeys:
+      type: array
+      items:
+        description: Account Keys
+        type: string
+    SolanaHeader:
+      type: object
+      properties:
+        num_required_signatures:
+          type: integer
+          x-go-type: int64
+          description: Number of required signatures
+        num_readonly_signed_accounts:
+          type: integer
+          x-go-type: int64
+          description: Number of read-only signed accounts
+        num_readonly_unsigned_accounts:
+          type: integer
+          x-go-type: int64
+          description: Number of read-only unsigned accounts
+    SolanaAccount:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the account
+        address:
+          type: string
+          description: Address of the account
+        is_signer:
+          type: boolean
+          description: True if this account is sa signer
+        is_writable:
+          type: boolean
+          description: True if this account have write permissions
+    SolanaParams:
+      type: object
+      description: A map of the parameters passed in the instruction
+      example:
+        lamports: '100000000'
+        space: '19292'
+        owner: 3syyTo4KJc5CGJzR7s1PgCaFah1RQcfxxVMHnLPgKeUB
+    SolanaInstruction:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Instruction name
+        accounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SolanaAccount'
+        params:
+          $ref: '#/components/schemas/SolanaParams'
+    SolanaProgram:
+      type: object
+      properties:
+        instruction:
+          $ref: '#/components/schemas/SolanaInstruction'
+        name:
+          type: string
+          description: Program name
+    SolanaInstructions:
+      type: object
+      properties:
+        programs:
+          type: array
+          items:
+            $ref: '#/components/schemas/SolanaProgram'
+    SolanaMessage:
+      type: object
+      properties:
+        version:
+          type: string
+          description: The version of the transaction, legacy or v0.
+        recent_block_hash:
+          type: string
+          description: The recent block hash of the transaction.
+        account_keys:
+          $ref: '#/components/schemas/SolanaAccountKeys'
+        header:
+          $ref: '#/components/schemas/SolanaHeader'
+        instructions:
+          $ref: '#/components/schemas/SolanaInstructions'
+    ApiTxDecodeResponseSolana:
+      title: Api Tx Decode Response Solana
+      type: object
+      description: Decoded Solana Transaction. Currently only supports decoding System and Compute-Budget Instructions.
+      properties:
+        message:
+          $ref: '#/components/schemas/SolanaMessage'
+        signatures:
+          type: array
+          items:
+            type: string
+            description: A signature of the transaction.
+    ApiTxDecodeResponseEVM:
+      title: Api Tx Decode Response EVM
+      type: object
+      properties:
+        chain_id:
+          type: string
+          description: The chain ID.
+          example: '11155111'
+        type:
+          type: string
+          description: The type of transaction.
+          example: EIP-1559
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: '0xaFF4481D10270F50f203E0763e2597776068CBc5'
+        from:
+          description: The sender of the transaction.
+          type: string
+          example: '0x4B2c3484037d56b3d50C7BB7cFD1C97497BCEee0'
+        value:
+          description: The amount you wish to transfer.
+          type: integer
+          x-go-type: big.Int
+          example: 1000000000000000000
+        gas:
+          type: integer
+          x-go-type: big.Int
+          description: Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas.
+        maxPriorityFeePerGas:
+          type: integer
+          x-go-type: big.Int
+          description: The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used.
+        maxFeePerGas:
+          type: integer
+          x-go-type: big.Int
+          description: The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an esitmate will be used.
+        nonce:
+          type: integer
+          x-go-type: big.Int
+          description: The account Nonce.
+          example: 6
+        decoded_data:
+          type: object
+          description: An unlimited size byte array specifying the input data of the message call
+          example:
+            _data: ''
+            _from: '0x557754f4fc8626b9fd3daaf651e2a1f0e1b9d26b'
+            _id: 6.171220375803133e+76
+            _to: '0x58b3e138f081709cc5e420680354dc4655ba5e13'
+            _value: 1
+        v:
+          type: string
+          description: This is a signature component. This is the recovery id.
+          example: '0'
+        r:
+          type: string
+          description: This is an ECDSA signature component.
+          example: 255739fcdac7b24cbc01bb0136d27aaec23d2d4e96c2e5b55e71ef688a46c809
+        s:
+          type: string
+          description: This is an ECDSA signature component.
+          example: 7bac7ae4a4bdb80759565b0d049bf1ed0aefc10bd4bab2520e83180e85780a87
+        public_key:
+          type: string
+          description: This is the public key of the signer of the transaction.
+          example: '0x0462d8d8df0c08d7b4b63be717b3e1887f903e4e2c7898fe40499cf6c510c70bc319cf6c3aaa3c216de40e9baffe68ccd34b7a134fc3369b611526d5528036e8c7'
+        hash:
+          type: string
+          description: The hash of the transaction.
+          example: '0xf41b3f510d90b178a5b065da17547172d7c67688dd4bce3dd984e2620f6f9c52'
+        data:
+          type: string
+          description: The encoded input data of the transaction.
+          example: '0x7ff36ab5000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000800000000000000000000000004b2c3484037d56b3d50c7bb7cfd1c97497bceee00000000000000000000000000000000000000000000000000000000064c4270b0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d60000000000000000000000001f9840a85d5af5bf1d1762f925bdaddc4201f984'
+        method_hash:
+          type: string
+          description: This is the method signature of the contract call. It is the first 4 bytes of the input data.
+          example: '0x7ff36ab5'
+        method_signature:
+          type: string
+          description: The method name called.
+          example: swapExactETHForTokens(uint256,address[],address,uint256)
+        full_method_signature:
+          type: string
+          description: The entire method signature including named params.
+          example: wapExactETHForTokens(uint256 amountOutMin, address[] path, address to, uint256 deadline)
+      required:
+      - to
+    ApiTxDecodeResponseNear:
+      title: Api Tx Decode Response Near
+      type: object
+      description: Decoded Near transaction in human-readable format.
+      properties:
+        transaction:
+          $ref: '#/components/schemas/ApiTxDecodedResponseNearTransaction'
+        signature:
+          type: string
+      required:
+      - transaction
+    ApiTxDecodedResponseNearTransaction:
+      type: object
+      properties:
+        signer_id:
+          type: string
+        public_key:
+          type: string
+        nonce_for_public_key:
+          type: number
+          x-go-type: uint64
+        receiver_id:
+          type: string
+        block_hash:
+          type: string
+        actions:
+          type: array
+          items:
+            type: object
+            x-go-type: any
+      required:
+      - signer_id
+      - public_key
+      - nonce_for_public_key
+      - receiver_id
+      - block_hash
+      - actions
+    ApiTxDecodeResponseTron:
+      title: Api Tx Decode Response Tron
+      type: object
+      properties:
+        tx_id:
+          type: string
+          description: Transaction ID
+          example: a8f62b028573c2cee4c95be373dfc1021d6dcd4b4cc2d92c7e80a1485326b045
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: array
+          items:
+            type: string
+          description: Transaction signatures
+          example:
+          - 4d3c6c522aa6833e143e59d4bb31002bb557c663f823795dc763011f7b67accf001252aee9dd4a9babaf35efdd78cca66c0895b34a02ecccac68ba594a55b9f501
+        raw_data_hex:
+          type: string
+          description: The hex encoded protobuf unsigned transaction.
+          example: 0a021e1b22083884b6bd2d32ef7d40e0c497c1fe315a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a1541494e9270255e7cf4d32ed1ceb9af9bf44abd21bd121541242aa579f130bf6fea5eac12aa6b846fb8b293ab18e80770e38794c1fe31
+          x-oapi-codegen-extra-tags:
+            validate: required
+        raw_data:
+          $ref: '#/components/schemas/TronRawDataTx'
+      required:
+      - tx_id
+      - raw_data
+      - raw_data_hex
+    TronRawDataTx:
+      type: object
+      properties:
+        contract:
+          type: array
+          items:
+            $ref: '#/components/schemas/TronTxContractData'
+        ref_block_bytes:
+          type: string
+          description: The height of the transaction reference block, using the 6th to 8th (exclusive) bytes of the reference block height, a total of 2 bytes
+          example: 1e1b
+          x-oapi-codegen-extra-tags:
+            validate: required
+        ref_block_hash:
+          type: string
+          description: The hash of the transaction reference block, using the 8th to 16th (exclusive) bytes of the reference block hash, a total of 8 bytes
+          example: 3884b6bd2d32ef7d
+          x-oapi-codegen-extra-tags:
+            validate: required
+        expiration:
+          type: integer
+          x-go-type: uint64
+          description: Transaction expiration time, beyond which the transaction will no longer be packed
+          example: 1717586748000
+          x-oapi-codegen-extra-tags:
+            validate: required
+        timestamp:
+          type: integer
+          x-go-type: uint64
+          description: Transaction timestamp, set as the transaction creation time
+          example: 1717586691043
+          x-oapi-codegen-extra-tags: null
+        fee_limit:
+          type: integer
+          x-go-type: uint64
+          description: The maximum energy cost allowed for the execution of smart contract transactions
+          example: 10000000000
+      required:
+      - contract
+      - ref_block_bytes
+      - ref_block_hash
+      - expiration
+      - timestamp
+    TronTxContractData:
+      type: object
+      properties:
+        type:
+          type: string
+          description: Type of the contract
+          example: TransferContract
+        parameter:
+          $ref: '#/components/schemas/TronContractParameter'
+      required:
+      - type
+      - parameter
+    TronContractParameter:
+      type: object
+      properties:
+        type_url:
+          type: string
+          description: Protobuf type of contract data
+          example: type.googleapis.com/protocol.TransferContract
+        value:
+          type: object
+          x-go-type: json.RawMessage
+          description: Contract call data of transaction
+          example:
+            amount: 100
+            owner_address: 418840e6c55b9ada326d211d818c34a994aeced808
+            to_address: 41d3136787e667d1e055d2cd5db4b5f6c880563049
+      required:
+      - type_url
+      - value
+    StellarTimeBounds:
+      type: object
+      properties:
+        min_time:
+          type: integer
+          description: The expiration min time.
+          x-go-type: uint64
+        max_time:
+          type: integer
+          description: The expiration max time.
+          x-go-type: uint64
+    StellarPreconditions:
+      type: object
+      properties:
+        time_bounds:
+          $ref: '#/components/schemas/StellarTimeBounds'
+    StellarAccount:
+      type: object
+      properties:
+        ed25519:
+          type: string
+          description: The ed25519 account address.
+          example: GD327MCKE45GYHWG22L7EJFULEUDMNOWGWW5WFBE5QD3CYLCI44XITXN
+      required:
+      - ed25519
+    StellarMemo:
+      type: object
+      properties:
+        hash:
+          type: string
+          description: The hash memo.
+        text:
+          type: string
+          description: The text memo.
+        id:
+          type: integer
+          description: The id memo.
+          x-go-type: uint64
+    StellarAsset:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The asset type.
+        code:
+          type: string
+          description: The asset code.
+        issuer:
+          $ref: '#/components/schemas/StellarAccount'
+    StellarPayment:
+      type: object
+      properties:
+        destination:
+          $ref: '#/components/schemas/StellarAccount'
+        asset:
+          $ref: '#/components/schemas/StellarAsset'
+        amount:
+          type: string
+          description: The quantity of assets sent to the recipient.
+      required:
+      - destination
+      - asset
+      - amount
+    StellarBody:
+      type: object
+      properties:
+        payment:
+          $ref: '#/components/schemas/StellarPayment'
+      required:
+      - payment
+    StellarOperations:
+      type: object
+      properties:
+        source_account:
+          $ref: '#/components/schemas/StellarAccount'
+        body:
+          $ref: '#/components/schemas/StellarBody'
+      required:
+      - body
+    StellarSignatures:
+      type: object
+      properties:
+        signature:
+          type: string
+          description: The base64 encoded signature.
+        hint:
+          type: string
+          description: The base64 encoded 4-byte signature hint.
+    StellarTx:
+      type: object
+      properties:
+        source_account:
+          $ref: '#/components/schemas/StellarAccount'
+        fee:
+          type: integer
+          x-go-type: uint32
+        seq_num:
+          type: integer
+          x-go-type: int64
+        cond:
+          $ref: '#/components/schemas/StellarPreconditions'
+        memo:
+          $ref: '#/components/schemas/StellarMemo'
+        operations:
+          type: array
+          items:
+            $ref: '#/components/schemas/StellarOperations'
+      required:
+      - source_account
+      - fee
+      - seq_num
+      - operations
+    StellarV1:
+      type: object
+      properties:
+        tx:
+          $ref: '#/components/schemas/StellarTx'
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StellarSignatures'
+      required:
+      - tx
+    StellarEnvelope:
+      type: object
+      properties:
+        v1:
+          $ref: '#/components/schemas/StellarV1'
+      required:
+      - v1
+    ApiTxDecodeResponseStellar:
+      title: Api Tx Decode Response Stellar
+      type: object
+      properties:
+        envelope:
+          $ref: '#/components/schemas/StellarEnvelope'
+    ApiTxVerifyRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxVerifyRequestEVM'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestBTC'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestTron'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestStellar'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestSolana'
+    ApiTxVerifyRequestEVM:
+      title: Api Tx Verify Request EVM
+      type: object
+      properties:
+        tx:
+          type: object
+          properties:
+            to:
+              description: The recipient of the transaction.
+              type: string
+              example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+              x-oapi-codegen-extra-tags:
+                validate: required_without=Data
+            value:
+              description: The amount you wish to transfer.
+              type: integer
+              x-go-type: big.Int
+              example: 1000000000000000000
+            gas:
+              type: integer
+              x-go-type: big.Int
+              description: Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas.
+            maxPriorityFeePerGas:
+              type: integer
+              x-go-type: big.Int
+              description: The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used.
+            maxFeePerGas:
+              type: integer
+              x-go-type: big.Int
+              description: The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an esitmate will be used.
+            nonce:
+              type: integer
+              x-go-type: big.Int
+              description: The account Nonce.
+              example: 5
+            data:
+              description: A hex string specifying the input data of the message call
+              type: string
+              example: '0xa9059cbb000000000000000000000000e6026f60efc3d0e714f1b89c596aa484ffbd25c800000000000000000000000000000000000000000303b6ae12d00504a8ed8000'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+        raw_encoded_tx:
+          type: string
+          description: The unsigned encoded transaction
+          example: e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - raw_encoded_tx
+      - tx
+    ApiTxVerifyRequestBTC:
+      title: Api Tx Verify Request BTC
+      type: object
+      properties:
+        tx:
+          $ref: '#/components/schemas/ApiTxCreateRequestBTC'
+        raw_encoded_tx:
+          type: string
+          description: The encoded transaction
+          example: 0100000001ca19af5fb94ced7e62b623d0039a398a42e60050405a1341efe475894629c131010000008b483045022100d77b002b3142013b3f825a730f5bc3ead2014266f07ba4449269af0cf6f086310220365bca1d616ba86fac42ad69efd5f92c5ed6cf16f27ebf5ab55010efc72c219d014104417eb0abe69db2eca63c84eb44266c29c24973dc81cde16ca86c9d923630cb5f797bae7d7fab13498e06146111356eb271da74add05ebda8f72ff2b2878fddb7ffffffff0410270000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac204e0000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac30750000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac48710000000000001976a914d6fa8814924b480fa7ff903b5ef61100ab4d92fe88ac00000000
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+      - raw_encoded_tx
+    ApiTxVerifyRequestStellar:
+      title: Api Tx Verify Request Stellar
+      type: object
+      properties:
+        tx:
+          $ref: '#/components/schemas/ApiTxCreateRequestStellar'
+        raw_encoded_tx:
+          type: string
+          description: The base64 encoded transaction
+          example: AAAAAgAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAGQDB9ZVAAAA9QAAAAAAAAABAAAAHDl4dFdRODVlc0VtaHhCYldtZW0xajlHYUxLWU4AAAABAAAAAQAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAAEAAAAAuxgEkM+4NJcX8d144oJm5qsgFs7dDP5kbz3d+liGNd0AAAABRVVSQwAAAAAhEu6GOGfk4hn+JUwJGLALyepAB3W/w6tEMJcc5QWHfAAAAAABMS0AAAAAAAAAAAHRsV2wAAAAQJJoN4BqiDlwWVDbtPHaEkd0aOJihQX2EfbmoOt05Aj/flRuDtZbtI5NsWooGhkSivAvmSz4VxZuT847OPZJngc=
+          x-oapi-codegen-extra-tags:
+            validate: required
+    ApiTxVerifyRequestSolana:
+      title: Api Tx Verify Request Solana
+      type: object
+      properties:
+        tx:
+          anyOf:
+          - $ref: '#/components/schemas/ApiTxCreateRequestSolana'
+          - $ref: '#/components/schemas/ApiTxCreateTokenRequestSolana'
+        raw_encoded_tx:
+          type: string
+          description: The base64 encoded transaction
+          example: AAAAAgAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAGQDB9ZVAAAA9QAAAAAAAAABAAAAHDl4dFdRODVlc0VtaHhCYldtZW0xajlHYUxLWU4AAAABAAAAAQAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAAEAAAAAuxgEkM+4NJcX8d144oJm5qsgFs7dDP5kbz3d+liGNd0AAAABRVVSQwAAAAAhEu6GOGfk4hn+JUwJGLALyepAB3W/w6tEMJcc5QWHfAAAAAABMS0AAAAAAAAAAAHRsV2wAAAAQJJoN4BqiDlwWVDbtPHaEkd0aOJihQX2EfbmoOt05Aj/flRuDtZbtI5NsWooGhkSivAvmSz4VxZuT847OPZJngc=
+          x-oapi-codegen-extra-tags:
+            validate: required
+    ApiTxVerifyRequestTron:
+      title: Api Tx Verify Request Tron
+      type: object
+      properties:
+        tx:
+          anyOf:
+          - $ref: '#/components/schemas/ApiTxCreateRequestTron'
+          - $ref: '#/components/schemas/ApiTxCreateTokenRequestTron'
+        raw_encoded_tx:
+          type: string
+          description: The hex encoded protobuf unsigned transaction.
+          example: 0a022ba0220887ae7932301801b540a0b2a7a1fc315a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a1541494e9270255e7cf4d32ed1ceb9af9bf44abd21bd121541242aa579f130bf6fea5eac12aa6b846fb8b293ab18e80770b8f2a3a1fc31
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+      - raw_encoded_tx
+    ApiTxEstimateFeeRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxEstimateFeeRequestTron'
+      - $ref: '#/components/schemas/ApiTxEstimateFeeRequestStellar'
+    ApiTxEstimateFeeRequestTron:
+      title: Api Tx Estimate Fee Request Tron
+      type: object
+      properties:
+        tx:
+          type: string
+          description: the transaction in protobuf hex encoding
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+    ApiTxEstimateFeeRequestStellar:
+      title: Api Tx Estimate Fee Request Stellar
+      type: object
+      properties:
+        smart_contract:
+          type: boolean
+          description: Is the transaction interacting with smart contracts, transactions interacting with smart contracts compete separately from native transactions for more limited resources as a result they typically pay higher fees.
+          default: false
+          x-go-type-skip-optional-pointer: true
+    ApiTxEstimateFeeResponse:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxEstimateFeeResponseTron'
+      - $ref: '#/components/schemas/ApiTxEstimateFeeResponseStellar'
+    ApiTxEstimateFeeResponseStellar:
+      title: Api Tx Estimate Fee Response Stellar
+      type: object
+      properties:
+        most_recent_block:
+          type: integer
+          x-go-type: big.Int
+        estimated_fees:
+          $ref: '#/components/schemas/ApiTxEstimateFeeStellar'
+    ApiTxEstimateFeeStellar:
+      title: Api Tx Estimate Fee Stellar
+      type: object
+      x-go-type-skip-optional-pointer: true
+      properties:
+        fast:
+          type: integer
+          x-go-type: big.Int
+        medium:
+          type: integer
+          x-go-type: big.Int
+        slow:
+          type: integer
+          x-go-type: big.Int
+    ApiTxEstimateFeeResponseTron:
+      title: Api Tx Estimate Fee Response Tron
+      type: object
+      properties:
+        account_resources:
+          $ref: '#/components/schemas/TronAccountResources'
+        contract_resources:
+          $ref: '#/components/schemas/TronAccountResources'
+        estimated_cost:
+          $ref: '#/components/schemas/TronAccountResources'
+        estimated_energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        estimated_bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        energy_distribution:
+          $ref: '#/components/schemas/TronEnergyDistribution'
+        sun_fee:
+          $ref: '#/components/schemas/TronSunFeeDetails'
+        estimated_tx_status:
+          type: string
+          enum:
+          - success
+          - failed
+        error:
+          type: string
+      required:
+      - account_resources
+      - estimated_cost
+      - estimated_energy
+      - estimated_bandwidth
+      - estimated_tx_status
+    TronAccountResources:
+      type: object
+      properties:
+        sun:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        free_bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        contract_energy:
+          type: integer
+          x-go-type: int64
+    TronEnergyDistribution:
+      type: object
+      properties:
+        sender_usage_percentage:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        contract:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        sender:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+    TronSunFeeDetails:
+      type: object
+      properties:
+        sun_for_energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        sun_for_contract_energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        sun_for_bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        other:
+          type: array
+          items:
+            type: object
+            properties:
+              fee:
+                type: integer
+                x-go-type: int64
+                x-go-type-skip-optional-pointer: true
+              contract_type:
+                type: string
+  responses:
+    ErrorTooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ErrorBadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    ErrorUnauthorized:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ErrorInternal:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ErrorServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    ErrorNotImplemented:
+      description: The request endpoint is not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-implemented
+            title: Not implemented
+            status: 501
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

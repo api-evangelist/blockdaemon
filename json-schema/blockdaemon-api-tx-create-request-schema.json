@@ -1,0 +1,485 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-api-tx-create-request-schema.json",
+  "title": "ApiTxCreateRequest",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-transaction-api-openapi.yml#/components/schemas/ApiTxCreateRequest",
+  "anyOf": [
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestEVM"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestStellar"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestSubstrate"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestBTC"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestTron"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestSolana"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestNear"
+    },
+    {
+      "$ref": "#/$defs/ApiTxCreateRequestCosmos"
+    }
+  ],
+  "$defs": {
+    "ApiTxCreateRequestBTC": {
+      "title": "Api Tx Create Request BTC",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApiTxSourceBTC"
+          },
+          "description": "The source UTXOs.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required,dive"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ApiTxDestinationCreateBTC"
+          },
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required,dive"
+          }
+        }
+      },
+      "x-oapi-codegen-extra-tags": {
+        "validate": "required,dive"
+      },
+      "required": [
+        "from",
+        "to"
+      ]
+    },
+    "ApiTxCreateRequestCosmos": {
+      "title": "Api Tx Create Request Cosmos",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "The account ID for the originating funds.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        },
+        "gas_limit": {
+          "description": "The maximum amount of gas the user is willing to use for the transaction.",
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "fee_amount": {
+          "description": "The maximum amount in uatom the user is willing to pay in fees.",
+          "type": "integer",
+          "x-go-type": "uint64"
+        },
+        "gas_price": {
+          "description": "The gas price in uatom the user is willing to pay per unit of gas. This will be used with the gas_used estimate returned from simulating the transaction.",
+          "type": "number",
+          "x-go-type": "float64"
+        },
+        "gas_adjustment": {
+          "description": "The multiplier used for gas estimates as they are not consistently accurate.",
+          "type": "number",
+          "x-go-type": "float64"
+        },
+        "sign_mode": {
+          "description": "The sign mode to be used for the transaction. This will be used in the simulated transaction to estimate gas.",
+          "type": "integer",
+          "x-go-type": "uint32"
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "value"
+      ]
+    },
+    "ApiTxCreateRequestEVM": {
+      "title": "Api Tx Create Request EVM",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "The account ID for the originating funds.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction. Required unless call is contract deployment.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required_without=Data"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        },
+        "gas": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas."
+        },
+        "maxPriorityFeePerGas": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used."
+        },
+        "maxFeePerGas": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an estimate will be used."
+        },
+        "nonce": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The account Nonce."
+        },
+        "data": {
+          "description": "A hex string specifying the input data of the message call",
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "from"
+      ]
+    },
+    "ApiTxCreateRequestNear": {
+      "title": "Api Tx Create Request Near",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "object",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          },
+          "properties": {
+            "account_id": {
+              "description": "The Near account ID.",
+              "type": "string",
+              "x-oapi-codegen-extra-tags": {
+                "validate": "required"
+              }
+            },
+            "public_key": {
+              "description": "The Near public key.",
+              "type": "string",
+              "x-oapi-codegen-extra-tags": {
+                "validate": "required"
+              }
+            }
+          },
+          "required": [
+            "account_id",
+            "public_key"
+          ]
+        },
+        "to": {
+          "description": "The Near recipient account ID.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "value"
+      ]
+    },
+    "ApiTxCreateRequestSolana": {
+      "title": "Api Tx Create Request Solana",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "The account ID for the originating funds.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        },
+        "nonce_account": {
+          "type": "string",
+          "description": "The nonce account used for the transfer."
+        },
+        "fee": {
+          "description": "The prioritization fee.",
+          "type": "integer",
+          "x-go-type": "uint64"
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "value"
+      ]
+    },
+    "ApiTxCreateRequestStellar": {
+      "title": "Api Tx Create Request Stellar",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "The account ID for the originating funds.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        },
+        "fee": {
+          "$ref": "#/$defs/ValueOptional"
+        },
+        "expiration_seconds": {
+          "type": "integer",
+          "x-go-type": "int64",
+          "description": "Time the transaction will expire in seconds. Default is 30 minutes."
+        }
+      },
+      "required": [
+        "from",
+        "to",
+        "value"
+      ]
+    },
+    "ApiTxCreateRequestSubstrate": {
+      "title": "Api Tx Create Request Substrate",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "The account ID for the originating funds.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        },
+        "tip": {
+          "type": "integer",
+          "x-go-type": "big.Int",
+          "description": "The extrinsic tip in planck (optional)"
+        },
+        "nonce": {
+          "type": "integer",
+          "x-go-type": "uint64",
+          "description": "The account index (nonce). Will be retrieved from chain when omitted."
+        },
+        "mortal_period": {
+          "type": "integer",
+          "x-go-type": "uint64"
+        }
+      },
+      "required": [
+        "value",
+        "from",
+        "to"
+      ]
+    },
+    "ApiTxCreateRequestTron": {
+      "title": "Api Tx Create Request Tron",
+      "type": "object",
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "The account ID for the originating funds.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "to": {
+          "description": "The recipient of the transaction.",
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required_without=Contract"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/ValueOptional"
+        },
+        "contract": {
+          "$ref": "#/$defs/ApiTxCreateRequestTronContract"
+        },
+        "expiration_seconds": {
+          "type": "integer",
+          "x-go-type": "int64",
+          "description": "Time in seconds the transaction will expire after creation. (Default 30 minutes)"
+        }
+      },
+      "required": [
+        "from",
+        "value"
+      ]
+    },
+    "ApiTxCreateRequestTronContract": {
+      "title": "Api Tx Create Request Tron Contract",
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        "parameter": {
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required_without=Data"
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        "function_selector": {
+          "type": "string",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required_without=Data"
+          },
+          "x-go-type-skip-optional-pointer": true
+        },
+        "data": {
+          "type": "string",
+          "x-go-type-skip-optional-pointer": true
+        },
+        "fee_limit": {
+          "$ref": "#/$defs/ValueOptional"
+        }
+      }
+    },
+    "ApiTxDestinationCreateBTC": {
+      "description": "The recipient of the transaction.",
+      "type": "object",
+      "properties": {
+        "destination": {
+          "type": "string",
+          "description": "The destination address.",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "value": {
+          "$ref": "#/$defs/Value"
+        }
+      },
+      "required": [
+        "destination",
+        "value"
+      ]
+    },
+    "ApiTxSourceBTC": {
+      "type": "object",
+      "properties": {
+        "tx_id": {
+          "type": "string",
+          "description": "UTXO's transaction ID",
+          "x-oapi-codegen-extra-tags": {
+            "validate": "required"
+          }
+        },
+        "index": {
+          "type": "integer",
+          "format": "uint32",
+          "description": "UTXO's index in source transaction"
+        }
+      },
+      "required": [
+        "tx_id",
+        "index"
+      ]
+    },
+    "IntegerValue": {
+      "title": "Integer Value",
+      "type": "integer",
+      "x-go-type": "*big.Int",
+      "description": "Value as an integer in the lowest unit of the currency (for example Wei or Satoshi)"
+    },
+    "StringValue": {
+      "title": "String Value",
+      "type": "string",
+      "description": "Value as a string in human readable format. This is in the highest unit of the currecy (for example Eth or BTC)"
+    },
+    "Value": {
+      "description": "A value can either be a decimal string or the lowest unit of the currency as an integer",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IntegerValue"
+        },
+        {
+          "$ref": "#/$defs/StringValue"
+        }
+      ],
+      "x-oapi-codegen-extra-tags": {
+        "validate": "required"
+      },
+      "x-go-type": "*value.Value"
+    },
+    "ValueOptional": {
+      "description": "A value can either be a decimal string or the lowest unit of the currency as an integer",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/IntegerValue"
+        },
+        {
+          "$ref": "#/$defs/StringValue"
+        }
+      ],
+      "x-go-type": "*value.Value",
+      "x-go-type-skip-optional-pointer": true
+    }
+  }
+}

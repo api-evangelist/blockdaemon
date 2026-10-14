@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-chains-schema.json",
+  "title": "Chains",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-pricing-api-openapi.yml#/components/schemas/Chains",
+  "type": "object",
+  "properties": {
+    "chains": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Chain"
+      }
+    }
+  },
+  "$defs": {
+    "Chain": {
+      "type": "object",
+      "properties": {
+        "chain_id": {
+          "type": "string"
+        },
+        "protocol": {
+          "type": "string"
+        },
+        "network": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

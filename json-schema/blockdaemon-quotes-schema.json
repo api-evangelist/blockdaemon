@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-quotes-schema.json",
+  "title": "Quotes",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-pricing-api-openapi.yml#/components/schemas/Quotes",
+  "type": "object",
+  "properties": {
+    "quotes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Quote"
+      }
+    }
+  },
+  "$defs": {
+    "Quote": {
+      "type": "object",
+      "properties": {
+        "symbol": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "chainId": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "RFC3339"
+        },
+        "units": {
+          "type": "string",
+          "description": "An array of quotes for the currency. For example, `USD` or `EUR`."
+        },
+        "price": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

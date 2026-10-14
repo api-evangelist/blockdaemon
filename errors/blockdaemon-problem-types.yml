@@ -1,0 +1,111 @@
+generated: '2026-10-14'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/blockdaemon-defi-api-openapi.yml
+- openapi/blockdaemon-event-streaming-api-openapi.yml
+- openapi/blockdaemon-native-rest-api-openapi.yml
+- openapi/blockdaemon-pricing-api-openapi.yml
+- openapi/blockdaemon-rest-api-openapi.yml
+- openapi/blockdaemon-sepior-threshold-security-module-tsm-management-api-openapi.yml
+- openapi/blockdaemon-staking-api-1-0-0-openapi.yml
+- openapi/blockdaemon-staking-api-2-0-0-openapi.yml
+- openapi/blockdaemon-staking-reporting-api-openapi.yml
+- openapi/blockdaemon-transaction-api-openapi.yml
+- openapi/blockdaemon-webhook-target-api-openapi.yml
+- openapi/blockdaemon-workspace-members-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: error
+coverage:
+  operations: 363
+  statuses_declared: 12
+problems:
+- status: 400
+  title: Bad Request
+  description: Invalid request.
+  operations: 140
+  media_types:
+  - application/json
+  - text/plain
+  schema: error
+- status: 401
+  title: Unauthorized
+  description: Header 'X-API-Key' missing.
+  operations: 124
+  media_types:
+  - application/json
+  schema: UnauthorizedError
+- status: 403
+  title: Forbidden
+  description: Invalid continuation
+  operations: 3
+  media_types:
+  - application/json
+  schema: error
+- status: 404
+  title: Not Found
+  description: Not Found
+  operations: 44
+  media_types:
+  - application/json
+  - text/plain
+  - 'application/json:'
+  schema: NotFound
+- status: 405
+  title: Method Not Allowed
+  description: Method Not Allowed
+  operations: 16
+  media_types:
+  - application/json
+  schema: MethodNotAllowed
+- status: 413
+  title: Content Too Large
+  description: Too Many Transactions
+  operations: 3
+  media_types:
+  - application/json
+  schema: error
+- status: 422
+  title: Unprocessable Content
+  description: Validation Error
+  operations: 29
+  media_types:
+  - application/json
+  schema: ErrorResponse
+- status: 429
+  title: Too Many Requests
+  description: Rate limit exceeded
+  operations: 47
+  media_types:
+  - application/json
+  schema: error
+- status: 500
+  title: Internal Server Error
+  description: Internal server error.
+  operations: 128
+  media_types:
+  - application/json
+  schema: Error
+- status: 501
+  title: Not Implemented
+  description: The request endpoint is not implemented
+  operations: 9
+  media_types:
+  - application/json
+  schema: error
+- status: 503
+  title: Service Unavailable
+  description: The resource you are trying to access is currently unavailable
+  operations: 63
+  media_types:
+  - application/json
+  schema: error
+- status: default
+  title: null
+  description: Unexpected error
+  operations: 25
+  media_types:
+  - application/json
+  schema: Error

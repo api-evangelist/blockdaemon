@@ -1,0 +1,736 @@
+[
+ {
+  "page": "https://docs.blockdaemon.com/reference/getchains-pricing.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Pricing API",
+    "version": "1.0.0"
+   },
+   "servers": [
+    {
+     "url": "https://svc.blockdaemon.com/pricing/v1",
+     "description": "Pricing Production Server"
+    }
+   ],
+   "security": [
+    {
+     "bearerAuth": []
+    },
+    {
+     "apiKeyAuthHeader": []
+    }
+   ],
+   "paths": {
+    "/allowed_chains": {
+     "get": {
+      "summary": "Get Chains",
+      "description": "Get a list of supported chains for token pricing.",
+      "tags": [
+       "pricing"
+      ],
+      "operationId": "GetChains",
+      "responses": {
+       "200": {
+        "description": "OK",
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/Chains"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/UnauthorizedError"
+       },
+       "429": {
+        "$ref": "#/components/responses/TooManyRequests"
+       },
+       "500": {
+        "$ref": "#/components/responses/ServerError"
+       },
+       "503": {
+        "$ref": "#/components/responses/ServiceUnavailable"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Chain": {
+      "type": "object",
+      "properties": {
+       "chain_id": {
+        "type": "string"
+       },
+       "protocol": {
+        "type": "string"
+       },
+       "network": {
+        "type": "string"
+       }
+      }
+     },
+     "Chains": {
+      "type": "object",
+      "properties": {
+       "chains": {
+        "type": "array",
+        "items": {
+         "$ref": "#/components/schemas/Chain"
+        }
+       }
+      }
+     },
+     "Error": {
+      "type": "object",
+      "properties": {
+       "type": {
+        "example": "bad-request",
+        "type": "string",
+        "description": "HTTP error type"
+       },
+       "code": {
+        "example": 16384,
+        "type": "integer",
+        "description": "Numeric error code"
+       },
+       "title": {
+        "example": "Invalid address",
+        "type": "string",
+        "description": "Short error description"
+       },
+       "status": {
+        "example": 400,
+        "type": "integer",
+        "description": "HTTP status of the error"
+       },
+       "detail": {
+        "example": "The requested address is invalid on this protocol",
+        "type": "string",
+        "description": "Long error description"
+       }
+      }
+     }
+    },
+    "responses": {
+     "UnauthorizedError": {
+      "description": "Invalid or expired token",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "unauthorized",
+         "title": "Invalid Token",
+         "status": 401
+        }
+       }
+      }
+     },
+     "TooManyRequests": {
+      "description": "Rate limit exceeded",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "too-many-requests",
+         "title": "Too Many Requests",
+         "status": 429,
+         "detail": "Request rate limits have been exceeded. Try again after a few seconds."
+        }
+       }
+      }
+     },
+     "ServerError": {
+      "description": "An internal server error happened",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "internal-server-error",
+         "title": "Internal Server Error",
+         "status": 500
+        }
+       }
+      }
+     },
+     "ServiceUnavailable": {
+      "description": "The resource you are trying to access is currently unavailable",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "unavailable",
+         "title": "Unavailable",
+         "status": 503
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "bearerAuth": {
+      "type": "http",
+      "description": "`Authorization: Bearer <Token>` header must be set to authenticate API requests.\nYou can create tokens in the \"Configure\" tab of your API access area at https://app.blockdaemon.com.",
+      "scheme": "bearer",
+      "bearerFormat": "Opaque",
+      "x-default": "2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw"
+     },
+     "apiKeyAuthHeader": {
+      "type": "apiKey",
+      "description": "`X-API-Key: <Token>` header must be set to authenticate API requests.\n        You can create tokens in the \"Configure\" tab of your API access area at https://app.blockdaemon.com.",
+      "name": "X-API-Key",
+      "in": "header",
+      "x-default": "2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw"
+     }
+    }
+   },
+   "tags": [
+    {
+     "name": "pricing"
+    }
+   ],
+   "x-readme": {
+    "samples-languages": [
+     "curl",
+     "go",
+     "javascript",
+     "python",
+     "node"
+    ],
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/gettokens-pricing.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Pricing API",
+    "version": "1.0.0"
+   },
+   "servers": [
+    {
+     "url": "https://svc.blockdaemon.com/pricing/v1",
+     "description": "Pricing Production Server"
+    }
+   ],
+   "security": [
+    {
+     "bearerAuth": []
+    },
+    {
+     "apiKeyAuthHeader": []
+    }
+   ],
+   "paths": {
+    "/allowed_tokens/{chain_id}": {
+     "get": {
+      "summary": "Get Tokens",
+      "description": "List tokens available for pricing on a specific chain.",
+      "tags": [
+       "pricing"
+      ],
+      "operationId": "GetTokens",
+      "parameters": [
+       {
+        "name": "chain_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+         "type": "string"
+        },
+        "description": "A unique numeric identifier for each network. For example, [eip155:1](https://namespaces.chainagnostic.org/eip155/caip2)  for Ethereum (ETH) and [eip155:137](https://namespaces.chainagnostic.org/eip155/caip2)  for Polygon (MATIC). <br><br> Refer to [ChainList.org](https://chainlist.org/)  for a list of EVM networks."
+       },
+       {
+        "name": "symbols",
+        "in": "query",
+        "schema": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "description": "List of token symbols to filter the response."
+       },
+       {
+        "name": "addresses",
+        "in": "query",
+        "schema": {
+         "type": "array",
+         "items": {
+          "type": "string"
+         }
+        },
+        "description": "An array of token addresses you want pricing data for. The `0x0000000000000000000000000000000000000000` address represents the native coin on the given chain, `ETH` on Ethereum Mainnet or `MATIC` on Polygon Mainnet."
+       }
+      ],
+      "responses": {
+       "200": {
+        "description": "OK",
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/Tokens"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/UnauthorizedError"
+       },
+       "429": {
+        "$ref": "#/components/responses/TooManyRequests"
+       },
+       "500": {
+        "$ref": "#/components/responses/ServerError"
+       },
+       "503": {
+        "$ref": "#/components/responses/ServiceUnavailable"
+       }
+      },
+      "x-internal": false
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "type": {
+        "example": "bad-request",
+        "type": "string",
+        "description": "HTTP error type"
+       },
+       "code": {
+        "example": 16384,
+        "type": "integer",
+        "description": "Numeric error code"
+       },
+       "title": {
+        "example": "Invalid address",
+        "type": "string",
+        "description": "Short error description"
+       },
+       "status": {
+        "example": 400,
+        "type": "integer",
+        "description": "HTTP status of the error"
+       },
+       "detail": {
+        "example": "The requested address is invalid on this protocol",
+        "type": "string",
+        "description": "Long error description"
+       }
+      }
+     },
+     "Token": {
+      "type": "object",
+      "properties": {
+       "chain_id": {
+        "type": "string"
+       },
+       "symbol": {
+        "type": "string"
+       },
+       "name": {
+        "type": "string"
+       },
+       "protocol": {
+        "type": "string"
+       },
+       "address": {
+        "type": "string"
+       }
+      }
+     },
+     "Tokens": {
+      "type": "object",
+      "properties": {
+       "tokens": {
+        "type": "array",
+        "items": {
+         "$ref": "#/components/schemas/Token"
+        }
+       }
+      }
+     }
+    },
+    "responses": {
+     "UnauthorizedError": {
+      "description": "Invalid or expired token",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "unauthorized",
+         "title": "Invalid Token",
+         "status": 401
+        }
+       }
+      }
+     },
+     "TooManyRequests": {
+      "description": "Rate limit exceeded",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "too-many-requests",
+         "title": "Too Many Requests",
+         "status": 429,
+         "detail": "Request rate limits have been exceeded. Try again after a few seconds."
+        }
+       }
+      }
+     },
+     "ServerError": {
+      "description": "An internal server error happened",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "internal-server-error",
+         "title": "Internal Server Error",
+         "status": 500
+        }
+       }
+      }
+     },
+     "ServiceUnavailable": {
+      "description": "The resource you are trying to access is currently unavailable",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "unavailable",
+         "title": "Unavailable",
+         "status": 503
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "bearerAuth": {
+      "type": "http",
+      "description": "`Authorization: Bearer <Token>` header must be set to authenticate API requests.\nYou can create tokens in the \"Configure\" tab of your API access area at https://app.blockdaemon.com.",
+      "scheme": "bearer",
+      "bearerFormat": "Opaque",
+      "x-default": "2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw"
+     },
+     "apiKeyAuthHeader": {
+      "type": "apiKey",
+      "description": "`X-API-Key: <Token>` header must be set to authenticate API requests.\n        You can create tokens in the \"Configure\" tab of your API access area at https://app.blockdaemon.com.",
+      "name": "X-API-Key",
+      "in": "header",
+      "x-default": "2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw"
+     }
+    }
+   },
+   "tags": [
+    {
+     "name": "pricing"
+    }
+   ],
+   "x-readme": {
+    "samples-languages": [
+     "curl",
+     "go",
+     "javascript",
+     "python",
+     "node"
+    ],
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getquotes-pricing.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Pricing API",
+    "version": "1.0.0"
+   },
+   "servers": [
+    {
+     "url": "https://svc.blockdaemon.com/pricing/v1",
+     "description": "Pricing Production Server"
+    }
+   ],
+   "security": [
+    {
+     "bearerAuth": []
+    },
+    {
+     "apiKeyAuthHeader": []
+    }
+   ],
+   "paths": {
+    "/quotes/{chain_id}": {
+     "post": {
+      "summary": "Get Token Price",
+      "description": "Fetch current prices for one or more tokens on a specific chain.",
+      "tags": [
+       "pricing"
+      ],
+      "operationId": "GetQuotes",
+      "parameters": [
+       {
+        "name": "chain_id",
+        "in": "path",
+        "required": true,
+        "schema": {
+         "type": "string"
+        },
+        "description": "A unique numeric identifier for each network. For example, [eip155:1](https://namespaces.chainagnostic.org/eip155/caip2)  for Ethereum (ETH) and [eip155:137](https://namespaces.chainagnostic.org/eip155/caip2)  for Polygon (MATIC). <br><br> Refer to [ChainList.org](https://chainlist.org/)  for a list of EVM networks."
+       }
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/QuotesRequestBody"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "description": "OK",
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/Quotes"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/UnauthorizedError"
+       },
+       "429": {
+        "$ref": "#/components/responses/TooManyRequests"
+       },
+       "500": {
+        "$ref": "#/components/responses/ServerError"
+       },
+       "503": {
+        "$ref": "#/components/responses/ServiceUnavailable"
+       }
+      },
+      "x-internal": false
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "type": {
+        "example": "bad-request",
+        "type": "string",
+        "description": "HTTP error type"
+       },
+       "code": {
+        "example": 16384,
+        "type": "integer",
+        "description": "Numeric error code"
+       },
+       "title": {
+        "example": "Invalid address",
+        "type": "string",
+        "description": "Short error description"
+       },
+       "status": {
+        "example": 400,
+        "type": "integer",
+        "description": "HTTP status of the error"
+       },
+       "detail": {
+        "example": "The requested address is invalid on this protocol",
+        "type": "string",
+        "description": "Long error description"
+       }
+      }
+     },
+     "Quote": {
+      "type": "object",
+      "properties": {
+       "symbol": {
+        "type": "string"
+       },
+       "address": {
+        "type": "string"
+       },
+       "chainId": {
+        "type": "string"
+       },
+       "timestamp": {
+        "type": "string",
+        "format": "RFC3339"
+       },
+       "units": {
+        "type": "string",
+        "description": "An array of quotes for the currency. For example, `USD` or `EUR`."
+       },
+       "price": {
+        "type": "string"
+       }
+      }
+     },
+     "Quotes": {
+      "type": "object",
+      "properties": {
+       "quotes": {
+        "type": "array",
+        "items": {
+         "$ref": "#/components/schemas/Quote"
+        }
+       }
+      }
+     },
+     "QuotesRequestBody": {
+      "type": "object",
+      "properties": {
+       "addresses": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "An array of token addresses you want pricing data for. The `0x0000000000000000000000000000000000000000` address represents the native coin on the given chain, `ETH` on Ethereum Mainnet or `MATIC` on Polygon Mainnet. <br><br> You can use the `address` from the  [GET Tokens endpoint](https://docs.blockdaemon.com/reference/gettokens-pricing) to get the price for a particular token."
+       },
+       "units": {
+        "type": "array",
+        "items": {
+         "type": "string"
+        },
+        "description": "An array of quotes for the currency. For example, `USD` or `EUR`."
+       }
+      }
+     }
+    },
+    "responses": {
+     "UnauthorizedError": {
+      "description": "Invalid or expired token",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "unauthorized",
+         "title": "Invalid Token",
+         "status": 401
+        }
+       }
+      }
+     },
+     "TooManyRequests": {
+      "description": "Rate limit exceeded",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "too-many-requests",
+         "title": "Too Many Requests",
+         "status": 429,
+         "detail": "Request rate limits have been exceeded. Try again after a few seconds."
+        }
+       }
+      }
+     },
+     "ServerError": {
+      "description": "An internal server error happened",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "internal-server-error",
+         "title": "Internal Server Error",
+         "status": 500
+        }
+       }
+      }
+     },
+     "ServiceUnavailable": {
+      "description": "The resource you are trying to access is currently unavailable",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        },
+        "example": {
+         "type": "unavailable",
+         "title": "Unavailable",
+         "status": 503
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "bearerAuth": {
+      "type": "http",
+      "description": "`Authorization: Bearer <Token>` header must be set to authenticate API requests.\nYou can create tokens in the \"Configure\" tab of your API access area at https://app.blockdaemon.com.",
+      "scheme": "bearer",
+      "bearerFormat": "Opaque",
+      "x-default": "2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw"
+     },
+     "apiKeyAuthHeader": {
+      "type": "apiKey",
+      "description": "`X-API-Key: <Token>` header must be set to authenticate API requests.\n        You can create tokens in the \"Configure\" tab of your API access area at https://app.blockdaemon.com.",
+      "name": "X-API-Key",
+      "in": "header",
+      "x-default": "2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw"
+     }
+    }
+   },
+   "tags": [
+    {
+     "name": "pricing"
+    }
+   ],
+   "x-readme": {
+    "samples-languages": [
+     "curl",
+     "go",
+     "javascript",
+     "python",
+     "node"
+    ],
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ }
+]

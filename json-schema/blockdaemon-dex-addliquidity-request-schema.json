@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-dex-addliquidity-request-schema.json",
+  "title": "_dex_addliquidity_Request",
+  "description": "The request body for a /defi/v1/dex/addliquidity",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-defi-api-openapi.yml#/components/schemas/_dex_addliquidity_Request",
+  "type": "object",
+  "properties": {
+    "dexId": {
+      "type": "string",
+      "description": "The unique ID to specify the decentralized exchange (DEX) within a particular blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-dexs-protocols).",
+      "enum": [
+        "1000",
+        "1001",
+        "1300",
+        "1301",
+        "1305",
+        "1306",
+        "1307",
+        "1308",
+        "1309",
+        "1310",
+        "1100",
+        "1101",
+        "1200",
+        "1201",
+        "2900",
+        "2901",
+        "2800",
+        "2808",
+        "2809",
+        "1500",
+        "1400",
+        "1402",
+        "2300",
+        "2100",
+        "2101",
+        "2500",
+        "2501",
+        "2700",
+        "2400",
+        "2401",
+        "3000",
+        "3001",
+        "3300",
+        "3301",
+        "3500",
+        "3501",
+        "3400",
+        "3401",
+        "3600"
+      ]
+    },
+    "tokenA": {
+      "type": "string",
+      "description": "Address of the first token being added."
+    },
+    "tokenB": {
+      "type": "string",
+      "description": "Address of the second token being added."
+    },
+    "amountADesired": {
+      "type": "string",
+      "description": "Desired amount of token A to add as liquidity, specified in the token's smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = \"1000000000000000000\"; 1 USDC (6 decimals) = \"1000000\"."
+    },
+    "amountBDesired": {
+      "type": "string",
+      "description": "Desired amount of token B to add as liquidity, specified in the token's smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = \"1000000000000000000\"; 1 USDC (6 decimals) = \"1000000\"."
+    },
+    "amountAMin": {
+      "type": "string",
+      "description": "Minimum acceptable amount of token A in the token's smallest denomination (base units). Provides slippage protection — the transaction reverts if the deposited amount falls below this value. Set to \"0\" to disable slippage protection."
+    },
+    "amountBMin": {
+      "type": "string",
+      "description": "Minimum acceptable amount of token B in the token's smallest denomination (base units). Provides slippage protection — the transaction reverts if the deposited amount falls below this value. Set to \"0\" to disable slippage protection."
+    },
+    "deadline": {
+      "type": "string",
+      "description": "Deadline for the transaction to be executed (UNIX Timestamp)."
+    },
+    "to": {
+      "type": "string",
+      "description": "Address of the recipient of the token."
+    },
+    "from": {
+      "type": "string",
+      "description": "Address of the sender of the token."
+    },
+    "gas": {
+      "type": "string",
+      "description": "Maximum number of gas units to allocate for the transaction, as an integer string (e.g., '200000'). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei."
+    },
+    "gasPriority": {
+      "type": "string",
+      "description": "Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost."
+    },
+    "slippage": {
+      "type": "string",
+      "description": "Percentage of total swap value allowed for slippage. By default, 1."
+    },
+    "enableFee": {
+      "type": "boolean",
+      "description": "Flag to include a basis points fee transaction alongside the main transaction when set to true."
+    },
+    "poolFees": {
+      "type": "string",
+      "description": "Different pool based on the fees."
+    },
+    "tokenId": {
+      "type": "string",
+      "description": "The token ID for Uniswap V3 liquidity position."
+    },
+    "path": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of token contract addresses for the liquidity pool. Provide [tokenAAddress, tokenBAddress]. Example (LINK/USDC): ['0x514910771AF9Ca656af840dff83E8264EcF986CA', '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48']."
+    },
+    "amountIn": {
+      "type": "string",
+      "description": "Amount of tokens to add as liquidity, specified in the token's smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = \"1000000000000000000\"; 1 USDC (6 decimals) = \"1000000\"."
+    },
+    "amountOut": {
+      "type": "string",
+      "description": "Amount of the output token to receive, specified in the token's smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = \"1000000000000000000\"; 1 USDC (6 decimals) = \"1000000\"."
+    },
+    "fromInternalBalance": {
+      "type": "boolean",
+      "description": "True if sending from internal token balances, otherwise False for ERC20."
+    },
+    "amountA": {
+      "type": "string",
+      "description": "Amount of token A, specified in the token's smallest denomination (base units). Examples: 1 WETH (18 decimals) = \"1000000000000000000\"; 1 USDC (6 decimals) = \"1000000\"."
+    },
+    "amountB": {
+      "type": "string",
+      "description": "Amount of token B, specified in the token's smallest denomination (base units). Examples: 1 WETH (18 decimals) = \"1000000000000000000\"; 1 USDC (6 decimals) = \"1000000\"."
+    },
+    "strategy": {
+      "type": "string",
+      "description": "Liquidity strategy to be used: spotUniform, curve, or bidask. Default is spotUniform.",
+      "enum": [
+        "stable",
+        "uncorrelated"
+      ]
+    },
+    "amountOutMin": {
+      "type": "string",
+      "description": "Minimum acceptable output amount in the token's smallest denomination (base units). Provides slippage protection — the transaction reverts if the output falls below this value. Set to \"0\" to disable slippage protection. Examples: to require at least 0.99 USDC (6 decimals), use \"990000\"; to require at least 0.99 WETH (18 decimals), use \"990000000000000000\"."
+    }
+  },
+  "required": [
+    "tokenA",
+    "tokenB",
+    "amountADesired",
+    "amountBDesired",
+    "amountAMin",
+    "amountBMin",
+    "deadline",
+    "to",
+    "from",
+    "poolFees",
+    "path",
+    "amountIn",
+    "gas",
+    "amountOut",
+    "fromInternalBalance",
+    "amountA",
+    "amountB"
+  ]
+}

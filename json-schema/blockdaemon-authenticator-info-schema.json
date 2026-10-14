@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-authenticator-info-schema.json",
+  "title": "AuthenticatorInfo",
+  "description": "Information about an authentication method",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-sepior-threshold-security-module-tsm-management-api-openapi.yml#/components/schemas/AuthenticatorInfo",
+  "type": "object",
+  "additionalProperties": true
+}

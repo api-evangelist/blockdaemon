@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-block-schema.json",
+  "title": "block",
+  "description": "The block object.",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-rest-api-openapi.yml#/components/schemas/block",
+  "type": "object",
+  "properties": {
+    "number": {
+      "type": "integer",
+      "format": "int64",
+      "description": "The block number."
+    },
+    "id": {
+      "type": "string",
+      "description": "The block hash."
+    },
+    "parent_id": {
+      "type": "string",
+      "description": "The parent block hash."
+    },
+    "date": {
+      "type": "integer",
+      "format": "int64",
+      "description": "The block date in unix timestamp format."
+    },
+    "num_txs": {
+      "type": "integer",
+      "description": "The amount of transaction in the block."
+    },
+    "txs": {
+      "type": "array",
+      "description": "A list of normalized transactions presented in the block (not filtered or unknown model).",
+      "items": {
+        "$ref": "#/$defs/tx"
+      }
+    }
+  },
+  "$defs": {
+    "event": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The event identifier."
+        },
+        "transaction_id": {
+          "type": "string",
+          "description": "The transaction identifer this event is presented."
+        },
+        "type": {
+          "type": "string",
+          "description": "The event type."
+        },
+        "denomination": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The Symbol of currency, can be natibe currency or token currency."
+        },
+        "destination": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The destination address of the event."
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The source address of the event."
+        },
+        "meta": {
+          "type": "object",
+          "description": "Protocol specific data that doesn't fit into a standard model.",
+          "properties": {
+            "addresses": {
+              "description": "A list of addresses.",
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "index": {
+              "description": "The index number.",
+              "type": "integer"
+            },
+            "script": {
+              "description": "The script.",
+              "type": "string"
+            },
+            "script_type": {
+              "description": "The script type.",
+              "type": "string"
+            }
+          }
+        },
+        "date": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The event date in unix timestamp format."
+        },
+        "amount": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "bigint",
+          "description": "The coin amount transfered in the event."
+        },
+        "decimals": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "The coin amount transfered in the event."
+        }
+      }
+    },
+    "tx": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique transaction identifier."
+        },
+        "block_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "Block hash if mined, otherwise omitted."
+        },
+        "date": {
+          "type": "integer",
+          "format": "int64",
+          "description": "The transaction creation unix timestamp."
+        },
+        "status": {
+          "type": "string",
+          "description": "Result status of the transaction.",
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "num_events": {
+          "type": "integer",
+          "description": "List of transaction events."
+        },
+        "meta": {
+          "type": "object",
+          "description": "Protocol specific data that doesn't fit into a standard model."
+        },
+        "block_number": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Block number if mined, otherwise omitted."
+        },
+        "confirmations": {
+          "type": "integer",
+          "description": "Total transaction confirmations."
+        },
+        "events": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "items": {
+            "$ref": "#/$defs/event"
+          }
+        },
+        "assets": {
+          "type": [
+            "array",
+            "null"
+          ],
+          "description": "List of moved assets by asset path. Find all the asset paths on this [page](https://docs.blockdaemon.com/reference/available-currencies-and-tokens).",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "nonce": {
+          "type": "integer",
+          "description": "The nonce of the transaction."
+        }
+      }
+    }
+  }
+}

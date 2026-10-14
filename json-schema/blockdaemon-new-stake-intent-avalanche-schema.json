@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-new-stake-intent-avalanche-schema.json",
+  "title": "NewStakeIntentAvalanche",
+  "description": "Request object to create a new Stake Intent for Avalanche",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-api-1-0-0-openapi.yml#/components/schemas/NewStakeIntentAvalanche",
+  "type": "object",
+  "required": [
+    "delegator_address",
+    "amount"
+  ],
+  "properties": {
+    "validator_address": {
+      "$ref": "#/$defs/AvalancheValidatorAddress",
+      "description": "Avalanche validator address"
+    },
+    "delegator_address": {
+      "$ref": "#/$defs/AvalancheAddress",
+      "description": "Avalanche delegator address"
+    },
+    "start_time": {
+      "$ref": "#/$defs/AvalancheStakingTimestamp",
+      "description": "Avalanche staking start time"
+    },
+    "end_time": {
+      "$ref": "#/$defs/AvalancheStakingTimestamp",
+      "description": "Avalanche staking end time"
+    },
+    "amount": {
+      "$ref": "#/$defs/AvalancheNano",
+      "description": "Amount of nano-Avalanche to stake. 1 Avalanche = 1e9 nano-Avalanche."
+    },
+    "plan_id": {
+      "$ref": "#/$defs/PlanId"
+    }
+  },
+  "$defs": {
+    "AvalancheAddress": {
+      "type": "string",
+      "description": "Avalanche platform chain address",
+      "pattern": "^([P]|[a-km-zA-HJ-NP-Z1-9]{36,72})-[a-zA-Z]{1,83}1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38}$"
+    },
+    "AvalancheNano": {
+      "type": "string",
+      "description": "Denomination of Avalanche.",
+      "pattern": "^[1-9]\\d+$"
+    },
+    "AvalancheStakingTimestamp": {
+      "type": "integer",
+      "description": "Avalanche staking start time",
+      "format": "int64"
+    },
+    "AvalancheValidatorAddress": {
+      "type": "string",
+      "description": "Avalanche validator node address",
+      "pattern": "^NodeID-[A-Za-z0-9]{43}$"
+    },
+    "PlanId": {
+      "type": "string",
+      "description": "This feature enables you to stake to validators from the specified plan(s). When no plan id is specified, validators across all plans that match the API route will be available for staking. If it is a shared plan, you can to stake to validators on a shared node from the specified plan."
+    }
+  }
+}

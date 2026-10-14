@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-yield-response-cosmos-schema.json",
+  "title": "YieldResponseCosmos",
+  "description": "The reward response object",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-staking-reporting-api-openapi.yml#/components/schemas/YieldResponseCosmos",
+  "type": "object",
+  "properties": {
+    "startTime": {
+      "description": "Epoch-based start time for reward queries.",
+      "type": "number"
+    },
+    "endTime": {
+      "description": "Epoch-based end time for reward queries.",
+      "type": "number"
+    },
+    "return": {
+      "description": "The staking return for all delegators or validators for the period",
+      "type": "string",
+      "format": "number"
+    },
+    "apr": {
+      "description": "The APR for delegators or validators based on the return and total stake of the network",
+      "type": "string",
+      "format": "number"
+    },
+    "aprPercentage": {
+      "description": "The same as above but in percentage form",
+      "type": "string",
+      "format": "number"
+    },
+    "apy": {
+      "description": "The APY based on the above and assuming re-staking of all rewards after each day",
+      "type": "string",
+      "format": "number"
+    },
+    "apyPercentage": {
+      "description": "The same as above but in percentage form",
+      "type": "string",
+      "format": "number"
+    },
+    "denomination": {
+      "description": "the denomination the reward is in",
+      "type": "string"
+    },
+    "stake": {
+      "description": "the total stake across the full network",
+      "type": "string",
+      "format": "number"
+    },
+    "metadata": {
+      "$ref": "#/$defs/YieldMetadataCosmos"
+    }
+  },
+  "$defs": {
+    "YieldMetadataCosmos": {
+      "properties": {
+        "startBlock": {
+          "description": "The block number at the start of this period",
+          "type": "string",
+          "format": "number"
+        },
+        "endBlock": {
+          "description": "The block number at the end of this period",
+          "type": "string",
+          "format": "number"
+        }
+      }
+    }
+  }
+}

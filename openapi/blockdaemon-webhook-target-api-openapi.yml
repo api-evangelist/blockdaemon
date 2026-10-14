@@ -1,0 +1,566 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Webhook target API
+  description: 'A reference of a webhook target that can be used in conjunction with Blockdaemon Event Streaming. '
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/streaming/v2
+security:
+- bearerAuth: []
+- apiKeyAuthHeader: []
+paths:
+  /:
+    get:
+      tags:
+      - webhook
+      summary: Webhook Verification Challenge
+      description: Endpoint that should respond to webhook verification. challenge
+      operationId: webhook verification challenge
+      parameters:
+      - name: token
+        in: query
+        description: The challenge token
+        required: true
+        schema:
+          type: string
+        example: 323i523-058jo3h523uh5234
+      responses:
+        '200':
+          description: Response to webhook verfication request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookVerificationResponse'
+    post:
+      tags:
+      - webhook
+      summary: Receives Webhook Messages
+      description: Endpoint that receives webhook messages after passing verification.
+      operationId: webhook receive
+      parameters:
+      - in: header
+        name: x-bd-webhooks-signature
+        schema:
+          type: string
+        required: true
+      requestBody:
+        description: the webhook send payload
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookSendRequest'
+      responses:
+        '200':
+          description: Response to webhook receive
+        '400':
+          description: Bad request
+components:
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+  schemas:
+    WebhookVerificationResponse:
+      type: object
+      properties:
+        response_token:
+          type: string
+          description: the response token is a HMAC using SHA256. Where the webhook secret is the key, and the challenge token the payload.
+          example: sha256=da0g909egewoqijgq987gfqe98tgyee8t
+    EventType:
+      type: string
+      enum:
+      - unified_block
+      - unified_confirmed_tx
+      - unified_confirmed_balance
+      - unified_confirmed_tx_log
+      - unified_reorg
+      - unified_staking_reward
+      - unified_staking_status
+      - system.connection
+      - system.dropped.messages
+    WebhookSendRequest:
+      oneOf:
+      - $ref: '#/components/schemas/WebhookMessageUnifiedBlockRequest'
+      - $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedBalanceRequest'
+      - $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxRequest'
+      - $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxLogRequest'
+      - $ref: '#/components/schemas/WebhookMessageUnifiedReorgRequest'
+      - $ref: '#/components/schemas/WebhookMessageUnifiedStakingRewardRequest'
+      - $ref: '#/components/schemas/WebhookMessageUnifiedStakingStatusRequest'
+      - $ref: '#/components/schemas/WebhookMessageSystemConnectionRequest'
+      - $ref: '#/components/schemas/WebhookMessageSystemDroppedMessagesRequest'
+      discriminator:
+        propertyName: event_type
+        mapping:
+          unified_block: '#/components/schemas/WebhookMessageUnifiedBlockRequest'
+          unified_confirmed_balance: '#/components/schemas/WebhookMessageUnifiedConfirmedBalanceRequest'
+          unified_confirmed_tx: '#/components/schemas/WebhookMessageUnifiedConfirmedTxRequest'
+          unified_confirmed_tx_log: '#/components/schemas/WebhookMessageUnifiedConfirmedTxLogRequest'
+          unified_reorg: '#/components/schemas/WebhookMessageUnifiedReorgRequest'
+          unified_staking_reward: '#/components/schemas/WebhookMessageUnifiedStakingRewardRequest'
+          unified_staking_status: '#/components/schemas/WebhookMessageUnifiedStakingStatusRequest'
+          system.connection: '#/components/schemas/WebhookMessageSystemConnectionRequest'
+          system.dropped.messages: '#/components/schemas/WebhookMessageSystemDroppedMessagesRequest'
+    WebhookMessageUnifiedBlockRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedBlockData'
+    WebhookMessageUnifiedBlockData:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          example: 12345678
+          x-go-type: uint64
+        block_hash:
+          type: string
+          example: 109387459cn81398fd7343195v1983u495yb3491345y
+        parent_hash:
+          type: string
+          example: 3240597834kjl5h234hjk235g329023854jh23g523f1
+        block_timestamp:
+          type: integer
+          example: 1709720523741662000
+      required:
+      - block_number
+      - block_hash
+      - block_timestamp
+      - parent_hash
+    WebhookMessageUnifiedConfirmedBalanceRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedBalanceData'
+    WebhookMessageUnifiedConfirmedBalanceData:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          example: 12345678
+          x-go-type: uint64
+        block_hash:
+          type: string
+          example: 109387459cn81398fd7343195v1983u495yb3491345y
+        block_timestamp:
+          type: integer
+          example: 1709720523741662000
+          x-go-type: uint64
+        address:
+          type: string
+          example: bc1qm34lsc65zpw79lxes69zkqmk6ee3ewf0j77s3h
+        asset:
+          type: string
+          example: native
+        value:
+          type: integer
+          example: 345709198148936100
+          x-go-type: big.Int
+      required:
+      - block_number
+      - block_hash
+      - block_timestamp
+      - address
+      - asset
+    WebhookMessageUnifiedConfirmedTxRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxData'
+    WebhookMessageUnifiedConfirmedTxData:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          example: 12345678
+          x-go-type: uint64
+        block_hash:
+          type: string
+          example: 109387459cn81398fd7343195v1983u495yb3491345y
+        tx_id:
+          type: string
+          example: 77d80eb55bc1e99db7617c5b508452306e7049a54e7ec398a25a293339077763
+        tx_hash:
+          type: string
+        timestamp:
+          type: integer
+          example: 1709720523741662000
+          x-go-type: uint64
+        status:
+          type: string
+          example: success
+        transfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'
+          x-go-type-skip-optional-pointer: true
+        fee:
+          anyOf:
+          - $ref: '#/components/schemas/Transfer'
+          - $ref: '#/components/schemas/TransactionEvmFee'
+      required:
+      - block_number
+      - block_hash
+      - timestamp
+      - tx_id
+      - status
+    Transfer:
+      type: object
+      properties:
+        asset:
+          type: string
+          example: native
+        from:
+          type: string
+          example: bc1qgzyta95e4tjkks900j3nzydp732ya6r8z4quv3
+        to:
+          type: string
+          example: bc1qzvkgdx0uma7dkcu4uull5sufm2lnmqf4dgyylf
+        event_name:
+          type: string
+          example: vout
+        value:
+          type: integer
+          x-go-type: big.Int
+    TransactionEvmFee:
+      type: object
+      properties:
+        gas_used:
+          type: integer
+          x-go-type: big.Int
+        gas_price:
+          type: integer
+          x-go-type: big.Int
+        gas_limit:
+          type: integer
+          x-go-type: big.Int
+        value:
+          type: integer
+          x-go-type: big.Int
+        max_fee_per_gas:
+          type: integer
+          x-go-type: big.Int
+        max_priority_fee_per_gas:
+          type: integer
+          x-go-type: big.Int
+    WebhookMessageUnifiedConfirmedTxLogRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxLogData'
+    WebhookMessageUnifiedConfirmedTxLogData:
+      type: object
+      required:
+      - block_number
+      - block_hash
+      - timestamp
+      - tx_id
+      - status
+      properties:
+        block_number:
+          type: integer
+          example: 12345678
+          x-go-type: uint64
+        block_hash:
+          type: string
+          example: 109387459cn81398fd7343195v1983u495yb3491345y
+        tx_id:
+          type: string
+          example: 77d80eb55bc1e99db7617c5b508452306e7049a54e7ec398a25a293339077763
+        tx_hash:
+          type: string
+        timestamp:
+          type: integer
+          example: 1709720523741662000
+          x-go-type: uint64
+        status:
+          type: string
+          example: success
+        transfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'
+          x-go-type-skip-optional-pointer: true
+    WebhookMessageUnifiedReorgRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedReorgData'
+    WebhookMessageUnifiedReorgData:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          example: 12345678
+          x-go-type: uint64
+        block_hash:
+          type: string
+          example: 109387459cn81398fd7343195v1983u495yb3491345y
+        block_timestamp:
+          type: integer
+          example: 1709720523741662000
+      required:
+      - block_number
+      - block_hash
+      - block_timestamp
+    WebhookMessageUnifiedStakingRewardRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedStakingRewardData'
+    WebhookMessageUnifiedStakingRewardData:
+      type: object
+      properties:
+        address:
+          type: string
+        start_balance:
+          type: integer
+          x-go-type: '*big.Int'
+        return:
+          type: integer
+          x-go-type: '*big.Int'
+        start_time:
+          type: integer
+          x-go-type: uint64
+        end_time:
+          type: integer
+          x-go-type: uint64
+        period:
+          type: string
+        metadata:
+          type: object
+          x-go-type-skip-optional-pointer: true
+          x-go-type: map[string]any
+      required:
+      - address
+      - start_balance
+      - return
+    WebhookMessageUnifiedStakingStatusRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedStakingStatusData'
+    WebhookMessageUnifiedStakingStatusData:
+      type: object
+      properties:
+        address:
+          type: string
+        status:
+          type: string
+        timestamp:
+          type: integer
+          x-go-type: uint64
+        metadata:
+          type: object
+          x-go-type-skip-optional-pointer: true
+          x-go-type: map[string]any
+      required:
+      - address
+      - status
+      - timestamp
+    WebhookMessageSystemConnectionRequest:
+      type: object
+      required:
+      - protocol
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageSystemConnectionData'
+    WebhookMessageSystemConnectionData:
+      type: object
+      properties:
+        target_id:
+          type: string
+        disconnect_time:
+          type: integer
+        connection_time:
+          type: integer
+        previous_status:
+          type: string
+        new_status:
+          type: string
+    WebhookMessageSystemDroppedMessagesRequest:
+      type: object
+      required:
+      - protocol
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageSystemDroppedMessagesData'
+    WebhookMessageSystemDroppedMessagesData:
+      type: object
+      properties:
+        target_id:
+          type: string
+        pending_msg_count:
+          type: integer
+        dropped_msg_count:
+          type: integer
+        time:
+          type: string
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/webhook-receive.md
+  - https://docs.blockdaemon.com/reference/webhook-verification-challenge.md
+  merge:
+    pages: 2
+    deduped: 2
+    conflicts_kept_first: 0

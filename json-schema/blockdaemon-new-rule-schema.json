@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/blockdaemon/main/json-schema/blockdaemon-new-rule-schema.json",
+  "title": "NewRule",
+  "x-generated": "2026-10-14",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/blockdaemon-event-streaming-api-openapi.yml#/components/schemas/NewRule",
+  "type": "object",
+  "required": [
+    "name",
+    "protocol",
+    "network",
+    "type",
+    "target",
+    "condition_type",
+    "condition"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the rule"
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional description of the rule"
+    },
+    "protocol": {
+      "type": "string",
+      "description": "Protocol the rule applies to"
+    },
+    "network": {
+      "type": "string",
+      "description": "Network context of the rule"
+    },
+    "type": {
+      "type": "string",
+      "description": "The rule type"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the rule is active or not"
+    },
+    "safeDistance": {
+      "type": "integer",
+      "default": 0,
+      "description": "Safety distance parameter"
+    },
+    "safeTimeout": {
+      "type": "integer",
+      "default": 0,
+      "description": "Safety timeout parameter"
+    },
+    "condition_type": {
+      "type": "string",
+      "default": "antlr",
+      "enum": [
+        "antlr",
+        "match_var"
+      ],
+      "description": "Type of condition syntax used"
+    },
+    "condition": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/MatchVars"
+        },
+        {
+          "$ref": "#/$defs/Antlr"
+        }
+      ],
+      "description": "Condition expressions for the rule"
+    },
+    "target": {
+      "type": "string",
+      "format": "uuid",
+      "x-go-type": "myuuid.UUID",
+      "x-go-type-import": {
+        "name": "myuuid",
+        "path": "github.com/google/uuid"
+      },
+      "description": "ID of the target associated with the rule"
+    },
+    "template": {
+      "$ref": "#/$defs/RuleTemplateRef"
+    }
+  },
+  "$defs": {
+    "Antlr": {
+      "type": "string",
+      "description": "A rule expression to define filtering or matching logic. For example, `height > 0` filters out items where the height is not greater than zero."
+    },
+    "ID": {
+      "description": "An ID representing a specific template.",
+      "type": "string",
+      "format": "uuid",
+      "x-go-type": "myuuid.UUID",
+      "x-go-type-import": {
+        "name": "myuuid",
+        "path": "github.com/google/uuid"
+      }
+    },
+    "MatchVar": {
+      "type": "object",
+      "description": "Represents a single variable used in a matching rule. It includes the variable's type and its ID.",
+      "required": [
+        "variable_type",
+        "variable_id"
+      ],
+      "properties": {
+        "variable_type": {
+          "type": "string"
+        },
+        "variable_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-go-type": "myuuid.UUID",
+          "x-go-type-import": {
+            "name": "myuuid",
+            "path": "github.com/google/uuid"
+          }
+        }
+      }
+    },
+    "MatchVars": {
+      "type": "array",
+      "description": "A list of variables used in a matching rule. Each item in the array must reference a valid MatchVar object.",
+      "items": {
+        "$ref": "#/$defs/MatchVar"
+      }
+    },
+    "PreDefinedTemplate": {
+      "title": "Predefined Template",
+      "description": "Available predefined templates that can be used for event formatting",
+      "type": "string",
+      "enum": [
+        "UNIFIED_V1",
+        "UNIFIED_V1_RAW",
+        "ALL_DATA",
+        "INPUT_EMAIL",
+        "OUTPUT_EMAIL",
+        "TX_EMAIL"
+      ]
+    },
+    "RuleTemplateRef": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ID"
+        },
+        {
+          "$ref": "#/$defs/PreDefinedTemplate"
+        }
+      ]
+    }
+  }
+}

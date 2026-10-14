@@ -1,0 +1,1429 @@
+[
+ {
+  "page": "https://docs.blockdaemon.com/reference/healthcheck.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Health",
+     "description": "Health check operations"
+    }
+   ],
+   "paths": {
+    "/management/health": {
+     "get": {
+      "summary": "Health check",
+      "description": "Returns the health status of the TSM node",
+      "operationId": "healthCheck",
+      "tags": [
+       "Health"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/HealthInformation"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "HealthInformation": {
+      "type": "object",
+      "properties": {
+       "pendingAuditLogEntries": {
+        "type": "integer",
+        "description": "Number of pending audit log entries"
+       }
+      },
+      "required": [
+       "pendingAuditLogEntries"
+      ]
+     },
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getauthenticationinfo.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Configuration",
+     "description": "Configuration information operations"
+    }
+   ],
+   "paths": {
+    "/management/configuration/authinfo": {
+     "get": {
+      "summary": "Get authentication information",
+      "description": "Returns information about available authentication methods",
+      "operationId": "getAuthenticationInfo",
+      "tags": [
+       "Configuration"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/json": {
+          "schema": {
+           "type": "array",
+           "items": {
+            "$ref": "#/components/schemas/AuthenticatorInfo"
+           }
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "AuthenticatorInfo": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Information about an authentication method"
+     },
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getauditsigningpublickey.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Configuration",
+     "description": "Configuration information operations"
+    }
+   ],
+   "paths": {
+    "/management/configuration/auditsigningpublickey": {
+     "get": {
+      "summary": "Get audit signing public key",
+      "description": "Returns the public key used for signing audit logs",
+      "operationId": "getAuditSigningPublicKey",
+      "tags": [
+       "Configuration"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/octet-stream": {
+          "schema": {
+           "type": "string",
+           "format": "binary"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/listapikeys.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "API Keys",
+     "description": "API key management operations"
+    }
+   ],
+   "paths": {
+    "/management/apikey": {
+     "get": {
+      "summary": "List API keys",
+      "description": "Returns a list of all API keys",
+      "operationId": "listApiKeys",
+      "tags": [
+       "API Keys"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/ApiKeyListResponse"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "ApiKeyListResponse": {
+      "type": "object",
+      "properties": {
+       "apiKeys": {
+        "type": "array",
+        "description": "List of API keys",
+        "items": {
+         "$ref": "#/components/schemas/ApiKeyListEntry"
+        }
+       }
+      },
+      "required": [
+       "apiKeys"
+      ]
+     },
+     "ApiKeyListEntry": {
+      "type": "object",
+      "properties": {
+       "id": {
+        "type": "string",
+        "description": "ID of the API key"
+       },
+       "applicationId": {
+        "type": "string",
+        "description": "ID of the application using this API key"
+       },
+       "description": {
+        "type": "string",
+        "description": "Description of the API key"
+       },
+       "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "When the API key was created"
+       }
+      },
+      "required": [
+       "id",
+       "applicationId",
+       "description",
+       "createdAt"
+      ]
+     },
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/createapikey.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "API Keys",
+     "description": "API key management operations"
+    }
+   ],
+   "paths": {
+    "/management/apikey": {
+     "post": {
+      "summary": "Create API key",
+      "description": "Creates a new API key",
+      "operationId": "createApiKey",
+      "tags": [
+       "API Keys"
+      ],
+      "requestBody": {
+       "content": {
+        "application/json": {
+         "schema": {
+          "$ref": "#/components/schemas/ApiKeyCreateRequest"
+         }
+        }
+       },
+       "required": true
+      },
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/json": {
+          "schema": {
+           "$ref": "#/components/schemas/ApiKeyCreateResponse"
+          }
+         }
+        }
+       },
+       "400": {
+        "$ref": "#/components/responses/BadRequest"
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "ApiKeyCreateRequest": {
+      "type": "object",
+      "properties": {
+       "applicationId": {
+        "type": "string",
+        "description": "ID of the application that will use the API key"
+       },
+       "description": {
+        "type": "string",
+        "description": "Description of the API key"
+       }
+      },
+      "required": [
+       "applicationId",
+       "description"
+      ]
+     },
+     "ApiKeyCreateResponse": {
+      "type": "object",
+      "properties": {
+       "apiKeyId": {
+        "type": "string",
+        "description": "ID of the created API key"
+       },
+       "apiKey": {
+        "type": "string",
+        "description": "The API key value (only shown once at creation time)"
+       }
+      },
+      "required": [
+       "apiKeyId",
+       "apiKey"
+      ]
+     },
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "BadRequest": {
+      "description": "Bad request",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/deleteapikey.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "API Keys",
+     "description": "API key management operations"
+    }
+   ],
+   "paths": {
+    "/management/apikey/{apiKeyID}": {
+     "delete": {
+      "summary": "Delete API key",
+      "description": "Deletes an API key by ID",
+      "operationId": "deleteApiKey",
+      "tags": [
+       "API Keys"
+      ],
+      "parameters": [
+       {
+        "name": "apiKeyID",
+        "in": "path",
+        "description": "ID of the API key to delete",
+        "required": true,
+        "schema": {
+         "type": "string"
+        }
+       }
+      ],
+      "responses": {
+       "204": {
+        "description": "API key deleted successfully"
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "404": {
+        "$ref": "#/components/responses/NotFound"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "NotFound": {
+      "description": "Resource not found",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getmetrics.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Metrics",
+     "description": "System metrics operations"
+    }
+   ],
+   "paths": {
+    "/management/metrics": {
+     "get": {
+      "summary": "Get system metrics",
+      "description": "Returns system metrics in either Prometheus or expvar format",
+      "operationId": "getMetrics",
+      "tags": [
+       "Metrics"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/json": {
+          "schema": {
+           "type": "object",
+           "description": "Metrics data (format depends on configuration)"
+          }
+         }
+        }
+       },
+       "401": {
+        "$ref": "#/components/responses/Unauthorized"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "Unauthorized": {
+      "description": "Unauthorized",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getfgprof.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Profiling",
+     "description": "Application profiling operations"
+    }
+   ],
+   "paths": {
+    "/management/profiling/debug/fgprof": {
+     "get": {
+      "summary": "Get fgprof profile",
+      "description": "Returns fgprof profiling data",
+      "operationId": "getFGProf",
+      "tags": [
+       "Profiling"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/octet-stream": {
+          "schema": {
+           "type": "string",
+           "format": "binary"
+          }
+         }
+        }
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getpprofindex.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Profiling",
+     "description": "Application profiling operations"
+    }
+   ],
+   "paths": {
+    "/management/profiling/debug/pprof": {
+     "get": {
+      "summary": "Get pprof index",
+      "description": "Returns pprof index page",
+      "operationId": "getPProfIndex",
+      "tags": [
+       "Profiling"
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "text/html": {
+          "schema": {
+           "type": "string"
+          }
+         }
+        }
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ },
+ {
+  "page": "https://docs.blockdaemon.com/reference/getpprofprofile.md",
+  "definition": {
+   "openapi": "3.0.3",
+   "info": {
+    "title": "Sepior Threshold Security Module (TSM) Management API",
+    "description": "Management API for the Threshold Security Module (TSM).\n\nThis API provides endpoints for monitoring and managing TSM nodes, including\nhealth checks, metrics, API key management, and authentication configuration.\n",
+    "version": "1.0.0",
+    "contact": {
+     "name": "Blockdaemon/Sepior Support",
+     "url": "https://blockdaemon.com/"
+    },
+    "license": {
+     "name": "Proprietary"
+    }
+   },
+   "servers": [
+    {
+     "url": "{server}",
+     "description": "TSM Management API Server",
+     "variables": {
+      "server": {
+       "default": "https://localhost:8080",
+       "description": "Server URL"
+      }
+     }
+    }
+   ],
+   "tags": [
+    {
+     "name": "Profiling",
+     "description": "Application profiling operations"
+    }
+   ],
+   "paths": {
+    "/management/profiling/debug/pprof/{profile}": {
+     "get": {
+      "summary": "Get specific pprof profile",
+      "description": "Returns a specific pprof profile",
+      "operationId": "getPProfProfile",
+      "tags": [
+       "Profiling"
+      ],
+      "parameters": [
+       {
+        "name": "profile",
+        "in": "path",
+        "description": "Name of the profile to retrieve",
+        "required": true,
+        "schema": {
+         "type": "string",
+         "enum": [
+          "allocs",
+          "block",
+          "cmdline",
+          "goroutine",
+          "heap",
+          "mutex",
+          "profile",
+          "threadcreate",
+          "trace"
+         ]
+        }
+       }
+      ],
+      "responses": {
+       "200": {
+        "description": "Successful operation",
+        "content": {
+         "application/octet-stream": {
+          "schema": {
+           "type": "string",
+           "format": "binary"
+          }
+         }
+        }
+       },
+       "404": {
+        "$ref": "#/components/responses/NotFound"
+       },
+       "500": {
+        "$ref": "#/components/responses/InternalServerError"
+       }
+      }
+     }
+    }
+   },
+   "components": {
+    "schemas": {
+     "Error": {
+      "type": "object",
+      "properties": {
+       "code": {
+        "type": "string",
+        "description": "Error code"
+       },
+       "message": {
+        "type": "string",
+        "description": "Error message"
+       },
+       "details": {
+        "type": "object",
+        "description": "Additional error details"
+       }
+      },
+      "required": [
+       "code",
+       "message"
+      ]
+     }
+    },
+    "responses": {
+     "NotFound": {
+      "description": "Resource not found",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     },
+     "InternalServerError": {
+      "description": "Internal server error",
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Error"
+        }
+       }
+      }
+     }
+    },
+    "securitySchemes": {
+     "APIKeyAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "X-API-Key"
+     }
+    }
+   },
+   "security": [
+    {
+     "APIKeyAuth": []
+    }
+   ],
+   "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+   }
+  }
+ }
+]
