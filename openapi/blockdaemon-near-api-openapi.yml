@@ -1,0 +1,831 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Staking NEAR API
+  description: 'The Blockdaemon Staking API simplifies and streamlines institutional cryptocurrency staking. The API allows developers to interact with blockchain networks and perform various staking-related operations, such as delegating and undelegating tokens, in a single, unified interface.
+
+
+    With the Staking API, you can quickly and easily build and deploy applications that automate staking activities and increase efficiency in your blockchain operations.'
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://assets-global.website-files.com/633c5e06513fa35f3391a5f9/645d33beb6fa65f6cfb95eb8_BD%20Logo%20Stack%20-%20Purple.svg
+    backgroundColor: '#fafafa'
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/boss
+security:
+- ApiKeyAuth: []
+tags:
+- name: NEAR
+  description: Near endpoints
+paths:
+  /v1/near/{network}/deactivatable-amount:
+    parameters:
+    - $ref: '#/components/parameters/NearNetwork'
+    - $ref: '#/components/parameters/NearTo'
+    - $ref: '#/components/parameters/NearWallets'
+    get:
+      summary: Get Deactivatable Amount
+      operationId: getNearDeactivatableAmount
+      tags:
+      - NEAR
+      description: 'Returns the total staked amount that can be deactivated across all wallets of the user.
+
+
+        You can specify the optional `wallets` parameter to get the total deactivatable amount in specific wallets.'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearDeactivatableAmount'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+  /v1/near/{network}/deactivation-intents:
+    parameters:
+    - $ref: '#/components/parameters/NearNetwork'
+    post:
+      summary: Post Deactivation Intent
+      operationId: postNearDeactivationIntent
+      tags:
+      - NEAR
+      description: 'Create a transaction for deactivating staked NEAR tokens.
+
+
+        The Post Deactivation Intent endpoint returns an unsigned transaction, which once signed and broadcasted starts the deactivation process. The process will complete in 4 NEAR epochs (48 hours).
+
+
+        Once the deactivation countdown is underway, you can still change the deactivated account by generating and broadcasting a new deactivation transaction. Please note that this will reset the countdown.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewDeactivateIntentNear'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearDeactivationIntentResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+    get:
+      summary: List Deactivation Intents
+      operationId: getNearDeactivationIntents
+      tags:
+      - NEAR
+      description: Retrieve a list of all outstanding deactivation intents.
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Deactivation intents
+                required:
+                - protocol
+                - network
+                - customer_id
+                properties:
+                  protocol:
+                    $ref: '#/components/schemas/NearProtocol'
+                  network:
+                    $ref: '#/components/schemas/NearNetwork'
+                  near:
+                    $ref: '#/components/schemas/DeactivationIntentsNear'
+                  customer_id:
+                    $ref: '#/components/schemas/CustomerId'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+    put:
+      summary: Cancel Deactivation Intent
+      operationId: cancelNearDeactivationIntent
+      tags:
+      - NEAR
+      description: Cancels a previously issued deactivation intent by specifying its ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelIntent'
+      responses:
+        '201':
+          description: Canceled
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+  /v1/near/{network}/stake-intents:
+    parameters:
+    - $ref: '#/components/parameters/NearNetwork'
+    - $ref: '#/components/parameters/IdempotencyKey'
+    post:
+      summary: Post Stake Intent
+      operationId: postNearStakeIntent
+      tags:
+      - NEAR
+      description: Returns an unsigned transaction that can be used to delegate your tokens to a Blockdaemon validator.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStakeIntentNear'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearStakeIntentResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+  /v1/near/{network}/withdrawable-amount:
+    parameters:
+    - $ref: '#/components/parameters/NearNetwork'
+    - $ref: '#/components/parameters/NearTo'
+    - $ref: '#/components/parameters/NearWallets'
+    get:
+      summary: Get Withdrawable Amount
+      operationId: getNearWithdrawableAmount
+      tags:
+      - NEAR
+      description: 'Returns total amount that can be withdrawn across all wallets of the user.
+
+
+        You can specify the optional `wallets` parameter to get the total withdrawable amount in specific wallets.'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NearWithdrawableAmount'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+  /v1/near/{network}/withdrawal-intents:
+    parameters:
+    - $ref: '#/components/parameters/NearNetwork'
+    post:
+      summary: Post Withdrawal Intent
+      operationId: postNearWithdrawalIntent
+      tags:
+      - NEAR
+      description: Returns an unsigned transaction that can be used to withdraw your stake after it was deactivated through the Post Deactivation Intent endpoint.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWithdrawIntentNear'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/CommonWithdrawalResponse'
+                - type: object
+                  description: Result of a new withdrawal intent request.
+                  required:
+                  - protocol
+                  - network
+                  properties:
+                    protocol:
+                      $ref: '#/components/schemas/NearProtocol'
+                    network:
+                      $ref: '#/components/schemas/NearNetwork'
+                    near:
+                      $ref: '#/components/schemas/WithdrawalIntentNear'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+    get:
+      summary: List Withdrawal Intents
+      operationId: getNearWithdrawalIntents
+      tags:
+      - NEAR
+      description: Retrieve a list of all outstanding withdrawal intents.
+      responses:
+        '200':
+          description: Withdrawal intents listed
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Withdrawal intents
+                required:
+                - protocol
+                - network
+                - customer_id
+                properties:
+                  protocol:
+                    $ref: '#/components/schemas/NearProtocol'
+                  network:
+                    $ref: '#/components/schemas/NearNetwork'
+                  near:
+                    $ref: '#/components/schemas/WithdrawalIntentsNear'
+                  customer_id:
+                    $ref: '#/components/schemas/CustomerId'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+components:
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      description: the unique idempotency key for this request
+      example: f1c971b4-7114-4c4b-8ad2-a6f9e33e2cd0
+      schema:
+        type: string
+        format: uuid
+      required: false
+    NearTo:
+      name: wallets
+      description: Array of NEAR wallets
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/NearAddress'
+    NearWallets:
+      name: to
+      description: Validator address to query amount for
+      in: query
+      required: false
+      schema:
+        type: string
+        $ref: '#/components/schemas/NearAddress'
+        description: Specifies the validator the stake was delegated to.
+    NearNetwork:
+      name: network
+      in: path
+      description: NEAR network
+      required: true
+      schema:
+        $ref: '#/components/schemas/NearNetwork'
+  schemas:
+    Error:
+      type: object
+      description: Error response envelope
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+          example: 500
+        message:
+          type: string
+          description: Error Message
+          example: A descriptive error message
+    WalletAmount:
+      type: object
+      description: Amount per wallet
+      required:
+      - wallet
+      - amount
+      - validator
+      properties:
+        wallet:
+          type: string
+        amount:
+          type: string
+          pattern: ^[1-9]\d+$
+        validator:
+          type: string
+    WithdrawIntentId:
+      type: string
+      format: uuid
+      description: Unique idenifier for a withdrawal intent.
+      example: 4ba06e89-8c29-483e-ac36-318de5aa7364
+    NewWithdrawIntentNear:
+      type: object
+      description: Request object to create a new withdrawal intent for NEAR.
+      required:
+      - wallet_address
+      - public_key
+      properties:
+        wallet_address:
+          $ref: '#/components/schemas/NearAddress'
+        public_key:
+          $ref: '#/components/schemas/NearPublicKey'
+        to:
+          $ref: '#/components/schemas/NearAddress'
+          description: Specifies the validator the stake was delegated to.
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    PlanId:
+      type: string
+      description: This feature enables you to stake to validators from the specified plan(s). When no plan id is specified, validators across all plans that match the API route will be available for staking. If it is a shared plan, you can to stake to validators on a shared node from the specified plan.
+      example: plan_Wgx98Rbi8nQuL9ddn3mTk1
+    NewStakeIntentNear:
+      type: object
+      description: Request object to create a new Stake Intent for NEAR Protocol
+      required:
+      - amount
+      - wallet_address
+      - public_key
+      properties:
+        amount:
+          $ref: '#/components/schemas/NearYocto'
+          description: Amount of yoctoNEAR to stake. 1 NEAR = 1e24 yoctoNEAR.
+        wallet_address:
+          $ref: '#/components/schemas/NearAddress'
+          description: Account to stake from (can be either [named account or implicit account](https://docs.near.org/concepts/basics/accounts/account-id/))
+        public_key:
+          $ref: '#/components/schemas/NearPublicKey'
+          description: Must be the public key of the private key that will be used to sign the returned transaction. The public key must also be added as [FullAccess](https://docs.near.org/concepts/basics/accounts/access-keys#full-access-keys) key to the `wallet_address` account.
+        to:
+          $ref: '#/components/schemas/NearAddress'
+          description: Specifies validator to delegate to.
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    NewDeactivateIntentNear:
+      type: object
+      description: Request object to create a new deactivation intent for NEAR Protocol.
+      required:
+      - amount
+      - wallet_address
+      - public_key
+      properties:
+        amount:
+          $ref: '#/components/schemas/NearYocto'
+          description: Amount of yoctoNEAR to deactivate. 1 NEAR = 1e24 yoctoNEAR
+        wallet_address:
+          $ref: '#/components/schemas/NearAddress'
+        public_key:
+          $ref: '#/components/schemas/NearPublicKey'
+        to:
+          $ref: '#/components/schemas/NearAddress'
+          description: Specifies the validator the stake was delegated to.
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    NearNetwork:
+      type: string
+      description: NEAR network
+      enum:
+      - mainnet
+      - testnet
+      - localnet
+    NearDeactivatableAmount:
+      type: object
+      description: The deactivatable amount
+      required:
+      - protocol
+      - network
+      - amount
+      - currency
+      properties:
+        protocol:
+          $ref: '#/components/schemas/NearProtocol'
+        network:
+          $ref: '#/components/schemas/NearNetwork'
+        currency:
+          $ref: '#/components/schemas/NearYocto'
+        amount:
+          type: string
+          pattern: ^[1-9]\d+$
+          example: '123456'
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletAmount'
+    UnsignedTransactionHash:
+      type: string
+      format: base64
+      description: A generated transaction that is ready to sign.
+      example: '120000007465737477616c6c65742e746573746e65740025150c44ecddfe779c2ca '
+    CommonWithdrawalResponse:
+      type: object
+      required:
+      - withdraw_intent_id
+      - customer_id
+      properties:
+        withdraw_intent_id:
+          $ref: '#/components/schemas/WithdrawIntentId'
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+    StakeIntentId:
+      type: string
+      format: base58
+      description: Unique idenifier for a group of stakes.
+      example: stake_intent_Wgx98Rbi8nQuL9ddn3mTk1
+    CommonDeactivationResponse:
+      type: object
+      required:
+      - deactivate_intent_id
+      - customer_id
+      properties:
+        deactivate_intent_id:
+          $ref: '#/components/schemas/DeactivateIntentId'
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+    CustomerId:
+      type: string
+      description: Unique identifier for a customer
+      example: SatoshiNakamoto-xUYJbPw9hw
+      minimum: 1
+    NearYocto:
+      type: string
+      description: Denomination of NEAR Protocol.
+      pattern: ^[1-9]\d+$
+      example: '100000000000000000000000000'
+    NearAddress:
+      type: string
+      description: Base58 encoded public key or registered named account. [Accounts](https://docs.near.org/concepts/basics/accounts/account-id/).
+      pattern: ^([a-km-zA-HJ-NP-Z1-9]{22,44})|((([a-z\d]+[-_])*[a-z\d]+\.)*([a-z\d]+[-_])*[a-z\d]+)$
+      example: alice.near
+    WithdrawalIntentNear:
+      type: object
+      description: NEAR Protocol Withdrawal Intent
+      required:
+      - to
+      - unsigned_transaction
+      - unsigned_transaction_hash
+      - wallet_address
+      - public_key
+      - withdrawal_intent_id
+      - expiration_time
+      properties:
+        withdrawal_intent_id:
+          type: string
+          format: uuid
+          description: Unique idenifier for deactivate intent.
+          example: 4ba06e89-8c29-483e-ac36-318de5aa7364
+        to:
+          $ref: '#/components/schemas/NearAddress'
+        unsigned_transaction:
+          $ref: '#/components/schemas/UnsignedTransaction'
+        unsigned_transaction_hash:
+          $ref: '#/components/schemas/UnsignedTransactionHash'
+        amount:
+          $ref: '#/components/schemas/NearYocto'
+        wallet_address:
+          $ref: '#/components/schemas/NearAddress'
+        public_key:
+          $ref: '#/components/schemas/NearPublicKey'
+        expiration_time:
+          $ref: '#/components/schemas/ExpirationTime'
+    DeactivationIntentsNear:
+      type: array
+      description: List of deactivation intents
+      items:
+        $ref: '#/components/schemas/NearDeactivationIntentResponse'
+    NearStakeIntentResponse:
+      allOf:
+      - $ref: '#/components/schemas/CommonStakeIntentResponse'
+      - type: object
+        required:
+        - protocol
+        - network
+        properties:
+          protocol:
+            $ref: '#/components/schemas/NearProtocol'
+          network:
+            $ref: '#/components/schemas/NearNetwork'
+          near:
+            $ref: '#/components/schemas/StakeIntentNear'
+    NearWithdrawableAmount:
+      type: object
+      description: Result of the get withdrawable amount
+      required:
+      - protocol
+      - network
+      - amount
+      - currency
+      properties:
+        protocol:
+          $ref: '#/components/schemas/NearProtocol'
+        network:
+          $ref: '#/components/schemas/NearNetwork'
+        currency:
+          $ref: '#/components/schemas/NearYocto'
+        amount:
+          type: string
+          pattern: ^[1-9]\d+$
+          example: '123456'
+        wallets:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletAmount'
+    DeactivateIntentNear:
+      type: object
+      description: NEAR Protocol Deactivate Intent
+      required:
+      - to
+      - unsigned_transaction
+      - unsigned_transaction_hash
+      - amount
+      - wallet_address
+      - public_key
+      - expiration_time
+      properties:
+        to:
+          $ref: '#/components/schemas/NearAddress'
+        unsigned_transaction:
+          $ref: '#/components/schemas/UnsignedTransaction'
+        unsigned_transaction_hash:
+          $ref: '#/components/schemas/UnsignedTransactionHash'
+        amount:
+          $ref: '#/components/schemas/NearYocto'
+        wallet_address:
+          $ref: '#/components/schemas/NearAddress'
+        public_key:
+          $ref: '#/components/schemas/NearPublicKey'
+        expiration_time:
+          $ref: '#/components/schemas/ExpirationTime'
+    NearProtocol:
+      type: string
+      description: Near protocol
+      enum:
+      - near
+    UnsignedTransaction:
+      type: string
+      format: base64
+      description: Generated unsigned transaction smart contract call data.
+      example: '0x22895118000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000120087fed394b43849eebef1e88873cd9efdbe33136656e5148e659b8b2f33625d40000000000000000000000000000000000000000000000000000000000000030b81748644e23c4d950f9dd709f3eb73d5eacd9657997e1d9dde7c4ebd8a6519ecb9d0a7fb603d3b68e023278f9650122000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020010000000000000000000000c509bb854c526af4cee5e037089f7aa8e091d8870000000000000000000000000000000000000000000000000000000000000060b36b79b4b206c0310472c117fa40c05342b5dc3e89f98f42c9da3ce6450d4c603cad55248017fd4eca3ab277cca64569193e4d487f5b2ea78a2bcdc81926c313c05842a3af318967a775783bba22519e8b8886587efa99aa7dab5784f792b187
+
+        '
+    CommonStakeIntentResponse:
+      type: object
+      required:
+      - stake_intent_id
+      - customer_id
+      properties:
+        stake_intent_id:
+          $ref: '#/components/schemas/StakeIntentId'
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    DeactivateIntentId:
+      type: string
+      format: uuid
+      description: Unique idenifier for deactivate intent.
+      example: 4ba06e89-8c29-483e-ac36-318de5aa7364
+    StakeIntentNear:
+      type: object
+      description: NEAR Protocol Stake Intent
+      required:
+      - to
+      - unsigned_transaction
+      - unsigned_transaction_hash
+      - amount
+      - wallet_address
+      - public_key
+      - expiration_time
+      properties:
+        to:
+          $ref: '#/components/schemas/NearAddress'
+        unsigned_transaction:
+          $ref: '#/components/schemas/UnsignedTransaction'
+          example: 120000007465737477616c6c65742e746573746e65740025150c44ecddfe779c2ca624cae002ef5bf6efbb9167fe3920d6595163574dc585ca49a33e2f0000170000006e6f64656173792e706f6f6c2e663836333937332e6d308e9076d7ec46d5c1d876bb5461c4a31469d50825695a1a23ee873ed532cadb2f0100000002110000006465706f7369745f616e645f7374616b65020000007b7d00c06e31d9100100000000e4d20cc8dcd2b7520000000000
+        unsigned_transaction_hash:
+          $ref: '#/components/schemas/UnsignedTransactionHash'
+        amount:
+          $ref: '#/components/schemas/NearYocto'
+        wallet_address:
+          $ref: '#/components/schemas/NearAddress'
+        public_key:
+          $ref: '#/components/schemas/NearPublicKey'
+        expiration_time:
+          $ref: '#/components/schemas/ExpirationTime'
+    UnauthorizedError:
+      type: object
+      description: Error response envelope
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+          example: 401
+        message:
+          type: string
+          description: Error Message
+          example: A human-readable diagnostic message detailing any authorization failure
+    WithdrawalIntentsNear:
+      type: array
+      description: List of withdrawal intents
+      items:
+        $ref: '#/components/schemas/WithdrawalIntentNear'
+    NearDeactivationIntentResponse:
+      allOf:
+      - $ref: '#/components/schemas/CommonDeactivationResponse'
+      - type: object
+        description: Response to a new deactivation intent request.
+        required:
+        - protocol
+        - network
+        - near
+        properties:
+          protocol:
+            $ref: '#/components/schemas/NearProtocol'
+          network:
+            $ref: '#/components/schemas/NearNetwork'
+          near:
+            $ref: '#/components/schemas/DeactivateIntentNear'
+    ExpirationTime:
+      type: integer
+      description: Transaction expiration time
+      format: int64
+      example: 1689939023
+    NearPublicKey:
+      type: string
+      description: Base58 encoded public key prefixed by ed25519, associated with the private key that will be used to sign the transaction.
+      example: ed25519:Cxg2wgFYrdLTEkMu6j5D6aEZqTb3kXbmJygS48ZKbo1S
+      pattern: ^ed25519:[a-km-zA-HJ-NP-Z1-9]{22,44}$
+    CancelIntent:
+      type: object
+      description: Intent id.
+      required:
+      - intent_id
+      properties:
+        intent_id:
+          type: string
+          format: uuid
+          description: Unique idenifier for deactivate intent.
+          example: 4ba06e89-8c29-483e-ac36-318de5aa7364
+  responses:
+    InvalidRequest:
+      description: Invalid request.
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response envelope
+            required:
+            - code
+            - message
+            properties:
+              code:
+                type: integer
+                format: int32
+                description: Error code
+                example: 400
+              message:
+                type: string
+                description: Error Message
+                example: Detailed human-readable diagnostic message regarding any invalid request parameters
+    InternalServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoValidatorsError:
+      description: Insufficient validators available to process Stake Intent request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Header 'X-API-Key' missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'When signing up for a staking account, you are provided with an API key.
+
+
+        To authenticate a Staking API request, pass your API key in the `X-API-Key` header.'
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/activeexitingqueueprogress.md
+  - https://docs.blockdaemon.com/reference/cancelneardeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelpolygondeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelsolanadeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelsolanawithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/exitethereumvalidator.md
+  - https://docs.blockdaemon.com/reference/exitethereumvalidators.md
+  - https://docs.blockdaemon.com/reference/generateethereumlaunchpaddeposit.md
+  - https://docs.blockdaemon.com/reference/generatesignedvoluntaryexit.md
+  - https://docs.blockdaemon.com/reference/getbinancedeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getbinancedeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getbinancerestakeintents.md
+  - https://docs.blockdaemon.com/reference/getcardanodeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getcardanorewardswithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getcosmosdeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getcosmosdeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getcosmosrestakeintents.md
+  - https://docs.blockdaemon.com/reference/getcosmoswithdrawablerewardsamount.md
+  - https://docs.blockdaemon.com/reference/getethwithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getneardeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getneardeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getnearwithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getnearwithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getpolygondeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getsolanadeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getsolanadeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getsolanawithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getsolanawithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getstakeaccountssolana.md
+  - https://docs.blockdaemon.com/reference/listcustomerplans.md
+  - https://docs.blockdaemon.com/reference/listethereumexits.md
+  - https://docs.blockdaemon.com/reference/liststakeintents.md
+  - https://docs.blockdaemon.com/reference/pendingqueuedprogress.md
+  - https://docs.blockdaemon.com/reference/postavaxstakeintent.md
+  - https://docs.blockdaemon.com/reference/postbinancedeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postbinancerestakeintent.md
+  - https://docs.blockdaemon.com/reference/postbinancestakeintent.md
+  - https://docs.blockdaemon.com/reference/postcardanodeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postcardanorewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postcardanostakeintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosdeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosrestakeintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosrewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosstakeintent.md
+  - https://docs.blockdaemon.com/reference/postethereumcompoundingintent.md
+  - https://docs.blockdaemon.com/reference/postethereumstakeintent.md
+  - https://docs.blockdaemon.com/reference/postethereumtopupintent.md
+  - https://docs.blockdaemon.com/reference/postethereumwithdrawalintentexit.md
+  - https://docs.blockdaemon.com/reference/postethereumwithdrawalintentpartial.md
+  - https://docs.blockdaemon.com/reference/postneardeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postnearstakeintent.md
+  - https://docs.blockdaemon.com/reference/postnearwithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonbootstrappingintent.md
+  - https://docs.blockdaemon.com/reference/postpolygondeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonrewardsrestakeintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonrewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonstakeintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonwithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postsolanadeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postsolanastakeintent.md
+  - https://docs.blockdaemon.com/reference/postsolanawithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/submittransaction.md
+  merge:
+    pages: 62
+    deduped: 1027
+    conflicts_kept_first: 0

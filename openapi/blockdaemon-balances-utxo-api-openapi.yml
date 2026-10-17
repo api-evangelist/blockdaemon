@@ -1,0 +1,1468 @@
+openapi: 3.2.0
+info:
+  version: 3.0.0
+  title: Blockdaemon REST Balances & UTXO API
+  description: 'Blockdaemon REST API provides a RESTful and uniform way to access blockchain resources,
+
+    with a rich and reusable model across multiple protocols/cryptocurrencies.'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/universal/{version}
+  description: Production server
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+- url: https://ubiquity.api.blockdaemon.com/{version}
+  description: '[Legacy Auth] Production server'
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Balances & UTXO
+paths:
+  /{protocol}/{network}/account/{address}:
+    get:
+      summary: Get a List of Balances for an Address
+      operationId: GetListOfBalancesByAddress
+      description: Returns a list of account balances by a user-defined account address for the supported currencies.
+      tags:
+      - Balances & UTXO
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/address'
+      - $ref: '#/components/parameters/assets'
+      responses:
+        '200':
+          description: Balances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/balances'
+              example:
+              - currency:
+                  asset_path: bitcoin/native/btc
+                  symbol: BTC
+                  name: Bitcoin
+                  decimals: 8
+                  type: native
+                confirmed_balance: '7268015775'
+                pending_balance: '7268015775'
+                confirmed_block: 801210
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+  /{protocol}/{network}/account/{address}/nonce:
+    get:
+      summary: Get Account Nonce
+      description: Returns the nonce for a user-defined account address.
+      operationId: GetAccountNonce
+      tags:
+      - Balances & UTXO
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'The protocol handle, one of: `ethereum`, `polygon`, `polkadot`, `solana`.
+
+          '
+        schema:
+          type: string
+          default: ethereum
+        examples:
+          Ethereum:
+            value: ethereum
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/address'
+      - name: block_number
+        in: query
+        required: false
+        description: Optional field to get the account nonce at a specific block height (not applicable to solana)
+        schema:
+          type: string
+        example: 19134862
+      responses:
+        '200':
+          description: Transaction outputs filtered by the given parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/nonce'
+            text/csv:
+              schema:
+                type: string
+                example: 'Protocol,PublicAddress,Currency,EventID,Block,BlockTimestamp,BlockTime,Hash,Action,Value,SenderAddress,TransactionFee,SenderReward,RecipientReward,Close,CloseAmount,CloseReward
+
+                  Algorand,GXL2EQ6JV54MTMP2IXOTF5CJLS7GAWMRDZMOY7JZAPO72AQRDDYGD6OX3E,ALGO,RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA,8986217,1599745403,2020-09-10 13:43:23 +0000 UTC,RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA,pay,1,T3BYUTYZCWV7UVK7IFYPC2UKH5VNBGVP4PUKSUBF5F6GQ244Y4I2XUWCQM,0.001,0.000003,0,,0,0
+
+                  '
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          description: Too Many Transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-zuplo-route:
+        custom:
+          product: ub_universal
+          billing_product: balances-utxos
+          fh: ubiquity
+          target_service: ub-{protocol}-{network}-{service}
+          cluster: use4
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://${context.custom.cluster_prefix}-${params.protocol}-${params.network}-${context.custom.service}-${env.UB_ENV}/v1/${params.protocol}/${params.network}/account/${params.address}/nonce
+            forwardSearch: true
+        policies:
+          inbound:
+          - ubiquity-default-policy
+          outbound: []
+  /{protocol}/{network}/account/{address}/report:
+    get:
+      summary: Get a Financial Report for an Address Between a Time Period
+      operationId: GetReportByAddress
+      description: Returns a financial report by a user-defined account address between a time period. Default timescale is within the last 30 days.
+      tags:
+      - Balances & UTXO
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'Protocol handle, one of: `algorand`, `polkadot`, `stellar` `tezos`, `xrp`.
+
+          '
+        schema:
+          type: string
+          default: polkadot
+        examples:
+          Polkadot:
+            value: polkadot
+      - $ref: '#/components/parameters/network'
+      - name: address
+        in: path
+        required: true
+        description: The account address of the protocol.
+        schema:
+          type: string
+          default: 12yi4uHFbnSUryffXT7Xq92fbGC3iXvCs3vz9HjVgpb4sBvL
+        examples:
+          DOT_address:
+            value: 12yi4uHFbnSUryffXT7Xq92fbGC3iXvCs3vz9HjVgpb4sBvL
+            description: Polkadot address
+      - name: from
+        in: query
+        required: false
+        description: The Unix Timestamp from where to start.
+        schema:
+          type: integer
+        example: 961846434
+      - name: to
+        in: query
+        required: false
+        description: The Unix Timestamp from where to end.
+        schema:
+          type: integer
+        example: 1119612834
+      - name: page_token
+        in: query
+        required: false
+        description: The token to retrieve more items in the next request. Use the `next_page_token` returned from the previous response for this parameter.
+        schema:
+          type: string
+        example: xyz
+      - name: page_size
+        in: query
+        required: false
+        description: 'The max number of items to return in a response.
+
+          Defaults to 50k and is capped at 100k.
+
+          '
+        schema:
+          type: integer
+        example: 1000
+      responses:
+        '200':
+          description: Account Activity
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/report'
+              example:
+                fields:
+                - protocol: Algorand
+                  address: GXL2EQ6JV54MTMP2IXOTF5CJLS7GAWMRDZMOY7JZAPO72AQRDDYGD6OX3E
+                  currency: ALGO
+                  event_id: RSSPF4EIKXRILWH6I4LZGPZA32YHWIWYFPWZFOHZQOXP23JBX6IA
+                  block: 8986308
+                  timestamp: 1599745808
+                  hash: RSSPF4EIKXRILWH6I4LZGPZA32YHWIWYFPWZFOHZQOXP23JBX6IA
+                  action: pay
+                  value: '1009113666'
+                  fee: '1000'
+                  sender_address: SP745JJR4KPRQEXJZHVIEN736LYTL2T2DFMG3OIIFJBV66K73PHNMDCZVM
+                  decimals: 6
+                  meta:
+                    type: algorand_meta
+                    sender_reward: '0'
+                    recipient_reward: '0'
+                    close: ''
+                    close_amount: '0'
+                    close_reward: '0'
+                items: 1
+                limit: 50000
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          description: Too Many Transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /{protocol}/{network}/account/{address}/utxo:
+    get:
+      summary: Get a List of Transaction Inputs and Outputs
+      operationId: GetUTXOByAccount
+      description: Returns the transaction inputs and outputs following the BTC's UTXO model definition by a user-definied account address.
+      tags:
+      - Balances & UTXO
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'The protocol handle, one of: `bitcoin`, `bitcoincash`, `dogecoin`, `litecoin`.
+
+          '
+        schema:
+          type: string
+          default: bitcoin
+        examples:
+          Bitcoin:
+            value: bitcoin
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/address'
+      - name: spent
+        in: query
+        description: Whether the transaction output was spent or not.
+        schema:
+          type: boolean
+        example: true
+      - name: check_mempool
+        in: query
+        description: Whether to check for UTXOs spent in the mempool as well as UTXOs pending in the mempool.
+        schema:
+          type: boolean
+        example: true
+      - name: from
+        in: query
+        required: false
+        description: The Unix Timestamp from where to start.
+        schema:
+          type: integer
+        example: 961846434
+      - name: to
+        in: query
+        required: false
+        description: The Unix Timestamp from where to end.
+        schema:
+          type: integer
+        example: 1119612834
+      - $ref: '#/components/parameters/order'
+      - $ref: '#/components/parameters/page_token'
+      - name: page_size
+        in: query
+        required: false
+        description: 'The max number of items to return in a response
+
+          Defaults to 50k and is capped at 100k.
+
+          '
+        schema:
+          type: integer
+        example: 1000
+      responses:
+        '200':
+          description: Transaction outputs filtered by the given parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_outputs'
+              example:
+                total: 25
+                data:
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: 385e7bfe62c8743b0bd5d3f4594ada38b2eb0764c4d89061591c11ba851c1ae0
+                    date: 1690886734
+                    block_id: 000000000000000000037cd5a51126baf707ae6ba6f3ab30738fc8bd689185c4
+                    block_number: 801188
+                    confirmations: 24
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 954
+                  mined:
+                    index: 0
+                    tx_id: 982c91b83f1e73eae8e8b0a24b5b1c13f6e0d6cd691b420f5f74a749aed9d0f4
+                    date: 1690825153
+                    block_id: 000000000000000000041b17b5d048819e4672d23ca3a0e1672617f1661e3899
+                    block_number: 801101
+                    confirmations: 111
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: 6ea5c5ab313b8982ca88f311a45f6dadc571d3e288809c9bc240c551cab839ca
+                    date: 1690741749
+                    block_id: 000000000000000000000663d5e45c2c6cb11436d7aff7a71db07c70027ab5e3
+                    block_number: 800942
+                    confirmations: 270
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: c5e879763b87aff8bd1f615a1363a0e19c660ce0b6a5f50dacc3a49341f75557
+                    date: 1690741232
+                    block_id: 00000000000000000004d9a12fcfa1aeb8f1b1bb22c69e02dc56fba04e758add
+                    block_number: 800941
+                    confirmations: 271
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: feb3b4f1a6de293e9f3a29e87daa1718ce2c37f1a0da8cfefe8f2a0601c6c38a
+                    date: 1690582068
+                    block_id: 00000000000000000001e820f06c8f03ff75e8ef10e0bf1dfe0abfca7fec2f77
+                    block_number: 800682
+                    confirmations: 530
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 1200
+                  mined:
+                    index: 0
+                    tx_id: 9d30e5aa1259f9a30765c5156c4e046b61a36dcf7e202f0652317772adfe13e6
+                    date: 1690582068
+                    block_id: 00000000000000000001e820f06c8f03ff75e8ef10e0bf1dfe0abfca7fec2f77
+                    block_number: 800682
+                    confirmations: 530
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: 9208f64f6a1a22e312c3fcc851b55d45d368703225071be6fda3b14a8f2b046d
+                    date: 1690582068
+                    block_id: 00000000000000000001e820f06c8f03ff75e8ef10e0bf1dfe0abfca7fec2f77
+                    block_number: 800682
+                    confirmations: 530
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: 6f4e0be74c563d9a2ed5cb766e3c32ff7105c6a1416101bad180140b77a74ab9
+                    date: 1690582068
+                    block_id: 00000000000000000001e820f06c8f03ff75e8ef10e0bf1dfe0abfca7fec2f77
+                    block_number: 800682
+                    confirmations: 530
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 672
+                  mined:
+                    index: 0
+                    tx_id: b338282600dcb99fcf112159b2504e179d343691fc70d1882b3721d0a7664b5c
+                    date: 1690519864
+                    block_id: 00000000000000000000f2fb02e783f1b02f7b2c3e449de406d9ce77091fa5f7
+                    block_number: 800570
+                    confirmations: 642
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac
+                      script_type: pubkey
+                - status: mined
+                  is_spent: false
+                  value: 50000
+                  mined:
+                    index: 1
+                    tx_id: a2fe4195a2db92826e0f2b0ed6d0d6b2469005d4d31fbd19cf069d9d7796e5c8
+                    date: 1690492591
+                    block_id: 00000000000000000001e845b790e5deeb2c899b561840ad795f23e95be5780d
+                    block_number: 800533
+                    confirmations: 679
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 1
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 10000
+                  mined:
+                    index: 0
+                    tx_id: a34cc16c558c25197cc13b144bf804b74b23416634096f9c932de40c774de474
+                    date: 1690409992
+                    block_id: 00000000000000000000734854a65230a8604147b42a9d973bbe0843c89519fc
+                    block_number: 800406
+                    confirmations: 806
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 546
+                  mined:
+                    index: 0
+                    tx_id: afce59363cd7001773a5e7284ea426ff4ef2660e0d077597fb164dced3989ea4
+                    date: 1690392819
+                    block_id: 00000000000000000004396eda9ba135c02895d95e2e588a8c9bb001ee21e45d
+                    block_number: 800384
+                    confirmations: 828
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 10000
+                  mined:
+                    index: 0
+                    tx_id: fc61f4e74bcf179deb931dddfa693026c59913d2a1e1bbdf12936140559fe6ff
+                    date: 1690247932
+                    block_id: 0000000000000000000408028c6040ef4dcdd43f17f03e21575b63963b404bfb
+                    block_number: 800136
+                    confirmations: 1076
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 10000
+                  mined:
+                    index: 0
+                    tx_id: d28ccf589ed5406d78e54b1ee544440b2bb884f417db03d9ca4bce0bf7bd006d
+                    date: 1690247932
+                    block_id: 0000000000000000000408028c6040ef4dcdd43f17f03e21575b63963b404bfb
+                    block_number: 800136
+                    confirmations: 1076
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 10000
+                  mined:
+                    index: 0
+                    tx_id: 8f1618087a842788e22a1217de9649569531d9520ec1f838cff0441969da6f9a
+                    date: 1690247932
+                    block_id: 0000000000000000000408028c6040ef4dcdd43f17f03e21575b63963b404bfb
+                    block_number: 800136
+                    confirmations: 1076
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 859358
+                  mined:
+                    index: 4
+                    tx_id: e9fdb8fc91b6600f2266684c5d4d0d73755799f5dd5eb44ef5cc4abd03b7b299
+                    date: 1690204575
+                    block_id: 0000000000000000000297c5e533506aa697bbc42a75892eba075bce1c997e9b
+                    block_number: 800059
+                    confirmations: 1153
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 4
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 1000
+                  mined:
+                    index: 0
+                    tx_id: 6fc0380e253f0d05fcb7b1f9f2443027705a9d500b68fafefb8ac43bfc01bb61
+                    date: 1689985375
+                    block_id: 000000000000000000041cb7600c15187e34bfacd2789c57a820755c91e0c2b7
+                    block_number: 799700
+                    confirmations: 1512
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: edc699705a7a3d8db4a5001110e1a98eb8cff485978ceeaf73952bf8b98b993f
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: db8fa4586e721b60d31b333cdcb8a048e57db101eee7b85f1e919ef8f8e9d8e3
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: be215188f515b02131b3fe65895c13bdb73e713e0d638d82fd3a3cf87911051c
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: 781aeca74c9472e93869599c5a1e4a88fc72a407f59bfd1014bafdb113c797db
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: 06c05204340ce27c135592f20d37403ec846d8288f1783b79c6ba9481639d0cf
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7006
+                  mined:
+                    index: 0
+                    tx_id: 04ad88cf6d793a5301a1ad7b6884ed8c95a6191054e88f050a2870cbdf936838
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: 026e3da4be97f9c71ca03d5e27b1cedaa355a12a6a29b517740c100836d725f1
+                    date: 1689982489
+                    block_id: 000000000000000000003d6f1e3a7c53df6095417898a28ab32406ebd0528845
+                    block_number: 799695
+                    confirmations: 1517
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                - status: mined
+                  is_spent: false
+                  value: 7450
+                  mined:
+                    index: 0
+                    tx_id: b2d0e8bb9bcece54157064c82f2739ba3ca8d60a004940dfeee7ceb396714234
+                    date: 1689982076
+                    block_id: 00000000000000000003d4e0a81b22c2d820728a065657a9dafaf859e5b3fb64
+                    block_number: 799694
+                    confirmations: 1518
+                    meta:
+                      addresses:
+                      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+                      index: 0
+                      script: 76a91462e907b15cbf27d5425399ebf6f0fb50ebb88f1888ac
+                      script_type: pubkeyhash
+                meta:
+                  paging:
+                    next_page_token: b2d0e8bb9bcece54157064c82f2739ba3ca8d60a004940dfeee7ceb396714234-0-799694
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '413':
+          description: Too Many Transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /{protocol}/{network}/accounts/:
+    post:
+      summary: Get a List of Balances for Multiple Addresses
+      operationId: GetListOfBalancesByAddresses
+      description: 'Returns a list of account balances for a user-defined list of account addresses:
+
+        - The filter allows up to 200 addresses for:
+
+        - Algorand
+
+        - Bitcoin
+
+        - Solana
+
+        - Stellar
+
+        - Ethereum
+
+        - The filter allows up to 10 addresses for other supported protocols.'
+      tags:
+      - Balances & UTXO
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/assets'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/accounts_obj'
+      responses:
+        '200':
+          description: Balances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/accounts_balances'
+              example:
+                1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa:
+                - currency:
+                    asset_path: bitcoin/native/btc
+                    symbol: BTC
+                    name: Bitcoin
+                    decimals: 8
+                    type: native
+                  confirmed_balance: '7268015775'
+                  pending_balance: '7268015775'
+                  confirmed_block: 801210
+                bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh:
+                - currency:
+                    asset_path: bitcoin/native/btc
+                    symbol: BTC
+                    name: Bitcoin
+                    decimals: 8
+                    type: native
+                  confirmed_balance: '30224256'
+                  pending_balance: '30224256'
+                  confirmed_block: 801210
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+components:
+  parameters:
+    protocol:
+      in: path
+      name: protocol
+      required: true
+      description: "Protocol handle, one of: \n`algorand`, `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `ethereum`, `litecoin`, `near`, `optimism`, `polkadot`, `polygon`, `solana`, `stellar`, `tezos`, `xrp`.\n"
+      schema:
+        type: string
+        default: bitcoin
+      examples:
+        Bitcoin:
+          value: bitcoin
+    order:
+      name: order
+      in: query
+      description: The pagination order.
+      schema:
+        type: string
+        enum:
+        - desc
+        - asc
+        default: desc
+    assets:
+      name: assets
+      in: query
+      required: false
+      description: "Comma-separated list of asset paths to filter. If the list is empty or all elements are empty, this filter has no effect. Filtering by asset is applicable only for:\n  - **Balances endpoints:** `algorand`, `avalanche`, `bitcoincash`, `ethereum`, `litecoin`, `optimism`, `polygon`, `polkadot`, `solana`\n  - **Transactions endpoints:** `algorand`, `avalanche`, `ethereum`\n\nFind all the asset paths on this [page](https://docs.blockdaemon.com/reference/available-currencies-and-tokens).\n"
+      schema:
+        type: string
+      allowReserved: true
+      examples:
+        ETH_native_currency:
+          value: ethereum/native/eth
+        ETH_smart_token:
+          value: ethereum/contract/0x0f5d2fb29fb7d3cfee444a200298f468908cc942/erc-20
+        More_than_one_asset:
+          value: ethereum/native/eth,ethereum/contract/0x0f5d2fb29fb7d3cfee444a200298f468908cc942/erc-20
+    address:
+      name: address
+      in: path
+      required: true
+      description: The account address of the protocol.
+      schema:
+        type: string
+        default: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+      examples:
+        BTC_address:
+          value: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+          description: BTC address
+    network:
+      name: network
+      in: path
+      required: true
+      description: Which network to target. Available networks can be found in the list of supported protocols or with /{protocol}.
+      schema:
+        type: string
+        default: mainnet
+      examples:
+        Mainnet:
+          value: mainnet
+        Mainnet-C:
+          value: mainnet-c
+        Testnet:
+          value: testnet
+        Testnet4:
+          value: testnet4
+          description: Bitcoin testnet network
+        Testnet-C:
+          value: testnet-c
+        Holesky:
+          value: holesky
+          description: Ethereum testnet network
+        Hoodi:
+          value: hoodi
+          description: Ethereum testnet network
+        Sepolia:
+          value: sepolia
+          description: Ethereum testnet network
+        Westend:
+          value: westend
+          description: Polkadot testnet network
+        Amoy:
+          value: amoy
+          description: Polygon testnet network
+    page_token:
+      name: page_token
+      in: query
+      required: false
+      description: The token to retrieve more items in the next request. Use the `next_page_token` returned from the previous response for this parameter.
+      schema:
+        type: string
+      example: '8185.123'
+  schemas:
+    smart_token_currency:
+      type: object
+      properties:
+        asset_path:
+          type: string
+          description: The asset path of the transferred currency.
+          example: ethereum/native/eth
+        symbol:
+          type: string
+          description: The currency symbol.
+          example: ETH
+        name:
+          type: string
+          description: The name of the currency.
+          example: Ether
+        decimals:
+          type: integer
+          description: The decimal places right to the comma.
+          example: 18
+        type:
+          type: string
+          description: The type of the currency.
+          default: smart_token
+        detail:
+          $ref: '#/components/schemas/smart_token'
+      required:
+      - asset_path
+      - type
+    balance:
+      type: object
+      description: Account balance object.
+      properties:
+        currency:
+          $ref: '#/components/schemas/currency'
+        confirmed_balance:
+          description: The balance that can be spent.
+          type: string
+        pending_balance:
+          description: The balance value from the latest confirmed block.
+          type: string
+        confirmed_block:
+          description: The confirmed block number.
+          example: 1313
+          type: integer
+        confirmed_nonce:
+          description: The confirmed nonce of the transaction.
+          type: integer
+    token_currency:
+      type: object
+      properties:
+        asset_path:
+          type: string
+          description: The asset path of the transferred currency.
+          example: ethereum/native/eth
+        symbol:
+          type: string
+          description: The currency symbol.
+          example: ETH
+        name:
+          type: string
+          description: The name of the currency.
+          example: Ether
+        decimals:
+          type: integer
+          description: The decimal places right to the comma.
+          example: 18
+        type:
+          type: string
+          description: The currency type.
+          default: token
+        detail:
+          $ref: '#/components/schemas/token'
+      required:
+      - asset_path
+      - type
+    nonce:
+      type: object
+      properties:
+        nonce:
+          type: string
+          description: Account Nonce.
+          example: '8000'
+      required:
+      - nonce
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    native_currency:
+      type: object
+      properties:
+        asset_path:
+          type: string
+          description: The asset path of transferred currency.
+          example: ethereum/native/eth
+        symbol:
+          type: string
+          description: The currency symbol.
+          example: ETH
+        name:
+          type: string
+          description: The name of the currency.
+          example: Ether
+        decimals:
+          type: integer
+          description: The decimal places right to the comma.
+          example: 18
+        type:
+          type: string
+          default: native
+          description: The type of the currency.
+      required:
+      - asset_path
+      - type
+    report_field:
+      type: object
+      properties:
+        protocol:
+          type: string
+          description: The protocol the address relates to.
+          example: Algorand
+        address:
+          type: string
+          description: The wallet/account the transaction occurred
+          example: GXL2EQ6JV54MTMP2IXOTF5CJLS7GAWMRDZMOY7JZAPO72AQRDDYGD6OX3E
+        currency:
+          type: string
+          description: The currency symbol.
+          example: ALGO
+        event_id:
+          type: string
+          description: The ID of the event within a transaction.
+          example: RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA
+        block:
+          type: integer
+          format: int64
+          description: The block number the transaction occurred on.
+          example: 8986217
+        timestamp:
+          type: integer
+          format: int32
+          description: The unix timestamp when the transaction was added to a block.
+          example: 1599745403
+        hash:
+          type: string
+          description: The transaction ID.
+          example: RNEYUT3MRYGT5ENSLIC7LGJCJMW6BXNS6SAW7A25DTYRW4TFJ5JA
+        action:
+          type: string
+          description: The action type e.g. Transfer, Deposit, Staking Reward etc..
+          example: pay
+        value:
+          type: string
+          description: The amount of currency involved in the transaction (smallest unit).
+          example: '1000000'
+        fee:
+          type: string
+          description: How much was charged as a fee for processing the transaction.
+          example: '1000'
+        sender_address:
+          type: string
+          description: The address where the funds originated.
+          example: T3BYUTYZCWV7UVK7IFYPC2UKH5VNBGVP4PUKSUBF5F6GQ244Y4I2XUWCQM
+        decimals:
+          type: integer
+          format: int32
+          description: The number of decimals in one coin, used to convert smallest unit to 1 whole coin if needed.
+          example: 6
+        meta:
+          $ref: '#/components/schemas/report_field_meta'
+      required:
+      - action
+      - address
+      - block
+      - currency
+      - decimals
+      - event_id
+      - fee
+      - hash
+      - protocol
+      - sender_address
+      - timestamp
+      - value
+    tx-output-response:
+      type:
+      - object
+      - 'null'
+      properties:
+        index:
+          type: integer
+          description: The output index within a given transaction.
+          example: 1
+        tx_id:
+          type: string
+          description: The transaction identifier.
+          example: 57f7dc46786c5d56d260186d459f1246943dd6e83ca00235909dad1b826f20b4
+        date:
+          type: integer
+          description: The transaction creation unix timestamp.
+          example: 1655419925
+        block_id:
+          type: string
+          description: The hash identifier of the block which the transaction was mined.
+          example: 00000000000000000008ad1bdca4288143a0cb20e71de0808a066db89857e153
+        block_number:
+          type: integer
+          description: The number of the block which the transaction was mined.
+          example: 741100
+        confirmations:
+          type: integer
+          description: The number of confirmations the transaction took in order to be mined.
+          example: 1619
+        meta:
+          description: The meta details of the transaction.
+          type: object
+          properties:
+            addresses:
+              description: A list of addresses.
+              type: array
+              items:
+                type: string
+            index:
+              description: The index number.
+              type: integer
+            script:
+              description: The script.
+              type: string
+            script_type:
+              description: The script type.
+              type: string
+    accounts_balances:
+      type: object
+      description: The accounts balances with account addressses as keys.
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/balance'
+    tx_outputs:
+      type: object
+      description: A list of transaction outputs.
+      properties:
+        total:
+          type: integer
+          description: The number of total items.
+          example: 25
+        data:
+          type: array
+          description: A list of output items.
+          items:
+            type: object
+            properties:
+              status:
+                type: string
+                description: The status of the given transaction output.
+                example: mined
+              is_spent:
+                type: boolean
+                description: Whether the transaction output was spent or not.
+                example: false
+              value:
+                type: integer
+                format: int64
+                description: The amount of tokens within the given output.
+                example: 600
+              spent:
+                allOf:
+                - $ref: '#/components/schemas/tx-output-response'
+              mined:
+                allOf:
+                - $ref: '#/components/schemas/tx-output-response'
+              pending:
+                allOf:
+                - $ref: '#/components/schemas/tx-output-response'
+        meta:
+          $ref: '#/components/schemas/meta'
+    paging:
+      type: object
+      description: The pagination details.
+      properties:
+        next_page_token:
+          type: string
+          description: The next page token to use in the following request.
+    token:
+      type: object
+      description: The detail object.
+      properties:
+        type:
+          type: string
+          description: The name of token mechanism.
+          example: credit_alphanum4
+        id:
+          type: string
+          description: The token identifier.
+          example: USD
+        creator:
+          type: string
+          description: The address that created the token.
+          example: GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX
+      required:
+      - type
+      - id
+    balances:
+      description: The currency balances with asset paths as keys.
+      type: array
+      items:
+        $ref: '#/components/schemas/balance'
+    report:
+      type: object
+      properties:
+        fields:
+          type: array
+          description: The transaction items.
+          items:
+            $ref: '#/components/schemas/report_field'
+        items:
+          type: integer
+          description: The number of transactions in the report.
+          example: 1
+        limit:
+          type: integer
+          description: The limit number.
+        page_size:
+          type: integer
+          description: The limit number provided in the request or the default.
+          example: 100
+        page_token:
+          type: string
+          description: The token to retrieve more items in the next request. Use the `next_page_token` returned from the previous response for this parameter.
+          example: xyz
+      required:
+      - fields
+      - items
+    smart_token:
+      type: object
+      description: The detail object.
+      properties:
+        type:
+          type: string
+          description: The name of the token mechanism (smart contract).
+          example: ERC-20
+        contract:
+          type: string
+          description: The address of the contract.
+          example: '0xF00Fa860473130C1df10707223E66Cb4B839B165'
+      required:
+      - type
+      - contract
+    meta:
+      type:
+      - object
+      - 'null'
+      description: The meta details.
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging'
+    currency:
+      type: object
+      oneOf:
+      - $ref: '#/components/schemas/native_currency'
+      - $ref: '#/components/schemas/token_currency'
+      - $ref: '#/components/schemas/smart_token_currency'
+      discriminator:
+        propertyName: type
+        mapping:
+          native: '#/components/schemas/native_currency'
+          token: '#/components/schemas/token_currency'
+          smart_token: '#/components/schemas/smart_token_currency'
+    accounts_obj:
+      type: object
+      properties:
+        addresses:
+          description: A list of addresses.
+          type: array
+          default:
+          - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+          - bc1qex0aqq8mxqfh4cpl62eg755836djjx20yzuuu8
+          items:
+            type: string
+      example:
+      - 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+      - bc1qex0aqq8mxqfh4cpl62eg755836djjx20yzuuu8
+    algorand_meta:
+      type:
+      - object
+      - 'null'
+      properties:
+        type:
+          type: string
+          default: algorand_meta
+          description: The type of protocol the metadata relates to.
+        sender_reward:
+          type: string
+          description: The sender reward amount.
+          example: '121176'
+        recipient_reward:
+          type: string
+          description: The recipient reward amount.
+          example: '0'
+        close:
+          type: string
+          description: The closing account.
+          example: XIU7HGGAJ3QOTATPDSIIHPFVKMICXKHMOR2FJKHTVLII4FAOA3CYZQDLG4
+        close_amount:
+          type: string
+          description: ' The closing amount.'
+          example: '0'
+        close_reward:
+          type: string
+          description: The closing reward.
+          example: '0'
+    report_field_meta:
+      description: Additional metadata bespoke to specific protocols.
+      oneOf:
+      - $ref: '#/components/schemas/algorand_meta'
+      discriminator:
+        propertyName: type
+        mapping:
+          algorand_meta: '#/components/schemas/algorand_meta'
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    ServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-found
+            title: Not Found
+            status: 404
+    ServerError:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    UnauthorizedError:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getaccountnonce.md
+  - https://docs.blockdaemon.com/reference/getblockbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifierbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifiers.md
+  - https://docs.blockdaemon.com/reference/getcurrentblockhash.md
+  - https://docs.blockdaemon.com/reference/getcurrentblocknumber.md
+  - https://docs.blockdaemon.com/reference/getfeeestimate.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddress.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddresses.md
+  - https://docs.blockdaemon.com/reference/getprotocolendpoints.md
+  - https://docs.blockdaemon.com/reference/getprotocolslist.md
+  - https://docs.blockdaemon.com/reference/getreportbyaddress.md
+  - https://docs.blockdaemon.com/reference/gettxbyhash.md
+  - https://docs.blockdaemon.com/reference/gettxconfirmations.md
+  - https://docs.blockdaemon.com/reference/gettxoutputbyhashandindex.md
+  - https://docs.blockdaemon.com/reference/gettxs.md
+  - https://docs.blockdaemon.com/reference/gettxsbyaddress.md
+  - https://docs.blockdaemon.com/reference/getutxobyaccount.md
+  merge:
+    pages: 18
+    deduped: 196
+    conflicts_kept_first: 0

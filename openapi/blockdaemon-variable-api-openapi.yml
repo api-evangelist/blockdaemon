@@ -1,0 +1,395 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Event Streaming Variable API
+  description: Creates and manages config for event streams
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- bearerAuth: []
+- apiKeyAuthHeader: []
+tags:
+- name: Variable
+paths:
+  /streaming/v2/variables:
+    x-zuplo-path:
+      pathMode: open-api
+    get:
+      tags:
+      - Variable
+      summary: Get all Variables
+      description: Returns all variables that the user has access to.
+      operationId: findVariables
+      responses:
+        '200':
+          description: List of variables returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Variable'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/variables
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: find variables
+    post:
+      tags:
+      - Variable
+      summary: Create a Variable
+      description: Creates a new variable. Duplicate variable names are not allowed.
+      operationId: addVariable
+      requestBody:
+        description: The variable object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewVariable'
+      responses:
+        '201':
+          description: Variable created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/variables
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: add variable
+  /streaming/v2/variables/{id}:
+    x-zuplo-path:
+      pathMode: open-api
+    get:
+      tags:
+      - Variable
+      summary: Get Variable by ID
+      description: Retrieves the details of a variable using its ID.
+      operationId: findVariableById
+      parameters:
+      - name: id
+        in: path
+        description: The ID of the variable to retrieve
+        required: true
+        schema:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+      responses:
+        '200':
+          description: Variable details returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/variables/${params.id}
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: find variable by id
+    delete:
+      tags:
+      - Variable
+      summary: Delete a Variable
+      description: Deletes a variable using the specified ID.
+      operationId: deleteVariable
+      parameters:
+      - name: id
+        in: path
+        description: ID of the variable to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+      responses:
+        '204':
+          description: Variable deleted
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/variables/${params.id}
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: delete variable
+    put:
+      tags:
+      - Variable
+      summary: Update a Variable
+      description: Updates an existing variable using the specified ID. All fields will be replaced with the new values provided in the request body.
+      operationId: updateVariable
+      parameters:
+      - name: id
+        in: path
+        description: ID of the variable to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewVariable'
+      responses:
+        '200':
+          description: Variable updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/variables/${params.id}
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: update variable
+components:
+  schemas:
+    Variable:
+      type: object
+      required:
+      - id
+      - name
+      - type
+      properties:
+        id:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+        name:
+          type: string
+        description:
+          type: string
+          default: ''
+        type:
+          type: string
+          enum:
+          - number
+          - bool
+          - string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      x-go-type: ApiError
+      x-go-name: ApiError
+      required:
+      - message
+      - type
+      - code
+      - status
+      - timestamp
+      properties:
+        type:
+          type: string
+          description: HTTP error type
+          example: bad-request
+        code:
+          type: integer
+          description: Numeric error code
+          example: 16384
+        status:
+          type: integer
+          description: HTTP status of the error
+          example: 500
+        message:
+          type: string
+          description: Long error description
+          example: Oops theres been an internal error handling
+        timestamp:
+          type: string
+          description: Long error description
+          example: Oops theres been an internal error handling
+    NewVariable:
+      type: object
+      required:
+      - name
+      - type
+      properties:
+        name:
+          type: string
+          description: The unique name of the variable.
+        description:
+          type: string
+          default: ''
+          description: Optional description of the variable.
+        type:
+          type: string
+          enum:
+          - number
+          - bool
+          - string
+          description: The data type of the variable.
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/add-rule.md
+  - https://docs.blockdaemon.com/reference/add-target.md
+  - https://docs.blockdaemon.com/reference/add-variable-value.md
+  - https://docs.blockdaemon.com/reference/add-variable.md
+  - https://docs.blockdaemon.com/reference/delete-rule.md
+  - https://docs.blockdaemon.com/reference/delete-target.md
+  - https://docs.blockdaemon.com/reference/delete-variable-value-by-id.md
+  - https://docs.blockdaemon.com/reference/delete-variable-value-by-value.md
+  - https://docs.blockdaemon.com/reference/delete-variable.md
+  - https://docs.blockdaemon.com/reference/find-rule-by-id.md
+  - https://docs.blockdaemon.com/reference/find-rules.md
+  - https://docs.blockdaemon.com/reference/find-target-by-id.md
+  - https://docs.blockdaemon.com/reference/find-targets.md
+  - https://docs.blockdaemon.com/reference/find-variable-by-id.md
+  - https://docs.blockdaemon.com/reference/find-variable-values.md
+  - https://docs.blockdaemon.com/reference/find-variables.md
+  - https://docs.blockdaemon.com/reference/get-event-protocol-overview.md
+  - https://docs.blockdaemon.com/reference/get-organization-audit-logs.md
+  - https://docs.blockdaemon.com/reference/get-target-logs-by-id.md
+  - https://docs.blockdaemon.com/reference/patch-target.md
+  - https://docs.blockdaemon.com/reference/update-rule.md
+  - https://docs.blockdaemon.com/reference/update-target.md
+  - https://docs.blockdaemon.com/reference/update-variable.md
+  - https://docs.blockdaemon.com/reference/validate-message-send.md
+  - https://docs.blockdaemon.com/reference/validate-verification.md
+  merge:
+    pages: 25
+    deduped: 140
+    conflicts_kept_first: 0

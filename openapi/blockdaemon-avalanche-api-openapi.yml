@@ -1,0 +1,350 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Staking Avalanche API
+  description: 'The Blockdaemon Staking API simplifies and streamlines institutional cryptocurrency staking. The API allows developers to interact with blockchain networks and perform various staking-related operations, such as delegating and undelegating tokens, in a single, unified interface.
+
+
+    With the Staking API, you can quickly and easily build and deploy applications that automate staking activities and increase efficiency in your blockchain operations.'
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://assets-global.website-files.com/633c5e06513fa35f3391a5f9/645d33beb6fa65f6cfb95eb8_BD%20Logo%20Stack%20-%20Purple.svg
+    backgroundColor: '#fafafa'
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/boss
+security:
+- ApiKeyAuth: []
+tags:
+- name: Avalanche
+  description: Avalanche endpoints
+paths:
+  /v1/avalanche/{network}/stake-intents:
+    parameters:
+    - $ref: '#/components/parameters/AvaxNetwork'
+    - $ref: '#/components/parameters/IdempotencyKey'
+    post:
+      summary: Post Stake Intent
+      operationId: postAvaxStakeIntent
+      tags:
+      - Avalanche
+      description: Returns an unsigned transaction that can be used to delegate your tokens to a Blockdaemon validator.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStakeIntentAvalanche'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AvalancheStakeIntentResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+components:
+  schemas:
+    AvalancheValidatorAddress:
+      type: string
+      description: Avalanche validator node address
+      pattern: ^NodeID-[A-Za-z0-9]{43}$
+      example: NodeID-B19uSxUKerjjnA215czAJLHMqNJMbsAMWuSxUKerjjW
+    NewStakeIntentAvalanche:
+      type: object
+      description: Request object to create a new Stake Intent for Avalanche
+      required:
+      - delegator_address
+      - amount
+      properties:
+        validator_address:
+          $ref: '#/components/schemas/AvalancheValidatorAddress'
+          description: Avalanche validator address
+        delegator_address:
+          $ref: '#/components/schemas/AvalancheAddress'
+          description: Avalanche delegator address
+        start_time:
+          $ref: '#/components/schemas/AvalancheStakingTimestamp'
+          description: Avalanche staking start time
+        end_time:
+          $ref: '#/components/schemas/AvalancheStakingTimestamp'
+          description: Avalanche staking end time
+        amount:
+          $ref: '#/components/schemas/AvalancheNano'
+          description: Amount of nano-Avalanche to stake. 1 Avalanche = 1e9 nano-Avalanche.
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    AvalancheProtocol:
+      type: string
+      description: Avalanche protocol
+      enum:
+      - avalanche
+    Error:
+      type: object
+      description: Error response envelope
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+          example: 500
+        message:
+          type: string
+          description: Error Message
+          example: A descriptive error message
+    PlanId:
+      type: string
+      description: This feature enables you to stake to validators from the specified plan(s). When no plan id is specified, validators across all plans that match the API route will be available for staking. If it is a shared plan, you can to stake to validators on a shared node from the specified plan.
+      example: plan_Wgx98Rbi8nQuL9ddn3mTk1
+    StakeIntentAvalanche:
+      type: object
+      description: Avalanche Stake Intent
+      required:
+      - validator_address
+      - unsigned_transaction
+      - amount
+      - delegator_address
+      - start_time
+      - end_time
+      properties:
+        validator_address:
+          $ref: '#/components/schemas/AvalancheValidatorAddress'
+        unsigned_transaction:
+          $ref: '#/components/schemas/UnsignedTransaction'
+          example: 120000007465737477616c6c65742e746573746e65740025150c44ecddfe779c2ca624cae002ef5bf6efbb9167fe3920d6595163574dc585ca49a33e2f0000170000006e6f64656173792e706f6f6c2e663836333937332e6d308e9076d7ec46d5c1d876bb5461c4a31469d50825695a1a23ee873ed532cadb2f0100000002110000006465706f7369745f616e645f7374616b65020000007b7d00c06e31d9100100000000e4d20cc8dcd2b7520000000000
+        amount:
+          $ref: '#/components/schemas/AvalancheNano'
+        delegator_address:
+          $ref: '#/components/schemas/AvalancheAddress'
+        start_time:
+          $ref: '#/components/schemas/AvalancheStakingTimestamp'
+          description: Avalanche staking start time
+        end_time:
+          $ref: '#/components/schemas/AvalancheStakingTimestamp'
+          description: Avalanche staking end time
+    AvalancheNano:
+      type: string
+      description: Denomination of Avalanche.
+      pattern: ^[1-9]\d+$
+      example: '10000000000'
+    StakeIntentId:
+      type: string
+      format: base58
+      description: Unique idenifier for a group of stakes.
+      example: stake_intent_Wgx98Rbi8nQuL9ddn3mTk1
+    AvalancheStakeIntentResponse:
+      allOf:
+      - $ref: '#/components/schemas/CommonStakeIntentResponse'
+      - type: object
+        required:
+        - protocol
+        - network
+        properties:
+          protocol:
+            $ref: '#/components/schemas/AvalancheProtocol'
+          network:
+            $ref: '#/components/schemas/AvalancheNetwork'
+          avalanche:
+            $ref: '#/components/schemas/StakeIntentAvalanche'
+    CustomerId:
+      type: string
+      description: Unique identifier for a customer
+      example: SatoshiNakamoto-xUYJbPw9hw
+      minimum: 1
+    AvalancheStakingTimestamp:
+      type: integer
+      description: Avalanche staking start time
+      format: int64
+      example: 1689939023
+    UnsignedTransaction:
+      type: string
+      format: base64
+      description: Generated unsigned transaction smart contract call data.
+      example: '0x22895118000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000120087fed394b43849eebef1e88873cd9efdbe33136656e5148e659b8b2f33625d40000000000000000000000000000000000000000000000000000000000000030b81748644e23c4d950f9dd709f3eb73d5eacd9657997e1d9dde7c4ebd8a6519ecb9d0a7fb603d3b68e023278f9650122000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020010000000000000000000000c509bb854c526af4cee5e037089f7aa8e091d8870000000000000000000000000000000000000000000000000000000000000060b36b79b4b206c0310472c117fa40c05342b5dc3e89f98f42c9da3ce6450d4c603cad55248017fd4eca3ab277cca64569193e4d487f5b2ea78a2bcdc81926c313c05842a3af318967a775783bba22519e8b8886587efa99aa7dab5784f792b187
+
+        '
+    CommonStakeIntentResponse:
+      type: object
+      required:
+      - stake_intent_id
+      - customer_id
+      properties:
+        stake_intent_id:
+          $ref: '#/components/schemas/StakeIntentId'
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    AvalancheAddress:
+      type: string
+      description: Avalanche platform chain address
+      pattern: ^([P]|[a-km-zA-HJ-NP-Z1-9]{36,72})-[a-zA-Z]{1,83}1[qpzry9x8gf2tvdw0s3jn54khce6mua7l]{38}$
+      example: P-fuji1g2g0jxcfn5sp59ld7g0t0tp4jrqppvqcfqc7hy
+    UnauthorizedError:
+      type: object
+      description: Error response envelope
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+          example: 401
+        message:
+          type: string
+          description: Error Message
+          example: A human-readable diagnostic message detailing any authorization failure
+    AvalancheNetwork:
+      type: string
+      description: Avalanche network
+      enum:
+      - mainnet
+      - fuji
+      - local
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      description: the unique idempotency key for this request
+      example: f1c971b4-7114-4c4b-8ad2-a6f9e33e2cd0
+      schema:
+        type: string
+        format: uuid
+      required: false
+    AvaxNetwork:
+      name: network
+      in: path
+      description: Avalanche network
+      required: true
+      schema:
+        $ref: '#/components/schemas/AvalancheNetwork'
+  responses:
+    InvalidRequest:
+      description: Invalid request.
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response envelope
+            required:
+            - code
+            - message
+            properties:
+              code:
+                type: integer
+                format: int32
+                description: Error code
+                example: 400
+              message:
+                type: string
+                description: Error Message
+                example: Detailed human-readable diagnostic message regarding any invalid request parameters
+    InternalServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Header 'X-API-Key' missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'When signing up for a staking account, you are provided with an API key.
+
+
+        To authenticate a Staking API request, pass your API key in the `X-API-Key` header.'
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/activeexitingqueueprogress.md
+  - https://docs.blockdaemon.com/reference/cancelneardeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelpolygondeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelsolanadeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelsolanawithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/exitethereumvalidator.md
+  - https://docs.blockdaemon.com/reference/exitethereumvalidators.md
+  - https://docs.blockdaemon.com/reference/generateethereumlaunchpaddeposit.md
+  - https://docs.blockdaemon.com/reference/generatesignedvoluntaryexit.md
+  - https://docs.blockdaemon.com/reference/getbinancedeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getbinancedeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getbinancerestakeintents.md
+  - https://docs.blockdaemon.com/reference/getcardanodeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getcardanorewardswithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getcosmosdeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getcosmosdeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getcosmosrestakeintents.md
+  - https://docs.blockdaemon.com/reference/getcosmoswithdrawablerewardsamount.md
+  - https://docs.blockdaemon.com/reference/getethwithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getneardeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getneardeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getnearwithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getnearwithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getpolygondeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getsolanadeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getsolanadeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getsolanawithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getsolanawithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getstakeaccountssolana.md
+  - https://docs.blockdaemon.com/reference/listcustomerplans.md
+  - https://docs.blockdaemon.com/reference/listethereumexits.md
+  - https://docs.blockdaemon.com/reference/liststakeintents.md
+  - https://docs.blockdaemon.com/reference/pendingqueuedprogress.md
+  - https://docs.blockdaemon.com/reference/postavaxstakeintent.md
+  - https://docs.blockdaemon.com/reference/postbinancedeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postbinancerestakeintent.md
+  - https://docs.blockdaemon.com/reference/postbinancestakeintent.md
+  - https://docs.blockdaemon.com/reference/postcardanodeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postcardanorewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postcardanostakeintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosdeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosrestakeintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosrewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosstakeintent.md
+  - https://docs.blockdaemon.com/reference/postethereumcompoundingintent.md
+  - https://docs.blockdaemon.com/reference/postethereumstakeintent.md
+  - https://docs.blockdaemon.com/reference/postethereumtopupintent.md
+  - https://docs.blockdaemon.com/reference/postethereumwithdrawalintentexit.md
+  - https://docs.blockdaemon.com/reference/postethereumwithdrawalintentpartial.md
+  - https://docs.blockdaemon.com/reference/postneardeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postnearstakeintent.md
+  - https://docs.blockdaemon.com/reference/postnearwithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonbootstrappingintent.md
+  - https://docs.blockdaemon.com/reference/postpolygondeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonrewardsrestakeintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonrewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonstakeintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonwithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postsolanadeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postsolanastakeintent.md
+  - https://docs.blockdaemon.com/reference/postsolanawithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/submittransaction.md
+  merge:
+    pages: 62
+    deduped: 1027
+    conflicts_kept_first: 0

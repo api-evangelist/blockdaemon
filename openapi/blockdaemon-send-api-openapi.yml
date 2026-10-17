@@ -1,0 +1,202 @@
+openapi: 3.2.0
+info:
+  title: Transaction Send API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Send
+paths:
+  /{blockchain_id}/send:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Submit a Signed Transaction
+      description: 'Submit a signed transaction to the network.
+
+
+        **Note**: A successful transaction may still be rejected on chain or not processed due to a too low fee.'
+      operationId: TxSend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxSigned'
+      responses:
+        '200':
+          description: A submitted Transaction ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxSendResponse'
+              example:
+                id: 9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+      tags:
+      - Send
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    ApiTxSendResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID.
+          example: '0x9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c'
+      required:
+      - id
+    ApiTxSigned:
+      type: object
+      properties:
+        tx:
+          type: string
+          description: The signed TX.
+          example: 0100000001ca19af5fb94ced7e62b623d0039a398a42e60050405a1341efe475894629c131010000008b483045022100d77b002b3142013b3f825a730f5bc3ead2014266f07ba4449269af0cf6f086310220365bca1d616ba86fac42ad69efd5f92c5ed6cf16f27ebf5ab55010efc72c219d014104417eb0abe69db2eca63c84eb44266c29c24973dc81cde16ca86c9d923630cb5f797bae7d7fab13498e06146111356eb271da74add05ebda8f72ff2b2878fddb7ffffffff0410270000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac204e0000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac30750000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac48710000000000001976a914d6fa8814924b480fa7ff903b5ef61100ab4d92fe88ac00000000
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  responses:
+    ErrorTooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ErrorNotImplemented:
+      description: The request endpoint is not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-implemented
+            title: Not implemented
+            status: 501
+    ErrorUnauthorized:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ErrorInternal:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ErrorServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

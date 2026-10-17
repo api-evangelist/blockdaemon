@@ -1,0 +1,95 @@
+openapi: 3.2.0
+info:
+  title: Transaction API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Transaction API
+paths:
+  /{blockchain_id}:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    get:
+      summary: Get the Supported Protocol Info
+      description: Returns the transaction endpoints supported for the given chain.
+      operationId: GetOverview
+      responses:
+        '200':
+          description: A list of endpoints
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OverviewResponse'
+      tags:
+      - Transaction API
+components:
+  schemas:
+    OverviewResponse:
+      type: object
+      properties:
+        endpoints:
+          type: array
+          items:
+            type: string
+      required:
+      - endpoints
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

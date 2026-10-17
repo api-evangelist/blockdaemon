@@ -1,0 +1,369 @@
+openapi: 3.2.0
+info:
+  version: 3.0.0
+  title: Blockdaemon REST Protocol and Endpoint Support API
+  description: 'Blockdaemon REST API provides a RESTful and uniform way to access blockchain resources,
+
+    with a rich and reusable model across multiple protocols/cryptocurrencies.'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/universal/{version}
+  description: Production server
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+- url: https://ubiquity.api.blockdaemon.com/{version}
+  description: '[Legacy Auth] Production server'
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Protocol and Endpoint Support
+paths:
+  /:
+    get:
+      summary: Get the Protocols Overview
+      operationId: GetProtocolsList
+      tags:
+      - Protocol and Endpoint Support
+      description: Returns a full list of all supported protocols and networks.
+      responses:
+        '200':
+          description: Protocols overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/protocols_overview'
+              example:
+                protocols:
+                - handle: algorand
+                  network: mainnet
+                - handle: avalanche
+                  network: mainnet-c
+                - handle: avalanche
+                  network: testnet-c
+                - handle: bitcoin
+                  network: mainnet
+                - handle: bitcoin
+                  network: testnet
+                - handle: bitcoincash
+                  network: mainnet
+                - handle: bitcoincash
+                  network: testnet
+                - handle: dogecoin
+                  network: mainnet
+                - handle: dogecoin
+                  network: testnet
+                - handle: ethereum
+                  network: holesky
+                - handle: ethereum
+                  network: hoodi
+                - handle: ethereum
+                  network: sepolia
+                - handle: ethereum
+                  network: mainnet
+                - handle: litecoin
+                  network: mainnet
+                - handle: litecoin
+                  network: testnet
+                - handle: near
+                  network: mainnet
+                - handle: optimism
+                  network: mainnet
+                - handle: polkadot
+                  network: mainnet
+                - handle: polkadot
+                  network: westend
+                - handle: polygon
+                  network: mainnet
+                - handle: polygon
+                  network: amoy
+                - handle: solana
+                  network: mainnet
+                - handle: solana
+                  network: testnet
+                - handle: stellar
+                  network: mainnet
+                - handle: stellar
+                  network: testnet
+                - handle: tezos
+                  network: mainnet
+                - handle: xrp
+                  network: mainnet
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /{protocol}/{network}:
+    get:
+      summary: Get the Protocol Info
+      operationId: GetProtocolEndpoints
+      tags:
+      - Protocol and Endpoint Support
+      description: Provides information about supported endpoints and generic protocol information.
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      responses:
+        '200':
+          description: Protocol overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/protocol_detail'
+              example:
+                handle: bitcoincash
+                network: mainnet
+                genesis_number: 0
+                endpoints:
+                - /account/:address
+                - /account/:address/txs
+                - /account/:address/utxo
+                - /accounts/
+                - /block/:id
+                - /block/:number
+                - /block_identifier/:id
+                - /block_identifier/:number
+                - /block_identifiers
+                - /sync/block_id
+                - /sync/block_number
+                - /tx/:id
+                - /tx/:id/:index
+                - /tx/:id/confirmations
+                - /tx/estimate_fee
+                - /tx/send
+                - /txs
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+components:
+  parameters:
+    protocol:
+      in: path
+      name: protocol
+      required: true
+      description: "Protocol handle, one of: \n`algorand`, `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `ethereum`, `litecoin`, `near`, `optimism`, `polkadot`, `polygon`, `solana`, `stellar`, `tezos`, `xrp`.\n"
+      schema:
+        type: string
+        default: bitcoin
+      examples:
+        Bitcoin:
+          value: bitcoin
+    network:
+      name: network
+      in: path
+      required: true
+      description: Which network to target. Available networks can be found in the list of supported protocols or with /{protocol}.
+      schema:
+        type: string
+        default: mainnet
+      examples:
+        Mainnet:
+          value: mainnet
+        Mainnet-C:
+          value: mainnet-c
+        Testnet:
+          value: testnet
+        Testnet4:
+          value: testnet4
+          description: Bitcoin testnet network
+        Testnet-C:
+          value: testnet-c
+        Holesky:
+          value: holesky
+          description: Ethereum testnet network
+        Hoodi:
+          value: hoodi
+          description: Ethereum testnet network
+        Sepolia:
+          value: sepolia
+          description: Ethereum testnet network
+        Westend:
+          value: westend
+          description: Polkadot testnet network
+        Amoy:
+          value: amoy
+          description: Polygon testnet network
+  schemas:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    protocol_detail:
+      type: object
+      properties:
+        handle:
+          type: string
+          description: The protocol handle.
+          example: bitcoin
+        network:
+          description: The specified network type.
+          example: mainnet
+        genesis_number:
+          type: integer
+          description: The genesis number.
+          format: int64
+        endpoints:
+          type: array
+          description: The supported endpoints.
+          items:
+            type: string
+    protocols_overview:
+      type: object
+      properties:
+        protocols:
+          type: array
+          description: List of items each describing a pair of supported protocol and network.
+          items:
+            type: object
+            properties:
+              handle:
+                type: string
+                description: The protocol name.
+                example: bitcoin
+              network:
+                type: string
+                description: The network type, i.e., mainnet, testnet, etc.
+                example: mainnet
+  responses:
+    ServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    UnauthorizedError:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-found
+            title: Not Found
+            status: 404
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ServerError:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getaccountnonce.md
+  - https://docs.blockdaemon.com/reference/getblockbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifierbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifiers.md
+  - https://docs.blockdaemon.com/reference/getcurrentblockhash.md
+  - https://docs.blockdaemon.com/reference/getcurrentblocknumber.md
+  - https://docs.blockdaemon.com/reference/getfeeestimate.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddress.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddresses.md
+  - https://docs.blockdaemon.com/reference/getprotocolendpoints.md
+  - https://docs.blockdaemon.com/reference/getprotocolslist.md
+  - https://docs.blockdaemon.com/reference/getreportbyaddress.md
+  - https://docs.blockdaemon.com/reference/gettxbyhash.md
+  - https://docs.blockdaemon.com/reference/gettxconfirmations.md
+  - https://docs.blockdaemon.com/reference/gettxoutputbyhashandindex.md
+  - https://docs.blockdaemon.com/reference/gettxs.md
+  - https://docs.blockdaemon.com/reference/gettxsbyaddress.md
+  - https://docs.blockdaemon.com/reference/getutxobyaccount.md
+  merge:
+    pages: 18
+    deduped: 196
+    conflicts_kept_first: 0

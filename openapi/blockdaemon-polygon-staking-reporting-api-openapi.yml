@@ -1,0 +1,680 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Polygon Staking Reporting API
+  description: '### Protocols
+
+    The following protocols are currently supported:
+
+    * Cardano
+
+    * Cosmos
+
+    * Ethereum
+
+    * NEAR
+
+    * Polkadot
+
+    * Polygon
+
+    * Solana'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: logo.png
+servers:
+- url: https://svc.blockdaemon.com/reporting/staking
+  description: Production server
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Polygon Staking Reporting
+paths:
+  /v2/polygon/{network}/health:
+    get:
+      summary: Get the Protocol Rewards Processing Health
+      description: 'Reward processing is optimal if all rewards up to the `lastProcessedCheckpoint - 1` are available, as rewards are calculated after an epoch ends.
+
+        The processing status is degraded if the following is `true`:
+
+
+        chainCheckpoint - lastProcessedCheckpoint > 1'
+      tags:
+      - Polygon Staking Reporting
+      operationId: getHealth
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+  /v2/polygon/{network}/{type}/rewards:
+    post:
+      summary: Get a Stream of Rewards
+      description: Returns 0 or more reward objects in a streaming fashion using `ndjson`.
+      tags:
+      - Polygon Staking Reporting
+      operationId: getRewards
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/PolygonV2Type'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/PolygonV2RewardsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+  /v2/polygon/{network}/{type}/rewards/{address}:
+    get:
+      summary: Get a Stream of Rewards for a Single Address
+      description: Returns 0 or more reward objects in a streaming fashion using `ndjson`.
+      tags:
+      - Polygon Staking Reporting
+      operationId: getRewardsSingle
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/PolygonV2Type'
+      - in: path
+        name: address
+        required: true
+        description: The address to look up rewards for.
+        example: '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+        schema:
+          type: string
+          default: '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+      - in: query
+        name: startTime
+        required: false
+        description: Epoch-based start time for reward queries. You can not specify both an epoch and start/end times.
+        example: 1706659200
+        schema:
+          type: number
+          default: 1706659200
+      - in: query
+        name: endTime
+        required: false
+        description: Epoch-based end time for reward queries. You can not specify both an epoch and start/end times.
+        example: 1712059200
+        schema:
+          type: number
+          default: 1712059200
+      - in: query
+        name: epoch
+        required: false
+        description: The epoch to look up rewards for, you can not specify both an epoch and start/end times
+        example: 80000
+        schema:
+          type: number
+          default: 80000
+      - in: query
+        name: period
+        required: true
+        description: The type of aggregation to apply.
+        example: monthly
+        schema:
+          $ref: '#/components/schemas/TimePeriod1'
+      - in: query
+        name: denomination
+        required: false
+        description: The denomination to return the rewards in.
+        schema:
+          $ref: '#/components/schemas/Denomination'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/PolygonV2RewardsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+  /v2/polygon/{network}/{type}/status:
+    post:
+      summary: Get a Stream of Statuses
+      description: Returns 0 or more status objects in a streaming fashion using `ndjson`.
+      tags:
+      - Polygon Staking Reporting
+      operationId: getStatuses
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/PolygonV2Type'
+      - in: query
+        name: validatorId
+        required: false
+        schema:
+          type: string
+        description: The validator id to check against when looking up a delegator status - required only for delegator types.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              example:
+              - '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+              - '0x6ae6c540c7b110d5c01cb9bc23297a013f9f4982'
+              default:
+              - '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+              - '0x6ae6c540c7b110d5c01cb9bc23297a013f9f4982'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/PolygonV2StatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+  /v2/polygon/{network}/{type}/status/{address}:
+    get:
+      summary: Get Status for an Address
+      description: Returns a status object for an address.
+      tags:
+      - Polygon Staking Reporting
+      operationId: getStatus
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/PolygonV2Type'
+      - in: path
+        name: address
+        required: true
+        description: The address to look up rewards for.
+        example: '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+        schema:
+          type: string
+          default: '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+      - in: query
+        name: validatorId
+        schema:
+          type: string
+        required: false
+        description: The validator id to check against when looking up a delegator status - required only for delegator types.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2StatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PolygonV2ErrorResponse'
+components:
+  schemas:
+    PolygonValidatorStatusMetadata:
+      title: Validator Status Metadata
+      properties:
+        validatorId:
+          description: Unique identifier for the validator.
+          type: string
+          example: 87
+        validatorContract:
+          description: Address of the validator's contract.
+          type: string
+          format: string
+          example: 1.05709370126874e+48
+        type:
+          description: Indicates the type of the entity is a validator.
+          type: string
+          example: validator
+        owner:
+          description: Address of the owner associated with this validator.
+          type: string
+          example: 6.102993762668248e+47
+    HealthMetadata:
+      properties:
+        chainCheckpoint:
+          description: The current active checkpoint on the chain.
+          type: string
+          format: number
+          example: '2'
+        lastProcessedCheckpoint:
+          description: The last processed checkpoint, when running smoothly this should be chainCheckpoint - 1.
+          type: string
+          format: number
+          example: '1'
+    PolygonV2ErrorResponse:
+      properties:
+        timestamp:
+          description: The timestamp of the error in ISO-8601 format.
+          type: string
+        path:
+          description: The path called when the error occurred.
+          type: string
+          example: /v2/polygon/mainnet/delegator
+        status:
+          description: The http status code
+          type: number
+          example: 400
+        error:
+          description: A useful description of the error that occurred.
+          type: string
+          example: '[endTime should be in unix epoch seconds]'
+    PolygonV2Type:
+      description: The type of request.
+      type: string
+      enum:
+      - validator
+      - delegator
+    PolygonV2StatusResponse:
+      properties:
+        address:
+          description: The address the status is for.
+          type: string
+          example: 15MdAHnkxt9TMC2Rj595hsg8Hnv693pPBB
+        status:
+          description: The status.
+          type: string
+          enum:
+          - UNKNOWN
+          - ACTIVE
+          - INACTIVE
+          - LOCKED
+        timestamp:
+          description: The epoch second timestamp that the status was recorded at.
+          type: number
+          example: 1708612182
+        metadata:
+          oneOf:
+          - $ref: '#/components/schemas/PolygonValidatorStatusMetadata'
+          - $ref: '#/components/schemas/PolygonDelegatorStatusMetadata'
+    HealthResponse:
+      description: The health response object.
+      type: object
+      properties:
+        status:
+          description: The rewards processing status.
+          type: string
+          default: OPTIMAL
+          enum:
+          - UNKNOWN
+          - OPTIMAL
+          - DEGRADED
+        timestamp:
+          description: The timestamp when the status was last updated in epoch seconds.
+          type: number
+          example: 1704067200
+        metadata:
+          $ref: '#/components/schemas/HealthMetadata'
+    Denomination:
+      description: The denomination to return rewards in.
+      type: string
+      default: wei
+      enum:
+      - wei
+      - kwei
+      - mwei
+      - gwei
+      - szabo
+      - finney
+      - pol
+      - kpol
+      - mpol
+      - gpol
+      - tpol
+    RewardRequest:
+      required:
+      - addresses
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1706659200
+          default: 1706659200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1712059200
+          default: 1712059200
+        epoch:
+          description: The epoch to look up rewards for.
+          type: number
+          example: 80000
+          default: 80000
+        addresses:
+          description: List of addresses to retrieve rewards for.
+          type: array
+          items:
+            type: string
+          example:
+          - '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+          - '0x6ae6c540c7b110d5c01cb9bc23297a013f9f4982'
+          default:
+          - '0xAB30eF276ADC2bE22CE58d75B4F4009173A73676'
+          - '0x6ae6c540c7b110d5c01cb9bc23297a013f9f4982'
+        period:
+          $ref: '#/components/schemas/TimePeriod1'
+        denomination:
+          $ref: '#/components/schemas/Denomination'
+        aggregate:
+          description: Whether to aggregate across provided addresses or per address - true to aggregate across all addresses.
+          type: boolean
+          default: false
+    PolygonDelegatorStatusMetadata:
+      title: Delegator Status Metadata
+      properties:
+        validatorId:
+          description: Unique identifier for the validator.
+          type: string
+          example: 87
+        validatorContract:
+          description: Address of the validator's contract.
+          type: string
+          format: string
+          example: 1.05709370126874e+48
+        type:
+          description: Indicates the type of the entity is a delegator.
+          type: string
+          example: delegator
+    PolygonV2RewardsResponse:
+      description: The reward response object.
+      type: object
+      properties:
+        address:
+          description: The address the reward is for.
+          type: string
+          example: 15MdAHnkxt9TMC2Rj595hsg8Hnv693pPBB
+        denomination:
+          description: The denomination the reward is in.
+          type: string
+          example: wei
+        return:
+          description: The staking return of the address for the period.
+          type: string
+          example: '283291849202'
+          format: number
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1704067200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1706745600
+        period:
+          $ref: '#/components/schemas/TimePeriod1'
+        startBalance:
+          description: The balance or stake at the start of the period.
+          type: string
+          example: '124222'
+          format: number
+        metadata:
+          oneOf:
+          - $ref: '#/components/schemas/PolygonValidatorRewardsMetadata'
+          - $ref: '#/components/schemas/PolygonDelegatorRewardsMetadata'
+    TimePeriod1:
+      description: How the data is aggregated, raw and epoch is checkpoint level data
+      type: string
+      default: monthly
+      enum:
+      - yearly
+      - monthly
+      - raw
+      - daily
+      - weekly
+      - epoch
+    PolygonValidatorRewardsMetadata:
+      title: Validator Rewards Metadata
+      properties:
+        blockNumber:
+          description: The range of block numbers covered in the period.
+          type: string
+          format: hex
+          example: 0x1-0x2
+        epoch:
+          description: The range of epoch numbers covered in the period.
+          type: string
+          format: number
+          example: 1-2
+        restakeTotal:
+          description: The total amount restaked during the period.
+          type: string
+          format: number
+          example: '123243'
+        validatorContract:
+          description: The contract address of the validator.
+          type: string
+          format: hex
+          example: 0x1-0x2
+        validatorId:
+          description: The unique identifier of the validator.
+          type: string
+          format: number
+          example: '143'
+        withdrawal:
+          description: The total amount withdrawn during the period.
+          type: string
+          format: number
+          example: '123243'
+    PolygonDelegatorRewardsMetadata:
+      title: Delegator Rewards Metadata
+      properties:
+        blockNumber:
+          description: The range of block numbers covered in the period.
+          type: string
+          format: hex
+          example: 0x1-0x2
+        epoch:
+          description: The range of epoch numbers covered in the period.
+          type: string
+          format: number
+          example: 1-2
+        restakeTotal:
+          description: The total amount restaked during the period.
+          type: string
+          format: number
+          example: '123243'
+        validatorContract:
+          description: The contract address of the validator.
+          type: string
+          format: hex
+          example: 0x1-0x2
+        validatorId:
+          description: The unique identifier of the validator.
+          type: string
+          format: number
+          example: '143'
+        withdrawal:
+          description: The total amount withdrawn during the period.
+          type: string
+          format: number
+          example: '123243'
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get_v2-ethereum-network-pubkeys.md
+  - https://docs.blockdaemon.com/reference/getdeposits.md
+  - https://docs.blockdaemon.com/reference/gethealth-cosmos.md
+  - https://docs.blockdaemon.com/reference/gethealth-ethereum.md
+  - https://docs.blockdaemon.com/reference/gethealth-polygon.md
+  - https://docs.blockdaemon.com/reference/gethealth-solana.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidator1.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getrewards-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewards-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewards-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewards-solana.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-solana.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getstatsethereum.md
+  - https://docs.blockdaemon.com/reference/getstatssolana.md
+  - https://docs.blockdaemon.com/reference/getstatus-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatus-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatus-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatus-solana.md
+  - https://docs.blockdaemon.com/reference/getstatuses-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatuses-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatuses-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatuses-solana.md
+  - https://docs.blockdaemon.com/reference/getstatusnominator.md
+  - https://docs.blockdaemon.com/reference/getstatusnominators.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidators1.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-solana.md
+  - https://docs.blockdaemon.com/reference/getyields-cosmos.md
+  - https://docs.blockdaemon.com/reference/getyields-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyields-solana.md
+  - https://docs.blockdaemon.com/reference/putstatsethereum.md
+  - https://docs.blockdaemon.com/reference/putstatssolana.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominator.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominators.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidator2.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidators2.md
+  merge:
+    pages: 55
+    deduped: 377
+    conflicts_kept_first: 0

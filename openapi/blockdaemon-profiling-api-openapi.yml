@@ -1,0 +1,153 @@
+openapi: 3.2.0
+info:
+  title: Sepior Threshold Security Module (TSM) Management Profiling…
+  description: 'Management API for the Threshold Security Module (TSM).
+
+
+    This API provides endpoints for monitoring and managing TSM nodes, including
+
+    health checks, metrics, API key management, and authentication configuration.'
+  version: 1.0.0
+  contact:
+    name: Blockdaemon/Sepior Support
+    url: https://blockdaemon.com/
+  license:
+    name: Proprietary
+servers:
+- url: '{server}'
+  description: TSM Management API Server
+  variables:
+    server:
+      default: https://localhost:8080
+      description: Server URL
+security:
+- APIKeyAuth: []
+tags:
+- name: Profiling
+  description: Application profiling operations
+paths:
+  /management/profiling/debug/fgprof:
+    get:
+      summary: Get fgprof profile
+      description: Returns fgprof profiling data
+      operationId: getFGProf
+      tags:
+      - Profiling
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /management/profiling/debug/pprof:
+    get:
+      summary: Get pprof index
+      description: Returns pprof index page
+      operationId: getPProfIndex
+      tags:
+      - Profiling
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/html:
+              schema:
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /management/profiling/debug/pprof/{profile}:
+    get:
+      summary: Get specific pprof profile
+      description: Returns a specific pprof profile
+      operationId: getPProfProfile
+      tags:
+      - Profiling
+      parameters:
+      - name: profile
+        in: path
+        description: Name of the profile to retrieve
+        required: true
+        schema:
+          type: string
+          enum:
+          - allocs
+          - block
+          - cmdline
+          - goroutine
+          - heap
+          - mutex
+          - profile
+          - threadcreate
+          - trace
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        details:
+          type: object
+          description: Additional error details
+      required:
+      - code
+      - message
+  securitySchemes:
+    APIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/createapikey.md
+  - https://docs.blockdaemon.com/reference/deleteapikey.md
+  - https://docs.blockdaemon.com/reference/getauditsigningpublickey.md
+  - https://docs.blockdaemon.com/reference/getauthenticationinfo.md
+  - https://docs.blockdaemon.com/reference/getfgprof.md
+  - https://docs.blockdaemon.com/reference/getmetrics.md
+  - https://docs.blockdaemon.com/reference/getpprofindex.md
+  - https://docs.blockdaemon.com/reference/getpprofprofile.md
+  - https://docs.blockdaemon.com/reference/healthcheck.md
+  - https://docs.blockdaemon.com/reference/listapikeys.md
+  merge:
+    pages: 10
+    deduped: 34
+    conflicts_kept_first: 0

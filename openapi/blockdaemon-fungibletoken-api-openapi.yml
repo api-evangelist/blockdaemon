@@ -1,0 +1,1991 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Fungibletoken API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: fungibletoken
+  description: API endpoints for operations related to fungible tokens
+paths:
+  /defi/v1/fungibletoken/approve:
+    post:
+      tags:
+      - fungibletoken
+      summary: Approve
+      description: 'This endpoint is used to grant permission for a designated spender to withdraw tokens from a user''s ERC-20 token balance. By invoking the standard ERC-20 approve function, it sets an allowance that enables the spender to access up to a specified number of tokens on behalf of the user.
+
+
+        > 💡
+
+        **Compute Unit Value:** `80` (Fixed)'
+      operationId: fungibletokenApprove
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/fungibletoken/approve
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_fungibletoken_approve_Request'
+            example:
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              amount: '1000000000000000000'
+              to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              chainId: '1'
+              chainSymbol: ETH
+              gasPriority: low
+              enableFee: false
+              simulate: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      chainId:
+                        type: string
+                      from:
+                        type: string
+                      to:
+                        type: string
+                      gas:
+                        type: string
+                      value:
+                        type: string
+                      data:
+                        type: string
+                      estimationCheck:
+                        type: boolean
+                      referenceId:
+                        type: string
+                      simulate:
+                        type: object
+                        description: 'Present when the request used `simulate: true`; eth_simulateV1 summary (omitted when simulation was not run).'
+                        properties:
+                          status:
+                            type: string
+                            enum:
+                            - success
+                            - failure
+                          error:
+                            type:
+                            - string
+                            - 'null'
+                            description: Failure reason when status is failure; null when status is success
+                        required:
+                        - status
+                        - error
+                    required:
+                    - chainId
+                    - from
+                    - to
+                    - value
+                    - data
+                    - estimationCheck
+                    - referenceId
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0'
+                    gas: '100000'
+                    data: '0x095ea7b3000000000000000000000000828b154032950c8ff7cf8085d841723db269605600000000000000000000000000000000000000000000003635c9adc5dea00000'
+                    referenceId: ab50faa439b64b66beae1a894e1f0a0a
+      x-bd-cu: '80'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/convertbasetokentowraptoken:
+    post:
+      tags:
+      - fungibletoken
+      summary: Convert Base Token to Wrap Token
+      description: 'Facilitates the conversion of native blockchain tokens into their corresponding wrapped token versions. Wrapped tokens are standardized ERC-20 (or similar) representations of native tokens, enabling them to interact seamlessly with decentralized applications, DeFi protocols, and smart contracts.
+
+
+        > 💡
+
+        **Compute Unit Value:** `140` (Fixed)'
+      operationId: fungibletokenConvertbasetokentowraptoken
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/fungibletoken/convertbasetokentowraptoken
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_fungibletoken_convertbasetokentowraptoken_Request'
+            example:
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              amount: '1000000000000000000'
+              gas: '100000'
+              chainId: '1'
+              chainSymbol: ETH
+              gasPriority: low
+              enableFee: false
+              simulate: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0xa'
+                    gas: '2307200'
+                    data: '0xd0e30db0'
+                    referenceId: 2418a38f53a047a6abb50dd26aa34621
+      x-bd-cu: '140'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/convertwraptokentobasetoken:
+    post:
+      tags:
+      - fungibletoken
+      summary: Convert Wrap Token to Base Token
+      description: 'Enables users to convert wrapped ERC-20 tokens back to their underlying base tokens. For example, it allows for the conversion of wrapped staked Ethereum (wstETH) back to its base version (stETH). This unwrapping process is essential for users who need to access the native properties of a token for activities that require the base token format.
+
+
+        > 💡
+
+        **Compute Unit Value:** `145` (Fixed)'
+      operationId: fungibletokenConvertwraptokentobasetoken
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/fungibletoken/convertwraptokentobasetoken
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_fungibletoken_convertwraptokentobasetoken_Request'
+            example:
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              amount: '1000000000000000000'
+              gas: '100000'
+              chainId: '1'
+              chainSymbol: ETH
+              gasPriority: low
+              enableFee: false
+              simulate: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0'
+                    gas: '2307200'
+                    data: '0x2e1a7d4d0000000000000000000000000000000000000000000000000000000000000005'
+                    referenceId: e911c9db36b54dfe889f10875af33fd4
+      x-bd-cu: '145'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/gettokendetails:
+    get:
+      tags:
+      - fungibletoken
+      summary: Get Token Details
+      description: 'Retrieves fundamental metadata about a specified ERC-20 token. It provides essential token details such as the token’s name, symbol, and decimal precision, which are critical for accurately displaying token information and performing token arithmetic in decentralized applications.
+
+
+        > 💡
+
+        **Compute Unit Value:** `95` (Fixed)'
+      operationId: fungibletokenGettokendetails
+      parameters:
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Comma separated address of token. Maximum 10 tokens allowed.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: Comma separated address of token. Maximum 10 tokens allowed.
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '42161'
+          - '25'
+          - '8453'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        name:
+                          type: string
+                        symbol:
+                          type: string
+                        decimals:
+                          type: string
+                        verifiedContract:
+                          type: boolean
+                        logoUrl:
+                          type: string
+                        tags: {}
+                        possibleSpam: {}
+                        prices:
+                          type: object
+                          properties:
+                            usd:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  '0x82af49447d8a07e3bd95bd0d56f35241523fbab1':
+                                    type: string
+                                required:
+                                - '0x82af49447d8a07e3bd95bd0d56f35241523fbab1'
+                          required:
+                          - usd
+                      required:
+                      - address
+                      - name
+                      - symbol
+                      - decimals
+                      - verifiedContract
+                      - logoUrl
+                      - tags
+                      - possibleSpam
+                      - prices
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                  - address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                    name: Tether USD
+                    symbol: USDT
+                    decimals: '6'
+                    possibleSpam: false
+                    verifiedContract: true
+                    logoUrl: https://images.ctfassets.net/hwqnbx905qdp/9xx8dTdpkobdm3NVRWLsQ/ed7b935f3a2b098c93925929039024f3/eip155_1-0xdAC17F958D2ee523a2206206994597C13D831ec7.webp
+                    tags:
+                    - stablecoin
+                    prices:
+                      usd:
+                      - '0xdac17f958d2ee523a2206206994597c13d831ec7': '1.0004813121144587'
+      x-bd-cu: '95'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/gettokensupply:
+    get:
+      tags:
+      - fungibletoken
+      summary: Get Token Supply
+      description: 'Retrieve the returns the supply metrics of a token across different chains.
+
+
+        > 💡
+
+        **Compute Unit Value:** `40` (Fixed)'
+      operationId: fungibletokenGettokensupply
+      parameters:
+      - name: asset
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The symbol of the token whose supply is to be retrieved.
+          example: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+        description: The symbol of the token whose supply is to be retrieved.
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                  - token: USDC
+                    timestamp: '1754657634000'
+                    totalSupplyCrossChain: '18510796903729.8284037'
+                    circulatingSupplyCrossChain: '63973613851.8820447'
+                    excludedCirculatingSupplyCrossChain: '18446823289877.946359'
+                    chains:
+                    - chain: Ethereum
+                      totalSupply: '42049466224.292595'
+                      excludedSupply: '247945921.207713'
+                      circulatingSupply: '41801520303.084882'
+                    - chain: Polygon
+                      totalSupply: '390308082.467228'
+                      excludedSupply: '1398851.794846'
+                      circulatingSupply: '388909230.672382'
+                    - chain: Arbitrum
+                      totalSupply: '6921331767.668921'
+                      excludedSupply: '0'
+                      circulatingSupply: '6921331767.668921'
+                    - chain: Optimism
+                      totalSupply: '183135121.59708'
+                      excludedSupply: '0'
+                      circulatingSupply: '183135121.59708'
+                    - chain: Avalanche
+                      totalSupply: '753525233.011792'
+                      excludedSupply: '0'
+                      circulatingSupply: '753525233.011792'
+                    - chain: ZkSync
+                      totalSupply: '22387753.272155'
+                      excludedSupply: '0'
+                      circulatingSupply: '22387753.272155'
+                    - chain: Base
+                      totalSupply: '3792586937.954769'
+                      excludedSupply: '0'
+                      circulatingSupply: '3792586937.954769'
+                    - chain: Solana
+                      totalSupply: '8287311899.703527'
+                      excludedSupply: '0.2468'
+                      circulatingSupply: '8287311899.456727'
+                    - chain: Sui
+                      totalSupply: '612622198.415431'
+                      excludedSupply: '0'
+                      circulatingSupply: '612622198.415431'
+                    - chain: Stellar
+                      totalSupply: '188885574.6223817'
+                      excludedSupply: '0'
+                      circulatingSupply: '188885574.6223817'
+                    - chain: Hedera
+                      totalSupply: '450010110'
+                      excludedSupply: '0'
+                      circulatingSupply: '450010110'
+                    - chain: Near
+                      totalSupply: '74705873.002865'
+                      excludedSupply: '0'
+                      circulatingSupply: '74705873.002865'
+                    - chain: Tron
+                      totalSupply: '40451304.264966'
+                      excludedSupply: '0'
+                      circulatingSupply: '40451304.264966'
+                    - chain: Algorand
+                      totalSupply: '18446744073709.552'
+                      excludedSupply: '18446573945104.697'
+                      circulatingSupply: '170128604.855'
+                    - chain: Aptos
+                      totalSupply: '286101940.002693'
+                      excludedSupply: '0'
+                      circulatingSupply: '286101940.002693'
+      x-bd-cu: '40'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/getuserbalance:
+    get:
+      tags:
+      - fungibletoken
+      summary: Get User Balance
+      description: 'Retrieve the balance of a specified ERC-20 token for a given user address. It provides an essential function for wallet management and decentralized finance applications by offering real-time balance information across multiple blockchain networks.
+
+
+        > 💡
+
+        **Compute Unit Value:** `55` (Fixed)'
+      operationId: fungibletokenGetuserbalance
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The address of the token whose balance is to be retrieved.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: The address of the token whose balance is to be retrieved.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The public address of the user whose token balance is being queried.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: The public address of the user whose token balance is being queried.
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    balance: '6174207572153394239393946019'
+                    prices:
+                      usd:
+                      - '0xfaba6f8e4a5e8ab82f62fe7c39859fa577269be3': '0.9886460715040926'
+                      inr:
+                      - '0xfaba6f8e4a5e8ab82f62fe7c39859fa577269be3': '85.44778029217368'
+                      eur:
+                      - '0xfaba6f8e4a5e8ab82f62fe7c39859fa577269be3': '0.8416413211939346'
+      x-bd-cu: '55'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/historical/weth:
+    get:
+      tags:
+      - fungibletoken
+      summary: Historical WETH
+      description: 'Fetches all Wrapped ETH (WETH) transfer transactions for a specified user address within a designated block range across supported blockchain networks.
+
+
+        > 💡
+
+        **Compute Unit Value:** `155` (Fixed)'
+      operationId: fungibletokenHistoricalWeth
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '137'
+          - '56'
+          - '25'
+          - '10'
+          - '250'
+          - '43114'
+          - '42161'
+          - '8453'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: address
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The public address of the user for which WETH transfers are being queried.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: The public address of the user for which WETH transfers are being queried.
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The starting block of the range. By default, latestBlock - 100.
+          example: '100000'
+        description: The starting block of the range. By default, latestBlock - 100.
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The ending block of the range. By default, latestBlock.
+          example: '100010'
+        description: The ending block of the range. By default, latestBlock.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The page number to fetch. By default, 1.
+          example: '1'
+        description: The page number to fetch. By default, 1.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Sorting order: asc for ascending, desc for descending. By default, desc.'
+          enum:
+          - desc
+          - asc
+          example: desc
+        description: 'Sorting order: asc for ascending, desc for descending. By default, desc.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    transactions:
+                    - blockNumber: '17320271'
+                      timeStamp: '1684824623'
+                      hash: '0x051aac77f464921c72bb628fea7e1f57663b28e0286d20c69e830498307f15d5'
+                      nonce: '367'
+                      blockHash: '0x3dc921095193718262dcf3f07b52f1921351bef675a8617dd6f1badde6093f19'
+                      from: '0x55d5c232d921b9eaa6b37b5845e439acd04b4dba'
+                      contractAddress: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+                      to: '0xef1c6e67703c7bd7107eed8303fbe6ec2554bf6b'
+                      value: '449713740022466855'
+                      tokenName: Wrapped Ether
+                      tokenSymbol: WETH
+                      tokenDecimal: '18'
+                      transactionIndex: '112'
+                      gas: '212952'
+                      gasPrice: '37761736473'
+                      gasUsed: '149768'
+                      cumulativeGasUsed: '10771742'
+                      input: deprecated
+                      confirmations: '1'
+      x-bd-cu: '155'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/historicallogs:
+    get:
+      tags:
+      - fungibletoken
+      summary: Historical Logs
+      description: 'Retrieves historical blockchain logs related to an ERC-20 token for a specified user address within a defined block range. It is designed to capture events such as token approvals and transfers, allowing developers and users to audit past activity, verify transaction histories, and analyze token behavior over time.
+
+
+        > 💡
+
+        **Compute Unit Value:** `70` (Fixed)'
+      operationId: fungibletokenHistoricallogs
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '137'
+          - '56'
+          - '25'
+          - '10'
+          - '250'
+          - '43114'
+          - '42161'
+          - '8453'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'The starting block of the range. Default: latestBlock - 100.'
+          example: '100000'
+        description: 'The starting block of the range. Default: latestBlock - 100.'
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'The ending block of the range. Default: latestBlock.'
+          example: '100010'
+        description: 'The ending block of the range. Default: latestBlock.'
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The address of the ERC-20 token for which logs are being queried.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: The address of the ERC-20 token for which logs are being queried.
+      - name: type
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Type of logs to fetch. Must be either Approval or Transfer.
+          enum:
+          - Approval
+          - Transfer
+          example: Approval
+        description: Type of logs to fetch. Must be either Approval or Transfer.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The page number to fetch. By default, 1.
+          example: '1'
+        description: The page number to fetch. By default, 1.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    logs:
+                    - address: '0x6b175474e89094c44da98b954eedeac495271d0f'
+                      topics:
+                      - '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925'
+                      - '0x000000000000000000000000975f7b8e68e99c04807e94f72d63e98ec21f5ad5'
+                      - '0x0000000000000000000000001715a3e4a142d8b698131108995174f37aeba10d'
+                      params:
+                        src: '0x975f7b8e68e99c04807e94f72d63e98ec21f5ad5'
+                        guy: '0x1715a3e4a142d8b698131108995174f37aeba10d'
+                        wad: '127000000000000000000'
+                      data: '0x000000000000000000000000000000000000000000000006e27aa3200a9c0000'
+                      blockNumber: '17320089'
+                      blockHash: '0x39b65a913a44fefa4f1432dc00927839cf8ba6bcbc778afb3effaf5c91a2a5d1'
+                      timeStamp: '1684822391'
+                      gasPrice: '37991235385'
+                      gasUsed: '46158'
+                      logIndex: '302'
+                      transactionHash: '0x8b9159d1fc58b9dd33a0f8ebcb6980bca0416c3836bb08771c2cac5737dbadba'
+                      transactionIndex: '109'
+      x-bd-cu: '70'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/historicaltransactions:
+    get:
+      tags:
+      - fungibletoken
+      summary: Historical Transactions
+      description: 'Provides a detailed history of ERC-20 token transfer transactions associated with a specific user address within a defined block range. It is designed for wallet-related data analytics, enabling users and developers to review past token movements, monitor account activity, and perform transaction audits.
+
+
+        > 💡
+
+        **Compute Unit Value:** `195` (Fixed)'
+      operationId: fungibletokenHistoricaltransactions
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: address
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The public address of the user for which transfers are being queried.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: The public address of the user for which transfers are being queried.
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The starting block of the range. By default, latestBlock - 100.
+          example: '100000'
+        description: The starting block of the range. By default, latestBlock - 100.
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The ending block of the range. By default, latestBlock.
+          example: '100010'
+        description: The ending block of the range. By default, latestBlock.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The page number to fetch. By default, 1.
+          example: '1'
+        description: The page number to fetch. By default, 1.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Sorting order: asc for ascending, desc for descending. By default, desc.'
+          enum:
+          - desc
+          - asc
+          example: desc
+        description: 'Sorting order: asc for ascending, desc for descending. By default, desc.'
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The address of the ERC-20 token whose transfers are to be retrieved.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: The address of the ERC-20 token whose transfers are to be retrieved.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    transactions:
+                    - blockNumber: '18968825'
+                      timeStamp: '1704796271'
+                      hash: '0x6df96285db80a5c1792a056bf9f38c63e9f250572c2f5afac945bcf996a145e5'
+                      nonce: '21'
+                      blockHash: '0xe8cf4dda5e648b707ff2837741708176122cb2196559c20c8618debf8c991997'
+                      from: '0x3f2488a54c8b397525ff85ce5d32ac5f27dd8ce5'
+                      contractAddress: '0x6b175474e89094c44da98b954eedeac495271d0f'
+                      to: '0x1715a3e4a142d8b698131108995174f37aeba10d'
+                      value: '193485657300000000000'
+                      tokenName: Dai Stablecoin
+                      tokenSymbol: DAI
+                      tokenDecimal: '18'
+                      transactionIndex: '114'
+                      gas: '216896'
+                      gasPrice: '12898560151'
+                      gasUsed: '189283'
+                      cumulativeGasUsed: '10458631'
+                      input: deprecated
+                      confirmations: '67'
+                      methodId: '0xad58bdd1'
+                      methodSignature: relayTokens(address,address,uint256)
+      x-bd-cu: '195'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/historicalusertransactions:
+    get:
+      tags:
+      - fungibletoken
+      summary: Historical User Transactions
+      description: 'Retrieves all the ERC-20 transfers for the given address.
+
+
+        > 💡
+
+        **Compute Unit Value:** `115` (Fixed)'
+      operationId: fungibletokenHistoricalusertransactions
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '137'
+          - '56'
+          - '25'
+          - '10'
+          - '250'
+          - '43114'
+          - '42161'
+          - '8453'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the user.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the user.
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: ERC-20 token address.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: ERC-20 token address.
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The starting block number of the range.
+          example: '100000'
+        description: The starting block number of the range.
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The ending block number of the range.
+          example: '100010'
+        description: The ending block number of the range.
+      - name: pageSize
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Number of transactions to fetch per page.
+          example: '10'
+        description: Number of transactions to fetch per page.
+      - name: pageToken
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Pagination token to retrieve the next page of results.
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYWdlIjoxLCJjb250cmFjdEFkZHJlc3MiOiIweGZhZThlNjRjZGRlNzM1NTBlN2Q3ZjA0Njk1NTdhMzNhNDE3YjI4NjgiLCJjb250cmFjdFR5cGUiOiJlcmMyMCIsImFwcHJvdmVyQWRkcmVzcyI6IjB4NjVhOGYwN2JkOWE4NTk4ZTFiNWI2YzBhODhmNDc3OWRiYzA3NzY3NSIsInNwZW5kZXJBZGRyZXNzIjoiMHgxMTExMTExMjU0ZmI2YzQ0YmFjMGJlZDI4NTRlNzZmOTA2NDMwOTdkIiwiaWF0IjoxNzMzMzkzODE2fQ.y7FANxpXgtdgk83CIqPHHk2jutj1NZrueTu4XR39jnk
+        description: Pagination token to retrieve the next page of results.
+      - name: sortOrder
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Asc or desc. Defaults to asc.
+          enum:
+          - desc
+          - asc
+          example: desc
+        description: Asc or desc. Defaults to asc.
+      - name: fromTimestamp
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Start time (in seconds) for filtering transactions. If both fromTimestamp and startBlock are provided, startBlock takes precedence.
+          example: '1741869257'
+        description: Start time (in seconds) for filtering transactions. If both fromTimestamp and startBlock are provided, startBlock takes precedence.
+      - name: toTimestamp
+        in: query
+        required: false
+        schema:
+          type: string
+          description: End time (in seconds) for filtering transactions. If both toTimestamp and endBlock are provided, endBlock takes precedence.
+          example: '1741969257'
+        description: End time (in seconds) for filtering transactions. If both toTimestamp and endBlock are provided, endBlock takes precedence.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    nextPageToken: eyJhbGciOiJIUzI1NiJ9.eyJhc2NlbmRpbmciOnRydWUsImxpbWl0IjoxMCwicGFnZSI6MCwibGFzdEV2YWx1YXRlZEtleSI6eyJ3YWxsZXRBZGRyZXNzIjoiMHg4M2EzMmE1NGQzMWVlNGYxZjlkZmZhZDJhNjNhNmQyMTRlNDY5ZWMzIiwibG9nSWRlbnRpZmllclJvbGx1cCI6IjAwMDE3MTYwMDAxNDMwMDAwMDAwMDAwMDAwMDAwMDA4In0sInRhYmxlSW5kZXgiOjl9.cRYxg4nozOYVDq9pvYE5RLb0yoe-IKyIhV2VvvNr4tQ
+                    transactions:
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0x1faa804cbd9899e08a6f56b995524d32926c2fe08a2cfae9448987087e8f85b1'
+                      block_number: '19768965'
+                      block_timestamp: '2024-04-30T15:17:23.000Z'
+                      transaction_hash: '0x22d5762ea04387c8e3517420c24f81becd7bd9f9836c9d5ae530878ac89d47e9'
+                      transaction_index: 35
+                      log_index: 131
+                      value: '1000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0x31ad28e590986b7f4ac84be0bf95557177f571a1e9be8062d1a7c96f8e273eb9'
+                      block_number: '19781205'
+                      block_timestamp: '2024-05-02T08:20:23.000Z'
+                      transaction_hash: '0x877cd91398440e3cf502cc99ec2ad463fa77dd3ce2bf5ee169aae42dffb5bdbc'
+                      transaction_index: 24
+                      log_index: 31
+                      value: '30000000000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0xf742ac23e06f776e28a228ab5cd9944ea354f267ecec324af7bbdfe30e7cec3a'
+                      block_number: '19781354'
+                      block_timestamp: '2024-05-02T08:50:11.000Z'
+                      transaction_hash: '0x77945592114d7df433fedd66515eada9070ce1838c81b2b348c2e5d416e0a47b'
+                      transaction_index: 44
+                      log_index: 38
+                      value: '30000000000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0xcfb6479ee16d2815aabd49789d2e630f891043bce1fe5ee699cd093e2fd3d954'
+                      block_number: '19781375'
+                      block_timestamp: '2024-05-02T08:54:23.000Z'
+                      transaction_hash: '0x24a959f0989328de6a7cdc97ffab4d07f4e612d98523bab17a5dd31291f3d8ed'
+                      transaction_index: 71
+                      log_index: 135
+                      value: '30000000000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0xeada8469b9cace2e42f21588cb5523de83f68712e3091d6128c73d71f3aba3d5'
+                      block_number: '19801538'
+                      block_timestamp: '2024-05-05T04:34:11.000Z'
+                      transaction_hash: '0x1d22a82e6973d137b3afcfb01ee608152a38102b8963ac6fd1dc5d295da4b721'
+                      transaction_index: 107
+                      log_index: 248
+                      value: '1744527000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0x1b524eb085ed2037f8d603c930cda05327c64bc0fe95d3617731d13fc691fca4'
+                      block_number: '19808133'
+                      block_timestamp: '2024-05-06T02:42:23.000Z'
+                      transaction_hash: '0xc8929c5cba88438537969fdd10ca2ed8c3c586fdc4b6860141ab99886ee97519'
+                      transaction_index: 13
+                      log_index: 33
+                      value: '2140680000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0x92552bb7fcf9611d83ed4321648a8dbb37ebf9ba1d07da05b7cfd550471123a3'
+                      block_number: '19815775'
+                      block_timestamp: '2024-05-07T04:21:11.000Z'
+                      transaction_hash: '0xbf6370013bb6ea39abec1b36ea4fcbc66261f11f07f6d48bb48dfc5b5b7b8d7a'
+                      transaction_index: 29
+                      log_index: 84
+                      value: '171606000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0x7c85bece4fadca37c185da98fc46efc9fdfead14589b3801dbea57322772601b'
+                      block_number: '19836736'
+                      block_timestamp: '2024-05-10T02:44:11.000Z'
+                      transaction_hash: '0xd4ba9d623ecc631360d9e7ed0b2a0c2b1bc56380fe758a0243f377cd3c5804f6'
+                      transaction_index: 30
+                      log_index: 91
+                      value: '1901967000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0xb993dc6955b4ddc316b7a81ce9bbabf5384861a992bc03bcfddf370f9a147997'
+                      block_number: '19879628'
+                      block_timestamp: '2024-05-16T02:42:23.000Z'
+                      transaction_hash: '0x3b491f01db569331737a6c25087c2f11ab0c277f518c8f85059fb1ef4000ea0b'
+                      transaction_index: 18
+                      log_index: 42
+                      value: '348518000000'
+                    - token_name: Tether USD
+                      token_symbol: USDT
+                      token_decimals: '6'
+                      from_address_entity: null
+                      from_address_entity_logo: null
+                      from_address: '0x83bdf89ce9b2b587785a89603d2d451f05cf719b'
+                      from_address_label: null
+                      to_address_entity: null
+                      to_address_entity_logo: null
+                      to_address: '0x83a32a54d31ee4f1f9dffad2a63a6d214e469ec3'
+                      to_address_label: null
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      block_hash: '0xcc8aa648ac4a05a5038dd330143468de3cc560e86f5d157730c9c66be6a82677'
+                      block_number: '19893927'
+                      block_timestamp: '2024-05-18T02:42:23.000Z'
+                      transaction_hash: '0x23f1f304b510a8c04dcc9659c4ce965e7648f288c1ab000a96fa95946fc8a87c'
+                      transaction_index: 10
+                      log_index: 8
+                      value: '1443489000000'
+      x-bd-cu: '115'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/transfer:
+    post:
+      tags:
+      - fungibletoken
+      summary: Transfer
+      description: 'Specifically designed to fetch all Wrapped Ether (WETH) transfer transactions for a given user address. It focuses on historical WETH activity within a user-defined block range, enabling users and developers to track and analyze the flow of WETH across supported blockchain networks.
+
+
+        > 💡
+
+        **Compute Unit Value:** `70` (Fixed)'
+      operationId: fungibletokenTransfer
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/fungibletoken/transfer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_fungibletoken_transfer_Request'
+            example:
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              amount: '1000000000000000000'
+              to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              chainId: '1'
+              chainSymbol: ETH
+              gasPriority: low
+              enableFee: false
+              simulate: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+                    value: '0'
+                    gas: '2307200'
+                    data: '0xa9059cbb0000000000000000000000003e1ca9fe2fc3021408d0e869bd3afb167f889f380000000000000000000000000000000000000000000000000000000000000001'
+                    referenceId: 03b43cb740914e9d91e4be1de40d3795
+      x-bd-cu: '70'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/fungibletoken/transferfrom:
+    post:
+      tags:
+      - fungibletoken
+      summary: Transfer From
+      description: 'Facilitates the transfer of ERC-20 tokens from one address to another using the ERC-20 allowance mechanism. It leverages the standard transferFrom function, enabling a spender (previously authorized by the token owner) to move tokens on the owner’s behalf.
+
+
+        > 💡
+
+        **Compute Unit Value:** `140` (Fixed)'
+      operationId: fungibletokenTransferfrom
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/fungibletoken/transferfrom
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_fungibletoken_transferfrom_Request'
+            example:
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              amount: '1000000000000000000'
+              to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              chainId: '1'
+              chainSymbol: ETH
+              receiver: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gasPriority: low
+              enableFee: false
+              simulate: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x6Fb447Ae94F5180254D436A693907a1f57696900'
+                    to: '0x4B9eb6c0b6ea15176BBF62841C6B2A8a398cb656'
+                    value: '0'
+                    gas: '390000'
+                    data: '0x23b872dd000000000000000000000000a67e9b68c41b0f26184d64c26e0b2b81466e599400000000000000000000000056d2208efd27fe9c67e3879debce35833b9d4cc7000000000000000000000000000000000000000000000000000009184e72a000'
+                    referenceId: ad4b0020353440d9bebc194695e204e1
+      x-bd-cu: '140'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  schemas:
+    _fungibletoken_transfer_Request:
+      type: object
+      properties:
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        to:
+          type: string
+          description: Blockchain address of the recipient. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '900'
+          - '901'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          example: '1'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        simulate:
+          type: boolean
+          description: When true, dry-runs the transaction batch via eth_simulateV1 and returns a simulate field with status and error on each transaction.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - amount
+      - to
+      description: The request body for a /defi/v1/fungibletoken/transfer
+      example:
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount: '1000000000000000000'
+        to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        chainId: '1'
+        chainSymbol: ETH
+        gasPriority: low
+        enableFee: false
+        simulate: false
+    _fungibletoken_transferfrom_Request:
+      type: object
+      properties:
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        to:
+          type: string
+          description: Blockchain address of the recipient. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          example: '1'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        receiver:
+          type: string
+          description: Address of the recipient receiving the tokens.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        simulate:
+          type: boolean
+          description: When true, dry-runs the transaction batch via eth_simulateV1 and returns a simulate field with status and error on each transaction.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - amount
+      - to
+      - receiver
+      description: The request body for a /defi/v1/fungibletoken/transferfrom
+      example:
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount: '1000000000000000000'
+        to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        chainId: '1'
+        chainSymbol: ETH
+        receiver: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gasPriority: low
+        enableFee: false
+        simulate: false
+    _fungibletoken_convertwraptokentobasetoken_Request:
+      type: object
+      properties:
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          - '8217'
+          - '1001'
+          example: '1'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        simulate:
+          type: boolean
+          description: When true, dry-runs the transaction batch via eth_simulateV1 and returns a simulate field with status and error on each transaction.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - amount
+      description: The request body for a /defi/v1/fungibletoken/convertwraptokentobasetoken
+      example:
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount: '1000000000000000000'
+        gas: '100000'
+        chainId: '1'
+        chainSymbol: ETH
+        gasPriority: low
+        enableFee: false
+        simulate: false
+    _fungibletoken_convertbasetokentowraptoken_Request:
+      type: object
+      properties:
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          example: '1'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        simulate:
+          type: boolean
+          description: When true, dry-runs the transaction batch via eth_simulateV1 and returns a simulate field with status and error on each transaction.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - amount
+      description: The request body for a /defi/v1/fungibletoken/convertbasetokentowraptoken
+      example:
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount: '1000000000000000000'
+        gas: '100000'
+        chainId: '1'
+        chainSymbol: ETH
+        gasPriority: low
+        enableFee: false
+        simulate: false
+    _fungibletoken_approve_Request:
+      type: object
+      properties:
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        to:
+          type: string
+          description: Blockchain address of the recipient. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '900'
+          - '901'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          example: '1'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost. Defaults to 'medium'.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        simulate:
+          type: boolean
+          description: When true, dry-runs the transaction batch via eth_simulateV1 and returns a simulate field with status and error on each transaction.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - amount
+      - to
+      description: The request body for a /defi/v1/fungibletoken/approve
+      example:
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amount: '1000000000000000000'
+        to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        chainId: '1'
+        chainSymbol: ETH
+        gasPriority: low
+        enableFee: false
+        simulate: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

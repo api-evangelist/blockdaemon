@@ -1,0 +1,524 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Event Streaming Rule API
+  description: Creates and manages config for event streams
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- bearerAuth: []
+- apiKeyAuthHeader: []
+tags:
+- name: Rule
+paths:
+  /streaming/v2/rules:
+    x-zuplo-path:
+      pathMode: open-api
+    get:
+      tags:
+      - Rule
+      summary: Get all Rules
+      description: Returns all rules in the system that the user has access to.
+      operationId: findRules
+      parameters:
+      - name: name
+        in: query
+        description: Name of the rule to fetch
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of rules returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rule'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/rules
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: find rules
+    post:
+      tags:
+      - Rule
+      summary: Create a Rule
+      description: Creates a new rule. Duplicate rules are not allowed.
+      operationId: addRule
+      requestBody:
+        description: Rule object to add to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRule'
+      responses:
+        '201':
+          description: Rule created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/rules
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: add rule
+  /streaming/v2/rules/{id}:
+    x-zuplo-path:
+      pathMode: open-api
+    get:
+      tags:
+      - Rule
+      summary: Get Rule by ID
+      description: Returns the rule from the specified ID.
+      operationId: findRuleById
+      parameters:
+      - name: id
+        in: path
+        description: ID of the rule to fetch
+        required: true
+        schema:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+      - name: rendered
+        in: query
+        schema:
+          type: boolean
+        description: Whether to render rules' conditions or not. If omitted or set to `false`, the conditions might be returned in their raw format
+      responses:
+        '200':
+          description: Rule details returned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/rules/${params.id}
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: find rule by id
+    delete:
+      tags:
+      - Rule
+      summary: Delete a Rule
+      description: Deletes the rule identified by the given ID.
+      operationId: deleteRule
+      parameters:
+      - name: id
+        in: path
+        description: ID of the rule to delete
+        required: true
+        schema:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+      responses:
+        '204':
+          description: Rule deleted
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/rules/${params.id}
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: delete rule
+    put:
+      tags:
+      - Rule
+      summary: Update a Rule
+      description: Update a rule by its ID with new data.
+      operationId: updateRule
+      parameters:
+      - name: id
+        in: path
+        description: ID of the rule to update
+        required: true
+        schema:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewRule'
+      responses:
+        '200':
+          description: Rule updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-zuplo-route:
+        custom:
+          product: ub_event_streaming
+          fh: ubiquity
+          target_service: stream-configurator
+          billing_product: event-streaming
+        corsPolicy: anything-goes
+        handler:
+          export: urlRewriteHandler
+          module: $import(@zuplo/runtime)
+          options:
+            rewritePattern: service://bd-workloads-${context.custom.cluster}-k8s-cluster-aegis-stream-configurator-${env.UB_ENV}/rules/${params.id}
+        policies:
+          inbound:
+          - event-streaming-default-policy
+          outbound: []
+      x-operation-id-source: normalized
+      x-operation-id-original: update rule
+components:
+  schemas:
+    NewRule:
+      type: object
+      required:
+      - name
+      - protocol
+      - network
+      - type
+      - target
+      - condition_type
+      - condition
+      properties:
+        name:
+          type: string
+          description: The name of the rule
+        description:
+          type: string
+          description: Optional description of the rule
+        protocol:
+          type: string
+          description: Protocol the rule applies to
+        network:
+          type: string
+          description: Network context of the rule
+        type:
+          type: string
+          description: The rule type
+        isActive:
+          type: boolean
+          default: true
+          description: Whether the rule is active or not
+        safeDistance:
+          type: integer
+          default: 0
+          description: Safety distance parameter
+        safeTimeout:
+          type: integer
+          default: 0
+          description: Safety timeout parameter
+        condition_type:
+          type: string
+          default: antlr
+          enum:
+          - antlr
+          - match_var
+          description: Type of condition syntax used
+        condition:
+          anyOf:
+          - $ref: '#/components/schemas/MatchVars'
+          - $ref: '#/components/schemas/Antlr'
+          description: Condition expressions for the rule
+        target:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+          description: ID of the target associated with the rule
+        template:
+          $ref: '#/components/schemas/RuleTemplateRef'
+    Antlr:
+      type: string
+      description: A rule expression to define filtering or matching logic. For example, `height > 0` filters out items where the height is not greater than zero.
+      example: height > 0
+    MatchVars:
+      type: array
+      description: A list of variables used in a matching rule. Each item in the array must reference a valid MatchVar object.
+      items:
+        $ref: '#/components/schemas/MatchVar'
+    Error:
+      type: object
+      x-go-type: ApiError
+      x-go-name: ApiError
+      required:
+      - message
+      - type
+      - code
+      - status
+      - timestamp
+      properties:
+        type:
+          type: string
+          description: HTTP error type
+          example: bad-request
+        code:
+          type: integer
+          description: Numeric error code
+          example: 16384
+        status:
+          type: integer
+          description: HTTP status of the error
+          example: 500
+        message:
+          type: string
+          description: Long error description
+          example: Oops theres been an internal error handling
+        timestamp:
+          type: string
+          description: Long error description
+          example: Oops theres been an internal error handling
+    MatchVar:
+      type: object
+      description: Represents a single variable used in a matching rule. It includes the variable's type and its ID.
+      required:
+      - variable_type
+      - variable_id
+      properties:
+        variable_type:
+          type: string
+          example: addresses
+        variable_id:
+          type: string
+          format: uuid
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+    ID:
+      description: An ID representing a specific template.
+      type: string
+      format: uuid
+      x-go-type: myuuid.UUID
+      x-go-type-import:
+        name: myuuid
+        path: github.com/google/uuid
+    PreDefinedTemplate:
+      title: Predefined Template
+      description: Available predefined templates that can be used for event formatting
+      type: string
+      enum:
+      - UNIFIED_V1
+      - UNIFIED_V1_RAW
+      - ALL_DATA
+      - INPUT_EMAIL
+      - OUTPUT_EMAIL
+      - TX_EMAIL
+    Rule:
+      type: object
+      required:
+      - name
+      - protocol
+      - network
+      - type
+      - target
+      - condition_type
+      - condition
+      properties:
+        id:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+        name:
+          type: string
+        description:
+          type: string
+        protocol:
+          type: string
+        network:
+          type: string
+        type:
+          type: string
+        isActive:
+          type: boolean
+        safeDistance:
+          type: integer
+        safeTimeout:
+          type: integer
+        condition_type:
+          type: string
+          default: antlr
+          enum:
+          - antlr
+          - match_var
+        condition:
+          anyOf:
+          - $ref: '#/components/schemas/MatchVars'
+          - $ref: '#/components/schemas/Antlr'
+        target:
+          type: string
+          format: uuid
+          x-go-type: myuuid.UUID
+          x-go-type-import:
+            name: myuuid
+            path: github.com/google/uuid
+        template:
+          $ref: '#/components/schemas/RuleTemplateRef'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RuleTemplateRef:
+      anyOf:
+      - $ref: '#/components/schemas/ID'
+      - $ref: '#/components/schemas/PreDefinedTemplate'
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/add-rule.md
+  - https://docs.blockdaemon.com/reference/add-target.md
+  - https://docs.blockdaemon.com/reference/add-variable-value.md
+  - https://docs.blockdaemon.com/reference/add-variable.md
+  - https://docs.blockdaemon.com/reference/delete-rule.md
+  - https://docs.blockdaemon.com/reference/delete-target.md
+  - https://docs.blockdaemon.com/reference/delete-variable-value-by-id.md
+  - https://docs.blockdaemon.com/reference/delete-variable-value-by-value.md
+  - https://docs.blockdaemon.com/reference/delete-variable.md
+  - https://docs.blockdaemon.com/reference/find-rule-by-id.md
+  - https://docs.blockdaemon.com/reference/find-rules.md
+  - https://docs.blockdaemon.com/reference/find-target-by-id.md
+  - https://docs.blockdaemon.com/reference/find-targets.md
+  - https://docs.blockdaemon.com/reference/find-variable-by-id.md
+  - https://docs.blockdaemon.com/reference/find-variable-values.md
+  - https://docs.blockdaemon.com/reference/find-variables.md
+  - https://docs.blockdaemon.com/reference/get-event-protocol-overview.md
+  - https://docs.blockdaemon.com/reference/get-organization-audit-logs.md
+  - https://docs.blockdaemon.com/reference/get-target-logs-by-id.md
+  - https://docs.blockdaemon.com/reference/patch-target.md
+  - https://docs.blockdaemon.com/reference/update-rule.md
+  - https://docs.blockdaemon.com/reference/update-target.md
+  - https://docs.blockdaemon.com/reference/update-variable.md
+  - https://docs.blockdaemon.com/reference/validate-message-send.md
+  - https://docs.blockdaemon.com/reference/validate-verification.md
+  merge:
+    pages: 25
+    deduped: 140
+    conflicts_kept_first: 0

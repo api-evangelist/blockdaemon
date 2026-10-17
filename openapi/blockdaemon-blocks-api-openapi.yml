@@ -1,0 +1,1264 @@
+openapi: 3.2.0
+info:
+  version: 3.0.0
+  title: Blockdaemon REST Blocks API
+  description: 'Blockdaemon REST API provides a RESTful and uniform way to access blockchain resources,
+
+    with a rich and reusable model across multiple protocols/cryptocurrencies.'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/universal/{version}
+  description: Production server
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+- url: https://ubiquity.api.blockdaemon.com/{version}
+  description: '[Legacy Auth] Production server'
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Blocks
+paths:
+  /{protocol}/{network}/block/{block_identifier}:
+    get:
+      summary: Get a Block by Number or Hash
+      description: 'Get a block and all its transactions by a user-defined block number or block hash.
+
+
+        Use `-1` or `current` parameter to return the current block.'
+      operationId: GetBlockByNumber
+      tags:
+      - Blocks
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/block_identifier'
+      responses:
+        '200':
+          description: Block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/block'
+              example:
+                number: 700000
+                id: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+                parent_id: 0000000000000000000aa3ce000eb559f4143be419108134e0ce71042fc636eb
+                date: 1631333672
+                num_txs: 1276
+                txs:
+                - id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46
+                  block_id: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+                  date: 1631333672
+                  status: completed
+                  num_events: 4
+                  meta:
+                    vsize: 285
+                  events:
+                  - id: input-1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46-coinbase
+                    transaction_id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46
+                    type: utxo_input
+                    denomination: BTC
+                    source: coinbase
+                    date: 1631333672
+                    amount: 640388640
+                    decimals: 8
+                  - id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46-0
+                    transaction_id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46
+                    type: utxo_output
+                    denomination: BTC
+                    destination: bc1q7wedv4zdu5smt3shljpu5mgns48jn299mukymc
+                    meta:
+                      addresses:
+                      - bc1q7wedv4zdu5smt3shljpu5mgns48jn299mukymc
+                      index: 0
+                      script: 0014f3b2d6544de521b5c617fc83ca6d13854f29a8a5
+                      script_type: witness_v0_keyhash
+                    date: 1631333672
+                    amount: 640388640
+                    decimals: 8
+                  - id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46-1
+                    transaction_id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46
+                    type: utxo_output
+                    denomination: BTC
+                    destination: unknown
+                    meta:
+                      index: 1
+                      script: 6a24aa21a9ed7236104716135a92521f30c820abfa7701c022b14087d8cba26377f6eb4528ed
+                      script_type: nulldata
+                    date: 1631333672
+                    amount: 0
+                    decimals: 8
+                  - id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46-2
+                    transaction_id: 1d8149eb8d8475b98113b5011cf70e0b7a4dccff71286d28b8b4b641f94f1e46
+                    type: utxo_output
+                    denomination: BTC
+                    destination: unknown
+                    meta:
+                      index: 2
+                      script: 6a24b9e11b6dc5b9ad3697607ac5b38843e47f087533645552c98f0ce8703d53efc1400aec87
+                      script_type: nulldata
+                    date: 1631333672
+                    amount: 0
+                    decimals: 8
+                - id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e
+                  block_id: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+                  date: 1631333672
+                  status: completed
+                  num_events: 4
+                  meta:
+                    vsize: 190
+                  events:
+                  - id: input-628607ab6e7d55eb402b44ab6c6102b096889466ff738ae88ee433b71cdf57f0-1
+                    transaction_id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e
+                    type: utxo_input
+                    denomination: BTC
+                    source: bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej
+                    meta:
+                      addresses:
+                      - bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej
+                      index: 1
+                      script: 0020701a8d401c84fb13e6baf169d59684e17abd9fa216c8cc5b9fc63d622ff8c58d
+                      script_type: witness_v0_scripthash
+                    date: 1631333672
+                    amount: 383459
+                    decimals: 8
+                  - id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e-0
+                    transaction_id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 3NL8PD5zsy8Xp396E951C5UuFVtK6dAJNt
+                    meta:
+                      addresses:
+                      - 3NL8PD5zsy8Xp396E951C5UuFVtK6dAJNt
+                      index: 0
+                      script: a914e2674c704f478f20a18282eb00cb5a4b4bd6fe8987
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 109000
+                    decimals: 8
+                  - id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e-1
+                    transaction_id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e
+                    type: utxo_output
+                    denomination: BTC
+                    destination: bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej
+                    meta:
+                      addresses:
+                      - bc1qwqdg6squsna38e46795at95yu9atm8azzmyvckulcc7kytlcckxswvvzej
+                      index: 1
+                      script: 0020701a8d401c84fb13e6baf169d59684e17abd9fa216c8cc5b9fc63d622ff8c58d
+                      script_type: witness_v0_scripthash
+                    date: 1631333672
+                    amount: 224459
+                    decimals: 8
+                  - id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e-fee
+                    transaction_id: ed25927576988e38e4cc8e4b19d1272c480f113fb605271b190df05aa983714e
+                    type: fee
+                    denomination: BTC
+                    date: 1631333672
+                    amount: 50000
+                    decimals: 8
+                - id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be
+                  block_id: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+                  date: 1631333672
+                  status: completed
+                  num_events: 4
+                  meta:
+                    vsize: 216
+                  events:
+                  - id: input-5e2df44cccd4e005976e630b31b576ece48bd4c62771dd98fa159e481f7cc7bf-0
+                    transaction_id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be
+                    type: utxo_input
+                    denomination: BTC
+                    source: 37EocSqEb5W5LgRSTUPNwbqLxx13rkk4B3
+                    meta:
+                      addresses:
+                      - 37EocSqEb5W5LgRSTUPNwbqLxx13rkk4B3
+                      index: 0
+                      script: a9143cdba981967fc67d09e7b0463aa6131c696ac22987
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 21745248
+                    decimals: 8
+                  - id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be-0
+                    transaction_id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 33TwHJfEa8s31tRzv9C6MuTdqcjCe8SpZr
+                    meta:
+                      addresses:
+                      - 33TwHJfEa8s31tRzv9C6MuTdqcjCe8SpZr
+                      index: 0
+                      script: a9141376f815c74fff262b5475e6046b10060dee3d5c87
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 19695248
+                    decimals: 8
+                  - id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be-1
+                    transaction_id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 15oQugCurUmWrnbp9EMiaBVYCPfdFqNXiA
+                    meta:
+                      addresses:
+                      - 15oQugCurUmWrnbp9EMiaBVYCPfdFqNXiA
+                      index: 1
+                      script: 76a91434a7984e2c46e0011ffe5fccbcba314c64d857d788ac
+                      script_type: pubkeyhash
+                    date: 1631333672
+                    amount: 2000000
+                    decimals: 8
+                  - id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be-fee
+                    transaction_id: b2b8328e5e7af3f17449109b449517cc6641b7a1a525e0c1d019cda078ee03be
+                    type: fee
+                    denomination: BTC
+                    date: 1631333672
+                    amount: 50000
+                    decimals: 8
+                - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                  block_id: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+                  date: 1631333672
+                  status: completed
+                  num_events: 9
+                  meta:
+                    vsize: 329
+                  events:
+                  - id: input-fd0d35482ceec95f95f3fe43c53e362320eef1ad0d93ef03f1c0d68baf9f865f-7
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_input
+                    denomination: BTC
+                    source: 39XpoaixBAbUZzaq7g73tmvogBw6rGv8JP
+                    meta:
+                      addresses:
+                      - 39XpoaixBAbUZzaq7g73tmvogBw6rGv8JP
+                      index: 7
+                      script: a9145603fae6c89d482d518bc8c42d77cc3ddc01a7de87
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 161244546
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-0
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 36teKbgRKkQx35q1BMAdN9HiJEsVAAEwmP
+                    meta:
+                      addresses:
+                      - 36teKbgRKkQx35q1BMAdN9HiJEsVAAEwmP
+                      index: 0
+                      script: a914390b966d0a20b2fb889cb5f8c059117edd4736c187
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 559734
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-1
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 1BbLcnmH3VBdUALJArUHgoCk4JN3gSMvxm
+                    meta:
+                      addresses:
+                      - 1BbLcnmH3VBdUALJArUHgoCk4JN3gSMvxm
+                      index: 1
+                      script: 76a914742fc6a9d75b42c0a8db6ab27143c361e93bf31c88ac
+                      script_type: pubkeyhash
+                    date: 1631333672
+                    amount: 516198
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-2
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 3Lk6Di4eoDCs5RjZkFi5sbYBELxfjXP8Vn
+                    meta:
+                      addresses:
+                      - 3Lk6Di4eoDCs5RjZkFi5sbYBELxfjXP8Vn
+                      index: 2
+                      script: a914d0ff394e8c9b4f424770bfd5101bc95fc1271d7187
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 569485
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-3
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 18FyePUmMfLsW7oYrPFH4MvZhBBZFL8Ngv
+                    meta:
+                      addresses:
+                      - 18FyePUmMfLsW7oYrPFH4MvZhBBZFL8Ngv
+                      index: 3
+                      script: 76a9144f9dfd0de62f42187491a3c7087f766c6eca381688ac
+                      script_type: pubkeyhash
+                    date: 1631333672
+                    amount: 585475
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-4
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: bc1q5zepe53k52k924ny0nlfjqq0z0allga5x29s8u
+                    meta:
+                      addresses:
+                      - bc1q5zepe53k52k924ny0nlfjqq0z0allga5x29s8u
+                      index: 4
+                      script: 0014a0b21cd236a2ac5556647cfe99000f13fbffa3b4
+                      script_type: witness_v0_keyhash
+                    date: 1631333672
+                    amount: 606841
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-5
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 3MEszGNau7vWTuR67sMMmTEazbbyioLnFJ
+                    meta:
+                      addresses:
+                      - 3MEszGNau7vWTuR67sMMmTEazbbyioLnFJ
+                      index: 5
+                      script: a914d671138037e683f21aa47819a1a2013ac9baf40387
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 641151
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-6
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 39XpoaixBAbUZzaq7g73tmvogBw6rGv8JP
+                    meta:
+                      addresses:
+                      - 39XpoaixBAbUZzaq7g73tmvogBw6rGv8JP
+                      index: 6
+                      script: a9145603fae6c89d482d518bc8c42d77cc3ddc01a7de87
+                      script_type: scripthash
+                    date: 1631333672
+                    amount: 157705662
+                    decimals: 8
+                  - id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6-fee
+                    transaction_id: 9421c806a8f3fd46841241659637d75b944b42af61fabe7b9359349bc50d2ea6
+                    type: fee
+                    denomination: BTC
+                    date: 1631333672
+                    amount: 60000
+                    decimals: 8
+        '400':
+          description: Invalid Block Identifier
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /{protocol}/{network}/block_identifier/{block_identifier}:
+    get:
+      summary: Get a Block Identifier by Number of Hash
+      description: 'Get the minimal block data, block header, by a user-defined block number or block hash.
+
+
+        Use `-1` or `current` parameter to return the current block.'
+      operationId: GetBlockIdentifierByNumber
+      tags:
+      - Blocks
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/block_identifier'
+      responses:
+        '200':
+          description: Block
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/block_identifier'
+              example:
+                number: 700000
+                id: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+                parent_id: 0000000000000000000aa3ce000eb559f4143be419108134e0ce71042fc636eb
+                date: 1631333672
+                num_txs: 1276
+        '400':
+          description: Invalid Block hash
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+  /{protocol}/{network}/block_identifiers:
+    get:
+      summary: Get a List of Block Identifiers
+      description: Returns a list of minimal block data, block headers such as block hash and block number.
+      operationId: GetBlockIdentifiers
+      tags:
+      - Blocks
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'Protocol handle, one of: `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `ethereum`,`litecoin`, `optimism`, `polkadot`, `polygon`, `tezos`.
+
+          '
+        schema:
+          type: string
+          default: bitcoin
+        examples:
+          Bitcoin:
+            value: bitcoin
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/order'
+      - $ref: '#/components/parameters/page_token'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: Block headers
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/block_identifiers'
+              example:
+                total: 4
+                data:
+                - number: 801213
+                  id: 00000000000000000003e55c378fc43ca713cf99c1fd3449f078ffb4b1e20ada
+                  parent_id: 000000000000000000055f45ce21d95738078b7ea23ff85ec100be918c12ec32
+                  date: 1690898216
+                  num_txs: 3882
+                - number: 801212
+                  id: 000000000000000000055f45ce21d95738078b7ea23ff85ec100be918c12ec32
+                  parent_id: 00000000000000000004616ffe61261f00be8a8d993d28ac4f3bfc205a32cd46
+                  date: 1690897709
+                  num_txs: 6449
+                - number: 801211
+                  id: 00000000000000000004616ffe61261f00be8a8d993d28ac4f3bfc205a32cd46
+                  parent_id: 00000000000000000002f10a83cb5f0823bc7bf60328472939c7ff630ee51969
+                  date: 1690897657
+                  num_txs: 3957
+                - number: 801210
+                  id: 00000000000000000002f10a83cb5f0823bc7bf60328472939c7ff630ee51969
+                  parent_id: 00000000000000000002e505ccfa3d5a4c2c9175c678e3ba7d8d2c0e1f5b7b9d
+                  date: 1690897018
+                  num_txs: 3673
+                meta:
+                  paging:
+                    next_page_token: ODAxMjEw
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+  /{protocol}/{network}/sync/block_id:
+    get:
+      summary: Get the Current Block Hash
+      description: Get the current block id (hash) of the protocol.
+      operationId: GetCurrentBlockHash
+      tags:
+      - Blocks
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      responses:
+        '200':
+          description: Current block hash
+          content:
+            application/json:
+              schema:
+                type: string
+                description: The current block hash.
+              example: 3ea7cfb439e0baa4d91525b66b1f7b4e79ac0302a054a83d12f4e2ee7c933c8f
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+  /{protocol}/{network}/sync/block_number:
+    get:
+      summary: Get the Current Block Number
+      description: Returns the current block number/height of the protocol.
+      operationId: GetCurrentBlockNumber
+      tags:
+      - Blocks
+      parameters:
+      - $ref: '#/components/parameters/protocol'
+      - $ref: '#/components/parameters/network'
+      responses:
+        '200':
+          description: Current block number
+          content:
+            application/json:
+              schema:
+                format: int64
+                description: The current block number.
+                type: integer
+              example: 801212
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+  /{protocol}/{network}/tx/{hash}/confirmations:
+    get:
+      summary: Get the Transaction Confirmations
+      description: Returns the number of transaction confirmations by a user-defined transaction hash.
+      operationId: GetTxConfirmations
+      tags:
+      - Blocks
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'Protocol handle, one of: `algorand`, `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `ethereum`, `litecoin`, `optimism`, `polkadot`, `polygon`, `stellar`, `tezos`.
+
+          '
+        schema:
+          type: string
+          default: bitcoin
+        examples:
+          Bitcoin:
+            value: bitcoin
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/tx-hash'
+      responses:
+        '200':
+          description: Transaction confirmations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_confirmation'
+              example:
+                current_height: 801213
+                tx_id: 71d4f3412ec11128bbd9ce988d5bff2ec3bb6ea3953c8faf189d88ae49de9f7a
+                confirmations: 39001
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /{protocol}/{network}/txs:
+    get:
+      summary: Get a List of Transactions
+      description: Get a List of transactions, starting with the lastest one. Each call returns an array of the entire list.
+      operationId: GetTxs
+      tags:
+      - Blocks
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'Protocol handle, one of: `algorand`, `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `litecoin`, `optimism`, `polkadot`, `stellar` `tezos`, `xrp`.
+
+          '
+        schema:
+          type: string
+          default: bitcoin
+        examples:
+          Bitcoin:
+            value: bitcoin
+      - $ref: '#/components/parameters/network'
+      - $ref: '#/components/parameters/block_hash'
+      - $ref: '#/components/parameters/block_number'
+      - $ref: '#/components/parameters/assets'
+      - $ref: '#/components/parameters/order'
+      - $ref: '#/components/parameters/page_token'
+      - $ref: '#/components/parameters/page_size'
+      responses:
+        '200':
+          description: Transactions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tx_page'
+              example:
+                total: 2
+                data:
+                - id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5
+                  block_id: 00000000000000000002e305f0030f47d6bcb8f0761706bacc20c0702af4a096
+                  date: 1683895659
+                  status: completed
+                  num_events: 4
+                  meta:
+                    index: 1320
+                    vsize: 142
+                  block_number: 789387
+                  confirmations: 11828
+                  events:
+                  - id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5-fee
+                    transaction_id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5
+                    type: fee
+                    denomination: BTC
+                    meta: null
+                    date: 1683895659
+                    amount: 19980
+                    decimals: 8
+                  - id: input-4bfc55715cc30a4b40652428e4499bd0e0693e7ebf14c8a332f1ed275c37384a-24
+                    transaction_id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5
+                    type: utxo_input
+                    denomination: BTC
+                    source: bc1q5pfnvq6jp2h87s8r7sy75dfsz6lmfu3gj7yldx
+                    meta:
+                      addresses:
+                      - bc1q5pfnvq6jp2h87s8r7sy75dfsz6lmfu3gj7yldx
+                      index: 24
+                      script: 0014a0533603520aae7f40e3f409ea353016bfb4f228
+                      script_type: witness_v0_keyhash
+                    date: 1683895659
+                    amount: 537362
+                    decimals: 8
+                  - id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5-0
+                    transaction_id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 33fgA7AfEERApg78v27YSYhnkYFgV57aji
+                    meta:
+                      addresses:
+                      - 33fgA7AfEERApg78v27YSYhnkYFgV57aji
+                      index: 0
+                      script: a91415af55ed8af079be639e672b147b731dbb85121d87
+                      script_type: scripthash
+                    date: 1683895659
+                    amount: 492098
+                    decimals: 8
+                  - id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5-1
+                    transaction_id: fff533aab668b9b1ab4880be04a4732195b4f4da48c5aed28146738496f95dc5
+                    type: utxo_output
+                    denomination: BTC
+                    destination: bc1q5pfnvq6jp2h87s8r7sy75dfsz6lmfu3gj7yldx
+                    meta:
+                      addresses:
+                      - bc1q5pfnvq6jp2h87s8r7sy75dfsz6lmfu3gj7yldx
+                      index: 1
+                      script: 0014a0533603520aae7f40e3f409ea353016bfb4f228
+                      script_type: witness_v0_keyhash
+                    date: 1683895659
+                    amount: 25284
+                    decimals: 8
+                - id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7
+                  block_id: 00000000000000000002e305f0030f47d6bcb8f0761706bacc20c0702af4a096
+                  date: 1683895659
+                  status: completed
+                  num_events: 4
+                  meta:
+                    index: 27
+                    vsize: 142
+                  block_number: 789387
+                  confirmations: 11828
+                  events:
+                  - id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7-fee
+                    transaction_id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7
+                    type: fee
+                    denomination: BTC
+                    meta: null
+                    date: 1683895659
+                    amount: 80244
+                    decimals: 8
+                  - id: input-5431f017bd1ad4b039682d24687aca8b1f5fe6873c8c63d5a30dccc01cebdaf4-1
+                    transaction_id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7
+                    type: utxo_input
+                    denomination: BTC
+                    source: bc1qfkvzp7rd5rfw8r4j5zxl6gg3hsxh9t6mxuzj4l
+                    meta:
+                      addresses:
+                      - bc1qfkvzp7rd5rfw8r4j5zxl6gg3hsxh9t6mxuzj4l
+                      index: 1
+                      script: 00144d9820f86da0d2e38eb2a08dfd2111bc0d72af5b
+                      script_type: witness_v0_keyhash
+                    date: 1683895659
+                    amount: 12399469
+                    decimals: 8
+                  - id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7-0
+                    transaction_id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7
+                    type: utxo_output
+                    denomination: BTC
+                    destination: 39zpmJK21K8VVjfCev7AD2kn3DE9t6Rb8Q
+                    meta:
+                      addresses:
+                      - 39zpmJK21K8VVjfCev7AD2kn3DE9t6Rb8Q
+                      index: 0
+                      script: a9145b1f2d9e2d07d811d692dbc594434effdfadadf287
+                      script_type: scripthash
+                    date: 1683895659
+                    amount: 77505
+                    decimals: 8
+                  - id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7-1
+                    transaction_id: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7
+                    type: utxo_output
+                    denomination: BTC
+                    destination: bc1qcfej7ehytal5jlxqxne9ac7xa4y0tkmj85duss
+                    meta:
+                      addresses:
+                      - bc1qcfej7ehytal5jlxqxne9ac7xa4y0tkmj85duss
+                      index: 1
+                      script: 0014c2732f66e45f7f497cc034f25ee3c6ed48f5db72
+                      script_type: witness_v0_keyhash
+                    date: 1683895659
+                    amount: 12241720
+                    decimals: 8
+                meta:
+                  paging:
+                    next_page_token: ffcb369654f90d390b1a9a57258c6a1afc162589b23b1ca1c1912e9f22b259b7-789387
+          links:
+            Continuation:
+              operationId: GetTxs
+              parameters:
+                continuation: $response.body#/continuation
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          description: Invalid continuation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  schemas:
+    block:
+      type: object
+      description: The block object.
+      properties:
+        number:
+          type: integer
+          format: int64
+          description: The block number.
+          example: 8000000
+        id:
+          type: string
+          description: The block hash.
+          example: '0x123456070D674D44a7F9cb4Ab272bd88fAd004b5'
+        parent_id:
+          type: string
+          description: The parent block hash.
+          example: '0xfcf029ffd36a6714aae09dcc7acbdd8f2b96327f'
+        date:
+          type: integer
+          format: int64
+          description: The block date in unix timestamp format.
+          example: 1571222657
+        num_txs:
+          type: integer
+          description: The amount of transaction in the block.
+          example: 10
+        txs:
+          type: array
+          description: A list of normalized transactions presented in the block (not filtered or unknown model).
+          items:
+            $ref: '#/components/schemas/tx'
+    event:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The event identifier.
+        transaction_id:
+          type: string
+          description: The transaction identifer this event is presented.
+        type:
+          type: string
+          description: The event type.
+          example: transfer
+        denomination:
+          type:
+          - string
+          - 'null'
+          description: The Symbol of currency, can be natibe currency or token currency.
+        destination:
+          type:
+          - string
+          - 'null'
+          example: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
+          description: The destination address of the event.
+        source:
+          type:
+          - string
+          - 'null'
+          description: The source address of the event.
+        meta:
+          type: object
+          description: Protocol specific data that doesn't fit into a standard model.
+          properties:
+            addresses:
+              description: A list of addresses.
+              type: array
+              items:
+                type: string
+            index:
+              description: The index number.
+              type: integer
+            script:
+              description: The script.
+              type: string
+            script_type:
+              description: The script type.
+              type: string
+        date:
+          type: integer
+          format: int64
+          description: The event date in unix timestamp format.
+        amount:
+          type:
+          - integer
+          - 'null'
+          format: bigint
+          example: 5000000000
+          description: The coin amount transfered in the event.
+        decimals:
+          type:
+          - integer
+          - 'null'
+          description: The coin amount transfered in the event.
+    tx_page:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The number of items in txs.
+          example: 1
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/tx'
+        meta:
+          $ref: '#/components/schemas/meta'
+    tx_confirmation:
+      type: object
+      properties:
+        current_height:
+          type: integer
+          format: int64
+          description: The current block height.
+          example: 150123
+        tx_id:
+          type: string
+          description: The transaction hash.
+          example: '0x123456070D674D44a7F9cb4Ab272bd88fAd004b5'
+        confirmations:
+          type: integer
+          format: int64
+          description: The total transaction confirmations.
+          example: 10
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    tx:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique transaction identifier.
+          example: '0xF00Fa860473130C1df10707223E66Cb4B839B165'
+        block_id:
+          type:
+          - string
+          - 'null'
+          description: Block hash if mined, otherwise omitted.
+          example: '0xaf2948aba2ed8cc7d5b7d4e4f4164a7c8819efc94d30aab3fce6904df68dbc07'
+        date:
+          type: integer
+          format: int64
+          description: The transaction creation unix timestamp.
+          example: 1571222657
+        status:
+          type: string
+          description: Result status of the transaction.
+          enum:
+          - completed
+          - failed
+        num_events:
+          type: integer
+          description: List of transaction events.
+        meta:
+          type: object
+          description: Protocol specific data that doesn't fit into a standard model.
+        block_number:
+          type:
+          - integer
+          - 'null'
+          description: Block number if mined, otherwise omitted.
+          example: 789387
+        confirmations:
+          type: integer
+          description: Total transaction confirmations.
+        events:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/event'
+        assets:
+          type:
+          - array
+          - 'null'
+          description: List of moved assets by asset path. Find all the asset paths on this [page](https://docs.blockdaemon.com/reference/available-currencies-and-tokens).
+          uniqueItems: true
+          items:
+            type: string
+            example: ethereum/native/eth
+        nonce:
+          type: integer
+          description: The nonce of the transaction.
+    paging:
+      type: object
+      description: The pagination details.
+      properties:
+        next_page_token:
+          type: string
+          description: The next page token to use in the following request.
+    block_identifiers:
+      type: object
+      properties:
+        total:
+          type: integer
+          description: The number of items in block identifiers.
+          example: 25
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/block_identifier'
+        meta:
+          $ref: '#/components/schemas/meta'
+    block_identifier:
+      type: object
+      properties:
+        number:
+          type: integer
+          format: int64
+          description: The block number.
+          example: 8000000
+        id:
+          type: string
+          description: The block hash.
+          example: '0x123456070D674D44a7F9cb4Ab272bd88fAd004b5'
+        parent_id:
+          type: string
+          description: The parent block hash.
+          example: '0xfcf029ffd36a6714aae09dcc7acbdd8f2b96327f'
+        date:
+          type: integer
+          format: int64
+          description: The block date in Unix timestamp format.
+          example: 1571222657
+        num_txs:
+          type: integer
+          description: The amount of transaction in the block.
+          example: 10
+    meta:
+      type:
+      - object
+      - 'null'
+      description: The meta details.
+      properties:
+        paging:
+          $ref: '#/components/schemas/paging'
+  parameters:
+    protocol:
+      in: path
+      name: protocol
+      required: true
+      description: "Protocol handle, one of: \n`algorand`, `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `ethereum`, `litecoin`, `near`, `optimism`, `polkadot`, `polygon`, `solana`, `stellar`, `tezos`, `xrp`.\n"
+      schema:
+        type: string
+        default: bitcoin
+      examples:
+        Bitcoin:
+          value: bitcoin
+    order:
+      name: order
+      in: query
+      description: The pagination order.
+      schema:
+        type: string
+        enum:
+        - desc
+        - asc
+        default: desc
+    page_size:
+      name: page_size
+      in: query
+      required: false
+      description: 'Max number of items to return in a response.
+
+        Defaults to 25 and is capped at 100.
+
+        '
+      schema:
+        type: integer
+      example: 25
+    block_identifier:
+      name: block_identifier
+      in: path
+      required: true
+      description: The block identifier, hash or number.
+      schema:
+        type: string
+        default: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+      examples:
+        Block_hash:
+          value: 0000000000000000000590fc0f3eba193a278534220b2b37e9849e1a770ca959
+        Block_number:
+          value: '100000'
+    block_number:
+      name: block_number
+      in: query
+      schema:
+        type: integer
+      description: Filter by block number.
+      example: 789387
+    block_hash:
+      name: block_hash
+      in: query
+      description: Filter by block hash. You can specify only one block hash at a time.
+      schema:
+        type: string
+      example: '0x2444165297806ad5598e4569e5823b3df0cde3e48b346781ab632fa6cef1a0ec'
+    tx-hash:
+      name: hash
+      in: path
+      required: true
+      description: The transaction hash.
+      schema:
+        type: string
+        default: 71d4f3412ec11128bbd9ce988d5bff2ec3bb6ea3953c8faf189d88ae49de9f7a
+      examples:
+        BTC_tx_hash:
+          value: 71d4f3412ec11128bbd9ce988d5bff2ec3bb6ea3953c8faf189d88ae49de9f7a
+        ETH_tx_hash:
+          value: '0x6d550b76008d75d25a735d2d96c640cc13b7a711372557955fbd3b1cad8a78cb'
+    assets:
+      name: assets
+      in: query
+      required: false
+      description: "Comma-separated list of asset paths to filter. If the list is empty or all elements are empty, this filter has no effect. Filtering by asset is applicable only for:\n  - **Balances endpoints:** `algorand`, `avalanche`, `bitcoincash`, `ethereum`, `litecoin`, `optimism`, `polygon`, `polkadot`, `solana`\n  - **Transactions endpoints:** `algorand`, `avalanche`, `ethereum`\n\nFind all the asset paths on this [page](https://docs.blockdaemon.com/reference/available-currencies-and-tokens).\n"
+      schema:
+        type: string
+      allowReserved: true
+      examples:
+        ETH_native_currency:
+          value: ethereum/native/eth
+        ETH_smart_token:
+          value: ethereum/contract/0x0f5d2fb29fb7d3cfee444a200298f468908cc942/erc-20
+        More_than_one_asset:
+          value: ethereum/native/eth,ethereum/contract/0x0f5d2fb29fb7d3cfee444a200298f468908cc942/erc-20
+    network:
+      name: network
+      in: path
+      required: true
+      description: Which network to target. Available networks can be found in the list of supported protocols or with /{protocol}.
+      schema:
+        type: string
+        default: mainnet
+      examples:
+        Mainnet:
+          value: mainnet
+        Mainnet-C:
+          value: mainnet-c
+        Testnet:
+          value: testnet
+        Testnet4:
+          value: testnet4
+          description: Bitcoin testnet network
+        Testnet-C:
+          value: testnet-c
+        Holesky:
+          value: holesky
+          description: Ethereum testnet network
+        Hoodi:
+          value: hoodi
+          description: Ethereum testnet network
+        Sepolia:
+          value: sepolia
+          description: Ethereum testnet network
+        Westend:
+          value: westend
+          description: Polkadot testnet network
+        Amoy:
+          value: amoy
+          description: Polygon testnet network
+    page_token:
+      name: page_token
+      in: query
+      required: false
+      description: The token to retrieve more items in the next request. Use the `next_page_token` returned from the previous response for this parameter.
+      schema:
+        type: string
+      example: '8185.123'
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+    ServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-found
+            title: Not Found
+            status: 404
+    ServerError:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    UnauthorizedError:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getaccountnonce.md
+  - https://docs.blockdaemon.com/reference/getblockbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifierbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifiers.md
+  - https://docs.blockdaemon.com/reference/getcurrentblockhash.md
+  - https://docs.blockdaemon.com/reference/getcurrentblocknumber.md
+  - https://docs.blockdaemon.com/reference/getfeeestimate.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddress.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddresses.md
+  - https://docs.blockdaemon.com/reference/getprotocolendpoints.md
+  - https://docs.blockdaemon.com/reference/getprotocolslist.md
+  - https://docs.blockdaemon.com/reference/getreportbyaddress.md
+  - https://docs.blockdaemon.com/reference/gettxbyhash.md
+  - https://docs.blockdaemon.com/reference/gettxconfirmations.md
+  - https://docs.blockdaemon.com/reference/gettxoutputbyhashandindex.md
+  - https://docs.blockdaemon.com/reference/gettxs.md
+  - https://docs.blockdaemon.com/reference/gettxsbyaddress.md
+  - https://docs.blockdaemon.com/reference/getutxobyaccount.md
+  merge:
+    pages: 18
+    deduped: 196
+    conflicts_kept_first: 0

@@ -1,0 +1,462 @@
+openapi: 3.2.0
+info:
+  title: Transaction Compile And Send API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Compile And Send
+paths:
+  /{blockchain_id}/compile_and_send:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Compile and Broadcast an Unsigned Transaction
+      description: Compile and broadcast an unsigned EVM transaction with signature.
+      operationId: TxCompileAndSend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxCompileRequest'
+            example:
+              unsigned_tx: e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080
+              address: b9aca008252089481b7e08f65bdf5648606c8
+              signature: ''
+              public_key: ''
+      responses:
+        '200':
+          description: A submitted Transaction ID
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxSendResponse'
+              example:
+                id: 9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+      tags:
+      - Compile And Send
+components:
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  schemas:
+    SolanaSignature:
+      type: object
+      properties:
+        signature:
+          type: string
+          description: A base58 encoded string of the cryptographic signature.
+          example: 2A3yw9TAUm55Ka7EnJDM6vZPrtsjmek9bMhGBdiUGgW8aQugNp5CdyLqMNbahbJXMnQ9h2SMFHhbk2R39RSzsSef
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - signature
+    ApiTxCompileRequestStellar:
+      title: Api Tx Compile Request Stellar
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The base64 encoded transaction
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/StellarSignature'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+        replace_signatures:
+          type: boolean
+          x-go-type-skip-optional-pointer: true
+      required:
+      - unsigned_tx
+      - signatures
+    CosmosSignature:
+      type: object
+      properties:
+        sequence:
+          type: integer
+          x-go-type: uint64
+          x-go-type-skip-optional-pointer: true
+        signature:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        sign_mode:
+          x-go-type: int32
+          type: string
+          x-go-type-skip-optional-pointer: true
+        public_key:
+          type: string
+      required:
+      - sequence
+      - sign_mode
+      - signature
+      - public_key
+    ApiTxCompileRequestNear:
+      title: Api Tx Compile Request Near
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction in base64 encoding.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: The signature hex encoded
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - unsigned_tx
+      - signature
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    ApiTxCompileRequestEVM:
+      title: Api Tx Compile Request EVM
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction. This transaction is hex RLP encoded and should be encoded wihout the R, S and V values (this is diffrent from what the /create endpoint returns)
+          example: 02ed82426880840c1a97ac847e881fdc82520894057cbbc4d1568530991088108ee48fd8b949167f843b9aca0080c0
+          x-oapi-codegen-extra-tags:
+            validate: required
+        address:
+          type: string
+          description: The hex address.
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature. This should include the R and S values of the signature in ASN1 encoding.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: A hex encoded string of the sender's public key in the 32 byte compressed format.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - unsigned_tx
+      - signature
+      - public_key
+    ApiTxCompileRequestBTC:
+      title: Api Tx Compile Request BTC
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          example: 02f86f0180834c4b40852096a4848082cde49495ad61b0a150d79219dcf64e1e6cc01f0b64c4ce80b844a9059cbb000000000000000000000000e6026f60efc3d0e714f1b89c596aa484ffbd25c800000000000000000000000000000000000000000303b6ae12d00504a8ed8000c0808080
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/signature'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+          example:
+          - address: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+            signature: 0x..
+            public_key: 0x..
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxCompileRequestSolana:
+      title: Api Tx Compile Request Solana
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          example: AAEAAwYqxtWdFTb3/xrAW77tXSxoksrUwfWFAj5zub2JojTbnAnmeRNLj9i/bnMMVMh6QF5AP37ejGou8zrK1/IjTymqfYQGW/wgxXxux6CxGpqQkEbj0ZY3LYwYJuNSvOf8i/0Gp9UXGSxWjuCKhF9z0peIzwNcMUWyGrNE2AYuqUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwZGb+UhFzL/7K26csOb57yM5bvF9xJrLEObOkAAAACSA/HmJql7hyAMci43hBLdOCK44yJ2YmFxfit5l1C6ngMEAwEDAAQEAAAABAIAAgwCAAAAAOH1BQAAAAAFAAkDiBMAAAAAAAA=
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/SolanaSignature'
+          x-oapi-codegen-extra-tags:
+            validate: required
+          example:
+          - signature: 4STXcD6nnpdPqM2AsJgxr4Wfbz4ihS7xQ5eCiQw2FUMTG7vqdr4TqomTrWsos4ZAjZbAr4vceEccUKTVWCn3jSs
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxCompileRequestTron:
+      title: Api Tx Compile Request Tron
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The protobuf hex encoded tron transaction
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: The hex encoded public key of the signer
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - unsigned_tx
+      - signature
+      - public_key
+    ApiTxCompileRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCompileRequestEVM'
+      - $ref: '#/components/schemas/ApiTxCompileRequestStellar'
+      - $ref: '#/components/schemas/ApiTxCompileRequestSubstrate'
+      - $ref: '#/components/schemas/ApiTxCompileRequestBTC'
+      - $ref: '#/components/schemas/ApiTxCompileRequestTron'
+      - $ref: '#/components/schemas/ApiTxCompileRequestSolana'
+      - $ref: '#/components/schemas/ApiTxCompileRequestNear'
+      - $ref: '#/components/schemas/ApiTxCompileRequestCosmos'
+    ApiTxCompileRequestSubstrate:
+      title: Api Tx Compile Request Substrate
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The hex encoded unsigned extrinsic
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: The hex encoded public key
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature_scheme:
+          type: string
+          enum:
+          - ed25519
+          - sr25519
+          default: ed25519
+      required:
+      - unsigned_tx
+      - signature
+      - public_key
+      - signature_scheme
+    ApiTxCompileRequestCosmos:
+      title: Api Tx Compile Request Cosmos
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The transaction data needed to sign.
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/CosmosSignature'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+      required:
+      - unsigned_tx
+      - signatures
+    ApiTxSendResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The transaction ID.
+          example: '0x9c8ac345b443dd10a418ea0beaa320ef233dbae5590be2a11ac090e0e9839c1c'
+      required:
+      - id
+    StellarSignature:
+      type: object
+      properties:
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: A hex encoded string which is the public key for the address.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - signature
+      - public_key
+    signature:
+      type: object
+      properties:
+        address:
+          type: string
+          description: The hex address.
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required
+        signature:
+          type: string
+          description: A hex encoded string of the cryptographic signature. ECDSA secp256k1 signatures are expected to be ASN1 encoded.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+        public_key:
+          type: string
+          description: A hex encoded string which is the public key for the address.
+          example: 0x..
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - address
+      - signature
+      - public_key
+  responses:
+    ErrorUnauthorized:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ErrorInternal:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ErrorServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    ErrorTooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ErrorNotImplemented:
+      description: The request endpoint is not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-implemented
+            title: Not implemented
+            status: 501
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

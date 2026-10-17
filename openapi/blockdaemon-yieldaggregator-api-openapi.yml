@@ -1,0 +1,2045 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Yieldaggregator API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: yieldaggregator
+paths:
+  /defi/v1/yieldaggregator/addliquidity:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Add Liquidity
+      description: 'Constructs a transaction payload for adding liquidity to a specified market. The payload includes chain, address, gas, and function data, enabling users to deposit tokens and expand yield opportunities.
+
+
+        > 💡
+
+        **Compute Unit Value:** `95` (Fixed)'
+      operationId: yieldaggregatorAddliquidity
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/addliquidity
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_addliquidity_Request'
+            example:
+              yieldAggregatorId: '5200'
+              marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+              tokenIn: '0x4db99b79361f98865230f5702de024c69f629fec'
+              amount: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amountPtIn: '10000'
+              slippage: '10'
+              zeroPriceImpact: false
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    to: '0x888888888889758F76e7103c6CbF23ABbF58F946'
+                    value: '0'
+                    gas: '1000000'
+                    data: '0x97ee279e000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b402000000000000000000000000b451a36c8b6b2eac77ad0737ba732818143a0e250000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000000000000000186a0000000000000000000000000000000000000000000000000000000000000c741'
+                    estimationCheck: 'Returned error: execution reverted: ERC20: insufficient allowance'
+                    referenceId: 410bcb32a855442caa186a8a7a599d1e
+      x-bd-cu: '95'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/depositpool:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Deposit Pool
+      description: 'Enables users to deposit tokens into yield-generating pools on supported blockchains, specifying the target pool either via a direct poolAddress or by providing the tokenAddress with additional parameters. Upon success, the endpoint returns key details (chainId, addresses, transaction data, referenceId) that streamline investment management in decentralized finance protocols.
+
+
+        > 💡
+
+        **Compute Unit Value:** `30` (Fixed)'
+      operationId: yieldaggregatorDepositpool
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/depositpool
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_depositpool_Request'
+            example:
+              yieldAggregatorId: '5100'
+              amount: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0x3DA9D911301f8144bdF5c3c67886e5373DCdff8e'
+                    value: '0'
+                    gas: '2307200'
+                    data: '0xa694fc3a00000000000000000000000000000000000000000000000000000000004b4a52'
+                    referenceId: 9fdce4b6184e442cbe52d0c3249c7657
+      x-bd-cu: '30'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/depositvault:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Deposit Vault
+      description: 'Initiates token deposits into yield-generating vaults with configurable gas parameters and flexible identification methods (via vaultAddress or tokenAddress and vaultNumber). The endpoint processes the deposit transaction on the designated blockchain and returns key details—such as chain ID, addresses, transaction value, gas usage, and a unique reference ID—essential for managing multiple vaults efficiently.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: yieldaggregatorDepositvault
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/depositvault
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_depositvault_Request'
+            example:
+              amount: '1000000000000000000'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              vaultNumber: '1'
+              vaultAddress: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+              yieldAggregatorId: '5000'
+              gasPriority: low
+              enableFee: false
+              poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0xFE09e53A81Fe2808bc493ea64319109B5bAa573e'
+                    value: '0'
+                    gas: '2307200'
+                    data: '0xb6b55f25000000000000000000000000000000000000000000000000000000000007a120'
+                    referenceId: d33bc36f30ff49e385388ba332f67594
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/getbalance:
+    get:
+      tags:
+      - yieldaggregator
+      summary: Get Balance
+      description: 'Retrieves a user’s current liquidity balance and position within yield-generating vaults or pools across supported protocols and blockchain networks. This endpoint returns a numeric value representing the total liquidity available for the given address, with detailed breakdowns of both vault and pool balances. Users can query their balance either by providing a direct vaultAddress or by supplying a tokenAddress along with a vaultNumber, in addition to required parameters such as the user’s public address and yieldAggregatorId. This comprehensive data is essential for developers and users seeking to monitor yield positions, manage liquidity, track earned yields, and integrate real-time yield data into DeFi portfolio management and performance analytics tools.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: yieldaggregatorGetbalance
+      parameters:
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The public blockchain address of the user whose liquidity balance is being queried. This value specifies the owner of the tokens deposited in the yield aggregator.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: The public blockchain address of the user whose liquidity balance is being queried. This value specifies the owner of the tokens deposited in the yield aggregator.
+      - name: tokenAddress
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The contract address of the token. Use this parameter when querying by token, in combination with vaultNumber, if the vaultAddress is not provided.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: The contract address of the token. Use this parameter when querying by token, in combination with vaultNumber, if the vaultAddress is not provided.
+      - name: vaultNumber
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The identifier for the specific vault holding the token, used when multiple vaults exist for the same token. Provide this along with tokenAddress if not directly specifying vaultAddress.
+          example: '1'
+        description: The identifier for the specific vault holding the token, used when multiple vaults exist for the same token. Provide this along with tokenAddress if not directly specifying vaultAddress.
+      - name: yieldAggregatorId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5000'
+          - '5001'
+          - '5002'
+          - '5003'
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          - '5100'
+          example: '5000'
+        description: The unique ID to specify the yield aggregator for queries or transactions.
+      - name: vaultAddress
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The address of the yield vault. Use this parameter to directly query a specific vault instead of using tokenAddress and vaultNumber.
+          example: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+        description: The address of the yield vault. Use this parameter to directly query a specific vault instead of using tokenAddress and vaultNumber.
+      - name: marketAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique blockchain address that identifies the specific yield market or vault within the yield aggregator. This parameter directs the query to the appropriate liquidity pool where deposits are made.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        description: The unique blockchain address that identifies the specific yield market or vault within the yield aggregator. This parameter directs the query to the appropriate liquidity pool where deposits are made.
+      - name: poolAddress
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Pool's address.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        description: Pool's address.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    vaultBalance: '0'
+                    poolBalance: '0'
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/getmarketdata:
+    get:
+      tags:
+      - yieldaggregator
+      summary: Get Market Data
+      description: 'Provides detailed financial metrics (liquidity, trading volume, token supply, PT, LP, SY) for a specified yield market. This snapshot helps users and developers monitor market performance and make informed DeFi decisions.
+
+
+        > 💡
+
+        **Compute Unit Value:** `70` (Fixed)'
+      operationId: yieldaggregatorGetmarketdata
+      parameters:
+      - name: yieldAggregatorId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        description: The unique ID to specify the yield aggregator for queries or transactions.
+      - name: marketAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The blockchain address of the yield market or liquidity pool for which the market data is being requested. This parameter ensures that the query targets the correct market, returning metrics specific to that liquidity pool.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        description: The blockchain address of the yield market or liquidity pool for which the market data is being requested. This parameter ensures that the query targets the correct market, returning metrics specific to that liquidity pool.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    liquidityInUsd: '167264298.4288716'
+                    tradingVolumeInUsd: '14114863.261934767'
+                    totalSupply: '32849681.13414054'
+                    totalPtTokens: '155965599.2172757'
+                    totalLpTokens: '77645954.28159352'
+                    totalSyTokens: '14596352.533499816'
+      x-bd-cu: '70'
+      x-bd-cu-type: fixed
+  /defi/v1/yieldaggregator/getmarkets:
+    get:
+      tags:
+      - yieldaggregator
+      summary: Get Markets
+      description: 'Retrieves a comprehensive list of yield markets (e.g., Pendle Finance) with identifiers, expiry dates, asset addresses, and token addresses (PT, YT, SY). This data helps users discover active markets, assess liquidity opportunities, and optimize yield strategies across supported networks.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: yieldaggregatorGetmarkets
+      parameters:
+      - name: yieldAggregatorId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        description: The unique ID to specify the yield aggregator for queries or transactions.
+      - name: includeInactive
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: A flag indicating whether to include inactive yield markets in the response. Set this parameter to true to return both active and inactive markets; if omitted, only active markets will be returned.
+          example: false
+        description: A flag indicating whether to include inactive yield markets in the response. Set this parameter to true to return both active and inactive markets; if omitted, only active markets will be returned.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                  - name: cbETH
+                    expiry: '2025-12-25T00:00:00.000Z'
+                    underlyingAsset: '0x2ae3f1ec7f1f5012cfeab0185bfc7aa3cf0dec22'
+                    marketAddress: '0x483f2e223c58a5ef19c4b32fbc6de57709749cb3'
+                    ptAddress: '0xe46c8ba948f8071b425a1f7ba45c0a65cbacea2e'
+                    ytAddress: '0xf9da8f69d518d7f6488179014f475e843ee2defd'
+                    syAddress: '0x75372f72ec752a761e96cbcb3395f4b9586d9afd'
+                    isActive: true
+                  - name: LBTC
+                    expiry: '2025-05-29T00:00:00.000Z'
+                    underlyingAsset: '0xecac9c5f704e954931349da37f60e39f515c11c1'
+                    marketAddress: '0x727cebacfb10ffd353fc221d06a862b437ec1735'
+                    ptAddress: '0x5d746848005507da0b1717c137a10c30ad9ee307'
+                    ytAddress: '0x5fd84c3dd5c00ab9e04bd94685b55e8dd0c1e3fd'
+                    syAddress: '0xb261266cb30c255cb9c73ebf4a3ead9398d23ab4'
+                    isActive: true
+                  - name: mUSDC
+                    expiry: '2025-06-26T00:00:00.000Z'
+                    underlyingAsset: '0xedc817a28e8b93b03976fbd4a3ddbc9f7d176c22'
+                    marketAddress: '0x3124d41708edbdc7995a55183e802e3d9d0d5ef1'
+                    ptAddress: '0x2a9e9256e0d1ad0f7f9d7c7248cb7e2f06072deb'
+                    ytAddress: '0xe84009923221bb401c811643c5a5efaf56eed4ca'
+                    syAddress: '0xc40febf5a33b8c92b187d9be0fd3fe0ac2e4b07c'
+                    isActive: true
+                  - name: mcbBTC
+                    expiry: '2025-06-26T00:00:00.000Z'
+                    underlyingAsset: '0xf877acafa28c19b96727966690b2f44d35ad5976'
+                    marketAddress: '0xd94fd7bceb29159405ae1e06ce80e51ef1a484b0'
+                    ptAddress: '0x5c6593f57ee95519ff6a8cd16a5e41ff50af239a'
+                    ytAddress: '0xdc2ffc7b4bd5a38d5842e5fdbb407e731dd30796'
+                    syAddress: '0x7f5efa1bb887a5080ceacd6f3e2c0fc16bd90c90'
+                    isActive: true
+                  - name: wsuperOETHb
+                    expiry: '2025-06-26T00:00:00.000Z'
+                    underlyingAsset: '0x7fcd174e80f264448ebee8c88a7c4476aaf58ea6'
+                    marketAddress: '0xecc2c994aa0c599a7f69a7cfb9106fe4dffb4341'
+                    ptAddress: '0x25d2b7e3b71f4edcc366e79134570704a079923a'
+                    ytAddress: '0x1188331820daa0a8af69c0779334d53cb4a9cef1'
+                    syAddress: '0x67507f3e26e7e2fd0a42c48fbc85069ccfcbd2ff'
+                    isActive: true
+                  - name: sUSDz
+                    expiry: '2025-03-27T00:00:00.000Z'
+                    underlyingAsset: '0xe31ee12bdfdd0573d634124611e85338e2cbf0cf'
+                    marketAddress: '0x14936c9b8eb798ca6291c2d6ce5de2c6cb5f1f9c'
+                    ptAddress: '0xc1e4d7ca05045dfbc654b67e11124901148b1266'
+                    ytAddress: '0xb80b9f31064be8a97e4ced4e1368f45826c59868'
+                    syAddress: '0xff702347d81725ed8bbe341392af511e29cfed98'
+                    isActive: true
+                  - name: VIRTUAL/cbBTC
+                    expiry: '2025-06-26T00:00:00.000Z'
+                    underlyingAsset: '0xb909f567c5c2bb1a4271349708cc4637d7318b4a'
+                    marketAddress: '0x621d4d92e9bed484e6d2cb8a37d342c804a0908c'
+                    ptAddress: '0x603e2d1af3d0673f4af756b6e12a2044bfebb714'
+                    ytAddress: '0xce714a2ce5ecec1ba7efdc6456f12c4e7b46fa69'
+                    syAddress: '0x02adf72d5d06a9c92136562eb237c07696833a84'
+                    isActive: true
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/getmarkettokens:
+    get:
+      tags:
+      - yieldaggregator
+      summary: Get Market Tokens
+      description: 'Returns the token configuration for a given yield market, including mint/redeem token arrays and a swap configuration object. This information clarifies token flows for effective liquidity management and yield optimization.
+
+
+        > 💡
+
+        **Compute Unit Value:** `75` (Fixed)'
+      operationId: yieldaggregatorGetmarkettokens
+      parameters:
+      - name: yieldAggregatorId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        description: The unique ID to specify the yield aggregator for queries or transactions.
+      - name: marketAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Specifies the blockchain address of the yield market or liquidity pool.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        description: Specifies the blockchain address of the yield market or liquidity pool.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    mintTokens:
+                    - '0x4c9edd5852cd905f086c759e8383e09bff1e68b3'
+                    - '0x9d39a5de30e57443bff2a8307a4256c8797a3497'
+                    redeemTokens:
+                    - '0x9d39a5de30e57443bff2a8307a4256c8797a3497'
+                    Swap:
+                      tokensIn:
+                      - '0x9d39a5de30e57443bff2a8307a4256c8797a3497'
+                      - '0x3ee118efc826d30a29645eaf3b2eaac9e8320185'
+                      - '0x4c9edd5852cd905f086c759e8383e09bff1e68b3'
+                      - '0x111111111117dc0aa78b770fa6a738034120c302'
+                      - '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9'
+                      - '0xe1b4d34e8754600962cd944b535180bd758e6c2e'
+                      - '0x5fd13359ba15a84b76f7f87568309040176167cd'
+                      - '0x06824c27c8a0dbde5f72f770ec82e3c0fd4dcec3'
+                      - '0xe95a203b1a91a908f9b9ce46459d101078c2c3cb'
+                      - '0x4d224452801aced8b2f0aebe155379bb5d594381'
+                      - '0xb50721bcf8d664c30412cfbc6cf7a15145234ad1'
+                      - '0xc0c293ce456ff0ed870add98a0828dd4d2903dbf'
+                      - '0xba100000625a3754423978a60c9317c58a424e3d'
+                      - '0x97ad75064b20fb2b2447fed4fa953bf7f007a706'
+                      - '0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf'
+                      - '0xc00e94cb662c3520282e6f5717214004a7f26888'
+                      - '0xd533a949740bb3306d119cc777fa900ba034cd52'
+                      - '0xf939e0a03fb07f59a73314e73794be0e57ac1b4e'
+                      - '0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b'
+                      - '0x6b175474e89094c44da98b954eedeac495271d0f'
+                      - '0x865377367054516e17014ccded1e7d814edc9ce4'
+                      - '0x657e8c867d8b37dcc18fa4caead9c45eb088c642'
+                      - '0x35fa164735182de50811e8e2e824cfb9b6118ac2'
+                      - '0xec53bf9167f50cdeb3ae105f56099aaab9061f83'
+                      - '0x57e114b691db790c35207b2e685d4a43181e6061'
+                      - '0xc18360217d8f7ab5e7c516566761ea12ce7f9d72'
+                      - '0x22fc5a29bd3d6cce19a06f844019fd506fce4455'
+                      - '0x0000000000000000000000000000000000000000'
+                      - '0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb'
+                      - '0xa35b1b31ce002fbf2058d22f30f95d405200a15b'
+                      - '0xbf5495efe5db9ce00f80364c8b423567e58d2110'
+                      - '0xc96de26018a54d51c097160568752c4e3bd6c364'
+                      - '0xc5f0f7b66764f6ec8c8dff7ba683102295e16409'
+                      - '0xaea46a60368a7bd060eec7df8cba43b7ef41ad85'
+                      - '0xcf0c122c6b73ff809c693db761e7baebe62b6a2e'
+                      - '0x6f40d4a6237c257fff2db00fa0510deeecd303eb'
+                      - '0x853d955acef822db058eb8505911ed77f175b99e'
+                      - '0x5e8422345238f34275888049021821e8e08caa1f'
+                      - '0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f'
+                      - '0xc944e90c64b2c07662a292be6244bdf05cda44a7'
+                      - '0xe28b3b32b6c345a34ff64674606124dd5aceca30'
+                      - '0x8236a87084f8b84306f72007f36f2618a5634494'
+                      - '0x5a98fcbea516cf06857215779fd812ca3bef1b32'
+                      - '0x514910771af9ca656af840dff83e8264ecf986ca'
+                      - '0x8f08b70456eb22f6109f57b8fafe862ed28e6040'
+                      - '0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2'
+                      - '0x3c3a81e81dc49a522a592e7622a7e711c06bf354'
+                      - '0x58d97b57bb95320f9a05dc918aef65434969c2b2'
+                      - '0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3'
+                      - '0x45804880de22913dafe09f4980848ece6ecbaf78'
+                      - '0x808507121b80c02388fad14726482e061b8da827'
+                      - '0x6982508145454ce325ddbe47a25d4ec3d2311933'
+                      - '0xd9a442856c234a39a81a089c06451ebaa4306a72'
+                      - '0xf469fbd2abcd6b9de8e169d128226c0fc90a012e'
+                      - '0x04c154b66cb340f3ae24111cc767e0184ed00cc6'
+                      - '0x6c3ea9036406852006290770bedfcaba0e23a0e8'
+                      - '0x8c9532a60e0e7c6bbd2b2c1303f63ace1c3e9811'
+                      - '0x84631c0d0081fde56deb72f6de77abbbf6a9f93a'
+                      - '0xae78736cd615f374d3085123a210448e74fc6393'
+                      - '0x3b50805453023a91a8bf641e279401a0b23fa6f9'
+                      - '0xa1290d69c65a6fe4df752f95823fae25cb99e5a7'
+                      - '0x7a4effd87c2f3c55ca251080b1343b605f327e3a'
+                      - '0xfae103dc9cf190ed75350761e95403b7b8afa6c0'
+                      - '0x83f20f44975d03b1b09e64809b757c47f942beea'
+                      - '0x8be3460a480c80728a8c4d7a5d5303c85ba7b3b9'
+                      - '0xac3e018457b222d93114458476f3e3416abbe38f'
+                      - '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce'
+                      - '0x56072c95faa701256059aa122697b133aded9279'
+                      - '0x7a56e1c57c7475ccf742a1832b028f0456652f97'
+                      - '0xd9d920aa40f578ab794426f5c90f6c731d159def'
+                      - '0x9559aaa82d9649c7a7b220e7c461d2e74c9a3593'
+                      - '0xbeef69ac7870777598a04b2bd4771c71212e6abc'
+                      - '0xae7ab96520de3a18e5e111b5eaab095312d7fe84'
+                      - '0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6'
+                      - '0x0a6e7ba5042b38349e437ec6db6214aec7b35676'
+                      - '0xf951e335afb289353dc249e82926178eac7ded78'
+                      - '0x18084fba666a33d37592fa2633fd49a74dd93a88'
+                      - '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+                      - '0x004e9c3ef86bc1ca1f0bb5c7662861ee93350568'
+                      - '0xf1376bcef0f78459c0ed0ba5ddce976f1ddf51f4'
+                      - '0x73a15fed60bf67631dc6cd7bc5b6e8da8190acf5'
+                      - '0x0000206329b97db379d5e1bf586bbdb969c63274'
+                      - '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+                      - '0xdc035d45d973e3ec169d2276ddab16f1e407384f'
+                      - '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      - '0x66a1e37c9b0eaddca17d3662d6c05f4decf3e110'
+                      - '0xc4441c2be5d8fa8126822b9929ca0b81ea0de38e'
+                      - '0x06b964d96f5dcf7eae9d7c559b09edce244d4b8e'
+                      - '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
+                      - '0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee'
+                      - '0x7223442cad8e9ca474fc40109ab981608f8c4273'
+                      - '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+                      - '0x163f8c2467924be0ae7b5347228cabf260318753'
+                      - '0x4691937a7508860f876c9c0a2a617e7d9e945d4b'
+                      - '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0'
+                      - '0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44'
+                      - '0x6985884c4392d348587b19cb9eaaf157f13271cd'
+                      tokensOut:
+                      - '0x9d39a5de30e57443bff2a8307a4256c8797a3497'
+                      - '0x3ee118efc826d30a29645eaf3b2eaac9e8320185'
+                      - '0x4c9edd5852cd905f086c759e8383e09bff1e68b3'
+                      - '0x111111111117dc0aa78b770fa6a738034120c302'
+                      - '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9'
+                      - '0xe1b4d34e8754600962cd944b535180bd758e6c2e'
+                      - '0x5fd13359ba15a84b76f7f87568309040176167cd'
+                      - '0x06824c27c8a0dbde5f72f770ec82e3c0fd4dcec3'
+                      - '0xe95a203b1a91a908f9b9ce46459d101078c2c3cb'
+                      - '0x4d224452801aced8b2f0aebe155379bb5d594381'
+                      - '0xb50721bcf8d664c30412cfbc6cf7a15145234ad1'
+                      - '0xc0c293ce456ff0ed870add98a0828dd4d2903dbf'
+                      - '0xba100000625a3754423978a60c9317c58a424e3d'
+                      - '0x97ad75064b20fb2b2447fed4fa953bf7f007a706'
+                      - '0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf'
+                      - '0xc00e94cb662c3520282e6f5717214004a7f26888'
+                      - '0xd533a949740bb3306d119cc777fa900ba034cd52'
+                      - '0xf939e0a03fb07f59a73314e73794be0e57ac1b4e'
+                      - '0x4e3fbd56cd56c3e72c1403e103b45db9da5b9d2b'
+                      - '0x6b175474e89094c44da98b954eedeac495271d0f'
+                      - '0x865377367054516e17014ccded1e7d814edc9ce4'
+                      - '0x657e8c867d8b37dcc18fa4caead9c45eb088c642'
+                      - '0x35fa164735182de50811e8e2e824cfb9b6118ac2'
+                      - '0xec53bf9167f50cdeb3ae105f56099aaab9061f83'
+                      - '0x57e114b691db790c35207b2e685d4a43181e6061'
+                      - '0xc18360217d8f7ab5e7c516566761ea12ce7f9d72'
+                      - '0x22fc5a29bd3d6cce19a06f844019fd506fce4455'
+                      - '0x0000000000000000000000000000000000000000'
+                      - '0xfe0c30065b384f05761f15d0cc899d4f9f9cc0eb'
+                      - '0xa35b1b31ce002fbf2058d22f30f95d405200a15b'
+                      - '0xbf5495efe5db9ce00f80364c8b423567e58d2110'
+                      - '0xc96de26018a54d51c097160568752c4e3bd6c364'
+                      - '0xc5f0f7b66764f6ec8c8dff7ba683102295e16409'
+                      - '0xaea46a60368a7bd060eec7df8cba43b7ef41ad85'
+                      - '0xcf0c122c6b73ff809c693db761e7baebe62b6a2e'
+                      - '0x6f40d4a6237c257fff2db00fa0510deeecd303eb'
+                      - '0x853d955acef822db058eb8505911ed77f175b99e'
+                      - '0x5e8422345238f34275888049021821e8e08caa1f'
+                      - '0x40d16fc0246ad3160ccc09b8d0d3a2cd28ae6c2f'
+                      - '0xc944e90c64b2c07662a292be6244bdf05cda44a7'
+                      - '0xe28b3b32b6c345a34ff64674606124dd5aceca30'
+                      - '0x8236a87084f8b84306f72007f36f2618a5634494'
+                      - '0x5a98fcbea516cf06857215779fd812ca3bef1b32'
+                      - '0x514910771af9ca656af840dff83e8264ecf986ca'
+                      - '0x8f08b70456eb22f6109f57b8fafe862ed28e6040'
+                      - '0x9f8f72aa9304c8b593d555f12ef6589cc3a579a2'
+                      - '0x3c3a81e81dc49a522a592e7622a7e711c06bf354'
+                      - '0x58d97b57bb95320f9a05dc918aef65434969c2b2'
+                      - '0x856c4efb76c1d1ae02e20ceb03a2a6a08b0b8dc3'
+                      - '0x45804880de22913dafe09f4980848ece6ecbaf78'
+                      - '0x808507121b80c02388fad14726482e061b8da827'
+                      - '0x6982508145454ce325ddbe47a25d4ec3d2311933'
+                      - '0xd9a442856c234a39a81a089c06451ebaa4306a72'
+                      - '0xf469fbd2abcd6b9de8e169d128226c0fc90a012e'
+                      - '0x04c154b66cb340f3ae24111cc767e0184ed00cc6'
+                      - '0x6c3ea9036406852006290770bedfcaba0e23a0e8'
+                      - '0x8c9532a60e0e7c6bbd2b2c1303f63ace1c3e9811'
+                      - '0x84631c0d0081fde56deb72f6de77abbbf6a9f93a'
+                      - '0xae78736cd615f374d3085123a210448e74fc6393'
+                      - '0x3b50805453023a91a8bf641e279401a0b23fa6f9'
+                      - '0xa1290d69c65a6fe4df752f95823fae25cb99e5a7'
+                      - '0x7a4effd87c2f3c55ca251080b1343b605f327e3a'
+                      - '0xfae103dc9cf190ed75350761e95403b7b8afa6c0'
+                      - '0x83f20f44975d03b1b09e64809b757c47f942beea'
+                      - '0x8be3460a480c80728a8c4d7a5d5303c85ba7b3b9'
+                      - '0xac3e018457b222d93114458476f3e3416abbe38f'
+                      - '0x95ad61b0a150d79219dcf64e1e6cc01f0b64c4ce'
+                      - '0x56072c95faa701256059aa122697b133aded9279'
+                      - '0x7a56e1c57c7475ccf742a1832b028f0456652f97'
+                      - '0xd9d920aa40f578ab794426f5c90f6c731d159def'
+                      - '0x9559aaa82d9649c7a7b220e7c461d2e74c9a3593'
+                      - '0xbeef69ac7870777598a04b2bd4771c71212e6abc'
+                      - '0xae7ab96520de3a18e5e111b5eaab095312d7fe84'
+                      - '0xaf5191b0de278c7286d6c7cc6ab6bb8a73ba2cd6'
+                      - '0x0a6e7ba5042b38349e437ec6db6214aec7b35676'
+                      - '0xf951e335afb289353dc249e82926178eac7ded78'
+                      - '0x18084fba666a33d37592fa2633fd49a74dd93a88'
+                      - '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984'
+                      - '0x004e9c3ef86bc1ca1f0bb5c7662861ee93350568'
+                      - '0xf1376bcef0f78459c0ed0ba5ddce976f1ddf51f4'
+                      - '0x73a15fed60bf67631dc6cd7bc5b6e8da8190acf5'
+                      - '0x0000206329b97db379d5e1bf586bbdb969c63274'
+                      - '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+                      - '0xdc035d45d973e3ec169d2276ddab16f1e407384f'
+                      - '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      - '0x66a1e37c9b0eaddca17d3662d6c05f4decf3e110'
+                      - '0xc4441c2be5d8fa8126822b9929ca0b81ea0de38e'
+                      - '0x06b964d96f5dcf7eae9d7c559b09edce244d4b8e'
+                      - '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
+                      - '0xcd5fe23c85820f7b72d0926fc9b05b43e359b7ee'
+                      - '0x7223442cad8e9ca474fc40109ab981608f8c4273'
+                      - '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'
+                      - '0x163f8c2467924be0ae7b5347228cabf260318753'
+                      - '0x4691937a7508860f876c9c0a2a617e7d9e945d4b'
+                      - '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0'
+                      - '0x77e06c9eccf2e797fd462a92b6d7642ef85b0a44'
+                      - '0x6985884c4392d348587b19cb9eaaf157f13271cd'
+      x-bd-cu: '75'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/getvaults:
+    get:
+      tags:
+      - yieldaggregator
+      summary: Get Vaults
+      description: 'Fetches vault information (APY, fees, performance) for yield-generating opportunities across supported blockchains.
+
+
+        > 💡
+
+        **Compute Unit Value:** `115` (Fixed)'
+      operationId: yieldaggregatorGetvaults
+      parameters:
+      - name: yieldAggregatorId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5000'
+          - '5001'
+          - '5002'
+          - '5003'
+          - '5100'
+          example: '5000'
+        description: The unique ID to specify the yield aggregator for queries or transactions.
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: The address of the token.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    tokenVaults:
+                    - vaultAddress: '0xFE09e53A81Fe2808bc493ea64319109B5bAa573e'
+                      apy: '4.08'
+                      poolAddress: '0x3DA9D911301f8144bdF5c3c67886e5373DCdff8e'
+      x-bd-cu: '115'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/mint:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Mint
+      description: 'Converts deposited assets into yield-bearing tokens (or share tokens) within a yield aggregator protocol. The response includes transaction details (chain ID, addresses, gas, reference ID) for secure tracking.
+
+
+        > 💡
+
+        **Compute Unit Value:** `30` (Fixed)'
+      operationId: yieldaggregatorMint
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/mint
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_mint_Request'
+            example:
+              yieldAggregatorId: '5200'
+              tokenIn: '0x4db99b79361f98865230f5702de024c69f629fec'
+              amountIn: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              gasPriority: low
+              slippage: '10'
+              ytAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+              syAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    to: '0x888888888889758F76e7103c6CbF23ABbF58F946'
+                    value: '0'
+                    gas: '1000000'
+                    data: '0x1a8631b2000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b4020000000000000000000000004a8036efa1307f1ca82d932c0895faa18db0c9ee0000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000083d6c7aab6360000'
+                    estimationCheck: 'Returned error: execution reverted: ERC20: insufficient allowance'
+                    referenceId: 3173e53c1af44cda8f70d4990858d2c6
+      x-bd-cu: '30'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/redeem:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Redeem
+      description: 'Converts yield-bearing tokens back into their underlying asset within a yield aggregator protocol. The response includes transaction metadata (chain ID, addresses, gas) and a unique reference ID for tracking.
+
+
+        > 💡
+
+        **Compute Unit Value:** `40` (Fixed)'
+      operationId: yieldaggregatorRedeem
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/redeem
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_redeem_Request'
+            example:
+              yieldAggregatorId: '5200'
+              tokenOut: '0x4db99b79361f98865230f5702de024c69f629fec'
+              amountIn: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              slippage: '10'
+              ytAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+              syAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    to: '0x888888888889758F76e7103c6CbF23ABbF58F946'
+                    value: '0'
+                    gas: '1000000'
+                    data: '0x339748cb000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b4020000000000000000000000004a8036efa1307f1ca82d932c0895faa18db0c9ee0000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000083d6c7aab6360000'
+                    estimationCheck: 'Returned error: execution reverted: ERC20: insufficient allowance'
+                    referenceId: d0de8589aa8f4306b3a5b3c2044e28f1
+      x-bd-cu: '40'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/removeliquidity:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Remove Liquidity
+      description: 'Withdraws tokens from a yield aggregator market, supporting advanced options like dual-token removal and slippage control. The response includes chain details, addresses, gas usage, and a unique reference ID for transaction tracking.
+
+
+        > 💡
+
+        **Compute Unit Value:** `120` (Fixed)'
+      operationId: yieldaggregatorRemoveliquidity
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/removeliquidity
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_removeliquidity_Request'
+            example:
+              yieldAggregatorId: '5200'
+              marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+              tokenOut: '0x4db99b79361f98865230f5702de024c69f629fec'
+              amountIn: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              isDual: false
+              slippage: '10'
+              enableAggregator: false
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    to: '0x888888888889758F76e7103c6CbF23ABbF58F946'
+                    value: '0'
+                    gas: '1000000'
+                    data: '0xb7d75b8b000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b402000000000000000000000000b451a36c8b6b2eac77ad0737ba732818143a0e250000000000000000000000000000000000000000000000008ac7230489e800000000000000000000000000000000000000000000000000001a3314a2f53c7a6f0000000000000000000000000000000000000000000000010bfcf818602b1a92'
+                    estimationCheck: 'Returned error: execution reverted: ERC20: insufficient allowance'
+                    referenceId: a2b80241f98544579531de6190c45729
+      x-bd-cu: '120'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/swap:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Swap
+      description: 'Executes token swaps within a yield aggregator protocol, providing transaction metadata (chain ID, addresses, gas, reference ID). Configurable slippage, swap path, and gas priority let users tailor swaps to market conditions.
+
+
+        > 💡
+
+        **Compute Unit Value:** `95` (Fixed)'
+      operationId: yieldaggregatorSwap
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/swap
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_swap_Request'
+            example:
+              yieldAggregatorId: '5200'
+              marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              path:
+              - '0x514910771AF9Ca656af840dff83E8264EcF986CA'
+              - '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              amountIn: '1000000000000000000'
+              slippage: '10'
+              gas: '100000'
+              enableAggregator: false
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    to: '0x888888888889758F76e7103c6CbF23ABbF58F946'
+                    value: '0'
+                    gas: '1000000'
+                    data: '0x2a50917c000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b402000000000000000000000000b451a36c8b6b2eac77ad0737ba732818143a0e250000000000000000000000000000000000000000000000008ac7230489e8000000000000000000000000000000000000000000000000000089f69f2983fe3071000000000000000000000000000000000000000000000000489cbf8f1d0c8549000000000000000000000000000000000000000000000000b587dee5c89f4d3600000000000000000000000000000000000000000000000091397f1e3a190a92000000000000000000000000000000000000000000000000000000000000001e00000000000000000000000000000000000000000000000000005af3107a400000000000000000000000000000000000000000000000000000000000000001400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+                    estimationCheck: 'Returned error: execution reverted: ERC20: insufficient allowance'
+                    referenceId: 8d5b7f177bf541d385f723d4891a792e
+      x-bd-cu: '95'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/transferliquidity:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Transfer Liquidity
+      description: 'Moves liquidity between markets, specifying source/destination addresses plus amounts of LP, principal, and yield tokens. Optional parameters (slippage, redeemRewards, zeroPriceImpact) fine-tune the transaction, with a reference ID for tracking.
+
+
+        > 💡
+
+        **Compute Unit Value:** `125` (Fixed)'
+      operationId: yieldaggregatorTransferliquidity
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/transferliquidity
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_transferliquidity_Request'
+            example:
+              yieldAggregatorId: '5200'
+              marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              dstMarketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+              lpAmount: '1000000000000000000'
+              ptAmount: '1000000000000000000'
+              ytAmount: '1000000000000000000'
+              slippage: '10'
+              gas: '100000'
+              redeemRewards: false
+              zeroPriceImpact: false
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    to: '0x888888888889758F76e7103c6CbF23ABbF58F946'
+                    value: '0'
+                    gas: '1000000'
+                    data: '0x9fa02c860000000000000000000000005039da22e5126e7c4e9284376116716a91782faf000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000003e0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000003247036e0520000000000000000000000005039da22e5126e7c4e9284376116716a91782faf000000000000000000000000b451a36c8b6b2eac77ad0737ba732818143a0e250000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000000000000000000000000000000de0b6b3a764000000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000002200000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b30000000000000000000000000000000000000000000000002844adcdc8f57fb00000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b3000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000056412599ac6000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b402000000000000000000000000cdd26eb5eb2ce0f203a84553853667ae69ca29ce0000000000000000000000000000000000000000000000001359ce887f24a97800000000000000000000000000000000000000000000000013cfba812d8cb8c000000000000000000000000000000000000000000000000031875242f1dfcde0000000000000000000000000000000000000000000000000279f75025b197180000000000000000000000000000000000000000000000000000000000000001e00000000000000000000000000000000000000000000000000005af3107a4000000000000000000000000000000000000000000000000000000000000000014000000000000000000000000000000000000000000000000000000000000004600000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b30000000000000000000000000000000000000000000000002a633db031d9ffac0000000000000000000000009d39a5de30e57443bff2a8307a4256c8797a34970000000000000000000000007ae5c4cf5cddfbda870a80d021997d8a04f4ff1100000000000000000000000000000000000000000000000000000000000000a00000000000000000000000000000000000000000000000000000000000000002000000000000000000000000cf5540fffcdc3d510b18bfca6d2b9987b07725590000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000001c43b635ce40000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b30000000000000000000000000000000000000000000000002b3c440ac2356610000000000000000000000000b28ca7e465c452ce4252598e0bc96aeba553cf820000000000000000000000009d39a5de30e57443bff2a8307a4256c8797a349700000000000000000000000000000000000000000000000025d59e349e70800000000000000000000000000000000000000000000000000025b88fa6a3158a00000000000000000000000000888888888889758f76e7103c6cbf23abbf58f9460000000000000000000000000000000000000000000000000000000000000140000000000000000000000000b28ca7e465c452ce4252598e0bc96aeba553cf820000000000000000000000000000000000000000000000000000000035d39ebf000000000000000000000000000000000000000000000000000000000000005c0102040046010101020301ff00000000000000000000000000000000000000009d39a5de30e57443bff2a8307a4256c8797a34974c9edd5852cd905f086c759e8383e09bff1e68b39d39a5de30e57443bff2a8307a4256c8797a349700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+                    estimationCheck: 'Returned error: execution reverted: ERC20: insufficient allowance'
+                    referenceId: 5b86393c4dc74d9bb0fee01660829e5a
+      x-bd-cu: '125'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/withdrawpool:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Withdraw Pool
+      description: 'Processes withdrawals from yield-generating pools with configurable gas parameters and flexible pool identification options.
+
+
+        > 💡
+
+        **Compute Unit Value:** `40` (Fixed)'
+      operationId: yieldaggregatorWithdrawpool
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/withdrawpool
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_withdrawpool_Request'
+            example:
+              yieldAggregatorId: '5100'
+              amount: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0x3DA9D911301f8144bdF5c3c67886e5373DCdff8e'
+                    value: '0'
+                    gas: '2307200'
+                    data: '0x2e1a7d4d00000000000000000000000000000000000000000000000000000000004b4a52'
+                    referenceId: cb96c9dc2c9e4ba7804b037f1c799059
+      x-bd-cu: '40'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/yieldaggregator/withdrawvault:
+    post:
+      tags:
+      - yieldaggregator
+      summary: Withdraw Vault
+      description: 'Executes withdrawals from yield vaults, returning the user’s deposited tokens. Multiple identification methods (vaultAddress, tokenAddress, vaultNumber) are supported, with transaction details provided for verification and tracking.
+
+
+        > 💡
+
+        **Compute Unit Value:** `40` (Fixed)'
+      operationId: yieldaggregatorWithdrawvault
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/yieldaggregator/withdrawvault
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_yieldaggregator_withdrawvault_Request'
+            example:
+              amount: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              vaultNumber: '1'
+              vaultAddress: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+              yieldAggregatorId: '5000'
+              gasPriority: low
+              enableFee: false
+              poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    to: '0xFE09e53A81Fe2808bc493ea64319109B5bAa573e'
+                    value: '0'
+                    gas: '2307200'
+                    data: '0x2e1a7d4d000000000000000000000000000000000000000000000000000000000007a120'
+                    referenceId: 7250fb68fbfa4411901e2a77b1e06974
+      x-bd-cu: '40'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  schemas:
+    _yieldaggregator_transferliquidity_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: A unique identifier to route the transaction to the correct yield aggregator instance. This parameter is optional if a default aggregator is used.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        marketAddress:
+          type: string
+          description: The blockchain address of the source market from which liquidity is being transferred.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        dstMarketAddress:
+          type: string
+          description: The blockchain address of the destination market where the liquidity will be deposited.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        lpAmount:
+          type: string
+          description: 'Amount of liquidity provider (LP) tokens to transfer, specified in the token''s smallest denomination (base units). Example: 1 LP token (18 decimals) = "1000000000000000000".'
+          example: '1000000000000000000'
+        ptAmount:
+          type: string
+          description: 'Amount of principal tokens (PT) involved in the transfer, specified in the token''s smallest denomination (base units). Principal tokens represent the original asset value deposited in the yield aggregator. Example: 1 PT token (18 decimals) = "1000000000000000000".'
+          example: '1000000000000000000'
+        ytAmount:
+          type: string
+          description: 'Amount of yield tokens (YT) to transfer, specified in the token''s smallest denomination (base units). Yield tokens represent the accrued yield from the user''s deposit. Example: 1 YT token (18 decimals) = "1000000000000000000".'
+          example: '1000000000000000000'
+        slippage:
+          type: string
+          description: 'Specifies the maximum acceptable percentage deviation between the expected and actual execution price during the liquidity removal. This helps protect against unfavorable price movements. The value is expressed as a percentage (e.g., 1 for 1%). Valid range: 0 to 100 (e.g., 1 = up to 1% slippage).'
+          example: '10'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        redeemRewards:
+          type: boolean
+          description: An optional flag indicating whether accrued rewards should be redeemed as part of the liquidity transfer transaction.
+          example: false
+        zeroPriceImpact:
+          type: boolean
+          description: When set to true, the transaction is executed to avoid any change in the asset’s price, resulting in the user receiving both LP and YT tokens, though the LP amount will be lower than in standard mode.
+          example: false
+        gasPriority:
+          type: string
+          description: Specifies the desired gas fee priority (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - marketAddress
+      - from
+      - dstMarketAddress
+      - lpAmount
+      - ptAmount
+      - ytAmount
+      description: The request body for a /defi/v1/yieldaggregator/transferliquidity
+      example:
+        yieldAggregatorId: '5200'
+        marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        dstMarketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        lpAmount: '1000000000000000000'
+        ptAmount: '1000000000000000000'
+        ytAmount: '1000000000000000000'
+        slippage: '10'
+        gas: '100000'
+        redeemRewards: false
+        zeroPriceImpact: false
+        gasPriority: low
+        enableFee: false
+    _yieldaggregator_removeliquidity_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: A unique identifier to route the transaction to the appropriate yield aggregator instance. This parameter is optional if a default aggregator is used.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        marketAddress:
+          type: string
+          description: The blockchain address of the liquidity pool or market where tokens will be deposited. This parameter directs the transaction to the correct pool within the yield aggregator.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        tokenOut:
+          type: string
+          description: The token that the user wishes to receive as a result of the liquidity removal. This parameter specifies which output token is desired when liquidity is withdrawn from the pool.
+          example: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amountIn:
+          type: string
+          description: 'Amount of tokens to remove from the liquidity pool, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        isDual:
+          type: boolean
+          description: An optional flag indicating whether the liquidity removal should be executed in dual-token mode. If set to true, liquidity will be removed for both tokens in the pool according to the pool’s ratio; if false or omitted, only a single token (as specified by tokenOut) will be withdrawn.
+          example: false
+        slippage:
+          type: string
+          description: 'The maximum allowable percentage deviation between the expected and executed swap price. Default is 1, meaning a 1% tolerance (acceptable range: 0 to 100).'
+          example: '10'
+        enableAggregator:
+          type: boolean
+          description: Enable swap aggregator functionality to facilitate swaps between tokens that are not directly convertible with the underlying asset. Set this boolean flag to true to activate advanced routing logic for such conversions.
+          example: false
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the desired gas fee priority (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - marketAddress
+      - tokenOut
+      - amountIn
+      - from
+      description: The request body for a /defi/v1/yieldaggregator/removeliquidity
+      example:
+        yieldAggregatorId: '5200'
+        marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        tokenOut: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amountIn: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        isDual: false
+        slippage: '10'
+        enableAggregator: false
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _yieldaggregator_swap_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: The unique identifier used to route queries or transactions to the correct yield aggregator.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        marketAddress:
+          type: string
+          description: The blockchain address of the source yield market from which the tokens will be swapped. This address directs the swap to the appropriate liquidity pool within the aggregator.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        path:
+          type: array
+          items:
+            type: string
+          description: 'Ordered array of token contract addresses defining the swap route from input to output. Provide [tokenInAddress, tokenOutAddress] for a direct swap. Example (WETH→USDC): [''0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'', ''0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48''].'
+          example:
+          - '0x514910771AF9Ca656af840dff83E8264EcF986CA'
+          - '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amountIn:
+          type: string
+          description: 'Amount of the input token to provide, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: to swap 1 WETH (18 decimals), use "1000000000000000000"; to swap 1 USDC (6 decimals), use "1000000".'
+          example: '1000000000000000000'
+        slippage:
+          type: string
+          description: 'The maximum allowable percentage deviation between the expected and executed swap price. Default is 1, meaning a 1% tolerance (acceptable range: 0 to 100).'
+          example: '10'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        enableAggregator:
+          type: boolean
+          description: Enable swap aggregator functionality to facilitate swaps between tokens that are not directly convertible with the underlying asset. Set this boolean flag to true to activate advanced routing logic for such conversions.
+          example: false
+        gasPriority:
+          type: string
+          description: Specifies the desired gas fee priority for the transaction. Acceptable values include 'low', 'medium', or 'high', and this setting can influence the speed and cost of the swap.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - marketAddress
+      - from
+      - path
+      - amountIn
+      description: The request body for a /defi/v1/yieldaggregator/swap
+      example:
+        yieldAggregatorId: '5200'
+        marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        path:
+        - '0x514910771AF9Ca656af840dff83E8264EcF986CA'
+        - '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        amountIn: '1000000000000000000'
+        slippage: '10'
+        gas: '100000'
+        enableAggregator: false
+        gasPriority: low
+        enableFee: false
+    _yieldaggregator_withdrawvault_Request:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        tokenAddress:
+          type: string
+          description: The smart contract address of the token. Use this parameter along with vaultNumber if you are not providing the vaultAddress directly.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        vaultNumber:
+          type: string
+          description: A numeric identifier for the specific vault (used when there are multiple vaults for the same token). Provide this along with tokenAddress if vaultAddress is not available.
+          example: '1'
+        vaultAddress:
+          type: string
+          description: The direct blockchain address of the yield vault to withdraw from. Use this parameter if you wish to directly specify the target vault instead of using tokenAddress and vaultNumber.
+          example: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+        yieldAggregatorId:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5000'
+          - '5001'
+          - '5002'
+          - '5003'
+          - '5100'
+          example: '5000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        poolAddress:
+          type: string
+          description: Address of the liquidity pool.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+      required:
+      - amount
+      - from
+      description: The request body for a /defi/v1/yieldaggregator/withdrawvault
+      example:
+        amount: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        vaultNumber: '1'
+        vaultAddress: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+        yieldAggregatorId: '5000'
+        gasPriority: low
+        enableFee: false
+        poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+    _yieldaggregator_mint_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: The unique identifier used to route queries or transactions to the correct yield aggregator.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        tokenIn:
+          type: string
+          description: Specifies the underlying asset (token) that is being deposited for minting yield-bearing tokens. This parameter should be provided as the token's contract address or an accepted identifier according to the protocol specifications.
+          example: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amountIn:
+          type: string
+          description: 'Amount of the input token to provide, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: to swap 1 WETH (18 decimals), use "1000000000000000000"; to swap 1 USDC (6 decimals), use "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        slippage:
+          type: string
+          description: 'Optional slippage tolerance for the transaction. Valid range: 0 to 100 (e.g., 1 = up to 1% slippage).'
+          example: '10'
+        ytAddress:
+          type: string
+          description: The blockchain address of the yield token. You can provide this parameter using either 'ytAddress' (yield token address) or 'syAddress' (standard yield address). Both names are accepted and refer to the same value.
+          example: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        syAddress:
+          type: string
+          description: The blockchain address of the yield token. You can provide this parameter using either 'ytAddress' (yield token address) or 'syAddress' (standard yield address). Both names are accepted and refer to the same value.
+          example: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - tokenIn
+      - amountIn
+      - from
+      - ytAddress
+      - syAddress
+      description: The request body for a /defi/v1/yieldaggregator/mint
+      example:
+        yieldAggregatorId: '5200'
+        tokenIn: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amountIn: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        gasPriority: low
+        slippage: '10'
+        ytAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        syAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        enableFee: false
+    _yieldaggregator_redeem_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: The unique identifier used to route queries or transactions to the correct yield aggregator.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        tokenOut:
+          type: string
+          description: The token to be received upon withdrawal.
+          example: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amountIn:
+          type: string
+          description: 'Amount of the input token to provide, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: to swap 1 WETH (18 decimals), use "1000000000000000000"; to swap 1 USDC (6 decimals), use "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        slippage:
+          type: string
+          description: 'Optional slippage tolerance for the transaction. Valid range: 0 to 100 (e.g., 1 = up to 1% slippage).'
+          example: '10'
+        ytAddress:
+          type: string
+          description: The blockchain address of the yield token. You can provide this parameter using either 'ytAddress' (yield token address) or 'syAddress' (standard yield address). Both names are accepted and refer to the same value.
+          example: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        syAddress:
+          type: string
+          description: The blockchain address of the yield token. You can provide this parameter using either 'ytAddress' (yield token address) or 'syAddress' (standard yield address). Both names are accepted and refer to the same value.
+          example: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - tokenOut
+      - amountIn
+      - from
+      - ytAddress
+      - syAddress
+      description: The request body for a /defi/v1/yieldaggregator/redeem
+      example:
+        yieldAggregatorId: '5200'
+        tokenOut: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amountIn: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        slippage: '10'
+        ytAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        syAddress: '0x4a8036efa1307f1ca82d932c0895faa18db0c9ee'
+        enableFee: false
+    _yieldaggregator_addliquidity_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: A unique identifier to route the transaction to the appropriate yield aggregator instance. This parameter is optional if a default aggregator is used.
+          enum:
+          - '5200'
+          - '5201'
+          - '5202'
+          - '5203'
+          - '5204'
+          example: '5200'
+        marketAddress:
+          type: string
+          description: The blockchain address of the liquidity pool or market where tokens will be deposited. This parameter directs the transaction to the correct pool within the yield aggregator.
+          example: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        tokenIn:
+          type: string
+          description: The address or identifier of the token being deposited. This parameter specifies the underlying asset that will be added as liquidity.
+          example: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amountPtIn:
+          type: string
+          description: 'Optional amount of principal tokens (PT) to deposit, specified in the token''s smallest denomination (base units). Required by certain protocols that accept PT alongside the main asset. Example: 1 PT token (18 decimals) = "1000000000000000000".'
+          example: '10000'
+        slippage:
+          type: string
+          description: 'Specifies the maximum allowable percentage deviation between the expected and executed price during the deposit. This tolerance helps protect against unfavorable price movements during the transaction. Valid range: 0 to 100 (e.g., 1 = up to 1% slippage).'
+          example: '10'
+        zeroPriceImpact:
+          type: boolean
+          description: When set to true, the transaction is executed to avoid any change in the asset's price, resulting in the user receiving both LP and YT tokens, though the LP amount will be lower than in standard mode.
+          example: false
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the desired gas fee priority (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - marketAddress
+      - tokenIn
+      - amount
+      - from
+      description: The request body for a /defi/v1/yieldaggregator/addliquidity
+      example:
+        yieldAggregatorId: '5200'
+        marketAddress: '0xcdd26eb5eb2ce0f203a84553853667ae69ca29ce'
+        tokenIn: '0x4db99b79361f98865230f5702de024c69f629fec'
+        amount: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amountPtIn: '10000'
+        slippage: '10'
+        zeroPriceImpact: false
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _yieldaggregator_depositvault_Request:
+      type: object
+      properties:
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        tokenAddress:
+          type: string
+          description: The contract address of the token being deposited. Use this field when identifying the vault by token along with the vaultNumber (if multiple vaults exist for the same token).
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        vaultNumber:
+          type: string
+          description: A numeric identifier for the specific vault associated with the token. This is required when using the tokenAddress approach to distinguish between multiple vaults for the same token.
+          example: '1'
+        vaultAddress:
+          type: string
+          description: The direct blockchain address of the yield vault. Use this field if you wish to bypass tokenAddress and vaultNumber by specifying the exact vault address.
+          example: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+        yieldAggregatorId:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5000'
+          - '5001'
+          - '5002'
+          - '5003'
+          - '5100'
+          example: '5000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        poolAddress:
+          type: string
+          description: The blockchain address of the pool associated with the vault, ensuring that the deposit is routed to the correct liquidity pool for yield generation.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+      required:
+      - amount
+      - from
+      description: The request body for a /defi/v1/yieldaggregator/depositvault
+      example:
+        amount: '1000000000000000000'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        vaultNumber: '1'
+        vaultAddress: '0xa258C4606Ca8206D8aA700cE2143D7db854D168c'
+        yieldAggregatorId: '5000'
+        gasPriority: low
+        enableFee: false
+        poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+    _yieldaggregator_withdrawpool_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5100'
+          example: '5100'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        tokenAddress:
+          type: string
+          description: Token's address.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        poolAddress:
+          type: string
+          description: Pool's address.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - amount
+      - from
+      description: The request body for a /defi/v1/yieldaggregator/withdrawpool
+      example:
+        yieldAggregatorId: '5100'
+        amount: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        gasPriority: low
+        enableFee: false
+    _yieldaggregator_depositpool_Request:
+      type: object
+      properties:
+        yieldAggregatorId:
+          type: string
+          description: The unique ID to specify the yield aggregator for queries or transactions.
+          enum:
+          - '5100'
+          example: '5100'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        tokenAddress:
+          type: string
+          description: The smart contract address of the token being deposited. Use this parameter when you do not have the direct yield pool address available.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        poolAddress:
+          type: string
+          description: The direct blockchain address of the yield pool where the deposit will be credited. Provide this if available; otherwise, you may use tokenAddress to identify the target pool.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - amount
+      - from
+      description: The request body for a /defi/v1/yieldaggregator/depositpool
+      example:
+        yieldAggregatorId: '5100'
+        amount: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        poolAddress: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        gasPriority: low
+        enableFee: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

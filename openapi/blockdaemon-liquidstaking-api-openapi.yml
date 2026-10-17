@@ -1,0 +1,2099 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Liquidstaking API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: liquidstaking
+paths:
+  /defi/v1/liquidstaking/approvewithdrawal:
+    post:
+      tags:
+      - liquidstaking
+      summary: Approve Withdrawal
+      description: 'Initiate a blockchain transaction that grants permission for a pending withdrawal request. This endpoint verifies that the specified user address is authorized to withdraw staked tokens, ensuring the withdrawal request is properly approved before execution.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: liquidstakingApprovewithdrawal
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/approvewithdrawal
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_approvewithdrawal_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x747b11E5AaCeF79cd78C78a8436946b00dE30b97'
+                    to: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'
+                    data: '0x095ea7b3000000000000000000000000889edc2edab5f40e902b864ad4d7ade8e412f9b100000000000000000000000000000000000000000000000000000000000f4240'
+                    gas: '40000000'
+                    value: '0'
+                    referenceId: 150082533644414dba28249a26f30082
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/burn:
+    post:
+      tags:
+      - liquidstaking
+      summary: Burn
+      description: 'Execute a burn transaction that permanently removes a specified amount of osETH tokens from circulation. This operation adjusts the circulating supply in accordance with the protocol’s tokenomics and can affect the overall staking balance.
+
+
+        > 💡
+
+        **Compute Unit Value:** `20` (Fixed)'
+      operationId: liquidstakingBurn
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/burn
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_burn_Request'
+            example:
+              liquidStakingId: '200'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x02Fd5aBb1f77841827Bfb7cB19608Ec6488BEd08'
+                    to: '0xe6d8d8aC54461b1C5eD15740EEe322043F696C08'
+                    value: '0'
+                    gas: '12212'
+                    data: '0x066055e00000000000000000000000000000000000000000000000000000000000000142'
+                    referenceId: a3ff2853fb204693bcba1d1a478e9164
+      x-bd-cu: '20'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/claim:
+    post:
+      tags:
+      - liquidstaking
+      summary: Claim
+      description: 'Process the claiming of accrued staking rewards. This endpoint allows you to collect earned rewards by specifying token amounts and adjusting gas parameters for optimal transaction speed and cost efficiency across different liquid staking protocols.
+
+
+        > 💡
+
+        **Compute Unit Value:** `35` (Fixed)'
+      operationId: liquidstakingClaim
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/claim
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_claim_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              requestId: '7'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+              amount: '1000000000000000000'
+              token: sTETH
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xe55A8cFF86aBf88bfD89C81C287f14848bcf8542'
+                    to: '0xe6d8d8aC54461b1C5eD15740EEe322043F696C08'
+                    value: '0'
+                    data: '0x8697d2c200000000000000000000000000000000000000000000000558ccb2cc7eb56b24000000000000000000000000000000000000000000000000000000006645dc67000000000000000000000000000000000000000000000000000000000000001b'
+                    gas: '800000'
+                    referenceId: 0e9a5ad94cb94402b162962b2bc125e2
+      x-bd-cu: '35'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/decreaseallowance:
+    post:
+      tags:
+      - liquidstaking
+      summary: Decrease Allowance
+      description: 'Reduce the spending allowance for staked tokens by a specified amount. This transaction lets you fine-tune the approved amount that a spender can use on your behalf, with customizable gas settings to ensure efficient execution.
+
+
+        > 💡
+
+        **Compute Unit Value:** `55` (Fixed)'
+      operationId: liquidstakingDecreaseallowance
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/decreaseallowance
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_decreaseallowance_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              spender: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+              subtractedAmount: '100000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x9f0ff6eCef671200447604c19D72228a170BC21c'
+                    to: '0xA35b1B31Ce002FBF2058D22F30f95D405200A15b'
+                    data: '0xa457c2d7000000000000000000000000cf5ea1b38380f6af39068375516daf40ed70d29900000000000000000000000000000000000000000000000000000000000186a0'
+                    value: '0'
+                    gas: '400000'
+                    referenceId: c86772e57a054784b95f30660b804e51
+      x-bd-cu: '55'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/delegate:
+    post:
+      tags:
+      - liquidstaking
+      summary: Delegate
+      description: 'Initiate the delegation of staked assets to a chosen operator contract. By delegating your tokens, you can potentially enhance yield or participate in network operations, with configurable gas parameters to suit current network conditions.
+
+
+        > 💡
+
+        **Compute Unit Value:** `10` (Fixed)'
+      operationId: liquidstakingDelegate
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/delegate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_delegate_Request'
+            example:
+              liquidStakingId: '3'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              delegateTo: '0xdbed88d83176316fc46797b43adee927dc2ff2f5'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                    to: '0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A'
+                    data: '0xeea9064b000000000000000000000000dbed88d83176316fc46797b43adee927dc2ff2f500000000000000000000000000000000000000000000000000000000000000600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+                    gas: '80000'
+                    value: '0'
+                    gasPrice: '1'
+                    estimationCheck: true
+                    referenceId: f95b5b2d47124927ba87c452202d9bbf
+      x-bd-cu: '10'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getallowance:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get Allowance
+      description: 'Retrieve the current token allowance that a designated spender is authorized to use on behalf of the token owner. Use this endpoint to verify approved limits before executing any subsequent spending or transfer operations.
+
+
+        > 💡
+
+        **Compute Unit Value:** `35` (Fixed)'
+      operationId: liquidstakingGetallowance
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '43114'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      - name: owner
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the owner of the token.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the owner of the token.
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Contract address of the token.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: Contract address of the token.
+      - name: spender
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the spender of the token.
+          example: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+        description: Public address of the spender of the token.
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    allowance: '20000000000'
+                    prices:
+                      usd:
+                      - '0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be': '28.35410204725495'
+                      inr:
+                      - '0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be': '2450.942361058311'
+                      cny:
+                      - '0x2b2c81e08f1af8835a78bb2a90ae924ace0ea4be': '202.9416499930226'
+      x-bd-cu: '35'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getapr:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get APR
+      description: 'Fetch the latest Annual Percentage Rate (APR) for staking rewards across various liquid staking protocols (such as Lido, Stader, Chorus One, EigenLayer, Benqi, and Jito) on different networks. This provides a quick snapshot of current yield rates to help inform staking decisions.
+
+
+        > 💡
+
+        **Compute Unit Value:** `45` (Fixed)'
+      operationId: liquidstakingGetapr
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '137'
+          - '43114'
+          - '900'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    timeUnix: '1716812675'
+                    apr: '3.103'
+                    blockNumber: '19961193'
+      x-bd-cu: '45'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getprotocolapr:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get Protocol APR
+      description: 'Obtain historical APR data for Lido on Ethereum over the past seven days. The response includes timestamped APR values along with associated block numbers, as well as a simple moving average (SMA) APR, allowing for trend analysis over time.
+
+
+        > 💡
+
+        **Compute Unit Value:** `5` (Fixed)'
+      operationId: liquidstakingGetprotocolapr
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    aprs:
+                    - timeUnix: 1712492591
+                      apr: 3.041
+                      blockNumber: 19603793
+                    - timeUnix: 1712579075
+                      apr: 3.148
+                      blockNumber: 19610931
+                    - timeUnix: 1712665379
+                      apr: 3.22
+                      blockNumber: 19618058
+                    - timeUnix: 1712751839
+                      apr: 3.36
+                      blockNumber: 19625206
+                    - timeUnix: 1712838191
+                      apr: 3.45
+                      blockNumber: 19632355
+                    - timeUnix: 1712924531
+                      apr: 3.146
+                      blockNumber: 19639495
+                    - timeUnix: 1713011063
+                      apr: 4.31
+                      blockNumber: 19646630
+                    - timeUnix: 1713097271
+                      apr: 4.436
+                      blockNumber: 19653737
+                    smaApr: 3.513875
+      x-bd-cu: '5'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getrewards:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get Rewards
+      description: 'Retrieve comprehensive staking metrics for a given user address. The response details historical reward events, cumulative reward totals (both in ETH and equivalent currency), average APR, and current stake-to-share ratios—offering a full picture of your staking performance and reward accrual.
+
+
+        > 💡
+
+        **Compute Unit Value:** `10` (Fixed)'
+      operationId: liquidstakingGetrewards
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '43114'
+          - '900'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the user.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the user.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The page number that the user wants to fetch. Defaults to 1 if not specified.
+          example: '1'
+        description: The page number that the user wants to fetch. Defaults to 1 if not specified.
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Starting block of the range.
+          example: '100000'
+        description: Starting block of the range.
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Ending block of the range.
+          example: '100010'
+        description: Ending block of the range.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    events:
+                    - apr: '3.937496701524082809229480683079713'
+                      block: '18634427'
+                      blockTime: '1700742443'
+                      id: '0x03f3622b45a9edbfe95325ff82295f5607bad59b0ad2c685b9466a9095ac61da'
+                      logIndex: '10'
+                      totalPooledEtherAfter: '9157899107759077846808314'
+                      totalPooledEtherBefore: '9166748915742419188288274'
+                      totalSharesAfter: '7979812024150962005298647'
+                      totalSharesBefore: '7988385045435518208987747'
+                      type: reward
+                      reportShares: '18867868971733625201'
+                      balance: '21653397335501660877'
+                      rewards: '2335643397182351'
+                      change: '2335643397182351'
+                      currencyChange: '4.826179060422565701819216607798'
+                      epochDays: '19684.519016203703703704'
+                      epochFullDays: '19684'
+                    - apr: '4.055508196694252655350449732776334'
+                      block: '18627274'
+                      blockTime: '1700656079'
+                      id: '0xd675c60b908931ab56b5fdabe6ef9e2c087c98d35d90fc1469bfa66767488628'
+                      logIndex: '10'
+                      totalPooledEtherAfter: '9102161623476534577713402'
+                      totalPooledEtherBefore: '9107756642154064122216622'
+                      totalSharesAfter: '7932100296676238065535304'
+                      totalSharesBefore: '7937857964883158472876527'
+                      type: reward
+                      reportShares: '18867868971733625201'
+                      balance: '21651061692104478526'
+                      rewards: '2405378167906481'
+                      change: '2405378167906481'
+                      currencyChange: '4.6676294187476755809931606548492'
+                      epochDays: '19683.51943287037037037'
+                      epochFullDays: '19683'
+                    totals:
+                      ethRewards: '653197335501660878'
+                      currencyRewards: '1173.1516994959593645694978037777253'
+                    averageApr: '4.30030827194990587'
+                    ethToStEthRatio: 1.000684768587144
+                    stETHCurrencyPrice:
+                      eth: 0.9993157
+                      usd: 3084.04
+                    totalItems: 260
+      x-bd-cu: '10'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getstake:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get Stake
+      description: 'Query the current staked token balance for a specific address across supported liquid staking protocols. The returned data (e.g., stETH and wstETH amounts) allows users to monitor their staking positions and assess their exposure in real time.
+
+
+        > 💡
+
+        **Compute Unit Value:** `10` (Fixed)'
+      operationId: liquidstakingGetstake
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '3'
+          - '17000'
+          - '43114'
+          - '900'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the user.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the user.
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    status: 200
+                    msg: success
+                    data:
+                      stETH: '1'
+                      wstETH: '0'
+                      prices:
+                        usd:
+                        - '0xae7ab96520de3a18e5e111b5eaab095312d7fe84': '3880.2700150383935'
+                        - '0x7f39c581f595b53c5cb19bd0b3f8da6c935e2ca0': '4689.06194403403'
+      x-bd-cu: '10'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getwithdrawalrequests:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get Withdrawal Requests
+      description: 'Fetch a list of all withdrawal request identifiers (typically represented as NFT IDs) associated with a specific user address. This endpoint is useful for tracking the status of pending withdrawal requests and managing your unstaking operations.
+
+
+        > 💡
+
+        **Compute Unit Value:** `10` (Fixed)'
+      operationId: liquidstakingGetwithdrawalrequests
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '43114'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the user.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the user.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                  - '7'
+      x-bd-cu: '10'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/getwithdrawalstatus:
+    get:
+      tags:
+      - liquidstaking
+      summary: Get Withdrawal Status
+      description: 'Check the detailed status of a specific withdrawal request using its NFT token ID. The response provides key information such as the amounts of stETH and shares involved, the timestamp of the request, and flags indicating whether the request has been finalized or claimed.
+
+
+        > 💡
+
+        **Compute Unit Value:** `10` (Fixed)'
+      operationId: liquidstakingGetwithdrawalstatus
+      parameters:
+      - name: liquidStakingId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '43114'
+          example: '1'
+        description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+      - name: requestId
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The token ID of the NFT, which is minted upon request, to claim the rewards.
+          example: '7'
+        description: The token ID of the NFT, which is minted upon request, to claim the rewards.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the user.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the user.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    amountOfStETH: '10000000000000'
+                    amountOfShares: '8895462062243'
+                    owner: '0x0AAEf336811136c176100092E24cEe3794389B19'
+                    timestamp: '1684163999'
+                    isFinalized: true
+                    isClaimed: false
+      x-bd-cu: '10'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/increaseallowance:
+    post:
+      tags:
+      - liquidstaking
+      summary: Increase Allowance
+      description: 'Increases the spending allowance for staked tokens with configurable gas parameters and amount specifications.
+
+
+        > 💡
+
+        **Compute Unit Value:** `60` (Fixed)'
+      operationId: liquidstakingIncreaseallowance
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/increaseallowance
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_increaseallowance_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+              spender: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+              addedAmount: '100000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x747b11E5AaCeF79cd78C78a8436946b00dE30b97'
+                    to: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0'
+                    data: '0x395093510000000000000000000000007f39c581f595b53c5cb19bd0b3f8da6c935e2ca000000000000000000000000000000000000000000000000000000000000186a0'
+                    value: '0'
+                    gas: '40000000'
+                    referenceId: fefeae75bdf247039d0cc0b6028247d5
+      x-bd-cu: '60'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/mint:
+    post:
+      tags:
+      - liquidstaking
+      summary: Mint
+      description: 'Initiate a transaction to mint new osETH tokens by specifying the desired amount. This operation creates osETH in accordance with the protocol''s staking rules and enables participation in liquid staking, with customizable gas settings for efficient execution.
+
+
+        > 💡
+
+        **Compute Unit Value:** `30` (Fixed)'
+      operationId: liquidstakingMint
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/mint
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_mint_Request'
+            example:
+              liquidStakingId: '200'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                    to: '0xe6d8d8aC54461b1C5eD15740EEe322043F696C08'
+                    value: '0'
+                    gas: '800000'
+                    data: '0x201b9eb5000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b402000000000000000000000000000000000000000000000000000000003b9aca00000000000000000000000000558d7be6092ca91da26521ac25b982d883218e2d'
+                    referenceId: 330fa401b85248dfb8c92a82e5d1aca6
+      x-bd-cu: '30'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/requestwithdrawal:
+    post:
+      tags:
+      - liquidstaking
+      summary: Request Withdrawal
+      description: 'Submit a request to withdraw a specified amount of staked tokens. This endpoint processes withdrawal requests by requiring parameters such as the withdrawal amount and owner address, and supports configurable gas settings to ensure a smooth and cost-effective transaction.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: liquidstakingRequestwithdrawal
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/requestwithdrawal
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_requestwithdrawal_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              ownerAddress: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+              token: sTETH
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x747b11E5AaCeF79cd78C78a8436946b00dE30b97'
+                    to: '0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1'
+                    data: '0xd66810420000000000000000000000000000000000000000000000000000000000000040000000000000000000000000747b11e5aacef79cd78c78a8436946b00de30b97000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000f4240'
+                    gas: '40000000'
+                    value: '0'
+                    referenceId: d3a79bcfd6ce4cdea13dfed88975ced7
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/restake:
+    post:
+      tags:
+      - liquidstaking
+      summary: Restake
+      description: 'Execute a restaking transaction—specifically on EigenLayer—that allows you to reinvest your liquid staking tokens. This endpoint supports token-specific parameters and configurable gas settings, helping you optimize the reinvestment process.
+
+
+        > 💡
+
+        **Compute Unit Value:** `30` (Fixed)'
+      operationId: liquidstakingRestake
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/restake
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_restake_Request'
+            example:
+              liquidStakingId: '3'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              token: sTETH
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                    to: '0x858646372CC42E1A627fcE94aa7A7033e7CF075A'
+                    data: '0xe7a050aa00000000000000000000000093c4b944d05dfe6df7645a86cd2206016c51564d000000000000000000000000ae7ab96520de3a18e5e111b5eaab095312d7fe8400000000000000000000000000000000000000000000000000005af3107a4000'
+                    value: '0'
+                    gas: '171219'
+                    gasPrice: '2'
+                    estimationCheck: true
+                    referenceId: 6ced624eb4bf46438063062d4a4df12d
+      x-bd-cu: '30'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/stake:
+    post:
+      tags:
+      - liquidstaking
+      summary: Stake
+      description: 'Initiate a staking transaction to deposit tokens into a protocol such as Lido. By converting ETH into stETH, you can participate in liquid staking, with the ability to specify the staking amount and adjust gas parameters for efficient transaction processing.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: liquidstakingStake
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/stake
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_stake_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x747b11E5AaCeF79cd78C78a8436946b00dE30b97'
+                    to: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'
+                    data: '0xa1903eab000000000000000000000000558d7be6092ca91da26521ac25b982d883218e2d'
+                    value: '1000000'
+                    gas: '40000000'
+                    referenceId: 49df15a47cde46d38e492fa74d16339c
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/undelegate:
+    post:
+      tags:
+      - liquidstaking
+      summary: Undelegate
+      description: 'Process the undelegation of staked assets from an operator contract, effectively reversing the delegation action. This endpoint enables you to reclaim your staked tokens with configurable gas settings to ensure a smooth transition.
+
+
+        > 💡
+
+        **Compute Unit Value:** `5` (Fixed)'
+      operationId: liquidstakingUndelegate
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/undelegate
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_undelegate_Request'
+            example:
+              liquidStakingId: '3'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                    to: '0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A'
+                    data: '0xda8be864000000000000000000000000dae2f6eddda6fb4fb60cc02633de27e2b431b402'
+                    gas: '131514'
+                    value: '0'
+                    estimationCheck: true
+                    referenceId: e05489bdfda945f096746d4634c7a283
+      x-bd-cu: '5'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/unwrap:
+    post:
+      tags:
+      - liquidstaking
+      summary: Unwrap
+      description: 'Convert wrapped stETH (wstETH) back into its underlying stETH tokens. Specify the amount to unwrap and adjust gas parameters as needed to optimize the conversion process within the liquid staking protocol.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: liquidstakingUnwrap
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/unwrap
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_unwrap_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x747b11E5AaCeF79cd78C78a8436946b00dE30b97'
+                    to: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0'
+                    data: '0xde0e9a3e00000000000000000000000000000000000000000000000000000000000186a0'
+                    value: '0'
+                    gas: '40000000'
+                    referenceId: a868769848d44f3fb862c1b476ae45a8
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/liquidstaking/wrap:
+    post:
+      tags:
+      - liquidstaking
+      summary: Wrap
+      description: 'Initiate the conversion of stETH tokens into their wrapped version (wstETH). This wrapping process enables enhanced flexibility or additional functionality within the protocol, and supports customizable token amounts and gas settings to ensure efficient processing.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: liquidstakingWrap
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/liquidstaking/wrap
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_liquidstaking_wrap_Request'
+            example:
+              liquidStakingId: '1'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x747b11E5AaCeF79cd78C78a8436946b00dE30b97'
+                    to: '0x7f39C581F595B53c5cb19bD0b3f8dA6c935E2Ca0'
+                    data: '0xea598cb000000000000000000000000000000000000000000000000000000000000186a0'
+                    value: '0'
+                    gas: '40000000'
+                    referenceId: 03d97934beaa4f7faafbf31f85f2cea4
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  schemas:
+    _liquidstaking_requestwithdrawal_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '3'
+          - '17000'
+          - '43114'
+          - '900'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        ownerAddress:
+          type: string
+          description: Public address of the owner.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        token:
+          type: string
+          description: The name of the staked token to withdraw.
+          example: sTETH
+      required:
+      - from
+      - amount
+      - ownerAddress
+      - token
+      description: The request body for a /defi/v1/liquidstaking/requestwithdrawal
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        ownerAddress: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+        token: sTETH
+    _liquidstaking_undelegate_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '3'
+          - '17000'
+          example: '3'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      description: The request body for a /defi/v1/liquidstaking/undelegate
+      example:
+        liquidStakingId: '3'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_restake_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '3'
+          - '17000'
+          example: '3'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        token:
+          type: string
+          description: Staked token name for restaking.
+          example: sTETH
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      - token
+      description: The request body for a /defi/v1/liquidstaking/restake
+      example:
+        liquidStakingId: '3'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        token: sTETH
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_stake_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '43114'
+          - '900'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      description: The request body for a /defi/v1/liquidstaking/stake
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_approvewithdrawal_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      description: The request body for a /defi/v1/liquidstaking/approvewithdrawal
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_mint_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '200'
+          - '201'
+          example: '200'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      description: The request body for a /defi/v1/liquidstaking/mint
+      example:
+        liquidStakingId: '200'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_decreaseallowance_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Token contract address.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        spender:
+          type: string
+          description: Public address of the spender.
+          example: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+        subtractedAmount:
+          type: string
+          description: 'Amount to decrease the allowance by, specified in the token''s smallest denomination (base units). Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '100000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - spender
+      - subtractedAmount
+      description: The request body for a /defi/v1/liquidstaking/decreaseallowance
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        spender: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+        subtractedAmount: '100000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_increaseallowance_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress:
+          type: string
+          description: Token contract address.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        spender:
+          type: string
+          description: Public address of the spender.
+          example: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+        addedAmount:
+          type: string
+          description: 'Amount to increase the allowance by, specified in the token''s smallest denomination (base units). Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '100000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - tokenAddress
+      - spender
+      - addedAmount
+      description: The request body for a /defi/v1/liquidstaking/increaseallowance
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        tokenAddress: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        spender: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+        addedAmount: '100000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_unwrap_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      description: The request body for a /defi/v1/liquidstaking/unwrap
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_burn_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '200'
+          - '201'
+          example: '200'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      description: The request body for a /defi/v1/liquidstaking/burn
+      example:
+        liquidStakingId: '200'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_delegate_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '3'
+          - '17000'
+          example: '3'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        delegateTo:
+          type: string
+          description: The operator contract address to which the user wants to delegate.
+          example: '0xdbed88d83176316fc46797b43adee927dc2ff2f5'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - delegateTo
+      description: The request body for a /defi/v1/liquidstaking/delegate
+      example:
+        liquidStakingId: '3'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        delegateTo: '0xdbed88d83176316fc46797b43adee927dc2ff2f5'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _liquidstaking_claim_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          - '200'
+          - '201'
+          - '2'
+          - '56'
+          - '97'
+          - '137'
+          - '3'
+          - '17000'
+          - '43114'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        requestId:
+          type: string
+          description: The token ID of the NFT, minted upon request, required to claim the rewards.
+          example: '7'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        token:
+          type: string
+          description: The name of the staked token to claim rewards for.
+          example: sTETH
+      required:
+      - from
+      - requestId
+      - amount
+      - token
+      description: The request body for a /defi/v1/liquidstaking/claim
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        requestId: '7'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+        amount: '1000000000000000000'
+        token: sTETH
+    _liquidstaking_wrap_Request:
+      type: object
+      properties:
+        liquidStakingId:
+          type: string
+          description: The unique ID to specify the liquid staking protocol for routing staking-related queries or transactions.
+          enum:
+          - '1'
+          - '11155111'
+          example: '1'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Number of tokens, specified in the token''s smallest denomination (base units). Do not send human-readable decimal values. Examples: 1 WETH (18 decimals) = "1000000000000000000"; 1 USDC (6 decimals) = "1000000".'
+          example: '1000000000000000000'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      - amount
+      description: The request body for a /defi/v1/liquidstaking/wrap
+      example:
+        liquidStakingId: '1'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

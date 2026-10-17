@@ -1,0 +1,580 @@
+openapi: 3.2.0
+info:
+  title: Transaction Verify API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Verify
+paths:
+  /{blockchain_id}/verify:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Verify a Transaction
+      description: Verifies whether a signed/unsigned transaction matches the expected input parameters.
+      operationId: TxVerify
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxVerifyRequest'
+            examples:
+              btc_with_errors:
+                summary: Bitcoin mainnet intent verification with errors
+                value:
+                  raw_encoded_tx: 0200000000010184780560d6a6386f4664c28f4072e413cca6c6b429d45d7ebc73cb5cd8d65f4a0c00000000fdffffff012601000000000000160014858ccaca6c4e482f629fdbcc5539e695d8673ea203408ecadedc04af3bc34b0c010e0d63a2b2b2247543b5ef7795e8112df37ed0775c6a5baa1672fb2b950ae4ea7b138b1834ba4c7088c97e960dc0e0fa83184acb5d7c2024f14b181a0f77d670b063836b8942eaafb9714de6ee5bcf9b5ecfaeb76446d1ac0063036f7264010118746578742f706c61696e3b636861727365743d7574662d3800367b2270223a226272632d3230222c226f70223a226d696e74222c227469636b223a22246f6464222c22616d74223a223530303030227d6821c124f14b181a0f77d670b063836b8942eaafb9714de6ee5bcf9b5ecfaeb76446d100000000
+                  tx:
+                    from:
+                    - index: 1
+                      tx_id: 0db756f7b889a5bfa6f2af44f267b60f989c712e49a882ac5768df92e9244687
+                    to:
+                    - value: 527560000
+                      destination: bc1qgcgc5f0f5fth60ycqh6ufdehdds39cc3rajs5j
+      responses:
+        '200':
+          description: Request successful
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                generic:
+                  value:
+                    type: bad-request
+                    code: 16396
+                    title: Bad Request
+                    status: 400
+                    detail: the provided input does not match the transaction
+                btc_with_errors:
+                  summary: Bitcoin mainnet intent verification with errors
+                  value:
+                    type: bad-request
+                    code: 16388
+                    title: Bad Request
+                    status: 400
+                    detail: tx hash '4a5fd6d85ccb73bc7e5dd429b4c6a6cc13e472408fc264466f38a6d660057884' input at index 0 does not match expected hash '0db756f7b889a5bfa6f2af44f267b60f989c712e49a882ac5768df92e9244687'; tx output index 12 of input at index 0 does not match expected index 1; address 'bc1qskxv4jnvfeyz7c5lm0x92w0xjhvxw04zpzg6gn' of tx output at index 0 does not match expected address 'bc1qgcgc5f0f5fth60ycqh6ufdehdds39cc3rajs5j'; amount of 294 sats of tx output at index 0 does not match expected amount of 527560000 sats
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+      tags:
+      - Verify
+components:
+  schemas:
+    ApiTxCreateTokenRequestSolana:
+      title: Api Tx Create Token Request Solana
+      type: object
+      properties:
+        token_address:
+          description: The mint account address of the token.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        from:
+          description: The owner's token account address to send the token from.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipients token account address to sent the token to.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        nonce_account:
+          type: string
+          description: The nonce account used for the transfer.
+          example: 8GRipryfxcsxN8mAGjy8zbFo9ezaUsh47TsPzmZbuytU
+        fee:
+          description: The prioritization fee.
+          type: integer
+          x-go-type: uint64
+      required:
+      - from
+      - to
+      - token_address
+      - value
+    ApiTxVerifyRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxVerifyRequestEVM'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestBTC'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestTron'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestStellar'
+      - $ref: '#/components/schemas/ApiTxVerifyRequestSolana'
+    StringValue:
+      title: String Value
+      type: string
+      description: Value as a string in human readable format. This is in the highest unit of the currecy (for example Eth or BTC)
+      example: '0.00001'
+    ApiTxCreateRequestSolana:
+      title: Api Tx Create Request Solana
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: 6CNAHF4gK6FGjJ54QUyxC6ipS4WUdx6erpqNpS8Ar7Nq
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: 2EMBiBdZaP2mdT9WkRSH15X58xcyigSndvQFA6TBA1Aq
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        nonce_account:
+          type: string
+          description: The nonce account used for the transfer.
+          example: 8GRipryfxcsxN8mAGjy8zbFo9ezaUsh47TsPzmZbuytU
+        fee:
+          description: The prioritization fee.
+          type: integer
+          x-go-type: uint64
+      required:
+      - from
+      - to
+      - value
+    ApiTxVerifyRequestEVM:
+      title: Api Tx Verify Request EVM
+      type: object
+      properties:
+        tx:
+          type: object
+          properties:
+            to:
+              description: The recipient of the transaction.
+              type: string
+              example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+              x-oapi-codegen-extra-tags:
+                validate: required_without=Data
+            value:
+              description: The amount you wish to transfer.
+              type: integer
+              x-go-type: big.Int
+              example: 1000000000000000000
+            gas:
+              type: integer
+              x-go-type: big.Int
+              description: Gas of transaction. If omitted, the gas will be estimated using eth_estimateGas.
+            maxPriorityFeePerGas:
+              type: integer
+              x-go-type: big.Int
+              description: The max priority fee per gas. Also referred to as the miner tip. When omitted an estimate will be used.
+            maxFeePerGas:
+              type: integer
+              x-go-type: big.Int
+              description: The max fee per gas, this includes the base fee and max priority fee per gas. When omitted an esitmate will be used.
+            nonce:
+              type: integer
+              x-go-type: big.Int
+              description: The account Nonce.
+              example: 5
+            data:
+              description: A hex string specifying the input data of the message call
+              type: string
+              example: '0xa9059cbb000000000000000000000000e6026f60efc3d0e714f1b89c596aa484ffbd25c800000000000000000000000000000000000000000303b6ae12d00504a8ed8000'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+        raw_encoded_tx:
+          type: string
+          description: The unsigned encoded transaction
+          example: e909843b9aca008252089481b7e08f65bdf5648606c89998a9cc81643976478601d1a94a200080808080
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - raw_encoded_tx
+      - tx
+    ApiTxVerifyRequestStellar:
+      title: Api Tx Verify Request Stellar
+      type: object
+      properties:
+        tx:
+          $ref: '#/components/schemas/ApiTxCreateRequestStellar'
+        raw_encoded_tx:
+          type: string
+          description: The base64 encoded transaction
+          example: AAAAAgAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAGQDB9ZVAAAA9QAAAAAAAAABAAAAHDl4dFdRODVlc0VtaHhCYldtZW0xajlHYUxLWU4AAAABAAAAAQAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAAEAAAAAuxgEkM+4NJcX8d144oJm5qsgFs7dDP5kbz3d+liGNd0AAAABRVVSQwAAAAAhEu6GOGfk4hn+JUwJGLALyepAB3W/w6tEMJcc5QWHfAAAAAABMS0AAAAAAAAAAAHRsV2wAAAAQJJoN4BqiDlwWVDbtPHaEkd0aOJihQX2EfbmoOt05Aj/flRuDtZbtI5NsWooGhkSivAvmSz4VxZuT847OPZJngc=
+          x-oapi-codegen-extra-tags:
+            validate: required
+    ApiTxVerifyRequestBTC:
+      title: Api Tx Verify Request BTC
+      type: object
+      properties:
+        tx:
+          $ref: '#/components/schemas/ApiTxCreateRequestBTC'
+        raw_encoded_tx:
+          type: string
+          description: The encoded transaction
+          example: 0100000001ca19af5fb94ced7e62b623d0039a398a42e60050405a1341efe475894629c131010000008b483045022100d77b002b3142013b3f825a730f5bc3ead2014266f07ba4449269af0cf6f086310220365bca1d616ba86fac42ad69efd5f92c5ed6cf16f27ebf5ab55010efc72c219d014104417eb0abe69db2eca63c84eb44266c29c24973dc81cde16ca86c9d923630cb5f797bae7d7fab13498e06146111356eb271da74add05ebda8f72ff2b2878fddb7ffffffff0410270000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac204e0000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac30750000000000001976a914344a0f48ca150ec2b903817660b9b68b13a6702688ac48710000000000001976a914d6fa8814924b480fa7ff903b5ef61100ab4d92fe88ac00000000
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+      - raw_encoded_tx
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    Value:
+      description: A value can either be a decimal string or the lowest unit of the currency as an integer
+      oneOf:
+      - $ref: '#/components/schemas/IntegerValue'
+      - $ref: '#/components/schemas/StringValue'
+      x-oapi-codegen-extra-tags:
+        validate: required
+      x-go-type: '*value.Value'
+    ApiTxDestinationCreateBTC:
+      description: The recipient of the transaction.
+      type: object
+      properties:
+        destination:
+          type: string
+          description: The destination address.
+          example: mkHS9ne12qx9pS9VojpwU5xtRd4T7X7ZUt
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+      required:
+      - destination
+      - value
+      example:
+        destination: 31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca
+        value: 50
+    ApiTxCreateRequestStellar:
+      title: Api Tx Create Request Stellar
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        fee:
+          $ref: '#/components/schemas/ValueOptional'
+        expiration_seconds:
+          type: integer
+          x-go-type: int64
+          description: Time the transaction will expire in seconds. Default is 30 minutes.
+      required:
+      - from
+      - to
+      - value
+    ValueOptional:
+      description: A value can either be a decimal string or the lowest unit of the currency as an integer
+      oneOf:
+      - $ref: '#/components/schemas/IntegerValue'
+      - $ref: '#/components/schemas/StringValue'
+      x-go-type: '*value.Value'
+      x-go-type-skip-optional-pointer: true
+    ApiTxSourceBTC:
+      type: object
+      properties:
+        tx_id:
+          type: string
+          description: UTXO's transaction ID
+          example: effd7af88861ccb25714216ba78561a8bf2e93ebe45b2deac37da8f284591b0e
+          x-oapi-codegen-extra-tags:
+            validate: required
+        index:
+          type: integer
+          format: uint32
+          description: UTXO's index in source transaction
+          example: 2
+      required:
+      - tx_id
+      - index
+    ApiTxCreateRequestTronContract:
+      title: Api Tx Create Request Tron Contract
+      type: object
+      properties:
+        address:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+          x-go-type-skip-optional-pointer: true
+        parameter:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Data
+          x-go-type-skip-optional-pointer: true
+        function_selector:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Data
+          x-go-type-skip-optional-pointer: true
+        data:
+          type: string
+          x-go-type-skip-optional-pointer: true
+        fee_limit:
+          $ref: '#/components/schemas/ValueOptional'
+    ApiTxCreateRequestBTC:
+      title: Api Tx Create Request BTC
+      type: object
+      properties:
+        from:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTxSourceBTC'
+          description: The source UTXOs.
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+        to:
+          description: The recipient of the transaction.
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiTxDestinationCreateBTC'
+          x-oapi-codegen-extra-tags:
+            validate: required,dive
+      x-oapi-codegen-extra-tags:
+        validate: required,dive
+      required:
+      - from
+      - to
+    IntegerValue:
+      title: Integer Value
+      type: integer
+      x-go-type: '*big.Int'
+      description: Value as an integer in the lowest unit of the currency (for example Wei or Satoshi)
+      example: 100000
+    ApiTxCreateTokenRequestTron:
+      title: Api Tx Create Token Request Tron
+      type: object
+      properties:
+        contract_address:
+          description: The contract address of the token.
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        from:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+        value:
+          $ref: '#/components/schemas/Value'
+        fee_limit:
+          $ref: '#/components/schemas/ValueOptional'
+        expiration_seconds:
+          type: integer
+          x-go-type: int64
+          description: Time in seconds the transaction will expire after creation. (Default 30 minutes)
+      required:
+      - from
+      - to
+      - contract_address
+      - value
+      - fee_limit
+    ApiTxCreateRequestTron:
+      title: Api Tx Create Request Tron
+      type: object
+      properties:
+        from:
+          type: string
+          description: The account ID for the originating funds.
+          example: TGepTLpYNhURKFxZPqWH4HmvZQsqJKSdj8
+          x-oapi-codegen-extra-tags:
+            validate: required
+        to:
+          description: The recipient of the transaction.
+          type: string
+          example: '0x31c129468975e4ef41135a405000e6428a399a03d023b6627eed4cb95faf19ca'
+          x-oapi-codegen-extra-tags:
+            validate: required_without=Contract
+        value:
+          $ref: '#/components/schemas/ValueOptional'
+        contract:
+          $ref: '#/components/schemas/ApiTxCreateRequestTronContract'
+        expiration_seconds:
+          type: integer
+          x-go-type: int64
+          description: Time in seconds the transaction will expire after creation. (Default 30 minutes)
+      required:
+      - from
+      - value
+    ApiTxVerifyRequestSolana:
+      title: Api Tx Verify Request Solana
+      type: object
+      properties:
+        tx:
+          anyOf:
+          - $ref: '#/components/schemas/ApiTxCreateRequestSolana'
+          - $ref: '#/components/schemas/ApiTxCreateTokenRequestSolana'
+        raw_encoded_tx:
+          type: string
+          description: The base64 encoded transaction
+          example: AAAAAgAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAGQDB9ZVAAAA9QAAAAAAAAABAAAAHDl4dFdRODVlc0VtaHhCYldtZW0xajlHYUxLWU4AAAABAAAAAQAAAABhehOVEbl0UnzymYSWWQsx2xJdU/HaQo3uQqax0bFdsAAAAAEAAAAAuxgEkM+4NJcX8d144oJm5qsgFs7dDP5kbz3d+liGNd0AAAABRVVSQwAAAAAhEu6GOGfk4hn+JUwJGLALyepAB3W/w6tEMJcc5QWHfAAAAAABMS0AAAAAAAAAAAHRsV2wAAAAQJJoN4BqiDlwWVDbtPHaEkd0aOJihQX2EfbmoOt05Aj/flRuDtZbtI5NsWooGhkSivAvmSz4VxZuT847OPZJngc=
+          x-oapi-codegen-extra-tags:
+            validate: required
+    ApiTxVerifyRequestTron:
+      title: Api Tx Verify Request Tron
+      type: object
+      properties:
+        tx:
+          anyOf:
+          - $ref: '#/components/schemas/ApiTxCreateRequestTron'
+          - $ref: '#/components/schemas/ApiTxCreateTokenRequestTron'
+        raw_encoded_tx:
+          type: string
+          description: The hex encoded protobuf unsigned transaction.
+          example: 0a022ba0220887ae7932301801b540a0b2a7a1fc315a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a1541494e9270255e7cf4d32ed1ceb9af9bf44abd21bd121541242aa579f130bf6fea5eac12aa6b846fb8b293ab18e80770b8f2a3a1fc31
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+      - raw_encoded_tx
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  responses:
+    ErrorUnauthorized:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ErrorInternal:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ErrorServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    ErrorTooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ErrorNotImplemented:
+      description: The request endpoint is not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-implemented
+            title: Not implemented
+            status: 501
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

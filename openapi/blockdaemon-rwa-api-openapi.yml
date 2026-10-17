@@ -1,0 +1,1084 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Rwa API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: rwa
+paths:
+  /defi/v1/rwa/burn:
+    post:
+      tags:
+      - rwa
+      summary: Burn
+      description: 'Executes a burn operation to permanently remove a specified quantity of custom assets from circulation. It supports multiple networks—including Stellar (and its testnet) as well as XRPLedger (and its testnet)—and requires key parameters such as the initiating wallet address, the amount to burn, the issuer''s address, and the asset code. This irreversible operation is typically used to manage token supply or implement deflationary measures for custom assets.
+
+
+        > 💡
+
+        **Compute Unit Value:** `50` (Fixed)'
+      operationId: rwaBurn
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/burn
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_burn_Request'
+            example:
+              chainId: '1500'
+              chainSymbol: ETH
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+              assetCode: VELO
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1500'
+                    from: GAJ4BSGJE6UQHZAZ5U5IUOABPDCYPKPS3RFS2NVNGFGFXGVQDLBQJW2P
+                    gas: '100'
+                    data: AAAAAgAAAAATwMjJJ6kD5BntOoo4AXjFh6ny3EstNq0xTFuasBrDBAAAAGQB5rJlAAH24AAAAAEAAAAAAAAAAAAAAABmD8C0AAAAAAAAAAEAAAAAAAAAAQAAAADZyMKQhSslQB+XiM/cOX7KIx+Q+JfpgDD4dBInpIgizQAAAAFWRUxPAAAAANnIwpCFKyVAH5eIz9w5fsojH5D4l+mAMPh0EiekiCLNAAAAADuaygAAAAAAAAAAAA==
+      x-bd-cu: '50'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/freeze:
+    post:
+      tags:
+      - rwa
+      summary: Freeze
+      description: 'Revokes authorization for an account''s trustline, effectively freezing their ability to transact with the specified asset.
+
+
+        > 💡
+
+        **Compute Unit Value:** `25` (Fixed)'
+      operationId: rwaFreeze
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/freeze
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_freeze_Request'
+            example:
+              chainId: '1500'
+              chainSymbol: ETH
+              user: GAJ4BSGJE6UQHZAZ5U5IUOABPDCYPKPS3RFS2NVNGFGFXGVQDLBQJW2P
+              issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+              assetCode: VELO
+              amount: '1000000000000000000'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1500'
+                    from: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+                    gas: '100'
+                    data: AAAAAgAAAADZyMKQhSslQB+XiM/cOX7KIx+Q+JfpgDD4dBInpIgizQAAAMgB5a+YAAAAAwAAAAEAAAAAAAAAAAAAAABmD8EjAAAAAAAAAAIAAAAAAAAABQAAAAAAAAAAAAAAAQAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABwAAAAATwMjJJ6kD5BntOoo4AXjFh6ny3EstNq0xTFuasBrDBAAAAAFWRUxPAAAAAAAAAAAAAAAA
+      x-bd-cu: '25'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/getallassets:
+    get:
+      tags:
+      - rwa
+      summary: Get All Assets
+      description: 'Retrieves a comprehensive list of all tokenized assets associated with a specific smart contract on the blockchain. It generates an XDR hash, which is processed through the Blockdaemon SDK to fetch and return details of all assets registered under the contract.
+
+
+        > 💡
+
+        **Compute Unit Value:** `55` (Fixed)'
+      operationId: rwaGetallassets
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          example: '1500'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+      - name: contract
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique identifier of the smart contract managing the asset.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        description: The unique identifier of the smart contract managing the asset.
+      - name: assetCode
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+        description: The unique alphanumeric code identifying the asset.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1501'
+                    from: GBAHSSSCKQMBRAIQMYYCCDQEI7FWYVGXUPFHDERK6DM47ZBIQ3CO2WYE
+                    gas: '100'
+                    data: AAAAAgAAAABAeUpCVBgYgRBmMCEOBEfLbFTXo8pxkirw2c/kKIbE7QABYNkACvbnAAAAAQAAAAEAAAAAAAAAAAAAAABnNFolAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAAB16IdcbXMaTYZUCf+zkWmrif1EXWUCm2ImuDcjuD+rPMAAAAOZ2V0X2FsbF9hc3NldHMAAAAAAAAAAAAAAAAAAQAAAAAAAAADAAAABgAAAAHXoh1xtcxpNhlQJ/7ORaauJ/URdZQKbYia4NyO4P6s8wAAAA8AAAAHUldBX01BUAAAAAABAAAABgAAAAHXoh1xtcxpNhlQJ/7ORaauJ/URdZQKbYia4NyO4P6s8wAAABQAAAABAAAAB3kUyPHhWt5gWWsnFoobWby0HB9NcaOHi79NVDRZsVz6AAAAAAAcCc8AACDkAAAAAAAAAAAAAWB1AAAAAA==
+      x-bd-cu: '55'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/getasset:
+    get:
+      tags:
+      - rwa
+      summary: Get Asset
+      description: 'Retrieves information about a specific tokenized asset on the blockchain. It generates an XDR hash, which is processed through the Blockdaemon SDK to obtain the full asset details, including its metadata, ownership structure, and contract-level attributes.
+
+
+        > 💡
+
+        **Compute Unit Value:** `40` (Fixed)'
+      operationId: rwaGetasset
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          example: '1500'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+      - name: contract
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique identifier of the smart contract managing the asset.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        description: The unique identifier of the smart contract managing the asset.
+      - name: assetCode
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+        description: The unique alphanumeric code identifying the asset.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1501'
+                    from: GBAHSSSCKQMBRAIQMYYCCDQEI7FWYVGXUPFHDERK6DM47ZBIQ3CO2WYE
+                    gas: '100'
+                    data: AAAAAgAAAABAeUpCVBgYgRBmMCEOBEfLbFTXo8pxkirw2c/kKIbE7QABXQAACvbnAAAAAQAAAAEAAAAAAAAAAAAAAABnNFlOAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAABZn5iOXwxfnAMuNIeo3df8OW8i9l0SDkVLS1NchNiC5IAAAAJZ2V0X2Fzc2V0AAAAAAAAAQAAAA8AAAAEVEVTVAAAAAAAAAABAAAAAAAAAAMAAAAGAAAAAWZ+Yjl8MX5wDLjSHqN3X/DlvIvZdEg5FS0tTXITYguSAAAADwAAAAdSV0FfTUFQAAAAAAEAAAAGAAAAAWZ+Yjl8MX5wDLjSHqN3X/DlvIvZdEg5FS0tTXITYguSAAAAFAAAAAEAAAAH+aOPXOReRJS5X2bfk7xTERQxNqsX1+Yc90/EJ1qApOsAAAAAABqWiQAAHzQAAAAAAAAAAAABXJwAAAAA
+      x-bd-cu: '40'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/getownerassets:
+    get:
+      tags:
+      - rwa
+      summary: Get Owner Assets
+      description: 'Retrieves tokenized assets owned by a specified wallet address on the blockchain by generating an XDR hash, which the Blockdaemon SDK processes to obtain complete ownership details. This endpoint benefits asset verification platforms, wallet services, and on-chain portfolio management tools, allowing users to track and manage real-world assets.
+
+
+        > 💡
+
+        **Compute Unit Value:** `35` (Fixed)'
+      operationId: rwaGetownerassets
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          example: '1500'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+      - name: contract
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique identifier of the smart contract managing the asset.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        description: The unique identifier of the smart contract managing the asset.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1501'
+                    from: GBAHSSSCKQMBRAIQMYYCCDQEI7FWYVGXUPFHDERK6DM47ZBIQ3CO2WYE
+                    gas: '100'
+                    data: AAAAAgAAAABAeUpCVBgYgRBmMCEOBEfLbFTXo8pxkirw2c/kKIbE7QABXS0ACvbnAAAAAQAAAAEAAAAAAAAAAAAAAABnNFMOAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAAB16IdcbXMaTYZUCf+zkWmrif1EXWUCm2ImuDcjuD+rPMAAAATZ2V0X2Fzc2V0c19ieV9vd25lcgAAAAABAAAAEgAAAAAAAAAAQHlKQlQYGIEQZjAhDgRHy2xU16PKcZIq8NnP5CiGxO0AAAAAAAAAAQAAAAAAAAADAAAABgAAAAHXoh1xtcxpNhlQJ/7ORaauJ/URdZQKbYia4NyO4P6s8wAAAA8AAAAHUldBX01BUAAAAAABAAAABgAAAAHXoh1xtcxpNhlQJ/7ORaauJ/URdZQKbYia4NyO4P6s8wAAABQAAAABAAAAB3kUyPHhWt5gWWsnFoobWby0HB9NcaOHi79NVDRZsVz6AAAAAAAb4iAAACDkAAAAAAAAAAAAAVzJAAAAAA==
+      x-bd-cu: '35'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/issue:
+    post:
+      tags:
+      - rwa
+      summary: Issue
+      description: 'Creates or mints new assets on the Stellar network by executing a payment operation from issuer to distributor with specified asset codes and amounts.
+
+
+        > 💡
+
+        **Compute Unit Value:** `35` (Fixed)'
+      operationId: rwaIssue
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/issue
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_issue_Request'
+            example:
+              chainId: '1500'
+              chainSymbol: ETH
+              issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+              assetCode: VELO
+              amount: '1000000000000000000'
+              to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              destinationTag: '10'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1500'
+                    from: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+                    gas: '100'
+                    data: AAAAAgAAAADZyMKQhSslQB+XiM/cOX7KIx+Q+JfpgDD4dBInpIgizQAAAGQB5a+YAAAAAwAAAAEAAAAAAAAAAAAAAABmD77nAAAAAAAAAAEAAAAAAAAAAQAAAAATwMjJJ6kD5BntOoo4AXjFh6ny3EstNq0xTFuasBrDBAAAAAJFeHBhbmREb2xsYXIAAAAA2cjCkIUrJUAfl4jP3Dl+yiMfkPiX6YAw+HQSJ6SIIs0AAAAAIC+/AAAAAAAAAAAA
+      x-bd-cu: '35'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/register:
+    post:
+      tags:
+      - rwa
+      summary: Register
+      description: 'Facilitates the creation and registration of an RWA as a token on the blockchain by interacting with smart contracts at the chain level to deploy and register the asset, providing transaction details (chain ID, sender address, gas) for seamless tokenization and ecosystem management.
+
+
+        > 💡
+
+        **Compute Unit Value:** `70` (Fixed)'
+      operationId: rwaRegister
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/register
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_register_Request'
+            example:
+              chainId: '1500'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              contract: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+              assetCode: VELO
+              amount: '1000000000000000000'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1501'
+                    from: GBHNAGV2LOLROYI3R4T7G6YVZ4WXHLVO62C4N5PNIPNUTPOCD4LQ3B4X
+                    gas: '100'
+                    data: AAAAAgAAAABO0Bq6W5cXYRuPJ/N7Fc8tc66u9oXG9e1D20m9wh8XDQAhARIACi7CAAAAUQAAAAEAAAAAAAAAAAAAAABnJS/DAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAABZn5iOXwxfnAMuNIeo3df8OW8i9l0SDkVLS1NchNiC5IAAAAOcmVnaXN0ZXJfYXNzZXQAAAAAAAMAAAAPAAAABVRFU1RJAAAAAAAACgAAAAAAAAAAAAAAAAAAJxAAAAASAAAAAAAAAABO0Bq6W5cXYRuPJ/N7Fc8tc66u9oXG9e1D20m9wh8XDQAAAAAAAAABAAAAAAAAAAIAAAAGAAAAAWZ+Yjl8MX5wDLjSHqN3X/DlvIvZdEg5FS0tTXITYguSAAAAFAAAAAEAAAAH+aOPXOReRJS5X2bfk7xTERQxNqsX1+Yc90/EJ1qApOsAAAABAAAABgAAAAFmfmI5fDF+cAy40h6jd1/w5byL2XRIORUtLU1yE2ILkgAAAA8AAAAHUldBX01BUAAAAAABABsCdgAAHzQAAAGsAAAAAAAhAK4AAAAA
+      x-bd-cu: '70'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/settrustline:
+    post:
+      tags:
+      - rwa
+      summary: Set Trustline
+      description: 'Establishes a secure trustline relationship between an issuer and distributor with specified asset limits and authorization parameters on the Stellar network.
+
+
+        > 💡
+
+        **Compute Unit Value:** `30` (Fixed)'
+      operationId: rwaSettrustline
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/settrustline
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_settrustline_Request'
+            example:
+              chainId: '1500'
+              chainSymbol: ETH
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+              assetCode: VELO
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1500'
+                    from: GAJ4BSGJE6UQHZAZ5U5IUOABPDCYPKPS3RFS2NVNGFGFXGVQDLBQJW2P
+                    gas: '100'
+                    data: AAAAAgAAAAATwMjJJ6kD5BntOoo4AXjFh6ny3EstNq0xTFuasBrDBAAAAGQB5rJlAAH24AAAAAEAAAAAAAAAAAAAAABmD8FoAAAAAAAAAAEAAAAAAAAABgAAAAFWRUxPAAAAANnIwpCFKyVAH5eIz9w5fsojH5D4l+mAMPh0EiekiCLNAAAAADuaygAAAAAAAAAAAA==
+      x-bd-cu: '30'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/transfer:
+    post:
+      tags:
+      - rwa
+      summary: Transfer
+      description: 'Enables secure on-chain transfers of both native (XLM) and custom assets between Stellar accounts. It requires the sender’s and recipient’s public addresses, the asset code, and the transfer amount. The endpoint processes the transaction on the blockchain, ensuring authenticity and returning transaction details such as the chain ID and gas used.
+
+
+        > 💡
+
+        **Compute Unit Value:** `30` (Fixed)'
+      operationId: rwaTransfer
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/transfer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_transfer_Request'
+            example:
+              chainId: '1500'
+              chainSymbol: ETH
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              amount: '1000000000000000000'
+              issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+              assetCode: VELO
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1500'
+                    from: GAJ4BSGJE6UQHZAZ5U5IUOABPDCYPKPS3RFS2NVNGFGFXGVQDLBQJW2P
+                    to: GDUY7J7A33TQWOSOQGDO776GGLM3UQERL4J3SPT56F6YS4ID7MLDERI4
+                    gas: '100'
+                    data: AAAAAgAAAAATwMjJJ6kD5BntOoo4AXjFh6ny3EstNq0xTFuasBrDBAAAAGQB5rJlAAH24AAAAAEAAAAAAAAAAAAAAABmD8BMAAAAAAAAAAEAAAAAAAAAAQAAAADpj6fg3ucLOk6Bhu//xjLZukCRXxO5Pn3xfYlxA/sWMgAAAAFWRUxPAAAAANnIwpCFKyVAH5eIz9w5fsojH5D4l+mAMPh0EiekiCLNAAAAADuaygAAAAAAAAAAAA==
+      x-bd-cu: '30'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/rwa/unfreeze:
+    post:
+      tags:
+      - rwa
+      summary: Unfreeze
+      description: 'Restores the functionality of a previously frozen asset within the RWA framework. It reactivates an asset—typically frozen for regulatory, security, or administrative reasons—so that it can resume normal blockchain operations. A successful request returns key details such as the chain ID, gas used, and a reference ID for tracking the unfreeze operation.
+
+
+        > 💡
+
+        **Compute Unit Value:** `55` (Fixed)'
+      operationId: rwaUnfreeze
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/rwa/unfreeze
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_rwa_unfreeze_Request'
+            example:
+              chainId: '1500'
+              contract: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              assetCode: VELO
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1501'
+                    from: GBHNAGV2LOLROYI3R4T7G6YVZ4WXHLVO62C4N5PNIPNUTPOCD4LQ3B4X
+                    gas: '100'
+                    data: AAAAAgAAAABO0Bq6W5cXYRuPJ/N7Fc8tc66u9oXG9e1D20m9wh8XDQABo0gACi7CAAAAUQAAAAEAAAAAAAAAAAAAAABnJTTAAAAAAAAAAAEAAAAAAAAAGAAAAAAAAAABZn5iOXwxfnAMuNIeo3df8OW8i9l0SDkVLS1NchNiC5IAAAAMdW5mcmVlemVfcndhAAAAAgAAAA8AAAAEVEVTVAAAABIAAAAAAAAAAE7QGrpblxdhG48n83sVzy1zrq72hcb17UPbSb3CHxcNAAAAAAAAAAEAAAAAAAAAAgAAAAYAAAABZn5iOXwxfnAMuNIeo3df8OW8i9l0SDkVLS1NchNiC5IAAAAUAAAAAQAAAAf5o49c5F5ElLlfZt+TvFMRFDE2qxfX5hz3T8QnWoCk6wAAAAEAAAAGAAAAAWZ+Yjl8MX5wDLjSHqN3X/DlvIvZdEg5FS0tTXITYguSAAAADwAAAAdSV0FfTUFQAAAAAAEAGvPkAAAfNAAAAPwAAAAAAAGi5AAAAAA=
+                    referenceId: e871f924cb034d04ba5f8bf2c5f95ceb
+      x-bd-cu: '55'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  schemas:
+    _rwa_register_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          example: '1500'
+        from:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        contract:
+          type: string
+          description: The unique identifier of the smart contract managing the asset.
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        assetCode:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+        amount:
+          type: string
+          description: 'Amount of the asset involved in the transaction, in the asset''s smallest denomination (base units). Do not send human-readable decimal values. Examples: EVM tokens (18 decimals) = "1000000000000000000"; Stellar (7 decimals) = "10000000".'
+          example: '1000000000000000000'
+      required:
+      - from
+      - contract
+      - assetCode
+      - amount
+      description: The request body for a /defi/v1/rwa/register
+      example:
+        chainId: '1500'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        contract: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        assetCode: VELO
+        amount: '1000000000000000000'
+    _rwa_unfreeze_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          example: '1500'
+        contract:
+          type: string
+          description: The unique identifier of the smart contract where the asset is registered
+          example: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        from:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        assetCode:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+      required:
+      - contract
+      - from
+      - assetCode
+      description: The request body for a /defi/v1/rwa/unfreeze
+      example:
+        chainId: '1500'
+        contract: '0xfad57d2039c21811c8f2b5d5b65308aa99d31559'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        assetCode: VELO
+    _rwa_issue_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          - '1600'
+          - '1601'
+          example: '1500'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        issuer:
+          type: string
+          description: Public address of the issuer of the asset.
+          example: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode:
+          type: string
+          description: The code of the asset to be issued.
+          example: VELO
+        amount:
+          type: string
+          description: 'Amount of the asset involved in the transaction, in the asset''s smallest denomination (base units). Do not send human-readable decimal values. Examples: EVM tokens (18 decimals) = "1000000000000000000"; Stellar (7 decimals) = "10000000".'
+          example: '1000000000000000000'
+        to:
+          type: string
+          description: Public blockchain address of the recipient. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        destinationTag:
+          type: string
+          description: An optional identifier used for transactions on networks that require an extra tag.
+          example: '10'
+      required:
+      - issuer
+      - assetCode
+      - amount
+      - to
+      description: The request body for a /defi/v1/rwa/issue
+      example:
+        chainId: '1500'
+        chainSymbol: ETH
+        issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode: VELO
+        amount: '1000000000000000000'
+        to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        destinationTag: '10'
+    _rwa_settrustline_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          - '1600'
+          - '1601'
+          example: '1500'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        from:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Amount of the asset involved in the transaction, in the asset''s smallest denomination (base units). Do not send human-readable decimal values. Examples: EVM tokens (18 decimals) = "1000000000000000000"; Stellar (7 decimals) = "10000000".'
+          example: '1000000000000000000'
+        issuer:
+          type: string
+          description: Public address of the issuer of the asset.
+          example: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+      required:
+      - from
+      - amount
+      - issuer
+      - assetCode
+      description: The request body for a /defi/v1/rwa/settrustline
+      example:
+        chainId: '1500'
+        chainSymbol: ETH
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode: VELO
+    _rwa_burn_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          - '1600'
+          - '1601'
+          example: '1500'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        from:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Amount of the asset involved in the transaction, in the asset''s smallest denomination (base units). Do not send human-readable decimal values. Examples: EVM tokens (18 decimals) = "1000000000000000000"; Stellar (7 decimals) = "10000000".'
+          example: '1000000000000000000'
+        issuer:
+          type: string
+          description: Public address of the issuer of the asset.
+          example: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+      required:
+      - from
+      - amount
+      - issuer
+      - assetCode
+      description: The request body for a /defi/v1/rwa/burn
+      example:
+        chainId: '1500'
+        chainSymbol: ETH
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode: VELO
+    _rwa_freeze_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          - '1600'
+          - '1601'
+          example: '1500'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        user:
+          type: string
+          description: Public address of the account whose asset is being frozen.
+          example: GAJ4BSGJE6UQHZAZ5U5IUOABPDCYPKPS3RFS2NVNGFGFXGVQDLBQJW2P
+        issuer:
+          type: string
+          description: Public address of the issuer of the asset.
+          example: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+        amount:
+          type: string
+          description: 'Amount of the asset involved in the transaction, in the asset''s smallest denomination (base units). Do not send human-readable decimal values. Examples: EVM tokens (18 decimals) = "1000000000000000000"; Stellar (7 decimals) = "10000000".'
+          example: '1000000000000000000'
+      required:
+      - user
+      - issuer
+      - assetCode
+      - amount
+      description: The request body for a /defi/v1/rwa/freeze
+      example:
+        chainId: '1500'
+        chainSymbol: ETH
+        user: GAJ4BSGJE6UQHZAZ5U5IUOABPDCYPKPS3RFS2NVNGFGFXGVQDLBQJW2P
+        issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode: VELO
+        amount: '1000000000000000000'
+    _rwa_transfer_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1500'
+          - '1501'
+          - '1600'
+          - '1601'
+          example: '1500'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        from:
+          type: string
+          description: Public blockchain address of the sender initiating the transaction. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        to:
+          type: string
+          description: Public blockchain address of the recipient. Format depends on the chain (e.g., 0xABCDEF... for EVM, G... for Stellar).
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount:
+          type: string
+          description: 'Amount of the asset involved in the transaction, in the asset''s smallest denomination (base units). Do not send human-readable decimal values. Examples: EVM tokens (18 decimals) = "1000000000000000000"; Stellar (7 decimals) = "10000000".'
+          example: '1000000000000000000'
+        issuer:
+          type: string
+          description: Public address of the issuer of the asset.
+          example: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode:
+          type: string
+          description: The unique alphanumeric code identifying the asset.
+          example: VELO
+      required:
+      - from
+      - to
+      - amount
+      - issuer
+      - assetCode
+      description: The request body for a /defi/v1/rwa/transfer
+      example:
+        chainId: '1500'
+        chainSymbol: ETH
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        to: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        amount: '1000000000000000000'
+        issuer: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+        assetCode: VELO
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

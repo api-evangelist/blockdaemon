@@ -1,0 +1,744 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Nft API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: NFT
+paths:
+  /defi/v1/nft/getbalance:
+    get:
+      tags:
+      - NFT
+      summary: Get Balance
+      description: 'Retrieves the quantity of NFTs held by a specific wallet address for a given collection across multiple blockchain networks. This endpoint allows users and developers to quickly determine the number of NFTs an address owns within a particular collection, facilitating portfolio tracking, auditing of NFT holdings, and interactions with NFT marketplaces or decentralized applications.
+
+
+        > 💡
+
+        **Compute Unit Value:** `95` (Fixed)'
+      operationId: nftGetbalance
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          - '900'
+          - '901'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: nftCollection
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The smart contract address of the NFT collection whose balance is to be retrieved.
+          example: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+        description: The smart contract address of the NFT collection whose balance is to be retrieved.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The user's blockchain address for which the NFT balance will be queried.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: The user's blockchain address for which the NFT balance will be queried.
+      - name: nftProtocolId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+          example: '721'
+        description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+      - name: tokenId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique token ID within the NFT collection. Required for ERC-1155 (nftProtocolId=1155) since multiple token types share one contract. For ERC-721, if only querying total owned, this can be omitted.
+          example: '3238'
+        description: The unique token ID within the NFT collection. Required for ERC-1155 (nftProtocolId=1155) since multiple token types share one contract. For ERC-721, if only querying total owned, this can be omitted.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    balance: '2'
+      x-bd-cu: '95'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/nft/getmetadata:
+    get:
+      tags:
+      - NFT
+      summary: Get Metadata
+      description: 'Fetches comprehensive metadata for a specified NFT collection, including key details such as the collection’s name, symbol, attributes, images, and additional descriptive information. This endpoint is essential for rendering rich NFT displays, powering detailed collection analytics, and enabling seamless integration with NFT marketplaces across supported blockchain networks.
+
+
+        > 💡
+
+        **Compute Unit Value:** `95` (Fixed)'
+      operationId: nftGetmetadata
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          - '900'
+          - '901'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: nftCollection
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The smart contract address of the NFT collection whose balance is to be retrieved.
+          example: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+        description: The smart contract address of the NFT collection whose balance is to be retrieved.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    name: 'Crowdsurfers #1000'
+                    symbol: CROWD
+                    uri: https://us-central1-simpl3r.cloudfunctions.net/m?id=8fGYVuiq5REaVwWTwatPvk342dm4xSY9ok2dE5rYEU5f&pid=eW6BNOjMgIFva6BNQ4Du
+      x-bd-cu: '95'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/nft/getowner:
+    get:
+      tags:
+      - NFT
+      summary: Get Owner
+      description: 'Identifies and retrieves the current owner of a specific NFT within a collection on supported blockchain networks. By providing the necessary identifiers or parameters, this endpoint returns the owner’s public address, thereby enabling verification of ownership, tracking of NFT transfers, and supporting secondary market transactions.
+
+
+        > 💡
+
+        **Compute Unit Value:** `85` (Fixed)'
+      operationId: nftGetowner
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '900'
+          - '901'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: nftCollection
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The smart contract address of the NFT collection whose balance is to be retrieved.
+          example: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+        description: The smart contract address of the NFT collection whose balance is to be retrieved.
+      - name: nftProtocolId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+          example: '721'
+        description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+      - name: nftIndex
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The unique index or identifier for the NFT within the specified collection. For ERC-721 collections, this typically corresponds to the token's ID, while for ERC-1155 collections it distinguishes between different token types within the contract. This parameter specifies exactly which NFT's owner should be retrieved.
+          example: '1000'
+        description: The unique index or identifier for the NFT within the specified collection. For ERC-721 collections, this typically corresponds to the token's ID, while for ERC-1155 collections it distinguishes between different token types within the contract. This parameter specifies exactly which NFT's owner should be retrieved.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    owner: '0x68761dE35422d8e36d18dC2F7f6313a58c1a3616'
+      x-bd-cu: '85'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/nft/historicallogs:
+    get:
+      tags:
+      - NFT
+      summary: Historical Logs
+      description: 'Extracts detailed historical event logs for NFT collections within a specified block range on Ethereum. Designed to support different NFT standards (such as ERC721 and ERC1155), the endpoint returns granular log data—including event topics, parameters (like from, to, and tokenId), block details, and transaction identifiers—allowing developers and auditors to analyze the full history of NFT-related events, track transfers, and perform forensic or compliance analyses.
+
+
+        > 💡
+
+        **Compute Unit Value:** `100` (Fixed)'
+      operationId: nftHistoricallogs
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: nftCollection
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The smart contract address of the NFT collection whose balance is to be retrieved.
+          example: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+        description: The smart contract address of the NFT collection whose balance is to be retrieved.
+      - name: nftProtocolId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+          example: '721'
+        description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the starting block number for the event log query. If not provided, the default value is set to 100 blocks prior to the latest finalized block, ensuring a recent historical range is returned.
+          example: '100000'
+        description: Specifies the starting block number for the event log query. If not provided, the default value is set to 100 blocks prior to the latest finalized block, ensuring a recent historical range is returned.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Indicates the page number for paginated results. Defaults to '1' if no value is specified, allowing for easy navigation through large sets of log data.
+          example: '1'
+        description: Indicates the page number for paginated results. Defaults to '1' if no value is specified, allowing for easy navigation through large sets of log data.
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the ending block number for the event log query. If omitted, the default is the latest finalized block, capturing all events up to the most recent block.
+          example: '100010'
+        description: Specifies the ending block number for the event log query. If omitted, the default is the latest finalized block, capturing all events up to the most recent block.
+      - name: type
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Defines the event type to retrieve. For example, for ERC721 collections, valid values include 'Approval' or 'Transfer'. This parameter is required to filter the logs based on the specific event type of interest.
+          enum:
+          - Approval
+          - Transfer
+          example: Approval
+        description: Defines the event type to retrieve. For example, for ERC721 collections, valid values include 'Approval' or 'Transfer'. This parameter is required to filter the logs based on the specific event type of interest.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    logs:
+                    - address: '0x08d7c0242953446436f34b4c78fe9da38c73668d'
+                      topics:
+                      - '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
+                      - '0x00000000000000000000000050d36f27872f637ec9ecb4eedff300df44a608ab'
+                      - '0x000000000000000000000000fcbe7b6da18a08a86ab1beb68c7372a60ab4e331'
+                      - '0x00000000000000000000000000000000000000000000000000000000000003d5'
+                      params:
+                        from: '0x50d36f27872f637ec9ecb4eedff300df44a608ab'
+                        to: '0xfcbe7b6da18a08a86ab1beb68c7372a60ab4e331'
+                        tokenId: '981'
+                      data: 0x
+                      blockNumber: '17147007'
+                      blockHash: '0x0af8cae4fce3cabdad9dbcac77ba4761afea961c040817ea835260ea6d56703a'
+                      timeStamp: '1682713763'
+                      gasPrice: '35684114147'
+                      gasUsed: '267808'
+                      logIndex: '250'
+                      transactionHash: '0x0eb9b987533eee819a1509b5e50691438d0de6f9c43b46973fdd2516eccefd97'
+                      transactionIndex: '98'
+      x-bd-cu: '100'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/nft/historicaltransactions:
+    get:
+      tags:
+      - NFT
+      summary: Historical Transactions
+      description: 'Retrieves a chronological list of historical NFT transactions for a specified collection on Ethereum, with customizable block ranges, pagination, and sorting. The response includes comprehensive details (block numbers, timestamps, transaction hashes, addresses, token IDs, gas metrics) to facilitate NFT auditing, market analysis, and dashboard integrations.
+
+
+        > 💡
+
+        **Compute Unit Value:** `90` (Fixed)'
+      operationId: nftHistoricaltransactions
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: nftCollection
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The smart contract address of the NFT collection whose balance is to be retrieved.
+          example: '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
+        description: The smart contract address of the NFT collection whose balance is to be retrieved.
+      - name: nftProtocolId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+          example: '721'
+        description: Specifies the NFT standard to use for the query. Acceptable values are 721 for ERC-721 tokens and 1155 for ERC-1155 tokens. If not provided, the default value is 721
+      - name: startBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the starting block number for the event log query. If not provided, the default value is set to 100 blocks prior to the latest finalized block, ensuring a recent historical range is returned.
+          example: '100000'
+        description: Specifies the starting block number for the event log query. If not provided, the default value is set to 100 blocks prior to the latest finalized block, ensuring a recent historical range is returned.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Indicates the page number for paginated results. Defaults to '1' if no value is specified, allowing for easy navigation through large sets of log data.
+          example: '1'
+        description: Indicates the page number for paginated results. Defaults to '1' if no value is specified, allowing for easy navigation through large sets of log data.
+      - name: endBlock
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Specifies the ending block number for the event log query. If omitted, the default is the latest finalized block, capturing all events up to the most recent block.
+          example: '100010'
+        description: Specifies the ending block number for the event log query. If omitted, the default is the latest finalized block, capturing all events up to the most recent block.
+      - name: sort
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Determines the order in which the transactions are returned. Acceptable values are 'asc' for ascending order and 'desc' for descending order. If not provided, the default value is 'desc', which returns the most recent logs first.
+          enum:
+          - desc
+          - asc
+          example: desc
+        description: Determines the order in which the transactions are returned. Acceptable values are 'asc' for ascending order and 'desc' for descending order. If not provided, the default value is 'desc', which returns the most recent logs first.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    transactions:
+                    - blockNumber: '18968332'
+                      timeStamp: '1704790283'
+                      hash: '0x719286621b2b2e4aeda8e61a0ce2e58bd6f4806d1d411653172ec5380ec2c3d6'
+                      nonce: '722'
+                      blockHash: '0x6929852257b9d94b5f9b5908d851a25488d3a2afd11c103229f7a8fb305b5898'
+                      from: '0x2efdb6dd6daa243fdf30cac2391adb8350d5e322'
+                      contractAddress: '0x306b1ea3ecdf94ab739f1910bbda052ed4a9f949'
+                      to: '0xae78174d3ab843dd349acb975ed1b3b1431a55e8'
+                      tokenID: '769'
+                      tokenName: Beanz
+                      tokenSymbol: BEANZ
+                      tokenDecimal: '0'
+                      transactionIndex: '43'
+                      gas: '173141'
+                      gasPrice: '16138857662'
+                      gasUsed: '128215'
+                      cumulativeGasUsed: '9277786'
+                      input: deprecated
+                      confirmations: '513'
+                      methodId: '0x00000000'
+                      methodSignature: get_block_hash_257335279069929(uint256)
+      x-bd-cu: '90'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

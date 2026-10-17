@@ -1,0 +1,232 @@
+openapi: 3.2.0
+info:
+  title: Transaction Derive Signing Payload API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Derive Signing Payload
+paths:
+  /{blockchain_id}/derive_signing_payload:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Derive signing payload from unsigned transaction
+      description: Create a signing payload.
+      operationId: TxDeriveSigningPayload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxDeriveSigningPayloadRequest'
+      responses:
+        '200':
+          description: A signing payload
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxDeriveSigningPayloadResponse'
+        '400':
+          $ref: '#/components/responses/ErrorBadRequest'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+      tags:
+      - Derive Signing Payload
+components:
+  schemas:
+    ApiTxDeriveSigningPayloadResponse:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxCreateResponseSubstrate'
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    ApiTxDeriveSigningPayloadRequestSubstrate:
+      title: Api Tx Derive Signing Payload Request Substrate
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The hex encoded unsigned transaction
+          x-oapi-codegen-extra-tags:
+            validate: required
+        sender_address:
+          type: string
+          description: The sender address is base58 encoding
+          x-oapi-codegen-extra-tags:
+            validate: required
+        mortal_period:
+          type: number
+          description: The number of blocks until the transaction is expired
+          default: 1000
+          x-go-type: uint64
+        tip:
+          type: number
+          x-go-type: big.Int
+        nonce:
+          type: number
+          x-go-type: uint64
+      required:
+      - unsigned_tx
+      - sender_address
+    ApiTxDeriveSigningPayloadRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxDeriveSigningPayloadRequestSubstrate'
+    ApiTxCreateResponseSubstrate:
+      title: Api Tx Create Response Substrate
+      type: object
+      properties:
+        unsigned_tx:
+          type: string
+          description: The unsigned transaction.
+        signing_payload:
+          type: string
+          description: The signing payload (hex encoded)
+      required:
+      - unsigned_tx
+      - signing_payload
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  responses:
+    ErrorTooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ErrorNotImplemented:
+      description: The request endpoint is not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-implemented
+            title: Not implemented
+            status: 501
+    ErrorUnauthorized:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ErrorInternal:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ErrorServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    ErrorBadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

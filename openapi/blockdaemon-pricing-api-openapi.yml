@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: Pricing API
   version: 1.0.0
@@ -8,13 +8,15 @@ servers:
 security:
 - bearerAuth: []
 - apiKeyAuthHeader: []
+tags:
+- name: Pricing
 paths:
   /allowed_chains:
     get:
       summary: Get Chains
       description: Get a list of supported chains for token pricing.
       tags:
-      - pricing
+      - Pricing
       operationId: GetChains
       responses:
         '200':
@@ -36,7 +38,7 @@ paths:
       summary: Get Tokens
       description: List tokens available for pricing on a specific chain.
       tags:
-      - pricing
+      - Pricing
       operationId: GetTokens
       parameters:
       - name: chain_id
@@ -80,7 +82,7 @@ paths:
       summary: Get Token Price
       description: Fetch current prices for one or more tokens on a specific chain.
       tags:
-      - pricing
+      - Pricing
       operationId: GetQuotes
       parameters:
       - name: chain_id
@@ -113,15 +115,37 @@ paths:
       x-internal: false
 components:
   schemas:
-    Chain:
+    Quotes:
       type: object
       properties:
-        chain_id:
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+    Quote:
+      type: object
+      properties:
+        symbol:
           type: string
-        protocol:
+        address:
           type: string
-        network:
+        chainId:
           type: string
+        timestamp:
+          type: string
+          format: RFC3339
+        units:
+          type: string
+          description: An array of quotes for the currency. For example, `USD` or `EUR`.
+        price:
+          type: string
+    Tokens:
+      type: object
+      properties:
+        tokens:
+          type: array
+          items:
+            $ref: '#/components/schemas/Token'
     Chains:
       type: object
       properties:
@@ -152,50 +176,6 @@ components:
           example: The requested address is invalid on this protocol
           type: string
           description: Long error description
-    Token:
-      type: object
-      properties:
-        chain_id:
-          type: string
-        symbol:
-          type: string
-        name:
-          type: string
-        protocol:
-          type: string
-        address:
-          type: string
-    Tokens:
-      type: object
-      properties:
-        tokens:
-          type: array
-          items:
-            $ref: '#/components/schemas/Token'
-    Quote:
-      type: object
-      properties:
-        symbol:
-          type: string
-        address:
-          type: string
-        chainId:
-          type: string
-        timestamp:
-          type: string
-          format: RFC3339
-        units:
-          type: string
-          description: An array of quotes for the currency. For example, `USD` or `EUR`.
-        price:
-          type: string
-    Quotes:
-      type: object
-      properties:
-        quotes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
     QuotesRequestBody:
       type: object
       properties:
@@ -209,7 +189,39 @@ components:
           items:
             type: string
           description: An array of quotes for the currency. For example, `USD` or `EUR`.
+    Token:
+      type: object
+      properties:
+        chain_id:
+          type: string
+        symbol:
+          type: string
+        name:
+          type: string
+        protocol:
+          type: string
+        address:
+          type: string
+    Chain:
+      type: object
+      properties:
+        chain_id:
+          type: string
+        protocol:
+          type: string
+        network:
+          type: string
   responses:
+    ServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
     UnauthorizedError:
       description: Invalid or expired token
       content:
@@ -241,16 +253,6 @@ components:
             type: internal-server-error
             title: Internal Server Error
             status: 500
-    ServiceUnavailable:
-      description: The resource you are trying to access is currently unavailable
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            type: unavailable
-            title: Unavailable
-            status: 503
   securitySchemes:
     bearerAuth:
       type: http
@@ -266,8 +268,6 @@ components:
       name: X-API-Key
       in: header
       x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
-tags:
-- name: pricing
 x-provenance:
   method: searched
   source: https://docs.blockdaemon.com/reference

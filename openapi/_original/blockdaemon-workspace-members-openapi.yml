@@ -1,3 +1,5 @@
+# x-archived-from: blockdaemon-workspace-members-openapi.yml
+# x-archived-on: 2026-10-16
 openapi: 3.0.0
 info:
   description: This service enables the querying of members belonging to a specific organisation

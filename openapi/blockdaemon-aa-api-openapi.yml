@@ -1,0 +1,851 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Aa API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: aa
+paths:
+  /defi/v1/aa/getpaymasterdata:
+    get:
+      tags:
+      - aa
+      summary: Get Paymaster Data
+      description: 'This endpoint retrieves the paymaster data necessary for account abstraction. It returns a payload containing the paymasterData, a verification hash, and validity timestamps (mockValidUntil and mockValidAfter) that should be incorporated into user operations.
+
+
+        > 💡
+
+        **Compute Unit Value:** `15` (Fixed)'
+      operationId: aaGetpaymasterdata
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: sender
+        in: query
+        required: true
+        schema:
+          type: string
+          description: On-chain wallet address.
+          example: '0x03D3a52d79eeB5014dFe28258e8c0978Ecd8e65c'
+        description: On-chain wallet address.
+      - name: nonce
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Anti-replay parameter.
+          example: '0'
+        description: Anti-replay parameter.
+      - name: initCode
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The initCode of the account. (needed if and only if the account is not yet on-chain and needs to be created)
+          example: 0x
+        description: The initCode of the account. (needed if and only if the account is not yet on-chain and needs to be created)
+      - name: preVerificationGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Gas units to compensate the bundler for pre-verification overhead and calldata encoding, as an integer string (ERC-4337).
+          example: '53576'
+        description: Gas units to compensate the bundler for pre-verification overhead and calldata encoding, as an integer string (ERC-4337).
+      - name: verificationGasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for verifying the user operation (signature validation and paymaster logic), as an integer string (ERC-4337).
+          example: '362451'
+        description: Maximum gas units for verifying the user operation (signature validation and paymaster logic), as an integer string (ERC-4337).
+      - name: gasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for the overall user operation execution, as an integer string (ERC-4337).
+          example: '10000'
+        description: Maximum gas units for the overall user operation execution, as an integer string (ERC-4337).
+      - name: callGasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for the main execution call of the user operation, as an integer string (ERC-4337).
+          example: '260611'
+        description: Maximum gas units for the main execution call of the user operation, as an integer string (ERC-4337).
+      - name: callData
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Encoded data for executing the primary function call or operation within the user's transaction.
+          example: '0x38ed173900000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000063056e00436da25bcf48a40dfbbdcc708935100600000000000000000000000000000000000000000000000000000000634d00ee0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d600000000000000000000000011fe4b6ae13d2a6055c8d9cf65c55bac32b5d844'
+        description: Encoded data for executing the primary function call or operation within the user's transaction.
+      - name: maxPriorityFeePerGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Maximum priority fee (tip) per gas unit in wei to incentivize validators or bundlers, as an integer string (EIP-1559). Example: ''1000000000'' = 1 gwei.'
+          example: '100000000'
+        description: 'Maximum priority fee (tip) per gas unit in wei to incentivize validators or bundlers, as an integer string (EIP-1559). Example: ''1000000000'' = 1 gwei.'
+      - name: maxFeePerGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Maximum total fee per gas unit in wei (base fee + priority fee), as an integer string (EIP-1559). Example: ''20000000000'' = 20 gwei.'
+          example: '29964445250'
+        description: 'Maximum total fee per gas unit in wei (base fee + priority fee), as an integer string (EIP-1559). Example: ''20000000000'' = 20 gwei.'
+      - name: paymasterAndData
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster. (empty for self-sponsored transaction)
+          example: 0x
+        description: Address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster. (empty for self-sponsored transaction)
+      - name: paymasterContractAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Address of the contract from where, gas is to be paid.
+          example: '0xba60b04029be2bfd16d76e70290acfad3a8b582c'
+        description: Address of the contract from where, gas is to be paid.
+      - name: mockValidAfter
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The UserOp is valid only after this time, to be sent in epoch time format.
+          example: '0x0'
+        description: The UserOp is valid only after this time, to be sent in epoch time format.
+      - name: mockValidUntil
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The UserOp is valid only up to this time, to be sent in epoch time format.
+          example: '0x00000000deadbeef'
+        description: The UserOp is valid only up to this time, to be sent in epoch time format.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    paymasterData: '0xba60b04029be2bfd16d76e70290acfad3a8b582c00000000000000000000000000000000000000000000000000000000deadbeef00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000'
+                    hash: '0x2907ffb2f2320e35a041bd74235caed02f706e3ed4b2308f0a064a1f9e0aac67'
+                    mockValidUntil: '0x00000000deadbeef'
+                    mockValidAfter: '0x0'
+      x-bd-cu: '15'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/aa/getsignaturemessage:
+    get:
+      tags:
+      - aa
+      summary: Get Signature Message
+      description: 'This endpoint retrieves a hexadecimal signature message that must be signed by the sender as part of the account abstraction process. The signed message serves as a critical authorization component for subsequent user operations on the blockchain.
+
+
+        > 💡
+
+        **Compute Unit Value:** `15` (Fixed)'
+      operationId: aaGetsignaturemessage
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: sender
+        in: query
+        required: true
+        schema:
+          type: string
+          description: On-chain wallet address.
+          example: '0x03D3a52d79eeB5014dFe28258e8c0978Ecd8e65c'
+        description: On-chain wallet address.
+      - name: nonce
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Anti-replay parameter.
+          example: '0'
+        description: Anti-replay parameter.
+      - name: initCode
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The initCode of the account. (needed if and only if the account is not yet on-chain and needs to be created)
+          example: 0x
+        description: The initCode of the account. (needed if and only if the account is not yet on-chain and needs to be created)
+      - name: preVerificationGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Gas units to compensate the bundler for pre-verification overhead and calldata encoding, as an integer string (ERC-4337).
+          example: '53576'
+        description: Gas units to compensate the bundler for pre-verification overhead and calldata encoding, as an integer string (ERC-4337).
+      - name: verificationGasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for verifying the user operation (signature validation and paymaster logic), as an integer string (ERC-4337).
+          example: '362451'
+        description: Maximum gas units for verifying the user operation (signature validation and paymaster logic), as an integer string (ERC-4337).
+      - name: gasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for the overall user operation execution, as an integer string (ERC-4337).
+          example: '10000'
+        description: Maximum gas units for the overall user operation execution, as an integer string (ERC-4337).
+      - name: callGasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for the main execution call of the user operation, as an integer string (ERC-4337).
+          example: '260611'
+        description: Maximum gas units for the main execution call of the user operation, as an integer string (ERC-4337).
+      - name: callData
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Encoded data for executing the primary function call or operation within the user's transaction.
+          example: '0x38ed173900000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000063056e00436da25bcf48a40dfbbdcc708935100600000000000000000000000000000000000000000000000000000000634d00ee0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d600000000000000000000000011fe4b6ae13d2a6055c8d9cf65c55bac32b5d844'
+        description: Encoded data for executing the primary function call or operation within the user's transaction.
+      - name: maxPriorityFeePerGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Maximum priority fee (tip) per gas unit in wei to incentivize validators or bundlers, as an integer string (EIP-1559). Example: ''1000000000'' = 1 gwei.'
+          example: '100000000'
+        description: 'Maximum priority fee (tip) per gas unit in wei to incentivize validators or bundlers, as an integer string (EIP-1559). Example: ''1000000000'' = 1 gwei.'
+      - name: maxFeePerGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Maximum total fee per gas unit in wei (base fee + priority fee), as an integer string (EIP-1559). Example: ''20000000000'' = 20 gwei.'
+          example: '29964445250'
+        description: 'Maximum total fee per gas unit in wei (base fee + priority fee), as an integer string (EIP-1559). Example: ''20000000000'' = 20 gwei.'
+      - name: paymasterAndData
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster. (empty for self-sponsored transaction)
+          example: 0x
+        description: Address of paymaster sponsoring the transaction, followed by extra data to send to the paymaster. (empty for self-sponsored transaction)
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    messageToBeSigned: '0x4617338a3acd06271c356d52f8cfc260519e8e2115f0af41eb79b7ac13b1963c'
+      x-bd-cu: '15'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/aa/getuserops:
+    get:
+      tags:
+      - aa
+      summary: Get User Ops
+      description: 'Retrieves a user operation object that can be signed and submitted to the bundler. Used in account abstraction flows to gather the required transaction data.
+
+
+        > 💡
+
+        **Compute Unit Value:** `5` (Fixed)'
+      operationId: aaGetuserops
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: sender
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Specifies the account or contract initiating the operation. If not on-chain yet, the account may need to be created.
+          example: '0x03D3a52d79eeB5014dFe28258e8c0978Ecd8e65c'
+        description: Specifies the account or contract initiating the operation. If not on-chain yet, the account may need to be created.
+      - name: nonce
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Anti-replay parameter.
+          example: '0'
+        description: Anti-replay parameter.
+      - name: initCode
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The initCode of the account. (needed if and only if the account is not yet on-chain and needs to be created)
+          example: 0x
+        description: The initCode of the account. (needed if and only if the account is not yet on-chain and needs to be created)
+      - name: preVerificationGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Gas units to compensate the bundler for pre-verification overhead and calldata encoding, as an integer string (ERC-4337).
+          example: '53576'
+        description: Gas units to compensate the bundler for pre-verification overhead and calldata encoding, as an integer string (ERC-4337).
+      - name: verificationGasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for verifying the user operation (signature validation and paymaster logic), as an integer string (ERC-4337).
+          example: '362451'
+        description: Maximum gas units for verifying the user operation (signature validation and paymaster logic), as an integer string (ERC-4337).
+      - name: gasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for the overall user operation execution, as an integer string (ERC-4337).
+          example: '10000'
+        description: Maximum gas units for the overall user operation execution, as an integer string (ERC-4337).
+      - name: callGasLimit
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Maximum gas units for the main execution call of the user operation, as an integer string (ERC-4337).
+          example: '260611'
+        description: Maximum gas units for the main execution call of the user operation, as an integer string (ERC-4337).
+      - name: callData
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The encoded data for the transaction function call or operation to be executed in this user operation.
+          example: '0x38ed173900000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000063056e00436da25bcf48a40dfbbdcc708935100600000000000000000000000000000000000000000000000000000000634d00ee0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d600000000000000000000000011fe4b6ae13d2a6055c8d9cf65c55bac32b5d844'
+        description: The encoded data for the transaction function call or operation to be executed in this user operation.
+      - name: maxPriorityFeePerGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Maximum priority fee (tip) per gas unit in wei to incentivize validators or bundlers, as an integer string (EIP-1559). Example: ''1000000000'' = 1 gwei.'
+          example: '100000000'
+        description: 'Maximum priority fee (tip) per gas unit in wei to incentivize validators or bundlers, as an integer string (EIP-1559). Example: ''1000000000'' = 1 gwei.'
+      - name: maxFeePerGas
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Maximum total fee per gas unit in wei (base fee + priority fee), as an integer string (EIP-1559). Example: ''20000000000'' = 20 gwei.'
+          example: '29964445250'
+        description: 'Maximum total fee per gas unit in wei (base fee + priority fee), as an integer string (EIP-1559). Example: ''20000000000'' = 20 gwei.'
+      - name: paymasterAndData
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Address of the paymaster sponsoring the transaction, plus any additional data sent to the paymaster. Leave empty for self-sponsored transactions.
+          example: 0x
+        description: Address of the paymaster sponsoring the transaction, plus any additional data sent to the paymaster. Leave empty for self-sponsored transactions.
+      - name: userOps
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Array of user operation objects as per ERC-4337. Defines one or more operations to bundle.
+          example:
+          - sender: '0x03D3a52d79eeB5014dFe28258e8c0978Ecd8e65c'
+            nonce: '0'
+            initCode: 0x
+            callData: '0x38ed173900000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000063056e00436da25bcf48a40dfbbdcc708935100600000000000000000000000000000000000000000000000000000000634d00ee0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d600000000000000000000000011fe4b6ae13d2a6055c8d9cf65c55bac32b5d844'
+            callGasLimit: '260611'
+            gasLimit: '362451'
+            verificationGasLimit: '362451'
+            preVerificationGas: '53576'
+            maxFeePerGas: '29964445250'
+            maxPriorityFeePerGas: '100000000'
+            paymasterAndData: 0x
+            signature: '0x06ba793e154877ba4beff535372f70be6d2ebb5503f374297658caa13a114b5b29b5a45cd4835176e637018823bba5990b6f043f93fe792a5bdb2a09958ecca61c'
+        description: Array of user operation objects as per ERC-4337. Defines one or more operations to bundle.
+      - name: bundler
+        in: query
+        required: true
+        schema:
+          type: string
+          description: The address of the bundler or beneficiary responsible for executing the user operations.
+          example: '0x6Fb447Ae94F5180254D436A693907a1f57696900'
+        description: The address of the bundler or beneficiary responsible for executing the user operations.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    sender: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+                    nonce: '0'
+                    initCode: 0x
+                    callData: '0x38ed173900000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000063056e00436da25bcf48a40dfbbdcc708935100600000000000000000000000000000000000000000000000000000000634d00ee0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d600000000000000000000000011fe4b6ae13d2a6055c8d9cf65c55bac32b5d844'
+                    callGasLimit: '260611'
+                    gasLimit: '362451'
+                    verificationGasLimit: '362451'
+                    preVerificationGas: '53576'
+                    maxFeePerGas: '29964445250'
+                    maxPriorityFeePerGas: '100000000'
+                    paymasterAndData: 0x
+                    signature: 0x
+      x-bd-cu: '5'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/aa/senduserops:
+    post:
+      tags:
+      - aa
+      summary: Send User Ops
+      description: 'This endpoint generates and returns the necessary paymaster parameters for account abstraction. It constructs a user operation payload including sender, recipient, gas, and call data details which can be submitted to execute transactions on the blockchain.
+
+
+        > 💡
+
+        **Compute Unit Value:** `15` (Fixed)'
+      operationId: aaSenduserops
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/aa/senduserops
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_aa_senduserops_Request'
+            example:
+              chainId: '1'
+              chainSymbol: ETH
+              bundler: '0x6Fb447Ae94F5180254D436A693907a1f57696900'
+              gas: '100000'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    from: '0x6Fb447Ae94F5180254D436A693907a1f57696900'
+                    to: '0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789'
+                    gas: '516124'
+                    data: '0x1fad948c00000000000000000000000000000000000000000000000000000000000000400000000000000000000000006fb447ae94f5180254d436a693907a1f576969000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000002000000000000000000000000003d3a52d79eeb5014dfe28258e8c0978ecd8e65c000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001600000000000000000000000000000000000000000000000000000000000000180000000000000000000000000000000000000000000000000000000000003fa0300000000000000000000000000000000000000000000000000000000000587d3000000000000000000000000000000000000000000000000000000000000d14800000000000000000000000000000000000000000000000000000006fa0526420000000000000000000000000000000000000000000000000000000005f5e10000000000000000000000000000000000000000000000000000000000000002c000000000000000000000000000000000000000000000000000000000000002e00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010438ed173900000000000000000000000000000000000000000000000000038d7ea4c68000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000a000000000000000000000000063056e00436da25bcf48a40dfbbdcc708935100600000000000000000000000000000000000000000000000000000000634d00ee0000000000000000000000000000000000000000000000000000000000000002000000000000000000000000b4fbf271143f4fbf7b91a5ded31805e42b2208d600000000000000000000000011fe4b6ae13d2a6055c8d9cf65c55bac32b5d844000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004106ba793e154877ba4beff535372f70be6d2ebb5503f374297658caa13a114b5b29b5a45cd4835176e637018823bba5990b6f043f93fe792a5bdb2a09958ecca61c00000000000000000000000000000000000000000000000000000000000000'
+                    value: '0'
+      x-bd-cu: '15'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  schemas:
+    _aa_senduserops_Request:
+      type: object
+      properties:
+        chainId:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          example: '1'
+        chainSymbol:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        userOps:
+          type: array
+          items:
+            type: string
+          description: Array of user operation objects as per ERC-4337. Defines one or more operations to bundle.
+        bundler:
+          type: string
+          description: The address of the bundler or beneficiary responsible for executing the user operations.
+          example: '0x6Fb447Ae94F5180254D436A693907a1f57696900'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+      required:
+      - userOps
+      - bundler
+      description: The request body for a /defi/v1/aa/senduserops
+      example:
+        chainId: '1'
+        chainSymbol: ETH
+        bundler: '0x6Fb447Ae94F5180254D436A693907a1f57696900'
+        gas: '100000'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

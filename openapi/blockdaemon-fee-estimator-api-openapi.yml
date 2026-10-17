@@ -1,0 +1,287 @@
+openapi: 3.2.0
+info:
+  version: 3.0.0
+  title: Blockdaemon REST Fee estimator API
+  description: 'Blockdaemon REST API provides a RESTful and uniform way to access blockchain resources,
+
+    with a rich and reusable model across multiple protocols/cryptocurrencies.'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/universal/{version}
+  description: Production server
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+- url: https://ubiquity.api.blockdaemon.com/{version}
+  description: '[Legacy Auth] Production server'
+  variables:
+    version:
+      enum:
+      - v1
+      default: v1
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Fee estimator
+paths:
+  /{protocol}/{network}/tx/estimate_fee:
+    get:
+      summary: Get the Fee Estimation
+      description: 'Returns fee estimation in decimals.This endpoint will return 3 fee estimations: fast, medium and slow.'
+      operationId: GetFeeEstimate
+      tags:
+      - Fee estimator
+      parameters:
+      - in: path
+        name: protocol
+        required: true
+        description: 'Protocol handle, one of: `avalanche`, `bitcoin`, `bitcoincash`, `dogecoin`, `ethereum`, `litecoin`, `polkadot`, `polygon`, `solana`, and `kaia`.
+
+          '
+        schema:
+          type: string
+          default: bitcoin
+        examples:
+          Bitcoin:
+            value: bitcoin
+      - $ref: '#/components/parameters/network'
+      responses:
+        '200':
+          description: Protocols Overview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  most_recent_block:
+                    type: integer
+                  estimated_fees:
+                    $ref: '#/components/schemas/fee_estimate_response'
+              examples:
+                simple_fee:
+                  value:
+                    most_recent_block: 17820703
+                    estimated_fees:
+                      fast: 38566334505
+                      medium: 35427955554
+                      slow: 33928922157
+                evm:
+                  value:
+                    most_recent_block: 17820703
+                    estimated_fees:
+                      fast:
+                        max_priority_fee: 1500000000
+                        max_total_fee: 38566334505
+                        medium:
+                          max_priority_fee: 1200000000
+                          max_total_fee: 35427955554
+                        slow:
+                          max_priority_fee: 1000000000
+                          max_total_fee: 33928922157
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/ServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+      x-internal: false
+components:
+  schemas:
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    fee_estimate_response:
+      anyOf:
+      - $ref: '#/components/schemas/fee_estimate'
+      - $ref: '#/components/schemas/evm_fee_estimate'
+    fee_estimate:
+      type: object
+      properties:
+        fast:
+          description: The fast maximum priority fee.
+          type: integer
+          format: bigint
+        medium:
+          description: The medium maximum priority fee.
+          type: integer
+          format: bigint
+        slow:
+          description: The slow maximum priority fee.
+          type: integer
+          format: bigint
+    evm_fee:
+      description: The priority fee.
+      type: object
+      properties:
+        max_priority_fee:
+          description: The fast slow priority fee.
+          type: integer
+          format: bigint
+        max_total_fee:
+          type: integer
+          format: bigint
+          description: The fast slow total fee.
+    evm_fee_estimate:
+      type: object
+      properties:
+        fast:
+          $ref: '#/components/schemas/evm_fee'
+        medium:
+          $ref: '#/components/schemas/evm_fee'
+        slow:
+          $ref: '#/components/schemas/evm_fee'
+  responses:
+    UnauthorizedError:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ServerError:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+  parameters:
+    network:
+      name: network
+      in: path
+      required: true
+      description: Which network to target. Available networks can be found in the list of supported protocols or with /{protocol}.
+      schema:
+        type: string
+        default: mainnet
+      examples:
+        Mainnet:
+          value: mainnet
+        Mainnet-C:
+          value: mainnet-c
+        Testnet:
+          value: testnet
+        Testnet4:
+          value: testnet4
+          description: Bitcoin testnet network
+        Testnet-C:
+          value: testnet-c
+        Holesky:
+          value: holesky
+          description: Ethereum testnet network
+        Hoodi:
+          value: hoodi
+          description: Ethereum testnet network
+        Sepolia:
+          value: sepolia
+          description: Ethereum testnet network
+        Westend:
+          value: westend
+          description: Polkadot testnet network
+        Amoy:
+          value: amoy
+          description: Polygon testnet network
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getaccountnonce.md
+  - https://docs.blockdaemon.com/reference/getblockbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifierbynumber.md
+  - https://docs.blockdaemon.com/reference/getblockidentifiers.md
+  - https://docs.blockdaemon.com/reference/getcurrentblockhash.md
+  - https://docs.blockdaemon.com/reference/getcurrentblocknumber.md
+  - https://docs.blockdaemon.com/reference/getfeeestimate.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddress.md
+  - https://docs.blockdaemon.com/reference/getlistofbalancesbyaddresses.md
+  - https://docs.blockdaemon.com/reference/getprotocolendpoints.md
+  - https://docs.blockdaemon.com/reference/getprotocolslist.md
+  - https://docs.blockdaemon.com/reference/getreportbyaddress.md
+  - https://docs.blockdaemon.com/reference/gettxbyhash.md
+  - https://docs.blockdaemon.com/reference/gettxconfirmations.md
+  - https://docs.blockdaemon.com/reference/gettxoutputbyhashandindex.md
+  - https://docs.blockdaemon.com/reference/gettxs.md
+  - https://docs.blockdaemon.com/reference/gettxsbyaddress.md
+  - https://docs.blockdaemon.com/reference/getutxobyaccount.md
+  merge:
+    pages: 18
+    deduped: 196
+    conflicts_kept_first: 0

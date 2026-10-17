@@ -1,0 +1,1569 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Staking Ethereum API
+  description: 'The Blockdaemon Staking API simplifies and streamlines institutional cryptocurrency staking. The API allows developers to interact with blockchain networks and perform various staking-related operations, such as delegating and undelegating tokens, in a single, unified interface.
+
+
+    With the Staking API, you can quickly and easily build and deploy applications that automate staking activities and increase efficiency in your blockchain operations.'
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://assets-global.website-files.com/633c5e06513fa35f3391a5f9/645d33beb6fa65f6cfb95eb8_BD%20Logo%20Stack%20-%20Purple.svg
+    backgroundColor: '#fafafa'
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/boss
+security:
+- ApiKeyAuth: []
+tags:
+- name: Ethereum
+  description: Ethereum endpoints
+paths:
+  /v1/eth2-launchpad-deposit:
+    post:
+      summary: Generate an Ethereum Launchpad Deposit File
+      operationId: generateEthereumLaunchpadDeposit
+      tags:
+      - Ethereum
+      description: Generates an Ethereum Launchpad deposit string for one or more validators. The resulting JSON file will allow you to execute the deposit manually on the official Ethereum Deposit Launchpad web-site.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateEthereumLDParams'
+      responses:
+        '200':
+          description: Launchpad deposit string created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumLaunchpadDeposit'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: validator(s) stake(s) not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+  /v1/ethereum/{network}/consolidation-intents:
+    parameters:
+    - $ref: '#/components/parameters/EthereumNetwork'
+    post:
+      summary: Generate validator consolidation intent
+      operationId: postEthereumCompoundingIntent
+      tags:
+      - Ethereum
+      description: 'Generates a signed intent message to consolidate validator balances by transferring
+
+        funds from a source validator to a target validator. This operation enables balance
+
+        consolidation and can also upgrade withdrawal credentials from Type 1 (0x01) to Type 2 (0x02).
+
+
+        **Consolidation Types:**
+
+        - **Type 1 to Type 2**: Upgrades a validator from regular withdrawals (0x01) to compounding (0x02)
+
+        - **Type 1 to Type 2**: Consolidates funds from a Type 1 validator to an existing Type 2 validator
+
+        - **Type 2 to Type 2**: Consolidates funds between two Type 2 (compounding) validators
+
+
+        **Key Notes:**
+
+        - Upgrading from Type 1 to Type 2 is **permanent and irreversible**.
+
+        - After Type 2 upgrade:
+
+        - **Max effective balance (MaxEB)** increases to **2048 ETH**.
+
+        - **Partial withdrawals** become available for balances **above 32 ETH**.
+
+        - Processing may take **several days** to complete across consensus and execution layers.
+
+        - **Consolidation transfers the entire balance** from source to target validator.
+
+
+        **Prerequisites:**
+
+        - Source validator must be **active or eligible**.
+
+        - Target validator must be **active and valid**.
+
+        - Source validator must **not already** use Type 2 withdrawal credentials (for Type 1 to Type 2 upgrades).
+
+        - No conflicting pending operations (e.g., exits, withdrawals).
+
+
+        **Costs & Timing:**
+
+        - Consolidation requires on-chain transaction; gas fees apply and execution may take hours or days.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewConsolidationIntentEthereum'
+      responses:
+        '200':
+          description: Intent created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumConsolidationIntentResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+  /v1/ethereum/{network}/queue-progress/active-exiting:
+    post:
+      summary: Estimate Ethereum validators progress in the active-exiting queue
+      operationId: ActiveExitingQueueProgress
+      tags:
+      - Ethereum
+      description: Retrieve Ethereum validator in the active-exiting queue
+      parameters:
+      - $ref: '#/components/parameters/EthereumNetwork'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EthereumQueuesProgressRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/EthereumQueuesProgress'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+  /v1/ethereum/{network}/queue-progress/pending-queued:
+    post:
+      summary: Estimate Ethereum validators progress in the pending-queued queue
+      operationId: PendingQueuedProgress
+      tags:
+      - Ethereum
+      description: Retrieve Ethereum validator in the pending-queued queue
+      parameters:
+      - $ref: '#/components/parameters/EthereumNetwork'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EthereumQueuesProgressRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/EthereumQueuesProgress'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+  /v1/ethereum/{network}/signed-voluntary-exit:
+    get:
+      summary: Generate a Signed Voluntary Exit Message
+      operationId: generateSignedVoluntaryExit
+      tags:
+      - Ethereum
+      description: 'Generates a voluntary exit message, but does not broadcast it to the network.
+
+        Instead, the signed message is returned as part of the response.
+
+        You can use the Native Ubiquity API for Ethereum to broadcast the message.
+
+
+        ---
+
+
+        - An exit message can be generated shortly after staking, once the validator shows a status on the consensus layer, typically within 7 hours after paying the deposit.
+
+        - Broadcasting or executing the exit is only possible after the validator reaches active status and has completed the activation queue.
+
+
+        `Note`: The validator must remain active for a minimum of 256 epochs, or approximately 27 hours, as per the Ethereum protocol rules.'
+      parameters:
+      - $ref: '#/components/parameters/EthereumNetwork'
+      - $ref: '#/components/parameters/ShowEthereumForkVersion'
+      - $ref: '#/components/parameters/EthereumValidatorIndexParam'
+      - $ref: '#/components/parameters/EthereumValidatorPublicKey'
+      - $ref: '#/components/parameters/EthereumExitEpoch'
+      responses:
+        '200':
+          $ref: '#/components/responses/EthereumExitValidatorTx'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          description: validator not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+  /v1/ethereum/{network}/stake-intents:
+    parameters:
+    - $ref: '#/components/parameters/EthereumNetwork'
+    - $ref: '#/components/parameters/IdempotencyKey'
+    - $ref: '#/components/parameters/ValidatorType'
+    post:
+      summary: Post Stake Intent
+      operationId: postEthereumStakeIntent
+      tags:
+      - Ethereum
+      description: 'Reserves one or more available validators and returns an unsigned transaction.
+
+        Supports 0x01 withdrawal address types.
+
+        The validators will remain reserved for 90 days or until the returned transaction is signed and confirmed in the network. Blockdaemon reserves the right to free any allocated resources if the transaction is not confirmed in time.
+
+
+        A single transaction can create up to 250 validators through the use of the Blockdaemon batch deposit contract which delivers over 50% reduction in gas fees when compared to submitting individual transactions for each deposit.
+
+
+        To complete the staking process, you must sign an Ethereum transaction with a data field set to match the returned `unsigned_transaction` property of the response. The `recipient` of the transaction must be set to the `contract_address` property of the response. The account signing the transaction must have the sufficient balance to create the requested number of validators and this amount must be provided as the value of the signed transaction.
+
+
+        For DVT plans (as indicated by `plan_id`), the `validator_type` value must be 0x02.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewStakeIntentEthereum'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumStakeIntentResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+  /v1/ethereum/{network}/topup-intents:
+    parameters:
+    - $ref: '#/components/parameters/EthereumNetwork'
+    post:
+      summary: Post Top up Intent
+      operationId: postEthereumTopUpIntent
+      tags:
+      - Ethereum
+      description: 'Adds additional balance to one or more eligible validators and returns an unsigned transaction.
+
+        Only withdrawal credentials of type **0x02** are supported.
+
+        If a validator uses 0x01 credentials or if the combined value of the additional deposit and the validator''s current effective balance exceeds **2048 ETH**, the deposit will not be processed.
+
+
+        The unsigned transaction remains valid for up to 90 days or until it is signed and confirmed on the network.
+
+
+        Through the Blockdaemon batch deposit contract,
+
+        a single transaction can top up up to 250 validators simultaneously,
+
+        delivering over 50% gas fee savings compared to submitting separate transactions for each validator.
+
+
+        To complete the staking process, you must sign an Ethereum transaction
+
+        with a data field
+
+        set to match the returned `unsigned_transaction` property of the response.
+
+        The `recipient` of the transaction must be set to the `contract_address`
+
+        property of the response. The account signing the transaction must have
+
+        the sufficient balance to top up the requested number of validators and
+
+        this amount must be provided as the value of the signed transaction.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEthereumTopUpIntent'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumTopUpIntent'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+  /v1/ethereum/{network}/voluntary-exit:
+    post:
+      summary: Exit Ethereum Validator
+      operationId: exitEthereumValidator
+      tags:
+      - Ethereum
+      description: Generates an Ethereum voluntary exit message and broadcasts it to the network.
+      parameters:
+      - $ref: '#/components/parameters/EthereumNetwork'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExitEthereumValidator'
+      responses:
+        '202':
+          description: Transaction was generated and submitted for processing.
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ValidatorNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      x-inbound-policy:
+      - apikey-check
+      - auth-policy
+      - ip-check
+      - boss-eth-exit-product-check
+      - rate-limit-inbound
+  /v1/ethereum/{network}/voluntary-exits:
+    post:
+      summary: Exit Ethereum Validators
+      operationId: exitEthereumValidators
+      tags:
+      - Ethereum
+      x-inbound-policy:
+      - apikey-check
+      - auth-policy
+      - ip-check
+      - boss-eth-exit-product-check
+      - rate-limit-inbound
+      description: 'Generates an Ethereum voluntary exit message and broadcasts it to the network.
+
+        With most error codes, a list of the correctly processed validators is returned. Use it to check which validators will be exited.'
+      parameters:
+      - $ref: '#/components/parameters/EthereumNetwork'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Data about a list of validators (up to 500) to exit.
+              required:
+              - validator_identifiers
+              properties:
+                validator_identifiers:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/EthereumValidatorIdentifier'
+                  maxItems: 500
+                  description: Contains a list of validators to exit.
+      responses:
+        '200':
+          description: A list of validators was exited correctly.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: A list of validators was exited correctly.
+                required:
+                - code
+                - message
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    description: Correct execution
+                    example: 200
+                  message:
+                    type: string
+                    description: Confirmation message
+                    example: Detailed human-readable diagnostic message
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/ValidatorNotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+    get:
+      summary: List of Ethereum voluntary exits
+      operationId: listEthereumExits
+      tags:
+      - Ethereum
+      x-inbound-policy:
+      - apikey-check
+      - auth-policy
+      - ip-check
+      - boss-eth-exit-product-check
+      - rate-limit-inbound
+      description: Lists all the Ethereum voluntary exits that have been generated by the system.
+      parameters:
+      - $ref: '#/components/parameters/EthereumNetwork'
+      - $ref: '#/components/parameters/Page'
+      - $ref: '#/components/parameters/PerPage'
+      responses:
+        '200':
+          $ref: '#/components/responses/ListEthereumExits'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+  /v1/ethereum/{network}/withdrawable-amount/{withdrawal_address}:
+    parameters:
+    - $ref: '#/components/parameters/EthereumNetwork'
+    - $ref: '#/components/parameters/WithdrawalAddress'
+    get:
+      summary: Get Ethereum Withdrawable Amount
+      operationId: getEthWithdrawableAmount
+      tags:
+      - Ethereum
+      description: Returns the total staked amount that can be withdrawn across a customer's 0x02 validators on the network with the given withdrawal address. Withdrawable amount per validator is calculated as 'withdrawable_amount = balance - minimum_deposit - pending_withdrawals'. Withdrawable amount does not include the balances of validators that can be exited and fully withdrawn.
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumWithdrawableAmount'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+  /v1/ethereum/{network}/withdrawal-intents/exit:
+    parameters:
+    - $ref: '#/components/parameters/EthereumNetwork'
+    post:
+      summary: Generate a validator full exit intent message
+      operationId: postEthereumWithdrawalIntentExit
+      tags:
+      - Ethereum
+      description: 'Generates an exit message that a user can sign as part of an exit transaction and submit to the official Ethereum
+
+        withdrawal smart contract. The response includes the withdrawal contract address for the specified network in the
+
+        request path.
+
+
+        To successfully submit an exit withdrawal intent, the validator must meet the following conditions:
+
+        - The withdrawal credentials prefix must be either ''0x01'' or ''0x02'' and contain the withdrawal address.
+
+        - The validator must be in an active state and have been active for at least 256 epochs.
+
+        - The validator''s balance must be greater than ''0'' Gwei.
+
+        - There must be no pending partial withdrawals with a total sum exceeding ''0'' Gwei.
+
+
+        **Important:** A successful transaction to the withdrawal smart contract does not guarantee that the validator will
+
+        exit on the Consensus Layer (CL), as validator state changes may affect the process. Standard gas fees will apply
+
+        regardless of the CL outcome.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewWithdrawalEthereum'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumWithdrawalResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+  /v1/ethereum/{network}/withdrawal-intents/partial:
+    parameters:
+    - $ref: '#/components/parameters/EthereumNetwork'
+    post:
+      summary: Generate a validator partial withdrawal intent message
+      operationId: postEthereumWithdrawalIntentPartial
+      tags:
+      - Ethereum
+      description: 'Generates an partial withdrawal message that a user can sign as part of an exit transaction and submit to the official
+
+        Ethereum withdrawal smart contract. The response includes the withdrawal contract address for the specified network in the
+
+        request path.
+
+
+        To successfully submit an exit withdrawal intent, the validator must meet the following conditions:
+
+        - The withdrawal credentials prefix must be type ''0x02'' and contain the withdrawal address.
+
+        - The validator must be in an active state and have been active for at least 256 epochs.
+
+        - The validator''s balance must be greater than (32000000000 Gwei + total sum of pending partial withdrawals).
+
+        - The validator''s effective balance must be 32000000000 Gwei or greater.
+
+
+        Standard gas fees will apply.'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Required data for Ethereum partial withdrawal
+              required:
+              - withdrawal_address
+              - validator
+              - amount
+              properties:
+                withdrawal_address:
+                  $ref: '#/components/schemas/EthereumAddress'
+                validator:
+                  $ref: '#/components/schemas/EthereumValidatorPublicKey'
+                amount:
+                  $ref: '#/components/schemas/Gwei'
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EthereumWithdrawalResponse'
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/NoValidatorsError'
+      security:
+      - ApiKeyAuth: []
+components:
+  parameters:
+    IdempotencyKey:
+      in: header
+      name: Idempotency-Key
+      description: the unique idempotency key for this request
+      example: f1c971b4-7114-4c4b-8ad2-a6f9e33e2cd0
+      schema:
+        type: string
+        format: uuid
+      required: false
+    EthereumValidatorPublicKey:
+      name: validator_public_key
+      in: query
+      description: Validator public key
+      schema:
+        $ref: '#/components/schemas/EthereumValidatorPublicKey'
+    ValidatorType:
+      name: validator_type
+      in: query
+      description: Type of validator to create (0x01 for standard, 0x02 for Pectra).  Must be `0x02` for DVT plan types.
+      required: false
+      schema:
+        type: string
+        enum:
+        - '0x01'
+        - '0x02'
+        default: '0x01'
+    EthereumValidatorIndexParam:
+      name: validator_index
+      in: query
+      schema:
+        type: integer
+        description: Validator index
+        format: uint64
+        example: 25
+    EthereumNetwork:
+      name: network
+      in: path
+      description: Ethereum network
+      required: true
+      schema:
+        $ref: '#/components/schemas/EthereumNetwork'
+    PerPage:
+      in: query
+      name: per_page
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+        maximum: 1000
+        default: 250
+      description: The number of items to include on a single page
+    Page:
+      in: query
+      name: page
+      required: false
+      schema:
+        type: integer
+        format: int64
+        minimum: 1
+        default: 1
+      description: The result set page to view
+    ShowEthereumForkVersion:
+      name: show_fork_version
+      in: query
+      description: 'When this parameter is set to `true`, the response will include the field `fork_version` indicating the fork version constant for the currently active fork.
+
+
+        The fork versions values are unique for each network and each fork. As an example, here is the constants preset file for Mainnet:
+
+        https://github.com/ethereum/consensus-specs/blob/dev/configs/mainnet.yaml'
+      required: false
+      schema:
+        type: boolean
+    EthereumExitEpoch:
+      name: epoch
+      in: query
+      schema:
+        type: integer
+        description: 'Earliest epoch when voluntary exit can be processed.
+
+          If not provided the earliest possible epoch will be fetched from the network.
+
+          '
+        format: uint64
+        example: 1001
+    WithdrawalAddress:
+      name: withdrawal_address
+      in: path
+      description: Withdrawal address
+      required: true
+      schema:
+        $ref: '#/components/schemas/EthereumAddress'
+  schemas:
+    OnchainValidatorStatus:
+      type: string
+      description: 'On-chain status of the validator.
+
+        Reference: https://docs.blockdaemon.com/docs/eth-validator-statuses
+
+        '
+      enum:
+      - pending_initialized
+      - pending_queued
+      - active_ongoing
+      - active_exiting
+      - active_slashed
+      - exited_unslashed
+      - exited_slashed
+      - withdrawal_possible
+      - withdrawal_done
+      - unknown
+    NewEthereumTopUp:
+      type: object
+      description: Required data for Ethereum validator top up
+      required:
+      - public_key
+      - amount
+      properties:
+        public_key:
+          $ref: '#/components/schemas/PublicKey'
+        amount:
+          $ref: '#/components/schemas/Gwei'
+    VoluntaryExits:
+      type: array
+      description: List of voluntary exits
+      items:
+        $ref: '#/components/schemas/EthereumVoluntaryExit'
+    PlanId:
+      type: string
+      description: This feature enables you to stake to validators from the specified plan(s). When no plan id is specified, validators across all plans that match the API route will be available for staking. If it is a shared plan, you can to stake to validators on a shared node from the specified plan.
+      example: plan_Wgx98Rbi8nQuL9ddn3mTk1
+    StakeIntentEthereumStake:
+      type: object
+      description: Individual Ethereum Stake Response
+      required:
+      - stake_id
+      - amount
+      - validator_public_key
+      - withdrawal_credentials
+      - fee_recipient
+      properties:
+        stake_id:
+          $ref: '#/components/schemas/StakeId'
+        amount:
+          $ref: '#/components/schemas/Gwei'
+        validator_public_key:
+          $ref: '#/components/schemas/PublicKey'
+        withdrawal_credentials:
+          $ref: '#/components/schemas/EthereumWithdrawalCredentials'
+        fee_recipient:
+          $ref: '#/components/schemas/FeeRecipient'
+    EthereumQueuesProgress:
+      type: object
+      required:
+      - validators
+      properties:
+        last_updated:
+          type: string
+          description: Time validator state was recorded
+          example: '2024-04-15 08:23:00'
+        validators:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidatorQueueProgress'
+    EthereumNetwork:
+      type: string
+      description: Ethereum network
+      enum:
+      - mainnet
+      - hoodi
+    CommonWithdrawalResponse:
+      type: object
+      required:
+      - withdraw_intent_id
+      - customer_id
+      properties:
+        withdraw_intent_id:
+          $ref: '#/components/schemas/WithdrawIntentId'
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+    ConsolidationIntentEthereum:
+      type: object
+      description: Ethereum Consolidation intent response
+      required:
+      - source_validator
+      - target_validator
+      - contract_address
+      - unsigned_data
+      properties:
+        source_validator:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        target_validator:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        contract_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        unsigned_data:
+          $ref: '#/components/schemas/EthereumUnsignedDataEthereum'
+    NewEthereumTopUpIntent:
+      type: object
+      description: Request object to create a new Ethereum Top Up Intent.
+      required:
+      - top_ups
+      properties:
+        top_ups:
+          type: array
+          description: Top ups for Ethereum 0x02 validators.
+          minItems: 1
+          maxItems: 1000
+          additionalProperties: false
+          items:
+            $ref: '#/components/schemas/NewEthereumTopUp'
+    CommonConsolidateResponse:
+      type: object
+      required:
+      - customer_id
+      properties:
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+    EthereumValidatorWithdrawableAmount:
+      type: object
+      description: Ethereum withdrawable amount
+      required:
+      - public_key
+      - network
+      - amount
+      - withdrawal_credentials
+      properties:
+        public_key:
+          $ref: '#/components/schemas/EthereumAddress'
+        network:
+          $ref: '#/components/schemas/EthereumNetwork'
+        amount:
+          $ref: '#/components/schemas/Gwei'
+        withdrawal_credentials:
+          $ref: '#/components/schemas/EthereumWithdrawalCredentials'
+    EthereumAddress:
+      type: string
+      description: Hex-encoded Ethereum [account or smart contract address](https://ethereum.org/en/developers/docs/accounts/).
+      format: hex
+      pattern: ^0x[a-fA-F0-9]{40}$
+      example: '0x00000000219ab540356cBB839Cbe05303d7705Fa'
+    ValidatorQueueProgress:
+      type: object
+      description: Ethereum validator queue progress validator
+      required:
+      - public_key
+      - epochs_remaining
+      properties:
+        public_key:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        epochs_remaining:
+          $ref: '#/components/schemas/EpochsRemaining'
+    EthereumStakeIntentResponse:
+      allOf:
+      - $ref: '#/components/schemas/CommonStakeIntentResponse'
+      - type: object
+        required:
+        - protocol
+        - network
+        properties:
+          protocol:
+            $ref: '#/components/schemas/EthereumProtocol'
+          network:
+            $ref: '#/components/schemas/EthereumNetwork'
+          ethereum:
+            $ref: '#/components/schemas/StakeIntentEthereum'
+    ExpirationTime:
+      type: integer
+      description: Transaction expiration time
+      format: int64
+      example: 1689939023
+    EpochsRemaining:
+      description: the number of epochs remaining in the current queue
+      type: integer
+      format: int64
+      example: 280312
+    Quantity:
+      type: integer
+      format: int32
+      description: Number of validators to create that will share the same withdrawal credentials.
+      minimum: 1
+    EthereumEpoch:
+      type: string
+      description: The numeric index of an [Ethereum epoch](https://ethereum.org/en/glossary/#epoch).
+      example: '1001'
+    EthereumLaunchpadDeposit:
+      description: An array of data that should be submitted to launchpad.ethereum.org to register the validators it describes.
+      type: array
+      items:
+        $ref: '#/components/schemas/EthereumLaunchpadDepositEntry'
+      format: json
+    StakeIntentId:
+      type: string
+      format: base58
+      description: Unique idenifier for a group of stakes.
+      example: stake_intent_Wgx98Rbi8nQuL9ddn3mTk1
+    EthereumUnsignedDataEthereum:
+      type: string
+      format: base64
+      description: Generated Ethereum unsigned transaction data
+      example: '0x91eb7c6836583b3f019eeffd4d0663a996d75f61f93567bd38fa36a78e2f57eb9ba338cbb338a55ccf94171cc9895c400000032000000000'
+    CustomerId:
+      type: string
+      description: Unique identifier for a customer
+      example: SatoshiNakamoto-xUYJbPw9hw
+      minimum: 1
+    NewWithdrawalEthereum:
+      type: object
+      description: Required data for Ethereum full withdrawal
+      required:
+      - withdrawal_address
+      - validator
+      properties:
+        withdrawal_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        validator:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+    EthereumWithdrawableAmount:
+      type: object
+      description: Ethereum withdrawable amount
+      required:
+      - protocol
+      - network
+      - currency
+      - amount
+      - pending_withdrawals
+      - withdrawable_validators
+      properties:
+        protocol:
+          $ref: '#/components/schemas/EthereumProtocol'
+        network:
+          $ref: '#/components/schemas/EthereumNetwork'
+        currency:
+          type: string
+        amount:
+          $ref: '#/components/schemas/Gwei'
+        pending_withdrawals:
+          type: array
+          items:
+            $ref: '#/components/schemas/EthereumValidatorWithdrawableAmount'
+        withdrawable_validators:
+          type: array
+          items:
+            $ref: '#/components/schemas/EthereumValidatorWithdrawableAmount'
+    EthereumExitValidatorMessage:
+      type: object
+      description: Ethereum exit validator message
+      required:
+      - validator_pubkey
+      - validator_index
+      - epoch
+      properties:
+        validator_pubkey:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        validator_index:
+          $ref: '#/components/schemas/EthereumValidatorIndex'
+        epoch:
+          $ref: '#/components/schemas/EthereumEpoch'
+    CommonStakeIntentResponse:
+      type: object
+      required:
+      - stake_intent_id
+      - customer_id
+      properties:
+        stake_intent_id:
+          $ref: '#/components/schemas/StakeIntentId'
+        customer_id:
+          $ref: '#/components/schemas/CustomerId'
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    EthereumExitsList:
+      type: object
+      required:
+      - exits
+      - pagination
+      properties:
+        exits:
+          $ref: '#/components/schemas/VoluntaryExits'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    EthereumVoluntaryExit:
+      type: object
+      description: Ethereum voluntary exit
+      required:
+      - created_at
+      - validators
+      properties:
+        created_at:
+          type: string
+          format: date-time
+          description: Date and time of the voluntary exit
+          example: '2021-09-01T00:00:00Z'
+        validators:
+          type: array
+          description: List of validators associated with the voluntary exit
+          items:
+            $ref: '#/components/schemas/EthereumVoluntaryExitValidator'
+    Error:
+      type: object
+      description: Error response envelope
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+          example: 500
+        message:
+          type: string
+          description: Error Message
+          example: A descriptive error message
+    NewStakeIntentEthereum:
+      type: object
+      description: Stake intent for the Ethereum protocol.
+      required:
+      - stakes
+      properties:
+        stakes:
+          type: array
+          description: Stakes for the Ethereum protocol.
+          minItems: 1
+          maxItems: 250
+          additionalProperties: false
+          items:
+            $ref: '#/components/schemas/NewStakeIntentEthereumStake'
+        plan_id:
+          $ref: '#/components/schemas/PlanId'
+    WithdrawalIntentEthereum:
+      type: object
+      description: Ethereum Full Withdraw response
+      required:
+      - validator
+      - amount
+      - withdrawal_address
+      - withdrawal_credentials
+      - unsigned_data
+      - contract_address
+      - estimated_gas
+      properties:
+        validator:
+          $ref: '#/components/schemas/PublicKey'
+        amount:
+          $ref: '#/components/schemas/Gwei'
+        withdrawal_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        withdrawal_credentials:
+          $ref: '#/components/schemas/EthereumWithdrawalCredentials'
+        unsigned_data:
+          $ref: '#/components/schemas/EthereumUnsignedDataEthereum'
+        contract_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        estimated_gas:
+          $ref: '#/components/schemas/EthereumGas'
+    EthereumValidatorPublicKey:
+      type: string
+      description: Public Key of an asymmetric key-pair.
+      format: hex
+      example: '0xa1d1ad0714035353258038e964ae9675dc0252ee22cea896825c01458e1807bfad2f9969338798548d9858a571f7425c'
+    PublicKey:
+      type: string
+      description: A BLS public Key.
+      format: base64
+      example: '0xa1d1ad0714035353258038e964ae9675dc0252ee22cea896825c01458e1807bfad2f9969338798548d9858a571f7425c'
+    NewStakeIntentEthereumStake:
+      type: object
+      description: Details of a individual Ethereum Stake request.
+      required:
+      - amount
+      - withdrawal_address
+      properties:
+        amount:
+          $ref: '#/components/schemas/Gwei'
+        withdrawal_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        quantity:
+          $ref: '#/components/schemas/Quantity'
+        fee_recipient:
+          $ref: '#/components/schemas/FeeRecipient'
+    EthereumQueuesProgressRequest:
+      type: object
+      description: List of Ethereum validator ids.
+      required:
+      - public_keys
+      properties:
+        public_keys:
+          type: array
+          items:
+            $ref: '#/components/schemas/EthereumValidatorPublicKey'
+    EthereumProtocol:
+      type: string
+      description: Ethereum protocol
+      enum:
+      - ethereum
+    EthereumTopUpIntent:
+      type: object
+      description: Ethereum validator top up intent
+      required:
+      - network
+      - contract_address
+      - estimated_gas
+      - unsigned_transaction
+      - total_amount
+      - expiration_time
+      - top_ups
+      properties:
+        network:
+          $ref: '#/components/schemas/EthereumNetwork'
+        contract_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        estimated_gas:
+          $ref: '#/components/schemas/EthereumGas'
+        total_amount:
+          $ref: '#/components/schemas/Gwei'
+        unsigned_transaction:
+          $ref: '#/components/schemas/UnsignedTransaction'
+        expiration_time:
+          $ref: '#/components/schemas/ExpirationTime'
+        top_ups:
+          type: array
+          items:
+            $ref: '#/components/schemas/EthereumTopUp'
+    EthereumSignature:
+      type: string
+      format: hex
+      description: Ethereum signature
+      example: null
+    UnsignedTransaction:
+      type: string
+      format: base64
+      description: Generated unsigned transaction smart contract call data.
+      example: '0x22895118000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000e00000000000000000000000000000000000000000000000000000000000000120087fed394b43849eebef1e88873cd9efdbe33136656e5148e659b8b2f33625d40000000000000000000000000000000000000000000000000000000000000030b81748644e23c4d950f9dd709f3eb73d5eacd9657997e1d9dde7c4ebd8a6519ecb9d0a7fb603d3b68e023278f9650122000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020010000000000000000000000c509bb854c526af4cee5e037089f7aa8e091d8870000000000000000000000000000000000000000000000000000000000000060b36b79b4b206c0310472c117fa40c05342b5dc3e89f98f42c9da3ce6450d4c603cad55248017fd4eca3ab277cca64569193e4d487f5b2ea78a2bcdc81926c313c05842a3af318967a775783bba22519e8b8886587efa99aa7dab5784f792b187
+
+        '
+    UnauthorizedError:
+      type: object
+      description: Error response envelope
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+          example: 401
+        message:
+          type: string
+          description: Error Message
+          example: A human-readable diagnostic message detailing any authorization failure
+    EthereumTopUp:
+      type: object
+      description: Ethereum validator top up
+      required:
+      - public_key
+      - amount
+      - withdrawal_credentials
+      - fee_recipient
+      properties:
+        public_key:
+          $ref: '#/components/schemas/PublicKey'
+        amount:
+          $ref: '#/components/schemas/Gwei'
+        withdrawal_credentials:
+          $ref: '#/components/schemas/EthereumWithdrawalCredentials'
+        fee_recipient:
+          $ref: '#/components/schemas/EthereumAddress'
+    StakeIntentEthereum:
+      type: object
+      description: Ethereum Stake Intent response
+      required:
+      - stakes
+      - contract_address
+      - unsigned_transaction
+      - estimated_gas
+      - expiration_time
+      properties:
+        stakes:
+          description: Stakes being made.
+          type: array
+          items:
+            $ref: '#/components/schemas/StakeIntentEthereumStake'
+        contract_address:
+          $ref: '#/components/schemas/EthereumAddress'
+        unsigned_transaction:
+          $ref: '#/components/schemas/UnsignedTransaction'
+        estimated_gas:
+          $ref: '#/components/schemas/EthereumGas'
+        expiration_time:
+          $ref: '#/components/schemas/ExpirationTime'
+    WithdrawIntentId:
+      type: string
+      format: uuid
+      description: Unique idenifier for a withdrawal intent.
+      example: 4ba06e89-8c29-483e-ac36-318de5aa7364
+    EthereumWithdrawalResponse:
+      allOf:
+      - $ref: '#/components/schemas/CommonWithdrawalResponse'
+      - type: object
+        description: Result of a new withdrawal intent request.
+        required:
+        - protocol
+        - network
+        properties:
+          protocol:
+            $ref: '#/components/schemas/EthereumProtocol'
+          network:
+            $ref: '#/components/schemas/EthereumNetwork'
+          ethereum:
+            $ref: '#/components/schemas/WithdrawalIntentEthereum'
+    EthereumExitValidatorTx:
+      type: object
+      description: Ethereum exit validator transaction response
+      required:
+      - message
+      - signature
+      - fork_version
+      properties:
+        message:
+          $ref: '#/components/schemas/EthereumExitValidatorMessage'
+        signature:
+          $ref: '#/components/schemas/EthereumSignature'
+        fork_version:
+          $ref: '#/components/schemas/EthereumForkVersion'
+    EthereumConsolidationIntentResponse:
+      allOf:
+      - $ref: '#/components/schemas/CommonConsolidateResponse'
+      - type: object
+        description: Result of a new consolidation intent request.
+        required:
+        - protocol
+        - network
+        properties:
+          protocol:
+            $ref: '#/components/schemas/EthereumProtocol'
+          network:
+            $ref: '#/components/schemas/EthereumNetwork'
+          ethereum:
+            $ref: '#/components/schemas/ConsolidationIntentEthereum'
+    EthereumWithdrawalCredentials:
+      type: string
+      format: hex
+      pattern: ^0x0(0|1)[a-fA-F0-9]{62}$
+      example: '0x0092c20062cee70389f1cb4fa566a2be5e2319ff43965db26dbaa3ce90b9df99'
+      description: 'Hexadecimal encoded [withdrawal credentials](https://github.com/ethereum/consensus-specs/blob/master/specs/phase0/validator.md#withdrawal-credentials) which can be either a BLS public key or an Ethereum account address.
+
+
+        This parameter currently accepts ETH1 and BLS withdrawal credentials, but it is considered deprecated after the Capella/Shanghai fork. All users are now advised to use an ETH1 withdrawal address, specified through the `withdrawal_address` parameter as this is required to enable the ongoing accrual of rewards.
+
+
+        For more information regarding creating withdrawal credentials, please see the official [Ethereum Launchpad FAQ](https://launchpad.ethereum.org/en/faq#withdrawal-credentials).'
+    EthereumValidatorIdentifier:
+      type: object
+      description: Information to identify validator. Only either validator index or validator public key is required.
+      properties:
+        validator_public_key:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        validator_index:
+          $ref: '#/components/schemas/EthereumValidatorIndex'
+      additionalProperties: false
+      minProperties: 1
+    FeeRecipient:
+      type: string
+      description: An Ethereum address to receive transaction fees from published blocks. 20-bytes, hex encoded with 0x prefix, case insensitive.
+      example: '0x93247f2209abcacf57b75a51dafae777f9dd38bc'
+      pattern: ^0x[a-fA-F0-9]{40}$
+    Gwei:
+      type: string
+      description: Amount of ETH (denominated in Gwei).
+      pattern: ^[1-9]\d{10,}$
+      example: '32000000000'
+    Pagination:
+      type: object
+      description: encapsulates pagination properties
+      required:
+      - page
+      - per_page
+      - total
+      properties:
+        page:
+          description: current page number
+          type: integer
+          format: int64
+        per_page:
+          description: number of results per page
+          type: integer
+          format: int64
+        total:
+          description: total number of results
+          type: integer
+          format: int64
+    NewConsolidationIntentEthereum:
+      type: object
+      description: Required data for Ethereum consolidation intent
+      required:
+      - source_validator
+      - target_validator
+      properties:
+        source_validator:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        target_validator:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+    EthereumForkVersion:
+      type: string
+      description: 'A hex-encoded Ethereum fork version value.
+
+
+        The fork versions values are unique for each network and each fork. As an example, here is the constants preset file for Mainnet:
+
+        https://github.com/ethereum/consensus-specs/blob/dev/configs/mainnet.yaml'
+      example: '0x03000000'
+    EthereumValidatorIndex:
+      type: string
+      description: Validator index
+      example: '25'
+    ExitEthereumValidator:
+      type: object
+      description: Data about validator to exit.
+      required:
+      - validator_identifier
+      properties:
+        validator_identifier:
+          $ref: '#/components/schemas/EthereumValidatorIdentifier'
+    StakeId:
+      description: Unique stake identifier.
+      type: string
+      format: base58
+      example: stake_Wgx98Rbi8nQuL9ddn3mTk1
+    EthereumGas:
+      type: integer
+      description: Gas estimation of the transaction
+      format: uint64
+      example: 1001
+    GenerateEthereumLDParams:
+      type: object
+      description: Request for generating an Ethereum Launchpad deposit string
+      required:
+      - validators
+      properties:
+        validators:
+          description: Validators public keys
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKey'
+    EthereumLaunchpadDepositEntry:
+      type: object
+      description: Data about a validator that can be registered at launchpad.ethereum.org
+      required:
+      - pubkey
+      - withdrawal_credentials
+      - amount
+      - signature
+      - deposit_message_root
+      - deposit_data_root
+      - fork_version
+      - network_name
+      - deposit_cli_version
+      properties:
+        pubkey:
+          type: string
+          description: Validator public key, 96 hex digits, no `0x` prefix
+        withdrawal_credentials:
+          type: string
+          description: Validator withdrawal credentials, 64 hex digits, no `0x` prefix
+        amount:
+          type: integer
+          format: uint64
+          description: Amount of ether that this validator has staked
+        signature:
+          type: string
+          description: Signed validator domain root, hex digits, no `0x` prefix
+        deposit_message_root:
+          type: string
+          description: Merkle root for the deposit message, 32 hex digits, no `0x` prefix
+        deposit_data_root:
+          type: string
+          description: Merkle root for the deposit data, 32 hex digits, no `0x` prefix
+        fork_version:
+          type: string
+          description: Network fork version, 8 hex digits, no `0x` prefix
+        network_name:
+          type: string
+          description: Name for the deposit network (mainnet, hoodi...), lowercase
+        deposit_cli_version:
+          type: string
+          description: String form of 3-number generator version, eg. `2.3.0`
+    EthereumVoluntaryExitValidator:
+      type: object
+      description: A single validator for voluntary exit.
+      required:
+      - public_key
+      - onchain_status
+      - balance
+      properties:
+        public_key:
+          $ref: '#/components/schemas/EthereumValidatorPublicKey'
+        onchain_status:
+          $ref: '#/components/schemas/OnchainValidatorStatus'
+        balance:
+          $ref: '#/components/schemas/Gwei'
+  responses:
+    Unauthorized:
+      description: Header 'X-API-Key' missing.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
+    InternalServerError:
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NoValidatorsError:
+      description: Insufficient validators available to process Stake Intent request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    EthereumQueuesProgress:
+      description: Ethereum queue estimate response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EthereumQueuesProgress'
+    EthereumExitValidatorTx:
+      description: Ethereum exit validator transaction response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EthereumExitValidatorTx'
+    ValidatorNotFound:
+      description: Validator not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ListEthereumExits:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EthereumExitsList'
+    InvalidRequest:
+      description: Invalid request.
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Error response envelope
+            required:
+            - code
+            - message
+            properties:
+              code:
+                type: integer
+                format: int32
+                description: Error code
+                example: 400
+              message:
+                type: string
+                description: Error Message
+                example: Detailed human-readable diagnostic message regarding any invalid request parameters
+  securitySchemes:
+    ApiKeyAuth:
+      description: 'When signing up for a staking account, you are provided with an API key.
+
+
+        To authenticate a Staking API request, pass your API key in the `X-API-Key` header.'
+      type: apiKey
+      in: header
+      name: X-API-KEY
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/activeexitingqueueprogress.md
+  - https://docs.blockdaemon.com/reference/cancelneardeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelpolygondeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelsolanadeactivationintent.md
+  - https://docs.blockdaemon.com/reference/cancelsolanawithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/exitethereumvalidator.md
+  - https://docs.blockdaemon.com/reference/exitethereumvalidators.md
+  - https://docs.blockdaemon.com/reference/generateethereumlaunchpaddeposit.md
+  - https://docs.blockdaemon.com/reference/generatesignedvoluntaryexit.md
+  - https://docs.blockdaemon.com/reference/getbinancedeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getbinancedeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getbinancerestakeintents.md
+  - https://docs.blockdaemon.com/reference/getcardanodeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getcardanorewardswithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getcosmosdeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getcosmosdeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getcosmosrestakeintents.md
+  - https://docs.blockdaemon.com/reference/getcosmoswithdrawablerewardsamount.md
+  - https://docs.blockdaemon.com/reference/getethwithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getneardeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getneardeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getnearwithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getnearwithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getpolygondeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getsolanadeactivatableamount.md
+  - https://docs.blockdaemon.com/reference/getsolanadeactivationintents.md
+  - https://docs.blockdaemon.com/reference/getsolanawithdrawableamount.md
+  - https://docs.blockdaemon.com/reference/getsolanawithdrawalintents.md
+  - https://docs.blockdaemon.com/reference/getstakeaccountssolana.md
+  - https://docs.blockdaemon.com/reference/listcustomerplans.md
+  - https://docs.blockdaemon.com/reference/listethereumexits.md
+  - https://docs.blockdaemon.com/reference/liststakeintents.md
+  - https://docs.blockdaemon.com/reference/pendingqueuedprogress.md
+  - https://docs.blockdaemon.com/reference/postavaxstakeintent.md
+  - https://docs.blockdaemon.com/reference/postbinancedeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postbinancerestakeintent.md
+  - https://docs.blockdaemon.com/reference/postbinancestakeintent.md
+  - https://docs.blockdaemon.com/reference/postcardanodeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postcardanorewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postcardanostakeintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosdeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosrestakeintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosrewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postcosmosstakeintent.md
+  - https://docs.blockdaemon.com/reference/postethereumcompoundingintent.md
+  - https://docs.blockdaemon.com/reference/postethereumstakeintent.md
+  - https://docs.blockdaemon.com/reference/postethereumtopupintent.md
+  - https://docs.blockdaemon.com/reference/postethereumwithdrawalintentexit.md
+  - https://docs.blockdaemon.com/reference/postethereumwithdrawalintentpartial.md
+  - https://docs.blockdaemon.com/reference/postneardeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postnearstakeintent.md
+  - https://docs.blockdaemon.com/reference/postnearwithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonbootstrappingintent.md
+  - https://docs.blockdaemon.com/reference/postpolygondeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonrewardsrestakeintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonrewardswithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonstakeintent.md
+  - https://docs.blockdaemon.com/reference/postpolygonwithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/postsolanadeactivationintent.md
+  - https://docs.blockdaemon.com/reference/postsolanastakeintent.md
+  - https://docs.blockdaemon.com/reference/postsolanawithdrawalintent.md
+  - https://docs.blockdaemon.com/reference/submittransaction.md
+  merge:
+    pages: 62
+    deduped: 1027
+    conflicts_kept_first: 0

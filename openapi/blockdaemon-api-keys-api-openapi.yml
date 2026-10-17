@@ -1,0 +1,217 @@
+openapi: 3.2.0
+info:
+  title: Sepior Threshold Security Module (TSM) Management API Keys…
+  description: 'Management API for the Threshold Security Module (TSM).
+
+
+    This API provides endpoints for monitoring and managing TSM nodes, including
+
+    health checks, metrics, API key management, and authentication configuration.'
+  version: 1.0.0
+  contact:
+    name: Blockdaemon/Sepior Support
+    url: https://blockdaemon.com/
+  license:
+    name: Proprietary
+servers:
+- url: '{server}'
+  description: TSM Management API Server
+  variables:
+    server:
+      default: https://localhost:8080
+      description: Server URL
+security:
+- APIKeyAuth: []
+tags:
+- name: API Keys
+  description: API key management operations
+paths:
+  /management/apikey:
+    get:
+      summary: List API keys
+      description: Returns a list of all API keys
+      operationId: listApiKeys
+      tags:
+      - API Keys
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      summary: Create API key
+      description: Creates a new API key
+      operationId: createApiKey
+      tags:
+      - API Keys
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiKeyCreateRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKeyCreateResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /management/apikey/{apiKeyID}:
+    delete:
+      summary: Delete API key
+      description: Deletes an API key by ID
+      operationId: deleteApiKey
+      tags:
+      - API Keys
+      parameters:
+      - name: apiKeyID
+        in: path
+        description: ID of the API key to delete
+        required: true
+        schema:
+          type: string
+      responses:
+        '204':
+          description: API key deleted successfully
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  schemas:
+    ApiKeyCreateRequest:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          description: ID of the application that will use the API key
+        description:
+          type: string
+          description: Description of the API key
+      required:
+      - applicationId
+      - description
+    ApiKeyListEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID of the API key
+        applicationId:
+          type: string
+          description: ID of the application using this API key
+        description:
+          type: string
+          description: Description of the API key
+        createdAt:
+          type: string
+          format: date-time
+          description: When the API key was created
+      required:
+      - id
+      - applicationId
+      - description
+      - createdAt
+    ApiKeyListResponse:
+      type: object
+      properties:
+        apiKeys:
+          type: array
+          description: List of API keys
+          items:
+            $ref: '#/components/schemas/ApiKeyListEntry'
+      required:
+      - apiKeys
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        details:
+          type: object
+          description: Additional error details
+      required:
+      - code
+      - message
+    ApiKeyCreateResponse:
+      type: object
+      properties:
+        apiKeyId:
+          type: string
+          description: ID of the created API key
+        apiKey:
+          type: string
+          description: The API key value (only shown once at creation time)
+      required:
+      - apiKeyId
+      - apiKey
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    APIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/createapikey.md
+  - https://docs.blockdaemon.com/reference/deleteapikey.md
+  - https://docs.blockdaemon.com/reference/getauditsigningpublickey.md
+  - https://docs.blockdaemon.com/reference/getauthenticationinfo.md
+  - https://docs.blockdaemon.com/reference/getfgprof.md
+  - https://docs.blockdaemon.com/reference/getmetrics.md
+  - https://docs.blockdaemon.com/reference/getpprofindex.md
+  - https://docs.blockdaemon.com/reference/getpprofprofile.md
+  - https://docs.blockdaemon.com/reference/healthcheck.md
+  - https://docs.blockdaemon.com/reference/listapikeys.md
+  merge:
+    pages: 10
+    deduped: 34
+    conflicts_kept_first: 0

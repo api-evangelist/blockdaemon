@@ -1,0 +1,1076 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Ethereum Staking Reporting API
+  description: '### Protocols
+
+    The following protocols are currently supported:
+
+    * Cardano
+
+    * Cosmos
+
+    * Ethereum
+
+    * NEAR
+
+    * Polkadot
+
+    * Polygon
+
+    * Solana'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: logo.png
+servers:
+- url: https://svc.blockdaemon.com/reporting/staking
+  description: Production server
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Ethereum Staking Reporting
+paths:
+  /v2/ethereum/{network}/deposits:
+    get:
+      summary: Get Deposit Records
+      description: Retrieves deposit records filtered by either a withdrawal address or a validator public key (exactly one must be provided).
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getDeposits
+      parameters:
+      - in: path
+        name: network
+        required: true
+        schema:
+          $ref: '#/components/schemas/Network'
+      - in: query
+        name: withdrawalAddress
+        required: false
+        description: Ethereum withdrawal address
+        example: '0xa554965fcd0d9493313e2eafa27eef5b058336f4'
+        schema:
+          type: string
+      - in: query
+        name: pubkey
+        required: false
+        description: Validator BLS public key
+        example: '0x8b2aa338c6dc383c80ce538e23113c124558b9634881223a7f35a5bb2806a23ba6cc62e9b120ecbe955905a87e8a7499'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of deposit records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ErrorResponse'
+              example:
+              - pubKey: '0xacb9365157fd0d035f36ecb82e58642cb72c850903660d130508e8e8a946b4b5905bec81c7a44f12e901901b5c63aed2'
+                amount: 18112749083033600
+                blockNumber: 17880249
+                withdrawalCredentials: '0x010000000000000000000000252152a38b9a8d16f08b78574664f7d3f32e3de1'
+                signature: '0x996f60e29acc6177e380bc9a49a6c9152ee3b1b327d16dd8dd0d130a191ae89cd01bbef5f639fd7643e3ec2197555ead1702b0ee6339f7623e40b2fdad02c562ba3b59de5807790cb7c0e9592ec6a877372f237d818e9ef5902a5470c892a9c3'
+                index: 11079150851959292000
+                txHash: '0x71307ae3d29a57097fd3455e916ed5f596a188046926eb589522fc436dcd4942'
+                timestamp: 1691619215
+                depositProvider: '0x0194512e77d798E4871973d9cB9D7DDFC0fFd801'
+                blockHash: '0xd7f2532a20bcfdbdb2b079b866e7c35cb81e135353f3de1f280571aa50b8a8f0'
+                withdrawalAddress: '0x252152A38b9A8D16f08B78574664F7D3f32e3De1'
+                validatorType: '0x01'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/ethereum/{network}/health:
+    get:
+      summary: Get the Protocol Rewards Processing Health
+      description: 'The status of reward processing, rewards are available upto and including the indicated `processedEpoch`.
+
+        The processing status is degraded if the following is `true`:
+
+
+        (currentChainEpoch - processedEpoch) >= 2'
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getHealth2
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse2'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+  /v2/ethereum/{network}/pubkeys:
+    get:
+      summary: Get Public Keys Associated with a Withdrawal Address
+      description: Retrieves a list of validator public keys that are associated with the provided withdrawal address on the specified Ethereum network.
+      tags:
+      - Ethereum Staking Reporting
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          $ref: '#/components/schemas/Network'
+      - in: query
+        name: withdrawalAddress
+        required: true
+        example: '0xa554965fcd0d9493313e2eafa27eef5b058336f4'
+        description: Ethereum withdrawal address
+        schema:
+          type: string
+      responses:
+        '200':
+          description: List of validator public keys
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                - '0xacb9365157fd0d035f36ecb82e58642cb72c850903660d130508e8e8a946b4b5905bec81c7a44f12e901901b5c63aed2'
+                - '0xb48139d9681f51a1a797cf09f6deb15e5808a540ecd576f11957ee4035efe6e847a0017c8e4c53a6c7c29cc08d663d34'
+                - '0xa4987a3edee697caf06a1be9d2713cd124dc4aa617e6c2c46ceb8bbf05926f6b6985b5d65fe023a6edc946af7d3cade9'
+                - '0x8b2a67eceeec9815009e4d2ccae4ed733ff5cccf87050f189be51c6e8c7063da0dd967b845a9cebf31839acd3c8c8b50'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+      operationId: getV2EthereumByNetworkPubkeys
+      x-operation-id-source: derived
+  /v2/ethereum/{network}/validator/rewards:
+    post:
+      summary: Get a Stream of Rewards
+      description: 'Returns the total rewards for the queried period in a streaming fashion using `ndjson`. The total reward returned is derived from the sum of fields in the response `metadata`:
+
+
+        Total Reward = mevBlockReward + syncCommitteeReward + attestationReward + blockReward'
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getRewards2
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          $ref: '#/components/schemas/Network'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardRequest2'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/RewardsResponse1'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+  /v2/ethereum/{network}/validator/rewards/{address}:
+    get:
+      summary: Get a Stream of Rewards for a Single Address
+      description: 'Returns the total rewards for the queried period in a streaming fashion using `ndjson`. The total reward returned is derived from the sum of fields in the response `metadata`:
+
+
+        Total Reward = mevBlockReward + syncCommitteeReward + attestationReward + blockReward'
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getRewardsSingle2
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          $ref: '#/components/schemas/Network'
+      - in: path
+        name: address
+        required: true
+        description: The address to look up rewards for.
+        example: '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+        schema:
+          type: string
+      - in: query
+        name: startTime
+        required: false
+        description: Epoch-based start time for reward queries.
+        example: 1704067200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: false
+        description: Epoch-based end time for reward queries.
+        example: 1706745600
+        schema:
+          type: number
+      - in: query
+        name: epoch
+        required: false
+        description: The epoch to look up rewards for.
+        example: 365832
+        schema:
+          type: number
+      - in: query
+        name: period
+        required: true
+        description: The type of aggregation to apply.
+        schema:
+          $ref: '#/components/schemas/TimePeriod3'
+      - in: query
+        name: denomination
+        required: false
+        description: Denomination to use for the response - default is wei.
+        schema:
+          $ref: '#/components/schemas/Denomination2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/RewardsResponse1'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+  /v2/ethereum/{network}/validator/stats/{address}:
+    get:
+      summary: Get Stats for an address
+      description: Returns stats for an address including 30 and 90 days of yield and rewards data based on utc days If an address is not currently monitored a 404 is returned, on the first query for an address data is async calculated and then updated daily
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getStatsEthereum
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: address
+        required: true
+        description: The validator address to retrieve stats data for.
+        example: '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponseEthereum'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Preemptively add an address to the stats tracking
+      tags:
+      - Ethereum Staking Reporting
+      operationId: putStatsEthereum
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: address
+        required: true
+        description: The validator address to retrieve stats data for.
+        example: '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+        schema:
+          type: string
+      responses:
+        '201':
+          description: CREATED
+  /v2/ethereum/{network}/validator/status:
+    post:
+      summary: Get a Stream of Validator Statuses
+      description: Returns 0 or more status objects in a streaming fashion using `ndjson`.
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getStatuses2
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          $ref: '#/components/schemas/Network'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              example:
+              - '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+              - '0x80000001677f23a227dfed6f61b132d114be83b8ad0aa5f3c5d1d77e6ee0bf5f73b0af750cc34e8f2dae73c21dc36f4a'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/StatusResponse1'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+  /v2/ethereum/{network}/validator/status/{address}:
+    get:
+      summary: Get Validator Status for an Address
+      description: Returns a status object for a Validator address.
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getStatus2
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          $ref: '#/components/schemas/Network'
+      - in: path
+        name: address
+        required: true
+        description: The address to look up rewards for.
+        example: '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse1'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse1'
+  /v2/ethereum/{network}/validator/yield:
+    get:
+      summary: Get a Stream of Yield Summaries
+      description: 'Returns a **network-wide** stream of yield summaries for the specified time range. Results are streamed in NDJSON format.
+
+
+        For more details on yield metrics and how they are calculated, see the Yield Metrics overview.'
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getYieldsEthereum
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: query
+        name: startTime
+        required: true
+        description: Epoch-based start time for reward queries.
+        example: 1709251200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: true
+        description: Epoch-based end time for reward queries.
+        example: 1711929600
+        schema:
+          type: number
+      - in: query
+        name: denomination
+        description: The unit to return the yield in.
+        required: false
+        schema:
+          $ref: '#/components/schemas/Denomination2'
+      - in: query
+        name: raw
+        description: Gives the yield values raw per-epoch. Set to `true` to get per-epoch raw values.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/YieldResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/ethereum/{network}/validator/yield/{address}:
+    get:
+      summary: Get a Yield for a Validator Address
+      description: 'Returns yield data for the specified validator address.
+
+        For more details on yield metrics and how they are calculated, see the Yield Metrics overview.'
+      tags:
+      - Ethereum Staking Reporting
+      operationId: getYieldEthereum
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: address
+        required: true
+        description: The validator address to retrieve yield data for.
+        example: '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+        schema:
+          type: string
+      - in: query
+        name: startTime
+        required: true
+        description: Epoch-based start time for reward queries.
+        example: 1709251200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: true
+        description: Epoch-based end time for reward queries.
+        example: 1711929600
+        schema:
+          type: number
+      - in: query
+        name: denomination
+        description: The unit to return yield values in.
+        required: false
+        schema:
+          $ref: '#/components/schemas/Denomination2'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YieldResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    HealthMetadata2:
+      properties:
+        chainEpoch:
+          description: The current active epoch on the chain.
+          type: string
+          format: number
+          example: '2'
+        lastProcessedEpoch:
+          description: The last processed epoch, when running smoothly this should be epoch - 1.
+          type: string
+          format: number
+          example: '1'
+    RewardRequest2:
+      required:
+      - addresses
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1716422400
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1717148216
+        epoch:
+          description: The eepoch to look up rewards for.
+          type: number
+          example: 365834
+        addresses:
+          description: List of addresses to retrieve rewards for.
+          type: array
+          items:
+            type: string
+          example:
+          - '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+          - '0x80000001677f23a227dfed6f61b132d114be83b8ad0aa5f3c5d1d77e6ee0bf5f73b0af750cc34e8f2dae73c21dc36f4a'
+        period:
+          $ref: '#/components/schemas/TimePeriod3'
+        aggregate:
+          description: Whether to aggregate across provided addresses or per address - true to aggregate across all addresses.
+          type: boolean
+          default: false
+        denomination:
+          $ref: '#/components/schemas/Denomination2'
+    TimePeriod3:
+      description: How the data is aggregated.
+      type: string
+      default: monthly
+      enum:
+      - yearly
+      - daily
+      - weekly
+      - monthly
+      - epoch
+      - raw
+    YieldMetadata:
+      properties:
+        epoch:
+          description: The epoch number/s that the period covers
+          type: string
+          example: 285413-287302
+        protocolRewards:
+          description: The total protocol rewards in the period
+          type: string
+          format: number
+          example: '11.582442116'
+        mevRewards:
+          description: The total mev block rewards in the period
+          type: string
+          format: number
+          example: '2.55849541422880986'
+        blockRewards:
+          description: The total block fee rewards in the period
+          type: string
+          format: number
+          example: '1.660716278059616145'
+        totalBalance:
+          description: The total balance of the validators in the network (including pending withdrawals)
+          type: string
+          format: number
+          example: '33750555.15182654'
+    StatsResponseEthereum:
+      type: object
+      properties:
+        updateTime:
+          type: integer
+          format: int64
+          example: 1775718200
+          description: epoch second timestamp of the end time the stats is for
+        thirtyDays:
+          type: object
+          properties:
+            yield:
+              $ref: '#/components/schemas/YieldResponse'
+            rewards:
+              $ref: '#/components/schemas/RewardsResponse1'
+        ninetyDays:
+          type: object
+          properties:
+            yield:
+              $ref: '#/components/schemas/YieldResponse'
+            rewards:
+              $ref: '#/components/schemas/RewardsResponse1'
+    ErrorResponse:
+      properties:
+        timestamp:
+          description: The timestamp of the error in ISO-8601 format
+          type: string
+        path:
+          description: The path called when the error occurred
+          type: string
+          example: /v2/solana/mainnet/delegator
+        status:
+          description: The http status code
+          type: number
+          example: 400
+        error:
+          description: A useful description of the error that occurred
+          type: string
+          example: '[endTime should be in unix epoch seconds]'
+    RewardsMetadata:
+      properties:
+        epoch:
+          description: The epoch number/s that the period covers.
+          type: string
+          example: 285413-287302
+        withdrawals:
+          description: The withdrawals in the period.
+          type: string
+          format: number
+          example: '18477398000000000'
+        deposits:
+          description: The deposits in the period.
+          type: string
+          format: number
+          example: '0'
+        syncCommitteeReward:
+          description: The sync committee rewards in the period.
+          type: string
+          format: number
+          example: '0'
+        blockReward:
+          description: The block rewards in the period.
+          type: string
+          format: number
+          example: '0'
+        attestationReward:
+          description: The attestation rewards in the period.
+          type: string
+          format: number
+          example: '17859798000000000'
+        mevBlockReward:
+          description: The mev block rewards in the period.
+          type: string
+          format: number
+          example: '0'
+        blockFeeReward:
+          description: The block fee rewards in the period.
+          type: string
+          format: number
+          example: '0'
+        index:
+          description: The validator index.
+          type: string
+          format: number
+          example: '1333904'
+    ErrorResponse1:
+      properties:
+        timestamp:
+          description: The timestamp of the error in ISO-8601 format.
+          type: string
+        path:
+          description: The path called when the error occurred.
+          type: string
+          example: /v2/ethereum/mainnet/validator
+        status:
+          description: the http status code
+          type: number
+          example: 400
+        error:
+          description: A useful description of the error that occurred.
+          type: string
+          example: '[endTime should be in unix epoch seconds]'
+    StatusMetadata:
+      properties:
+        rawStatus:
+          description: The on-chain status of the validator. See reference [here](https://docs.blockdaemon.com/reference/ethereum-api-v2-overview#%EF%B8%8F-get-a-validator-status).
+          type: string
+          format: string
+          example: active_ongoing
+        balance:
+          description: The current balance.
+          type: string
+          format: number
+          example: '32011887937'
+        index:
+          description: The current index.
+          type: string
+          format: number
+          example: '1111111'
+        withdrawalCredentials:
+          description: Withdrawal credentials for the address.
+          type: string
+          example: '0x01000000000000000000000080e163f67ab78222b1ac109e8db63801cb34b682'
+        effectiveBalance:
+          description: The effective balance of the validator.
+          type: string
+          format: number
+          example: '32000000000'
+        slashed:
+          description: Indicates whether the validator is slashed.
+          type: string
+          example: 'false'
+        activationEligibilityEpoch:
+          description: The epoch at which the validator became eligible for activation.
+          type: string
+          format: number
+          example: '253795'
+        activationEpoch:
+          description: The epoch at which the validator was activated.
+          type: string
+          format: number
+          example: '253861'
+        exitEpoch:
+          description: The epoch at which the validator is scheduled to exit.
+          type: string
+          format: number
+          example: '18446744073709551615'
+        withdrawableEpoch:
+          description: The epoch at which the validator becomes withdrawable.
+          type: string
+          format: number
+          example: '18446744073709551615'
+    Denomination2:
+      description: Denomination
+      type: string
+      default: wei
+      enum:
+      - wei
+      - kwei
+      - mwei
+      - gwei
+      - szab
+      - finn
+      - eth
+      - ether
+      - kether
+      - keth
+      - mether
+      - meth
+      - gether
+      - geth
+      - tether
+      - teth
+    YieldResponse:
+      description: The yield response object
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+        return:
+          description: The staking return for all validators for the period
+          type: string
+          example: '283291849202'
+          format: number
+        apr:
+          description: The APR for validators based on the return, total stake of the network and assuming 82125 epochs a year
+          type: string
+          example: '0.0601'
+          format: number
+        aprPercentage:
+          description: The same as above but in percentage form
+          type: string
+          example: 6.01%
+          format: number
+        apy:
+          description: The APY based on the above and assuming re-staking of all rewards after each epoch (Unlikely for ETH but kept in for completeness)
+          type: string
+          example: '0.06912'
+          format: number
+        apyPercentage:
+          description: The same as above but in percentage form
+          type: string
+          example: 6.912%
+          format: number
+        denomination:
+          description: the denomination the reward is in
+          type: string
+          example: ETH
+        stake:
+          description: the total stake across the full network
+          type: string
+          example: '3830810096309000'
+          format: number
+        metadata:
+          oneOf:
+          - $ref: '#/components/schemas/YieldMetadata'
+          - $ref: '#/components/schemas/ValidatorYieldMetadata'
+    RewardsResponse1:
+      description: The reward response object
+      type: object
+      properties:
+        address:
+          description: The address the reward is for.
+          type: string
+          example: '0xaf3cfa981e084985c88928ae2fc7802790195d5d4e297fb384230b6b8e4540b2654a50a17dfeccc73f550461bd794563'
+        denomination:
+          description: The denomination the reward is in.
+          type: string
+          example: wei
+        return:
+          description: The staking return of the address for the period.
+          type: string
+          example: '17859798000000000'
+          format: number
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1716422400
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1719100799
+        period:
+          $ref: '#/components/schemas/TimePeriod3'
+        startBalance:
+          description: The balance or stake at the start of the period.
+          type: string
+          example: '32002448366000000000'
+          format: number
+        metadata:
+          $ref: '#/components/schemas/RewardsMetadata'
+    ValidatorYieldMetadata:
+      properties:
+        effectiveBalance:
+          description: The effective balance of the validator at the start time
+          type: string
+          format: number
+          example: '11.582442116'
+        mevBlockReward:
+          description: The total mev block rewards in the period
+          type: string
+          format: number
+          example: '2.55849541422880986'
+        blockReward:
+          description: The total block rewards in the period
+          type: string
+          format: number
+          example: '1.660716278059616145'
+        syncCommitteeReward:
+          description: The sync comittee rewards for the period
+          type: string
+          format: number
+          example: '33750555.15182654'
+        attestationReward:
+          description: The attestation rewards for the period
+          type: string
+          format: number
+          example: '33750555.15182654'
+    StatusResponse1:
+      properties:
+        address:
+          description: The validator address associated with the status.
+          type: string
+          example: '0x821dcb238db02d80a16f20c585027dd8e2390de32062f8e14f41d5236c4e520acf6e920e05435bc144c6d84b8b6debef'
+        status:
+          description: The current status of a validator, which maps from on-chain statuses. See reference [here](https://docs.blockdaemon.com/reference/ethereum-api-v2-overview#%EF%B8%8F-get-a-validator-status).
+          type: string
+          enum:
+          - UNKNOWN
+          - PENDING
+          - ACTIVE
+          - EXITED
+          - WITHDRAWAL
+          - DEPOSITED
+          example: ACTIVE
+        timestamp:
+          description: The epoch second timestamp that the status was recorded at.
+          type: number
+          example: 1730818391
+        metadata:
+          $ref: '#/components/schemas/StatusMetadata'
+    Network:
+      description: Network
+      type: string
+      default: mainnet
+      enum:
+      - mainnet
+      - holesky
+      - hoodi
+    HealthResponse2:
+      description: The reward response object.
+      type: object
+      properties:
+        status:
+          description: The current health status of reward processing which indicates system or validator performance.
+          type: string
+          enum:
+          - UNKNOWN
+          - OPTIMAL
+          - DEGRADED
+        timestamp:
+          description: The timestamp when the status was last updated in epoch seconds.
+          type: number
+          example: 1704067200
+        metadata:
+          $ref: '#/components/schemas/HealthMetadata2'
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get_v2-ethereum-network-pubkeys.md
+  - https://docs.blockdaemon.com/reference/getdeposits.md
+  - https://docs.blockdaemon.com/reference/gethealth-cosmos.md
+  - https://docs.blockdaemon.com/reference/gethealth-ethereum.md
+  - https://docs.blockdaemon.com/reference/gethealth-polygon.md
+  - https://docs.blockdaemon.com/reference/gethealth-solana.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidator1.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getrewards-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewards-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewards-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewards-solana.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-solana.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getstatsethereum.md
+  - https://docs.blockdaemon.com/reference/getstatssolana.md
+  - https://docs.blockdaemon.com/reference/getstatus-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatus-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatus-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatus-solana.md
+  - https://docs.blockdaemon.com/reference/getstatuses-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatuses-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatuses-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatuses-solana.md
+  - https://docs.blockdaemon.com/reference/getstatusnominator.md
+  - https://docs.blockdaemon.com/reference/getstatusnominators.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidators1.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-solana.md
+  - https://docs.blockdaemon.com/reference/getyields-cosmos.md
+  - https://docs.blockdaemon.com/reference/getyields-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyields-solana.md
+  - https://docs.blockdaemon.com/reference/putstatsethereum.md
+  - https://docs.blockdaemon.com/reference/putstatssolana.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominator.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominators.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidator2.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidators2.md
+  merge:
+    pages: 55
+    deduped: 377
+    conflicts_kept_first: 0

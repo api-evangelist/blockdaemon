@@ -1,0 +1,103 @@
+openapi: 3.2.0
+info:
+  title: Sepior Threshold Security Module (TSM) Management Metrics…
+  description: 'Management API for the Threshold Security Module (TSM).
+
+
+    This API provides endpoints for monitoring and managing TSM nodes, including
+
+    health checks, metrics, API key management, and authentication configuration.'
+  version: 1.0.0
+  contact:
+    name: Blockdaemon/Sepior Support
+    url: https://blockdaemon.com/
+  license:
+    name: Proprietary
+servers:
+- url: '{server}'
+  description: TSM Management API Server
+  variables:
+    server:
+      default: https://localhost:8080
+      description: Server URL
+security:
+- APIKeyAuth: []
+tags:
+- name: Metrics
+  description: System metrics operations
+paths:
+  /management/metrics:
+    get:
+      summary: Get system metrics
+      description: Returns system metrics in either Prometheus or expvar format
+      operationId: getMetrics
+      tags:
+      - Metrics
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Metrics data (format depends on configuration)
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+components:
+  responses:
+    InternalServerError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+        details:
+          type: object
+          description: Additional error details
+      required:
+      - code
+      - message
+  securitySchemes:
+    APIKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/createapikey.md
+  - https://docs.blockdaemon.com/reference/deleteapikey.md
+  - https://docs.blockdaemon.com/reference/getauditsigningpublickey.md
+  - https://docs.blockdaemon.com/reference/getauthenticationinfo.md
+  - https://docs.blockdaemon.com/reference/getfgprof.md
+  - https://docs.blockdaemon.com/reference/getmetrics.md
+  - https://docs.blockdaemon.com/reference/getpprofindex.md
+  - https://docs.blockdaemon.com/reference/getpprofprofile.md
+  - https://docs.blockdaemon.com/reference/healthcheck.md
+  - https://docs.blockdaemon.com/reference/listapikeys.md
+  merge:
+    pages: 10
+    deduped: 34
+    conflicts_kept_first: 0

@@ -1,0 +1,326 @@
+openapi: 3.2.0
+info:
+  title: Transaction Estimate Fee API
+  version: 1.0.0
+  description: Blockdaemon transaction API to create, compile, send and verify transactions for supported blockchains.
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+    altText: Blockdaemon logo
+servers:
+- url: https://svc.blockdaemon.com/tx/v1
+  description: Blockdaemon transaction API
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Estimate Fee
+paths:
+  /{blockchain_id}/estimate_fee:
+    parameters:
+    - $ref: '#/components/parameters/blockchain_id'
+    post:
+      summary: Get the Fee Estimation
+      description: Returns the estimated fee for a given chain.
+      operationId: TxEstimateFee
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiTxEstimateFeeRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiTxEstimateFeeResponse'
+        '401':
+          $ref: '#/components/responses/ErrorUnauthorized'
+        '429':
+          $ref: '#/components/responses/ErrorTooManyRequests'
+        '500':
+          $ref: '#/components/responses/ErrorInternal'
+        '501':
+          $ref: '#/components/responses/ErrorNotImplemented'
+        '503':
+          $ref: '#/components/responses/ErrorServiceUnavailable'
+      tags:
+      - Estimate Fee
+components:
+  schemas:
+    ApiTxEstimateFeeRequestTron:
+      title: Api Tx Estimate Fee Request Tron
+      type: object
+      properties:
+        tx:
+          type: string
+          description: the transaction in protobuf hex encoding
+          x-oapi-codegen-extra-tags:
+            validate: required
+      required:
+      - tx
+    TronEnergyDistribution:
+      type: object
+      properties:
+        sender_usage_percentage:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        contract:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        sender:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+    error:
+      type: object
+      properties:
+        type:
+          type: string
+          description: The HTTP error type.
+          example: bad-request
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The short error description.
+          example: Invalid Address
+        status:
+          type: integer
+          description: The HTTP status of the error.
+          example: 400
+        detail:
+          type: string
+          description: Long error description
+          example: The requested address is invalid on this protocol.
+    ApiTxEstimateFeeResponseStellar:
+      title: Api Tx Estimate Fee Response Stellar
+      type: object
+      properties:
+        most_recent_block:
+          type: integer
+          x-go-type: big.Int
+        estimated_fees:
+          $ref: '#/components/schemas/ApiTxEstimateFeeStellar'
+    ApiTxEstimateFeeStellar:
+      title: Api Tx Estimate Fee Stellar
+      type: object
+      x-go-type-skip-optional-pointer: true
+      properties:
+        fast:
+          type: integer
+          x-go-type: big.Int
+        medium:
+          type: integer
+          x-go-type: big.Int
+        slow:
+          type: integer
+          x-go-type: big.Int
+    ApiTxEstimateFeeRequest:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxEstimateFeeRequestTron'
+      - $ref: '#/components/schemas/ApiTxEstimateFeeRequestStellar'
+    ApiTxEstimateFeeResponse:
+      anyOf:
+      - $ref: '#/components/schemas/ApiTxEstimateFeeResponseTron'
+      - $ref: '#/components/schemas/ApiTxEstimateFeeResponseStellar'
+    ApiTxEstimateFeeRequestStellar:
+      title: Api Tx Estimate Fee Request Stellar
+      type: object
+      properties:
+        smart_contract:
+          type: boolean
+          description: Is the transaction interacting with smart contracts, transactions interacting with smart contracts compete separately from native transactions for more limited resources as a result they typically pay higher fees.
+          default: false
+          x-go-type-skip-optional-pointer: true
+    TronSunFeeDetails:
+      type: object
+      properties:
+        sun_for_energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        sun_for_contract_energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        sun_for_bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        other:
+          type: array
+          items:
+            type: object
+            properties:
+              fee:
+                type: integer
+                x-go-type: int64
+                x-go-type-skip-optional-pointer: true
+              contract_type:
+                type: string
+    ApiTxEstimateFeeResponseTron:
+      title: Api Tx Estimate Fee Response Tron
+      type: object
+      properties:
+        account_resources:
+          $ref: '#/components/schemas/TronAccountResources'
+        contract_resources:
+          $ref: '#/components/schemas/TronAccountResources'
+        estimated_cost:
+          $ref: '#/components/schemas/TronAccountResources'
+        estimated_energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        estimated_bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        energy_distribution:
+          $ref: '#/components/schemas/TronEnergyDistribution'
+        sun_fee:
+          $ref: '#/components/schemas/TronSunFeeDetails'
+        estimated_tx_status:
+          type: string
+          enum:
+          - success
+          - failed
+        error:
+          type: string
+      required:
+      - account_resources
+      - estimated_cost
+      - estimated_energy
+      - estimated_bandwidth
+      - estimated_tx_status
+    TronAccountResources:
+      type: object
+      properties:
+        sun:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        free_bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        bandwidth:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        energy:
+          type: integer
+          x-go-type: int64
+          x-go-type-skip-optional-pointer: true
+        contract_energy:
+          type: integer
+          x-go-type: int64
+  parameters:
+    blockchain_id:
+      name: blockchain_id
+      in: path
+      required: true
+      description: Either a hyphen seperated protocol-network pair like `ethereum-mainnet` or the `chain-id`
+      schema:
+        type: string
+        default: ethereum-mainnet
+  responses:
+    ErrorTooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: too-many-requests
+            title: Too Many Requests
+            status: 429
+            detail: Request rate limits have been exceeded. Try again after a few seconds.
+    ErrorNotImplemented:
+      description: The request endpoint is not implemented
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: not-implemented
+            title: Not implemented
+            status: 501
+    ErrorUnauthorized:
+      description: Invalid or expired token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unauthorized
+            title: Invalid Token
+            status: 401
+    ErrorInternal:
+      description: An internal server error happened
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: internal-server-error
+            title: Internal Server Error
+            status: 500
+    ErrorServiceUnavailable:
+      description: The resource you are trying to access is currently unavailable
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/error'
+          example:
+            type: unavailable
+            title: Unavailable
+            status: 503
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/getoverview-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompile-txapi.md
+  - https://docs.blockdaemon.com/reference/txcompileandsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreate-txapi.md
+  - https://docs.blockdaemon.com/reference/txcreatetoken-txapi.md
+  - https://docs.blockdaemon.com/reference/txdecode-txapi.md
+  - https://docs.blockdaemon.com/reference/txderivesigningpayload.md
+  - https://docs.blockdaemon.com/reference/txestimatefee-txapi.md
+  - https://docs.blockdaemon.com/reference/txsend-txapi.md
+  - https://docs.blockdaemon.com/reference/txverify-txapi.md
+  merge:
+    pages: 10
+    deduped: 119
+    conflicts_kept_first: 0

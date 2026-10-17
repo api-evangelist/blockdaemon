@@ -1,0 +1,1165 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Solana Staking Reporting API
+  description: '### Protocols
+
+    The following protocols are currently supported:
+
+    * Cardano
+
+    * Cosmos
+
+    * Ethereum
+
+    * NEAR
+
+    * Polkadot
+
+    * Polygon
+
+    * Solana'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: logo.png
+servers:
+- url: https://svc.blockdaemon.com/reporting/staking
+  description: Production server
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Solana Staking Reporting
+paths:
+  /v2/solana/{network}/health:
+    get:
+      summary: Get the Protocol Rewards Processing Health
+      description: 'The status of reward processing, if optimal then all rewards data up to the indicated metadata fields are available the processing status is degraded if any of the following are true:
+
+
+        * `chainEpoch` - `lastProcessedInflationEpoch` > 1
+
+        * `chainEpoch` - `lastProcessedStatusesEpoch` > 1
+
+        * if the `lastProcessedSlot` is over 20 minutes behind the chainSlot - note we run 10 minutes behind by design to alleviate any reorgs so this is a 10 minuate buffer on top of that
+
+        * `chainEpoch` - `lastProcessedMevEpoch` > 1
+
+        * if the `lastProcessedMevTxTimestamp` is older than 3.2 days, this is mainly as a check to see if the jito mev bot has paid out expectedly or not, not that our system is degraded
+
+
+        **Please note** that mev rewards are allocated to the epoch they are paid out in *not* the epoch they are earned in.'
+      tags:
+      - Solana Staking Reporting
+      operationId: getHealth1
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against
+        schema:
+          type: string
+          default: mainnet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse1'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/solana/{network}/{type}/rewards:
+    post:
+      summary: Get a Stream of Rewards
+      description: Returns 0 or more reward objects in a streaming fashion using `ndjson`.
+      tags:
+      - Solana Staking Reporting
+      operationId: getRewards1
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Type'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardRequest1'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/RewardsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/solana/{network}/{type}/rewards/{address}:
+    get:
+      summary: Get a Stream of Rewards for a Single Address
+      description: Returns 0 or more reward objects in a streaming fashion using `ndjson`. Must specify either a start and end time or an epoch
+      tags:
+      - Solana Staking Reporting
+      operationId: getRewardsSingle1
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Type'
+      - in: path
+        name: address
+        required: true
+        description: The address to look up rewards for.
+        example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        schema:
+          type: string
+          default: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+      - in: query
+        name: startTime
+        required: false
+        description: Epoch-based start time for reward queries. You can not specify both an epoch and start/end times.
+        example: 1709251200
+        schema:
+          type: number
+          default: 1709251200
+      - in: query
+        name: endTime
+        required: false
+        description: Epoch-based end time for reward queries. You can not specify both an epoch and start/end times
+        example: 1711929600
+        schema:
+          type: number
+          default: 1711929600
+      - in: query
+        name: epoch
+        required: false
+        description: The epoch to look up rewards for, you can not specify both an epoch and start/end times
+        example: 755
+        schema:
+          type: number
+          default: 755
+      - in: query
+        name: period
+        required: true
+        description: The type of aggregation to apply.
+        schema:
+          $ref: '#/components/schemas/TimePeriod2'
+      - in: query
+        name: denomination
+        required: false
+        description: the denomination to return the rewards in
+        schema:
+          $ref: '#/components/schemas/Denomination1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/RewardsResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/solana/{network}/{type}/stats/{address}:
+    get:
+      summary: Get Stats for an address
+      description: Returns stats for an address including 30 and 90 days of yield and rewards data based on utc days If an address is not currently monitored a 404 is returned, on the first query for an address data is async calculated and then updated daily
+      tags:
+      - Solana Staking Reporting
+      operationId: getStatsSolana
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Type'
+      - in: path
+        name: address
+        required: true
+        description: The validator address to retrieve stats data for.
+        example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatsResponseSolana'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    put:
+      summary: Preemptively add an address to the stats tracking
+      tags:
+      - Solana Staking Reporting
+      operationId: putStatsSolana
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Type'
+      - in: path
+        name: address
+        required: true
+        description: The validator address to retrieve stats data for.
+        example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        schema:
+          type: string
+      responses:
+        '201':
+          description: CREATED
+  /v2/solana/{network}/{type}/status:
+    post:
+      summary: Get a Stream of Statuses
+      description: Returns 0 or more status objects in a streaming fashion using `ndjson`.
+      tags:
+      - Solana Staking Reporting
+      operationId: getStatuses1
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against.
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Type'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              example:
+              - FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+              default:
+              - FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/solana/{network}/{type}/status/{address}:
+    get:
+      summary: Get Status for an Address
+      description: Returns a status object for an address.
+      tags:
+      - Solana Staking Reporting
+      operationId: getStatus1
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The network to look up against
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/Type'
+      - in: path
+        name: address
+        required: true
+        description: The address to look up rewards for
+        example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        schema:
+          type: string
+          default: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/solana/{network}/{type}/yield:
+    get:
+      summary: Get a Stream of Yield Summaries
+      description: 'Returns a **network-wide** stream of yield summaries for the specified type and time range. Results are streamed in NDJSON format.
+
+
+        For more details on yield metrics and how they are calculated, see the Yield Metrics overview.'
+      tags:
+      - Solana Staking Reporting
+      operationId: getYieldsSolana
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        description: 'The type of yield data to retrieve:
+
+          - `validator`: includes the validator’s own rewards.
+
+          - `delegator`: includes rewards distributed to delegators of that validator.
+
+
+          Call both endpoints and aggregate the results to get a complete network-wide view.
+
+          '
+        schema:
+          $ref: '#/components/schemas/TypeYieldSolana'
+      - in: query
+        name: startTime
+        required: true
+        description: Epoch-based start time for reward queries.
+        example: 1709251200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: true
+        description: Epoch-based end time for reward queries.
+        example: 1711929600
+        schema:
+          type: number
+      - in: query
+        name: denomination
+        description: The unit to return the yield in (e.g., `lamports`).
+        required: false
+        schema:
+          $ref: '#/components/schemas/Denomination1'
+      - in: query
+        name: raw
+        description: Gives the yield values raw per-epoch. Set to `true` to get per-epoch raw values.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/YieldResponseSolana'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /v2/solana/{network}/{type}/yield/{address}:
+    get:
+      summary: Get a Yield for a Validator Address
+      description: 'Returns yield data for the specified validator address within a given type.
+
+        For more details on yield metrics and how they are calculated, see the Yield Metrics overview.
+
+
+        ⚠️ **Note:** This endpoint does not support validators with a 100% commission rate and will not return yield data for them.'
+      tags:
+      - Solana Staking Reporting
+      operationId: getYieldSolana
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        description: "The type of yield data to retrieve:\n- `validator`: includes the validator’s own rewards.\n- `delegator`: includes rewards distributed to delegators of that validator.                 \n"
+        schema:
+          $ref: '#/components/schemas/TypeYieldSolana'
+      - in: path
+        name: address
+        required: true
+        description: The validator address to query yield data for.
+        example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        schema:
+          type: string
+          default: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+      - in: query
+        name: startTime
+        required: true
+        description: Epoch-based start time for reward queries.
+        example: 1709251200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: true
+        description: Epoch-based end time for reward queries.
+        example: 1711929600
+        schema:
+          type: number
+      - in: query
+        name: denomination
+        description: The unit to return the yield in (e.g., `lamports`).
+        required: false
+        schema:
+          $ref: '#/components/schemas/Denomination1'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YieldResponseSolana'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    DelegatorStakeStatusMetadata:
+      title: Delegator Stake Status Metadata
+      properties:
+        identity:
+          description: the validator identity address the stake account is delegated to
+          type: string
+          example: 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy
+        voteKey:
+          description: the validator vote key address the stake account is delegated to
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        type:
+          description: the type of status object this is
+          type: string
+          enum:
+          - delegator
+        activationEpoch:
+          description: the activation epoch of the stake account
+          type: string
+          format: number
+          example: 308
+        deactivationEpoch:
+          description: the deactivation epoch of the stake account if set to 18446744073709551615 then the account is active
+          type: string
+          format: number
+          example: 508
+        solanaAccount:
+          description: the solana account the stake account is linked to
+          type: string
+          example: 5LJ93G4SQh9GiewTQJNAu6X9sQ1VVyrpCAgbQsRSgn22
+        stakeAccount:
+          description: the stake account address
+          type: string
+          example: HEcQHKyVaM6mRd4728RTJPvWcezm2mkPoAUazt992RJt
+        activeStake:
+          description: "The total active stake for the stake account, if the overall status is inactive then this is not \"active stake\". \nThis is updated at approximately hourly intervals.\n"
+          type: string
+          format: number
+          example: 331417862470541
+    TimePeriod2:
+      description: How the data is aggregated, raw is checkpoint level data
+      type: string
+      default: monthly
+      enum:
+      - yearly
+      - daily
+      - weekly
+      - monthly
+      - epoch
+      - raw
+    Denomination1:
+      description: The denomination to return rewards in
+      type: string
+      default: lamports
+      enum:
+      - lamports
+      - sol
+    ValidatorStatusMetadata:
+      title: Validator Status Metadata
+      properties:
+        authorisedWithdrawer:
+          description: the authorised withdrawer address
+          type: string
+          example: GRKMJ1zE99jGh4SVA8HCwizVN9fL3yvr8JCCgvqUpbNv
+        commission:
+          description: the commisson the validator charges
+          type: string
+          format: number
+          example: 8
+        identity:
+          description: the validator identity address
+          type: string
+          example: 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy
+        voteKey:
+          description: the validator vote key address
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        type:
+          description: the type of status object this is
+          type: string
+          enum:
+          - validator
+        activeStake:
+          description: "the total active stake against the a validator, as defined by calling the getProgramAccounts method for the stake program \nand summing the stake account stakes by the validator pub key, note: a stake account is \"active\" if it does not have a \ndeactivation epoch set. This is updated at approximately hourly intervals.\n"
+          type: string
+          format: number
+          example: 331417862470541
+    YieldResponseSolana:
+      description: The reward response object
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+        return:
+          description: The staking return for all delegators or validators for the period
+          type: string
+          example: '283291849202'
+          format: number
+        apr:
+          description: The APR for delegators or validators based on the return, total stake of the network and assuming 180 epochs a year
+          type: string
+          example: '0.0601'
+          format: number
+        aprPercentage:
+          description: The same as above but in percentage form
+          type: string
+          example: 6.01%
+          format: number
+        apy:
+          description: The APY based on the above and assuming re-staking of all rewards after each epoch
+          type: string
+          example: '0.06912'
+          format: number
+        apyPercentage:
+          description: The same as above but in percentage form
+          type: string
+          example: 6.912%
+          format: number
+        denomination:
+          description: the denomination the reward is in
+          type: string
+          example: lamports
+        stake:
+          description: the total stake across the full network
+          type: string
+          example: '3830810096309000'
+          format: number
+        metadata:
+          oneOf:
+          - $ref: '#/components/schemas/ValidatorYieldMetadataSolana'
+          - $ref: '#/components/schemas/DelegatorYieldMetadataSolana'
+    DelegatorYieldMetadataSolana:
+      properties:
+        fee:
+          description: the amount of rewards from fees
+          type: string
+          format: number
+          example: '532626257312'
+        epoch:
+          description: Only present for protocol yield, The epoch number/s that the period covers
+          type: string
+          format: number
+          example: '1'
+        mev:
+          description: the amount of rewards from jito mev
+          type: string
+          format: number
+          example: '532626257312'
+        staking:
+          description: the amount of rewards from staking
+          type: string
+          format: number
+          example: '532626257312'
+    HealthResponse1:
+      description: The health response object
+      type: object
+      properties:
+        status:
+          description: the health status
+          type: string
+          default: OPTIMAL
+          enum:
+          - UNKNOWN
+          - OPTIMAL
+          - DEGRADED
+        timestamp:
+          description: the timestamp when the status was last updated in epoch seconds
+          type: number
+          example: 1704067200
+        metadata:
+          $ref: '#/components/schemas/HealthMetadata1'
+    Type:
+      description: Specifies whether the request is for a validator or delegator.
+      type: string
+      enum:
+      - validator
+      - delegator
+    RewardRequest1:
+      required:
+      - addresses
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+          default: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+          default: 1711929600
+        epoch:
+          description: The epoch
+          type: number
+          example: 755
+          default: 755
+        addresses:
+          description: List of addresses to retrieve rewards for.
+          type: array
+          items:
+            type: string
+          example:
+          - FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+          default:
+          - FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        period:
+          $ref: '#/components/schemas/TimePeriod2'
+        aggregate:
+          description: Whether to aggregate across provided addresses or per address - true to aggregate across all addresses.
+          type: boolean
+          default: false
+        denomination:
+          $ref: '#/components/schemas/Denomination1'
+    DelegatorRewardsMetadata:
+      title: Delegator Rewards Metadata
+      description: 'A map of string keys to string values, note that not all fields will be present depending on the period chosen in the request and that new fields could also be added at any time
+
+        '
+      properties:
+        epoch:
+          description: The epoch number/s that the period covers
+          type: string
+          format: number
+          example: '1'
+        identity:
+          description: The validator identity that the stake account is delegated to
+          type: string
+          example: 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy
+        slot:
+          description: The slot/s that are included in the period
+          type: string
+          format: number
+          example: '251296884'
+        voteKey:
+          description: The validator vote key that the stake account is delegated to
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        mev:
+          description: the amount of rewards from jito mev
+          type: string
+          format: number
+          example: '532626257312'
+        staking:
+          description: the amount of rewards from staking
+          type: string
+          format: number
+          example: '532626257312'
+        stakeAccount:
+          description: the stake account this reward is for
+          type: string
+          example: HEcQHKyVaM6mRd4728RTJPvWcezm2mkPoAUazt992RJt
+        solanaAccount:
+          description: the solana account the stake account is linked to
+          type: string
+          example: 5LJ93G4SQh9GiewTQJNAu6X9sQ1VVyrpCAgbQsRSgn22
+    DelegatorAccountStatusMetadata:
+      title: Delegator Account Status Metadata
+      properties:
+        type:
+          description: the type of status object this is
+          type: string
+          enum:
+          - delegator
+        solanaAccount:
+          description: the solana account
+          type: string
+          example: 5LJ93G4SQh9GiewTQJNAu6X9sQ1VVyrpCAgbQsRSgn22
+        activeStakeAccounts:
+          description: csv of active stake accounts this solana account is linked to, only present in delegator solana account statuses
+          type: string
+          format: csv
+          example: FJLNfMzEz3Jt3SNWurkhF8iwRtpPbAte9CVaTsnAjsQT,8SWy8cePppycfhhcrnfBEBNqTZTpNRNGQARbgWaYeKjb
+        inactiveStakeAccounts:
+          description: csv of inactive stake accounts this solana account is linked to, only present in delegator solana account statuses
+          type: string
+          format: csv
+          example: EQrjCtqFowuFPa15UxbBPKbisVgtynF8FUDKmNghZXE6,2PhQgAbcaDTnjxKQ8DFwwHZiXBa6Ekq9MvEc2DyaboCy
+        activeStake:
+          description: "the total active stake against the a solana account, as defined by calling the getProgramAccounts method for the stake program \nand summing the stake account stakes by the solana pub key, note: a stake account is \"active\" if it does not have a \ndeactivation epoch set. This is updated at approximately hourly intervals.\n"
+          type: string
+          format: number
+          example: 331417862470541
+    StatsResponseSolana:
+      type: object
+      description: "note: the delegatorYield field is only included if the address is a validator, \nwhen included this is delegators yield information to that validator\n"
+      properties:
+        updateTime:
+          type: integer
+          format: int64
+          example: 1775718200
+          description: epoch second timestamp of the end time the stats is for
+        thirtyDays:
+          type: object
+          properties:
+            yield:
+              $ref: '#/components/schemas/YieldResponseSolana'
+            delegatorYield:
+              $ref: '#/components/schemas/YieldResponseSolana'
+            rewards:
+              $ref: '#/components/schemas/RewardsResponse'
+        ninetyDays:
+          type: object
+          properties:
+            yield:
+              $ref: '#/components/schemas/YieldResponseSolana'
+            delegatorYield:
+              $ref: '#/components/schemas/YieldResponseSolana'
+            rewards:
+              $ref: '#/components/schemas/RewardsResponse'
+    ValidatorRewardsMetadata:
+      title: Validator Rewards Metadata
+      description: 'A map of string keys to string values, note that not all fields will be present depending on the period chosen in the request and that new fields could also be added at any time
+
+        '
+      properties:
+        fee:
+          description: the amount of rewards earned from fees
+          type: string
+          format: number
+          example: '532626257312'
+        epoch:
+          description: The epoch number/s that the period covers
+          type: string
+          example: '1'
+        identity:
+          description: The validator identity
+          type: string
+          example: 7cVfgArCheMR6Cs4t6vz5rfnqd56vZq4ndaBrY5xkxXy
+        slot:
+          description: The slot/s that are included in the period
+          type: string
+          format: number
+          example: '251296884'
+        voteKey:
+          description: The validator vote key
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        voting:
+          description: the amount of rewards from voting
+          type: string
+          format: number
+          example: '532626257312'
+        stake:
+          description: total stake against that validator at the start of the period - will be missing if a validator has a 100% commission
+          type: string
+          format: number
+          example: '532626257312'
+        mev:
+          description: the amount of rewards from jito mev
+          type: string
+          format: number
+          example: '532626257312'
+    TypeYieldSolana:
+      description: 'The type of yield data to retrieve:
+
+        - `validator`: includes the validator’s own rewards.
+
+        - `delegator`: includes rewards distributed to delegators of that validator.
+
+        '
+      type: string
+      enum:
+      - validator
+      - delegator
+    StatusResponse:
+      properties:
+        address:
+          description: The address the status is for
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        status:
+          description: 'The status of the validator or delegator.
+
+            - For **validators** - it is active if it has voted on at least 1 slot in the previous epoch to the active one.
+
+            - For **delegator stake accounts** - it is active if the deactivation epoch is not equal to 18446744073709551615.
+
+            - For **delegator solana accounts** - it is active if the account has at least one active stake account.
+
+            '
+          type: string
+          enum:
+          - UNKNOWN
+          - ACTIVE
+          - INACTIVE
+        timestamp:
+          description: The epoch second timestamp that the status was recorded at
+          type: number
+          example: 1708612182
+        metadata:
+          oneOf:
+          - $ref: '#/components/schemas/ValidatorStatusMetadata'
+          - $ref: '#/components/schemas/DelegatorStakeStatusMetadata'
+          - $ref: '#/components/schemas/DelegatorAccountStatusMetadata'
+    RewardsResponse:
+      description: The reward response object
+      type: object
+      properties:
+        address:
+          description: The address the reward is for
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        denomination:
+          description: The denomination the reward is in
+          type: string
+          example: lamports
+        return:
+          description: The staking return of the address for the period
+          type: string
+          example: '283291849202'
+          format: number
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+        period:
+          $ref: '#/components/schemas/TimePeriod2'
+        startBalance:
+          description: The balance or stake at the start of the period
+          type: string
+          example: '124222'
+          format: number
+        metadata:
+          oneOf:
+          - $ref: '#/components/schemas/ValidatorRewardsMetadata'
+          - $ref: '#/components/schemas/DelegatorRewardsMetadata'
+    ValidatorYieldMetadataSolana:
+      properties:
+        fee:
+          description: the amount of rewards from fees
+          type: string
+          format: number
+          example: '532626257312'
+        epoch:
+          description: Only present for protocol yield, The epoch number/s that the period covers
+          type: string
+          format: number
+          example: '1'
+        mev:
+          description: the amount of rewards from jito mev
+          type: string
+          format: number
+          example: '532626257312'
+        voting:
+          description: the amount of rewards from voting
+          type: string
+          format: number
+          example: '532626257312'
+    HealthMetadata1:
+      description: 'A map of string keys to string values, new fields could also be added at any time.
+
+        '
+      properties:
+        chainEpoch:
+          description: The current active epoch on the chain
+          type: string
+          format: number
+          example: '625'
+        chainSlot:
+          description: The current chain slot - note there could be up to a minute delay for an update on this
+          type: string
+          format: number
+          example: '270029560'
+        lastProcessedInflationEpoch:
+          description: The last processed inflationary reward epoch - whatever this number is at the inflation rewards are available up to this epoch
+          type: string
+          format: number
+          example: '624'
+        lastProcessedMevEpoch:
+          description: The last processed mev reward epoch - whatever this number is at the mev rewards are available up to this epoch, there can be up to a 120 minute delay after the epoch ends before these are available
+          type: string
+          format: number
+          example: '624'
+        lastProcessedMevTxTimestamp:
+          description: The timestamp of the last processed mev transaction
+          type: string
+          format: number
+          example: '1717536188'
+        lastProcessedSlot:
+          description: The slot that was last processed by the system, fee/rent rewards should be available up to this slot
+          type: string
+          format: number
+          example: '270029109'
+        lastProcessedStatusesEpoch:
+          description: The last processed statuses epoch, statuses are up to date to the start of this epoch
+          type: string
+          format: number
+          example: '625'
+        reason:
+          description: 'An enum reason for the overall status.
+
+            - INFLATION_EPOCH: This means that the processing of the inflationary rewards is behind
+
+            - WEBSOCKET_EPOCH: This means that real time slot processing is behind
+
+            - STATUSES_EPOCH: This means that status data is behind
+
+            - LAST_PROCESSED_SLOT: This means that real time slot processing is behind
+
+            - MEV_EPOCH: This means mev reward data is delayed
+
+            - MEV_TX_TIMESTAMP: This likely means that the jito mev bot is delayed paying out rewards
+
+            - OPTIMAL: All good
+
+            '
+          type: string
+          default: OPTIMAL
+          enum:
+          - INFLATION_EPOCH
+          - WEBSOCKET_EPOCH
+          - STATUSES_EPOCH
+          - LAST_PROCESSED_SLOT
+          - MEV_EPOCH
+          - MEV_TX_TIMESTAMP
+          - OPTIMAL
+    ErrorResponse:
+      properties:
+        timestamp:
+          description: The timestamp of the error in ISO-8601 format
+          type: string
+        path:
+          description: The path called when the error occurred
+          type: string
+          example: /v2/solana/mainnet/delegator
+        status:
+          description: The http status code
+          type: number
+          example: 400
+        error:
+          description: A useful description of the error that occurred
+          type: string
+          example: '[endTime should be in unix epoch seconds]'
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get_v2-ethereum-network-pubkeys.md
+  - https://docs.blockdaemon.com/reference/getdeposits.md
+  - https://docs.blockdaemon.com/reference/gethealth-cosmos.md
+  - https://docs.blockdaemon.com/reference/gethealth-ethereum.md
+  - https://docs.blockdaemon.com/reference/gethealth-polygon.md
+  - https://docs.blockdaemon.com/reference/gethealth-solana.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidator1.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getrewards-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewards-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewards-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewards-solana.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-solana.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getstatsethereum.md
+  - https://docs.blockdaemon.com/reference/getstatssolana.md
+  - https://docs.blockdaemon.com/reference/getstatus-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatus-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatus-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatus-solana.md
+  - https://docs.blockdaemon.com/reference/getstatuses-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatuses-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatuses-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatuses-solana.md
+  - https://docs.blockdaemon.com/reference/getstatusnominator.md
+  - https://docs.blockdaemon.com/reference/getstatusnominators.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidators1.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-solana.md
+  - https://docs.blockdaemon.com/reference/getyields-cosmos.md
+  - https://docs.blockdaemon.com/reference/getyields-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyields-solana.md
+  - https://docs.blockdaemon.com/reference/putstatsethereum.md
+  - https://docs.blockdaemon.com/reference/putstatssolana.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominator.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominators.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidator2.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidators2.md
+  merge:
+    pages: 55
+    deduped: 377
+    conflicts_kept_first: 0

@@ -1,0 +1,676 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Cosmos Staking Reporting API
+  description: '### Protocols
+
+    The following protocols are currently supported:
+
+    * Cardano
+
+    * Cosmos
+
+    * Ethereum
+
+    * NEAR
+
+    * Polkadot
+
+    * Polygon
+
+    * Solana'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: logo.png
+servers:
+- url: https://svc.blockdaemon.com/reporting/staking
+  description: Production server
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Cosmos Staking Reporting
+paths:
+  /v2/cosmos/{network}/health:
+    get:
+      summary: Get the Health of the Protocol Rewards Processing
+      description: Returns the health of the protocol rewards processing system.
+      tags:
+      - Cosmos Staking Reporting
+      operationId: getHealthCosmos
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: the network to look up against
+        schema:
+          type: string
+          default: mainnet
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponseCosmos'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+  /v2/cosmos/{network}/{type}/rewards:
+    post:
+      summary: Get a Stream of Rewards
+      description: Returns 0 or more reward objects in a streaming fashion using ndjson.
+      tags:
+      - Cosmos Staking Reporting
+      operationId: getRewardsCosmos
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: the network to look up against
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TypeCosmos'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RewardRequestCosmos'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/RewardsResponseCosmos'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+  /v2/cosmos/{network}/{type}/rewards/{address}:
+    get:
+      summary: Get a Stream of Rewards for a Single Address
+      description: Returns 0 or more reward objects in a streaming fashion using ndjson.
+      tags:
+      - Cosmos Staking Reporting
+      operationId: getRewardsSingleCosmos
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: the network to look up against
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TypeCosmos'
+      - in: path
+        name: address
+        required: true
+        description: the address to look up rewards for
+        example: cosmosvaloper10nzaaeh2kq28t3nqsh5m8kmyv90vx7ym5mpakx
+        schema:
+          type: string
+      - in: query
+        name: startTime
+        required: true
+        description: Epoch-based start time for reward queries.
+        example: 1709251200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: true
+        description: Epoch-based end time for reward queries.
+        example: 1711929600
+        schema:
+          type: number
+      - in: query
+        name: period
+        required: true
+        description: the type of aggregation to apply
+        schema:
+          $ref: '#/components/schemas/TimePeriodCosmos'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/RewardsResponseCosmos'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+  /v2/cosmos/{network}/{type}/status:
+    post:
+      summary: Get a Stream of Statuses
+      description: Returns 0 or more status objects in a streaming fashion using ndjson.
+      tags:
+      - Cosmos Staking Reporting
+      operationId: getStatusesCosmos
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: the network to look up against
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TypeCosmos'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+              example:
+              - cosmosvaloper10nzaaeh2kq28t3nqsh5m8kmyv90vx7ym5mpakx
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/StatusResponseCosmos'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+  /v2/cosmos/{network}/{type}/status/{address}:
+    get:
+      summary: Get Status for an Address
+      description: Returns a status object for an address.
+      tags:
+      - Cosmos Staking Reporting
+      operationId: getStatusCosmos
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: the network to look up against
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TypeCosmos'
+      - in: path
+        name: address
+        required: true
+        description: the address to look up rewards for
+        example: cosmosvaloper10nzaaeh2kq28t3nqsh5m8kmyv90vx7ym5mpakx
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponseCosmos'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+  /v2/cosmos/{network}/{type}/yield:
+    get:
+      summary: Get a Stream of Yield Summaries
+      description: Returns a stream of yield summaries for the specified time range. Results are streamed in NDJSON format.
+      tags:
+      - Cosmos Staking Reporting
+      operationId: getYieldsCosmos
+      parameters:
+      - in: path
+        name: network
+        required: true
+        description: The blockchain network to query (e.g., mainnet).
+        schema:
+          type: string
+          default: mainnet
+      - in: path
+        name: type
+        required: true
+        schema:
+          $ref: '#/components/schemas/TypeCosmos'
+      - in: query
+        name: startTime
+        required: true
+        description: Epoch-based start time for reward queries.
+        example: 1709251200
+        schema:
+          type: number
+      - in: query
+        name: endTime
+        required: true
+        description: Epoch-based end time for reward queries.
+        example: 1711929600
+        schema:
+          type: number
+      - in: query
+        name: denomination
+        description: The unit to return the yield in.
+        required: false
+        schema:
+          $ref: '#/components/schemas/DenominationCosmos'
+      - in: query
+        name: raw
+        description: Gives the yield values raw per-epoch. Set to `true` to get per-epoch raw values.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: OK
+          content:
+            application/x-ndjson:
+              schema:
+                $ref: '#/components/schemas/YieldResponseCosmos'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponseCosmos'
+components:
+  schemas:
+    StatusResponseCosmos:
+      properties:
+        address:
+          description: The address the status is for
+          type: string
+          example: FQwewNXahV7MiZcLpY6p1xhUs2acVGQ3U5Xxc7FzV571
+        status:
+          description: the status
+          type: string
+          enum:
+          - UNKNOWN
+          - ACTIVE
+          - INACTIVE
+        timestamp:
+          description: the epoch second timestamp that the status was recorded at
+          type: number
+          example: 1708612182
+    YieldResponseCosmos:
+      description: The reward response object
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+        return:
+          description: The staking return for all delegators or validators for the period
+          type: string
+          example: '283291849202'
+          format: number
+        apr:
+          description: The APR for delegators or validators based on the return and total stake of the network
+          type: string
+          example: '0.0601'
+          format: number
+        aprPercentage:
+          description: The same as above but in percentage form
+          type: string
+          example: 6.01%
+          format: number
+        apy:
+          description: The APY based on the above and assuming re-staking of all rewards after each day
+          type: string
+          example: '0.06912'
+          format: number
+        apyPercentage:
+          description: The same as above but in percentage form
+          type: string
+          example: 6.912%
+          format: number
+        denomination:
+          description: the denomination the reward is in
+          type: string
+          example: uatom
+        stake:
+          description: the total stake across the full network
+          type: string
+          example: '3830810096309000'
+          format: number
+        metadata:
+          $ref: '#/components/schemas/YieldMetadataCosmos'
+    RewardRequestCosmos:
+      required:
+      - startTime
+      - endTime
+      - addresses
+      type: object
+      properties:
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+        addresses:
+          description: List of addresses to retrieve rewards for.
+          type: array
+          items:
+            type: string
+          example:
+          - cosmosvaloper10nzaaeh2kq28t3nqsh5m8kmyv90vx7ym5mpakx
+        period:
+          $ref: '#/components/schemas/TimePeriodCosmos'
+        aggregate:
+          description: Whether to aggregate across provided addresses or per address - true to aggregate across all addresses
+          type: boolean
+          default: false
+    TypeCosmos:
+      description: Specifies the role associated with the request.
+      type: string
+      enum:
+      - delegator
+      - validator
+    DenominationCosmos:
+      description: The denomination to return rewards in
+      type: string
+      default: uatom
+    TimePeriodCosmos:
+      description: How the data is aggregated, `raw` is checkpoint level data.
+      type: string
+      enum:
+      - raw
+      - daily
+      - weekly
+      - monthly
+    RewardsResponseCosmos:
+      description: The reward response object
+      type: object
+      properties:
+        address:
+          description: The address the reward is for
+          type: string
+          example: cosmosvaloper10nzaaeh2kq28t3nqsh5m8kmyv90vx7ym5mpakx
+        denomination:
+          description: the denomination the reward is in
+          type: string
+          example: uatom
+        return:
+          description: The staking return of the address for the period
+          type: string
+          example: '283291849202'
+          format: number
+        startTime:
+          description: Epoch-based start time for reward queries.
+          type: number
+          example: 1709251200
+        endTime:
+          description: Epoch-based end time for reward queries.
+          type: number
+          example: 1711929600
+        period:
+          $ref: '#/components/schemas/TimePeriodCosmos'
+        startBalance:
+          description: the balance or stake at the start of the period
+          type: string
+          example: '124222'
+          format: number
+        metadata:
+          $ref: '#/components/schemas/RewardsMetadataCosmos'
+    RewardsMetadataCosmos:
+      properties:
+        commission:
+          description: Only present in validator rewards - the amount of rewards from commission
+          type: string
+          format: number
+          example: '532626257312'
+        withdrawals:
+          description: The total amount withdrawn from rewards balance during the period
+          type: string
+          format: number
+          example: '8869338515563405'
+        validatorAddress:
+          description: Only present in delegator rewards - the validator address of this delegation reward
+          type: string
+          example: cosmosvaloper10nzaaeh2kq28t3nqsh5m8kmyv90vx7ym5mpakx
+        claimableCommission:
+          description: Only present in validator rewards - the total commission rewards this validator had available to withdraw at the end of the period
+          type: string
+          format: number
+          example: '251296884'
+        startBlock:
+          description: The block number at the start of this period
+          type: string
+          format: number
+          example: '25274224'
+        endBlock:
+          description: The block number at the end of this period
+          type: string
+          format: number
+          example: '25286409'
+        stake:
+          description: If a validator reward, it is the total stake against that validator, if a delegator then the total it has staked
+          type: string
+          format: number
+          example: '532626257312'
+        claimableRewards:
+          description: Only present in delegator rewards - the total amount of rewards available to withdraw at the end of the period
+          type: string
+          format: number
+          example: '532626257312'
+    HealthMetadataCosmos:
+      properties:
+        lastProcessedDate:
+          description: The last processed UTC date rewards are available for
+          type: string
+          format: number
+          example: '2025-04-20'
+        progress:
+          description: If the status is PROCESSING then this indicates the number of validators processed out of the total
+          type: string
+          format: number
+          example: 231/545
+        minDelegation:
+          description: The minimum delegation amount required for us to track a delegator
+          type: string
+          format: number
+          example: 100 ATOM
+    YieldMetadataCosmos:
+      properties:
+        startBlock:
+          description: The block number at the start of this period
+          type: string
+          format: number
+          example: '25274224'
+        endBlock:
+          description: The block number at the end of this period
+          type: string
+          format: number
+          example: '25286409'
+    HealthResponseCosmos:
+      description: The reward response object
+      type: object
+      properties:
+        status:
+          description: the status
+          type: string
+          enum:
+          - PROCESSING
+          - OPTIMAL
+          - DEGRADED
+        timestamp:
+          description: the timestamp when the status was last updated in epoch seconds
+          type: number
+          example: 1704067200
+        metadata:
+          $ref: '#/components/schemas/HealthMetadataCosmos'
+    ErrorResponseCosmos:
+      properties:
+        timestamp:
+          description: the timestamp of the error in ISO-8601 format
+          type: string
+        path:
+          description: the path called when the error occurred
+          type: string
+          example: /v2/cosmos/mainnet/delegator
+        status:
+          description: the http status code
+          type: number
+          example: 400
+        error:
+          description: a useful description of the error that occurred
+          type: string
+          example: '[endTime should be in unix epoch seconds]'
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get_v2-ethereum-network-pubkeys.md
+  - https://docs.blockdaemon.com/reference/getdeposits.md
+  - https://docs.blockdaemon.com/reference/gethealth-cosmos.md
+  - https://docs.blockdaemon.com/reference/gethealth-ethereum.md
+  - https://docs.blockdaemon.com/reference/gethealth-polygon.md
+  - https://docs.blockdaemon.com/reference/gethealth-solana.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidator1.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getrewards-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewards-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewards-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewards-solana.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-solana.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getstatsethereum.md
+  - https://docs.blockdaemon.com/reference/getstatssolana.md
+  - https://docs.blockdaemon.com/reference/getstatus-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatus-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatus-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatus-solana.md
+  - https://docs.blockdaemon.com/reference/getstatuses-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatuses-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatuses-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatuses-solana.md
+  - https://docs.blockdaemon.com/reference/getstatusnominator.md
+  - https://docs.blockdaemon.com/reference/getstatusnominators.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidators1.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-solana.md
+  - https://docs.blockdaemon.com/reference/getyields-cosmos.md
+  - https://docs.blockdaemon.com/reference/getyields-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyields-solana.md
+  - https://docs.blockdaemon.com/reference/putstatsethereum.md
+  - https://docs.blockdaemon.com/reference/putstatssolana.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominator.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominators.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidator2.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidators2.md
+  merge:
+    pages: 55
+    deduped: 377
+    conflicts_kept_first: 0

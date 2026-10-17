@@ -1,0 +1,1503 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Cardano Staking Reporting API
+  description: '### Protocols
+
+    The following protocols are currently supported:
+
+    * Cardano
+
+    * Cosmos
+
+    * Ethereum
+
+    * NEAR
+
+    * Polkadot
+
+    * Polygon
+
+    * Solana'
+  contact:
+    name: Blockdaemon
+    email: support@blockdaemon.com
+    url: https://blockdaemon.com
+  x-logo:
+    url: logo.png
+servers:
+- url: https://svc.blockdaemon.com/reporting/staking
+  description: Production server
+security:
+- apiKeyAuthHeader: []
+- bearerAuth: []
+tags:
+- name: Cardano Staking Reporting
+paths:
+  /v1/cardano/mainnet/delegator/history:
+    post:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Historical Stake and Rewards for Multiple Delegators
+      description: Returns the historical stake and rewards allocated to multiple staking delegators.
+      operationId: GetHistoricalStakeAndRewardsForMultipleDelegators
+      parameters:
+      - name: aggregate
+        in: query
+        description: Set to true for the rewards to be aggregated across addresses.
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiDelegatorHistoricRewardsQuery'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rewards'
+              example:
+                rewards:
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '56.148764'
+                  startingBalance: '27761.420614'
+                  timeAggregation: monthly
+                  timeEnd: '2023-05-31T23:59:59Z'
+                  timeStart: '2023-05-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '72.972703'
+                  startingBalance: '22474.808699'
+                  timeAggregation: monthly
+                  timeEnd: '2023-04-30T23:59:59Z'
+                  timeStart: '2023-04-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '78.148158'
+                  startingBalance: '22395.826448'
+                  timeAggregation: monthly
+                  timeEnd: '2023-03-31T23:59:59Z'
+                  timeStart: '2023-03-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '56.987177'
+                  startingBalance: '22344.996632'
+                  timeAggregation: monthly
+                  timeEnd: '2023-02-28T23:59:59Z'
+                  timeStart: '2023-02-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '58.981383'
+                  startingBalance: '22281.649658'
+                  timeAggregation: monthly
+                  timeEnd: '2023-01-31T23:59:59Z'
+                  timeStart: '2023-01-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '81.592729'
+                  startingBalance: '22202.422476'
+                  timeAggregation: monthly
+                  timeEnd: '2022-12-31T23:59:59Z'
+                  timeStart: '2022-12-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '65.361381'
+                  startingBalance: '22138.276649'
+                  timeAggregation: monthly
+                  timeEnd: '2022-11-30T23:59:59Z'
+                  timeStart: '2022-11-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '399.198058'
+                  startingBalance: '295391.872886'
+                  timeAggregation: monthly
+                  timeEnd: '2022-10-31T23:59:59Z'
+                  timeStart: '2022-10-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '901.621736'
+                  startingBalance: '294552.735998'
+                  timeAggregation: monthly
+                  timeEnd: '2022-09-30T23:59:59Z'
+                  timeStart: '2022-09-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '882.996146'
+                  startingBalance: '293649.006910'
+                  timeAggregation: monthly
+                  timeEnd: '2022-08-31T23:59:59Z'
+                  timeStart: '2022-08-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '927.451592'
+                  startingBalance: '292667.068999'
+                  timeAggregation: monthly
+                  timeEnd: '2022-07-31T23:59:59Z'
+                  timeStart: '2022-07-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '1019.301148'
+                  startingBalance: '278990.972429'
+                  timeAggregation: monthly
+                  timeEnd: '2022-06-30T23:59:59Z'
+                  timeStart: '2022-06-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '854.937728'
+                  startingBalance: '278034.761182'
+                  timeAggregation: monthly
+                  timeEnd: '2022-05-31T23:59:59Z'
+                  timeStart: '2022-05-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '835.299823'
+                  startingBalance: '277314.634954'
+                  timeAggregation: monthly
+                  timeEnd: '2022-04-30T23:59:59Z'
+                  timeStart: '2022-04-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '1030.839638'
+                  startingBalance: '276213.860646'
+                  timeAggregation: monthly
+                  timeEnd: '2022-03-31T23:59:59Z'
+                  timeStart: '2022-03-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '754.698463'
+                  startingBalance: '275496.275827'
+                  timeAggregation: monthly
+                  timeEnd: '2022-02-28T23:59:59Z'
+                  timeStart: '2022-02-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '891.121983'
+                  startingBalance: '274571.459950'
+                  timeAggregation: monthly
+                  timeEnd: '2022-01-31T23:59:59Z'
+                  timeStart: '2022-01-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '1651.859400'
+                  startingBalance: '22611.441114'
+                  timeAggregation: monthly
+                  timeEnd: '2021-12-31T23:59:59Z'
+                  timeStart: '2021-12-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '3523.769067'
+                  startingBalance: '1385375.911107'
+                  timeAggregation: monthly
+                  timeEnd: '2021-11-30T23:59:59Z'
+                  timeStart: '2021-11-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6572.065984'
+                  startingBalance: '1715359.500888'
+                  timeAggregation: monthly
+                  timeEnd: '2021-10-31T23:59:59Z'
+                  timeStart: '2021-10-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6370.037435'
+                  startingBalance: '1808972.651363'
+                  timeAggregation: monthly
+                  timeEnd: '2021-09-30T23:59:59Z'
+                  timeStart: '2021-09-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6489.460463'
+                  startingBalance: '1802084.516328'
+                  timeAggregation: monthly
+                  timeEnd: '2021-08-31T23:59:59Z'
+                  timeStart: '2021-08-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6478.693817'
+                  startingBalance: '1796965.244613'
+                  timeAggregation: monthly
+                  timeEnd: '2021-07-31T23:59:59Z'
+                  timeStart: '2021-07-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '3858.082451'
+                  startingBalance: '1875834.948102'
+                  timeAggregation: monthly
+                  timeEnd: '2021-06-30T23:59:59Z'
+                  timeStart: '2021-06-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '9307.709931'
+                  startingBalance: '2001168.830524'
+                  timeAggregation: monthly
+                  timeEnd: '2021-05-31T23:59:59Z'
+                  timeStart: '2021-05-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '12988.588658'
+                  startingBalance: '1841524.117636'
+                  timeAggregation: monthly
+                  timeEnd: '2021-04-30T23:59:59Z'
+                  timeStart: '2021-04-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '16399.536086'
+                  startingBalance: '2042978.639272'
+                  timeAggregation: monthly
+                  timeEnd: '2021-03-31T23:59:59Z'
+                  timeStart: '2021-03-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '13436.345150'
+                  startingBalance: '2028496.915900'
+                  timeAggregation: monthly
+                  timeEnd: '2021-02-28T23:59:59Z'
+                  timeStart: '2021-02-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '19131.319892'
+                  startingBalance: '2213586.272660'
+                  timeAggregation: monthly
+                  timeEnd: '2021-01-31T23:59:59Z'
+                  timeStart: '2021-01-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '23179.555534'
+                  startingBalance: '2207094.256559'
+                  timeAggregation: monthly
+                  timeEnd: '2020-12-31T23:59:59Z'
+                  timeStart: '2020-12-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '13457.550657'
+                  startingBalance: '2196985.731537'
+                  timeAggregation: monthly
+                  timeEnd: '2020-11-30T23:59:59Z'
+                  timeStart: '2020-11-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '10151.938775'
+                  startingBalance: '2185986.613700'
+                  timeAggregation: monthly
+                  timeEnd: '2020-10-31T23:59:59Z'
+                  timeStart: '2020-10-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '8761.884164'
+                  startingBalance: '1929816.611184'
+                  timeAggregation: monthly
+                  timeEnd: '2020-09-30T23:59:59Z'
+                  timeStart: '2020-09-01T00:00:00Z'
+                - address: multi
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '3918.024712'
+                  startingBalance: '1928603.929764'
+                  timeAggregation: monthly
+                  timeEnd: '2020-08-31T23:59:59Z'
+                  timeStart: '2020-08-01T00:00:00Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'request body has an error: doesn''t match schema #/components/schemas/MultiDelegatorHistoricRewardsQuery: Error at ''/addresses/0'': string doesn''t match the regular expression ''^stake[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: delegators not found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Historical Stake and Rewards for multiple Delegators
+  /v1/cardano/mainnet/delegator/history/{address}:
+    post:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Historical Stake and Rewards of a Delegator
+      description: Returns the historical stake and rewards allocated to a given delegator.
+      operationId: GetHistoricalStakeAndRewardsOfDelegator
+      parameters:
+      - name: address
+        in: path
+        description: A single public address to check
+        required: true
+        schema:
+          type: string
+          pattern: ^stake[a-z0-9]+$
+          example: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+          default: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SingleHistoricRewardsQuery'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rewards'
+              example:
+                rewards:
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6.829176'
+                  startingBalance: '3662.726590'
+                  timeAggregation: monthly
+                  timeEnd: '2023-05-31T23:59:59Z'
+                  timeStart: '2023-05-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6.148199'
+                  startingBalance: '2485.272440'
+                  timeAggregation: monthly
+                  timeEnd: '2023-04-30T23:59:59Z'
+                  timeStart: '2023-04-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.811982'
+                  startingBalance: '2476.788190'
+                  timeAggregation: monthly
+                  timeEnd: '2023-03-31T23:59:59Z'
+                  timeStart: '2023-03-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6.183880'
+                  startingBalance: '2470.735376'
+                  timeAggregation: monthly
+                  timeEnd: '2023-02-28T23:59:59Z'
+                  timeStart: '2023-02-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.975343'
+                  startingBalance: '2462.963015'
+                  timeAggregation: monthly
+                  timeEnd: '2023-01-31T23:59:59Z'
+                  timeStart: '2023-01-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '8.804830'
+                  startingBalance: '2453.819793'
+                  timeAggregation: monthly
+                  timeEnd: '2022-12-31T23:59:59Z'
+                  timeStart: '2022-12-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.603393'
+                  startingBalance: '2446.899602'
+                  timeAggregation: monthly
+                  timeEnd: '2022-11-30T23:59:59Z'
+                  timeStart: '2022-11-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '6.901557'
+                  startingBalance: '2439.656760'
+                  timeAggregation: monthly
+                  timeEnd: '2022-10-31T23:59:59Z'
+                  timeStart: '2022-10-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.388850'
+                  startingBalance: '2223.360164'
+                  timeAggregation: monthly
+                  timeEnd: '2022-09-30T23:59:59Z'
+                  timeStart: '2022-09-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.068161'
+                  startingBalance: '2215.967076'
+                  timeAggregation: monthly
+                  timeEnd: '2022-08-31T23:59:59Z'
+                  timeStart: '2022-08-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.364562'
+                  startingBalance: '2208.619302'
+                  timeAggregation: monthly
+                  timeEnd: '2022-07-31T23:59:59Z'
+                  timeStart: '2022-07-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.675079'
+                  startingBalance: '2201.213551'
+                  timeAggregation: monthly
+                  timeEnd: '2022-06-30T23:59:59Z'
+                  timeStart: '2022-06-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '5.798449'
+                  startingBalance: '1680.978478'
+                  timeAggregation: monthly
+                  timeEnd: '2022-05-31T23:59:59Z'
+                  timeStart: '2022-05-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '5.780388'
+                  startingBalance: '1675.087547'
+                  timeAggregation: monthly
+                  timeEnd: '2022-04-30T23:59:59Z'
+                  timeStart: '2022-04-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '7.187242'
+                  startingBalance: '1668.201535'
+                  timeAggregation: monthly
+                  timeEnd: '2022-03-31T23:59:59Z'
+                  timeStart: '2022-03-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '4.199273'
+                  startingBalance: '1663.991613'
+                  timeAggregation: monthly
+                  timeEnd: '2022-02-28T23:59:59Z'
+                  timeStart: '2022-02-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '5.647811'
+                  startingBalance: '1460.605661'
+                  timeAggregation: monthly
+                  timeEnd: '2022-01-31T23:59:59Z'
+                  timeStart: '2022-01-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '5.432609'
+                  startingBalance: '1319.444416'
+                  timeAggregation: monthly
+                  timeEnd: '2021-12-31T23:59:59Z'
+                  timeStart: '2021-12-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '4.618723'
+                  startingBalance: '1314.901291'
+                  timeAggregation: monthly
+                  timeEnd: '2021-11-30T23:59:59Z'
+                  timeStart: '2021-11-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '4.574104'
+                  startingBalance: '1219.113863'
+                  timeAggregation: monthly
+                  timeEnd: '2021-10-31T23:59:59Z'
+                  timeStart: '2021-10-01T00:00:00Z'
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '3.134845'
+                  startingBalance: '1217.473207'
+                  timeAggregation: monthly
+                  timeEnd: '2021-09-30T23:59:59Z'
+                  timeStart: '2021-09-01T00:00:00Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'parameter ''address'' in path has an error: string doesn''t match the regular expression ''^stake[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no delegator rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Historical Stake and Rewards of Delegator
+  /v1/cardano/mainnet/delegator/rewards:
+    post:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Stake and Rewards for Multiple Delegators
+      description: Returns the staking balance and rewards earned during the most recent epoch for multiple delegators.
+      operationId: GetStakeAndRewardsForMultipleDelegators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StakingDelegatorAddresses'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rewards'
+              example:
+                rewards:
+                - address: stake1u8003gtvhcunzzmy85nfnk6kafd8lks2mykfzf0n4hq4qzg9f029u
+                  currency: ADA
+                  metadata:
+                    commission: 0.02
+                    epoch: 421
+                  return: '2.596542'
+                  startingBalance: '5783.611154'
+                  timeAggregation: epoch
+                  timeEnd: '2023-07-04T21:44:20Z'
+                  timeStart: '2023-06-29T21:46:01Z'
+                - address: stake1u80058a9nztq6d5sudzynepf63pedvpyr3kzhlxacrcefwqf3ez2y
+                  currency: ADA
+                  metadata:
+                    commission: 0
+                    epoch: 421
+                  return: '10.086260'
+                  startingBalance: '22123.017475'
+                  timeAggregation: epoch
+                  timeEnd: '2023-07-04T21:44:20Z'
+                  timeStart: '2023-06-29T21:46:01Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'request body has an error: doesn''t match schema #/components/schemas/StakingDelegatorAddresses: Error at ''/addresses/1'': string doesn''t match the regular expression ''^stake[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            'application/json:':
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no delegator rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Stake and Rewards for multiple Delegators
+  /v1/cardano/mainnet/delegator/rewards/{address}:
+    get:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Stake and Rewards of a Delegator
+      description: Returns the staking balance and rewards earned during the most recent epoch for a delegator.
+      operationId: GetStakeAndRewardsOfDelegator
+      parameters:
+      - name: address
+        in: path
+        description: A single public address to check
+        required: true
+        schema:
+          type: string
+          pattern: ^stake[a-z0-9]+$
+          example: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+          default: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reward'
+              example:
+                rewards:
+                - address: stake1ux9sn560pz6skkjuhfz8s3j0a4wf9flxt00kfgfg3ngnnxsvzfw5q
+                  currency: ADA
+                  metadata:
+                    commission: 0.01
+                    epoch: 421
+                  return: '1.950286'
+                  startingBalance: '3667.804551'
+                  timeAggregation: epoch
+                  timeEnd: '2023-07-04T21:44:20Z'
+                  timeStart: '2023-06-29T21:46:01Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'parameter ''address'' in path has an error: string doesn''t match the regular expression ''^stake[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no delegator rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Stake and Rewards of Delegator
+  /v1/cardano/mainnet/pool/history:
+    post:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Historical Stake and Rewards for Multiple Pools
+      description: Returns the historical stake and rewards allocated to multiple staking pools.
+      operationId: GetHistoricalStakeAndRewardsForMultiplePools
+      parameters:
+      - name: aggregate
+        in: query
+        description: Set to `true` for the rewards to be aggregated across addresses.
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiPoolHistoricRewardsQuery'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rewards'
+              example:
+                rewards:
+                - address: pool10gllgflzl3ngg0fj2xas9hfww25zxn2fdwtc0gd44am92pdlr7p
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '500.000000'
+                  startingBalance: '1498.049735'
+                  timeAggregation: monthly
+                  timeEnd: '2020-08-31T23:59:59Z'
+                  timeStart: '2020-08-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '500.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-07-31T23:59:59Z'
+                  timeStart: '2022-07-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-06-30T23:59:59Z'
+                  timeStart: '2022-06-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-05-31T23:59:59Z'
+                  timeStart: '2022-05-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-04-30T23:59:59Z'
+                  timeStart: '2022-04-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-03-31T23:59:59Z'
+                  timeStart: '2022-03-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-02-28T23:59:59Z'
+                  timeStart: '2022-02-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2022-01-31T23:59:59Z'
+                  timeStart: '2022-01-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-12-31T23:59:59Z'
+                  timeStart: '2021-12-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-11-30T23:59:59Z'
+                  timeStart: '2021-11-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-10-31T23:59:59Z'
+                  timeStart: '2021-10-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-09-30T23:59:59Z'
+                  timeStart: '2021-09-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-08-31T23:59:59Z'
+                  timeStart: '2021-08-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-07-31T23:59:59Z'
+                  timeStart: '2021-07-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-06-30T23:59:59Z'
+                  timeStart: '2021-06-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-05-31T23:59:59Z'
+                  timeStart: '2021-05-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-04-30T23:59:59Z'
+                  timeStart: '2021-04-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.058667'
+                  timeAggregation: monthly
+                  timeEnd: '2021-03-31T23:59:59Z'
+                  timeStart: '2021-03-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.247004'
+                  timeAggregation: monthly
+                  timeEnd: '2021-02-28T23:59:59Z'
+                  timeStart: '2021-02-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.247004'
+                  timeAggregation: monthly
+                  timeEnd: '2021-01-31T23:59:59Z'
+                  timeStart: '2021-01-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.247004'
+                  timeAggregation: monthly
+                  timeEnd: '2020-12-31T23:59:59Z'
+                  timeStart: '2020-12-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.247004'
+                  timeAggregation: monthly
+                  timeEnd: '2020-11-30T23:59:59Z'
+                  timeStart: '2020-11-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5004.247004'
+                  timeAggregation: monthly
+                  timeEnd: '2020-10-31T23:59:59Z'
+                  timeStart: '2020-10-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '4999.623678'
+                  timeAggregation: monthly
+                  timeEnd: '2020-09-30T23:59:59Z'
+                  timeStart: '2020-09-01T00:00:00Z'
+                - address: pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '0.000000'
+                  startingBalance: '5000.000000'
+                  timeAggregation: monthly
+                  timeEnd: '2020-08-31T23:59:59Z'
+                  timeStart: '2020-08-01T00:00:00Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'request body has an error: doesn''t match schema #/components/schemas/MultiPoolHistoricRewardsQuery: Error at ''/addresses/0'': string doesn''t match the regular expression ''^pool[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no pool rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Historical Stake and Rewards for multiple Pools
+  /v1/cardano/mainnet/pool/history/{address}:
+    post:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Historical Stake and Rewards of a Pool
+      description: Returns the historical stake and rewards allocated to a given staking pool.
+      operationId: GetHistoricalStakeAndRewardsOfPool
+      parameters:
+      - name: address
+        in: path
+        description: A single public address to check
+        required: true
+        schema:
+          type: string
+          pattern: ^pool[a-z0-9]+$
+          example: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+          default: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SingleHistoricRewardsQuery'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rewards'
+              example:
+                rewards:
+                - address: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '708.133272'
+                  startingBalance: '55725.609532'
+                  timeAggregation: monthly
+                  timeEnd: '2023-05-31T23:59:59Z'
+                  timeStart: '2023-05-01T00:00:00Z'
+                - address: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '1603.075336'
+                  startingBalance: '52324.810889'
+                  timeAggregation: monthly
+                  timeEnd: '2023-04-30T23:59:59Z'
+                  timeStart: '2023-04-01T00:00:00Z'
+                - address: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+                  currency: ADA
+                  metadata:
+                    epoch: 0
+                  return: '1329.577125'
+                  startingBalance: '36217.090084'
+                  timeAggregation: monthly
+                  timeEnd: '2023-03-31T23:59:59Z'
+                  timeStart: '2023-03-01T00:00:00Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: from time is further than to time
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no pool rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Historical Stake and Rewards of Pool
+  /v1/cardano/mainnet/pool/rewards:
+    post:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Stake and Rewards for Multiple Pools
+      description: Returns the staking balance and rewards earned during the most recent epoch for multiple staking pools.
+      operationId: GetStakeAndRewardsForMultiplePools
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StakingPoolAddresses'
+        required: true
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rewards'
+              example:
+                rewards:
+                - address: pool16agnvfan65ypnswgg6rml52lqtcqe5guxltexkn82sqgj2crqtx
+                  currency: ADA
+                  metadata:
+                    commission: 0.01
+                    epoch: 421
+                  return: '1470.056029'
+                  startingBalance: '1868164.904685'
+                  timeAggregation: epoch
+                  timeEnd: '2023-07-04T21:44:20Z'
+                  timeStart: '2023-06-29T21:46:01Z'
+                - address: pool1tdsrw0n33gmy0mzh7cgtn9p0jy5xwjxaa2s26gn2ewf8kg4nrzx
+                  currency: ADA
+                  metadata:
+                    commission: 0.01
+                    epoch: 421
+                  return: '712.727917'
+                  startingBalance: '102322.717726'
+                  timeAggregation: epoch
+                  timeEnd: '2023-07-04T21:44:20Z'
+                  timeStart: '2023-06-29T21:46:01Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'request body has an error: doesn''t match schema #/components/schemas/StakingPoolAddresses: Error at ''/addresses/0'': string doesn''t match the regular expression ''^pool[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no pool rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Stake and Rewards for multiple Pools
+  /v1/cardano/mainnet/pool/rewards/{address}:
+    get:
+      tags:
+      - Cardano Staking Reporting
+      summary: Get the Stake and Rewards of a Pool
+      description: Returns the staking balance and rewards earned during the most recent epoch for a pool.
+      operationId: GetStakeAndRewardsOfPool
+      parameters:
+      - name: address
+        in: path
+        description: A single public address to check
+        required: true
+        schema:
+          type: string
+          pattern: ^pool[a-z0-9]+$
+          example: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+          default: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reward'
+              example:
+                rewards:
+                - address: pool1af7dmzgcyp9kc5lyrtrtpsce58l6j5cjvc8wavkwmzlr53ym50v
+                  currency: ADA
+                  metadata:
+                    commission: 0.01
+                    epoch: 421
+                  return: '480.832186'
+                  startingBalance: '114593.812019'
+                  timeAggregation: epoch
+                  timeEnd: '2023-07-04T21:44:20Z'
+                  timeStart: '2023-06-29T21:46:01Z'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 400
+                title: 'parameter ''address'' in path has an error: string doesn''t match the regular expression ''^pool[a-z0-9]+$'''
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error1'
+              example:
+                code: 404
+                title: no pool rewards found
+      x-operation-id-source: normalized
+      x-operation-id-original: Get Stake and Rewards of Pool
+components:
+  schemas:
+    MultiDelegatorHistoricRewardsQuery:
+      required:
+      - fromTime
+      - toTime
+      - timeUnit
+      - addresses
+      type: object
+      properties:
+        fromTime:
+          type: integer
+          format: int64
+          description: The Unix timestamp in seconds from which you wish to retrieve rewards.
+          example: 1577836800
+          default: 1577836800
+        toTime:
+          type: integer
+          format: int64
+          description: The Unix timestamp in seconds until which rewards are retrieved.
+          example: 1685491200
+          default: 1685491200
+        timeUnit:
+          $ref: '#/components/schemas/TimeUnit1'
+        addresses:
+          type: array
+          description: List of addresses to retrieve rewards for.
+          default:
+          - stake1u8003gtvhcunzzmy85nfnk6kafd8lks2mykfzf0n4hq4qzg9f029u
+          - stake1u80058a9nztq6d5sudzynepf63pedvpyr3kzhlxacrcefwqf3ez2y
+          items:
+            type: string
+            pattern: ^stake[a-z0-9]+$
+    Rewards:
+      type: object
+      required:
+      - rewards
+      properties:
+        rewards:
+          type: array
+          description: A list of rewards.
+          items:
+            $ref: '#/components/schemas/Reward'
+    SingleHistoricRewardsQuery:
+      required:
+      - fromTime
+      - toTime
+      - timeUnit
+      type: object
+      properties:
+        fromTime:
+          type: integer
+          format: int64
+          description: The Unix timestamp in seconds from which you wish to retrieve rewards.
+          example: 1577836800
+          default: 1577836800
+        toTime:
+          type: integer
+          format: int64
+          description: The Unix timestamp in seconds until which rewards are retrieved.
+          example: 1685491200
+          default: 1685491200
+        timeUnit:
+          $ref: '#/components/schemas/TimeUnit1'
+    Metadata2:
+      required:
+      - epoch
+      type: object
+      description: The protocol specific data.
+      properties:
+        commission:
+          type: number
+          format: double
+          description: The commission rate.
+          example: 0.01
+        epoch:
+          type: integer
+          format: int
+          description: The epoch number the rewards were earned in.
+          example: 348
+    MultiPoolHistoricRewardsQuery:
+      required:
+      - fromTime
+      - toTime
+      - timeUnit
+      - addresses
+      type: object
+      properties:
+        fromTime:
+          type: integer
+          format: int64
+          description: The Unix timestamp in seconds from which you wish to retrieve rewards.
+          example: 1577836800
+          default: 1577836800
+        toTime:
+          type: integer
+          format: int64
+          description: The Unix timestamp in seconds until which rewards are retrieved.
+          example: 1685491200
+          default: 1685491200
+        timeUnit:
+          $ref: '#/components/schemas/TimeUnit1'
+        addresses:
+          type: array
+          description: List of addresses to retrieve rewards for.
+          default:
+          - pool10gllgflzl3ngg0fj2xas9hfww25zxn2fdwtc0gd44am92pdlr7p
+          - pool1f4lvg6px40kelh4kala6jxn6fnugtyhrtw6hgzgr7ar7ymtr7jd
+          items:
+            type: string
+            pattern: ^pool[a-z0-9]+$
+    Reward:
+      required:
+      - address
+      - currency
+      - metadata
+      - return
+      - startingBalance
+      - timeAggregation
+      - timeEnd
+      - timeStart
+      type: object
+      properties:
+        address:
+          type: string
+          description: The user-defined address.
+        currency:
+          type: string
+          description: The cryptocurrency protocol the request relates to.
+          example: ADA
+        metadata:
+          $ref: '#/components/schemas/Metadata2'
+        return:
+          type: string
+          description: The sum of the rewards for the previous UTC day.
+          example: '500.000000'
+        startingBalance:
+          type: string
+          description: The staked amount at the beginning of the previous UTC day (at the timeStart).
+          example: '5004.058667'
+        timeAggregation:
+          type: string
+          example: weekly
+          description: The agregation period. Either one of `epoch`, `daily`, `weekly`, or `monthly`.
+        timeEnd:
+          type: string
+          description: The timestamp, in UTC, that marks the end of the period covered.
+          example: '2022-07-31T23:59:59.000Z'
+        timeStart:
+          type: string
+          description: The timestamp, in UTC, that marks the start of the period covered.
+          example: '2022-07-01T00:00:00.000Z'
+    StakingDelegatorAddresses:
+      required:
+      - addresses
+      type: object
+      description: A list of delegator addresses.
+      properties:
+        addresses:
+          type: array
+          default:
+          - stake1u8003gtvhcunzzmy85nfnk6kafd8lks2mykfzf0n4hq4qzg9f029u
+          - stake1u80058a9nztq6d5sudzynepf63pedvpyr3kzhlxacrcefwqf3ez2y
+          items:
+            type: string
+            pattern: ^stake[a-z0-9]+$
+    StakingPoolAddresses:
+      required:
+      - addresses
+      type: object
+      description: A list of staking pool addresses.
+      properties:
+        addresses:
+          type: array
+          default:
+          - pool1tdsrw0n33gmy0mzh7cgtn9p0jy5xwjxaa2s26gn2ewf8kg4nrzx
+          - pool16agnvfan65ypnswgg6rml52lqtcqe5guxltexkn82sqgj2crqtx
+          items:
+            type: string
+            pattern: ^pool[a-z0-9]+$
+    error1:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: The numeric error code.
+          example: 16384
+        title:
+          type: string
+          description: The error description.
+          example: Invalid Address
+    TimeUnit1:
+      type: string
+      description: Represents how the rewards are aggregated. Must be one of `epoch`, `daily`, `weekly`, or `monthly`.
+      enum:
+      - epoch
+      - daily
+      - weekly
+      - monthly
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-historical-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-delegators-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-for-multiple-pools-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-delegator-cardano.md
+  - https://docs.blockdaemon.com/reference/get-stake-and-rewards-of-pool-cardano.md
+  - https://docs.blockdaemon.com/reference/get_v2-ethereum-network-pubkeys.md
+  - https://docs.blockdaemon.com/reference/getdeposits.md
+  - https://docs.blockdaemon.com/reference/gethealth-cosmos.md
+  - https://docs.blockdaemon.com/reference/gethealth-ethereum.md
+  - https://docs.blockdaemon.com/reference/gethealth-polygon.md
+  - https://docs.blockdaemon.com/reference/gethealth-solana.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidator1.md
+  - https://docs.blockdaemon.com/reference/gethistoricalstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getrewards-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewards-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewards-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewards-solana.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-cosmos.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-ethereum.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-polygon.md
+  - https://docs.blockdaemon.com/reference/getrewardssingle-solana.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominator.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsnominators.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstakeandrewardsvalidators2.md
+  - https://docs.blockdaemon.com/reference/getstatsethereum.md
+  - https://docs.blockdaemon.com/reference/getstatssolana.md
+  - https://docs.blockdaemon.com/reference/getstatus-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatus-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatus-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatus-solana.md
+  - https://docs.blockdaemon.com/reference/getstatuses-cosmos.md
+  - https://docs.blockdaemon.com/reference/getstatuses-ethereum.md
+  - https://docs.blockdaemon.com/reference/getstatuses-polygon.md
+  - https://docs.blockdaemon.com/reference/getstatuses-solana.md
+  - https://docs.blockdaemon.com/reference/getstatusnominator.md
+  - https://docs.blockdaemon.com/reference/getstatusnominators.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidator2.md
+  - https://docs.blockdaemon.com/reference/getstatusvalidators1.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyield-validator-solana.md
+  - https://docs.blockdaemon.com/reference/getyields-cosmos.md
+  - https://docs.blockdaemon.com/reference/getyields-ethereum.md
+  - https://docs.blockdaemon.com/reference/getyields-solana.md
+  - https://docs.blockdaemon.com/reference/putstatsethereum.md
+  - https://docs.blockdaemon.com/reference/putstatssolana.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominator.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivitynominators.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidator2.md
+  - https://docs.blockdaemon.com/reference/verifystakingactivityvalidators2.md
+  merge:
+    pages: 55
+    deduped: 377
+    conflicts_kept_first: 0

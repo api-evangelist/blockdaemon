@@ -1,0 +1,718 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Account API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Account
+  description: API endpoints for fetching information about account
+paths:
+  /account/v1/allowance:
+    get:
+      tags:
+      - Account
+      summary: Get User Allowance
+      description: '!Beta
+
+
+        Retrieves the approved allowance for a specific ERC-20 token, indicating how many tokens a designated spender is authorized to withdraw from an owner’s wallet. It is especially useful for verifying spending limits before initiating transactions, ensuring that decentralized applications or swap interfaces can confirm the available allowance for token transfers.
+
+
+        > 💡
+
+        **Compute Unit Value:** `60` (Fixed)'
+      operationId: accountV1Allowance
+      parameters:
+      - name: tokenAddress
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Address of the token whose allowance is being queried.
+          example: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
+        description: Address of the token whose allowance is being queried.
+      - name: owner
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the owner of the tokens.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the owner of the tokens.
+      - name: spender
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the spender authorized to withdraw tokens on the owner's behalf.
+          example: '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D'
+        description: Public address of the spender authorized to withdraw tokens on the owner's behalf.
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '56'
+          - '43114'
+          - '137'
+          - '250'
+          - '10'
+          - '11155420'
+          - '42161'
+          - '421614'
+          - '25'
+          - '338'
+          - '84532'
+          - '8453'
+          - '43113'
+          - '97'
+          - '80002'
+          - '300'
+          - '324'
+          - '5000'
+          - '5003'
+          - '8217'
+          - '1001'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Numeric status code indicating success or failure of the API call
+                    example: 200
+                  msg:
+                    type: string
+                    description: Human-readable message describing the API result or error
+                  data:
+                    type: object
+                    properties:
+                      allowance:
+                        type: string
+                        description: Amount a spender is allowed to withdraw from an owner
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    allowance: '999999999900000'
+                    prices:
+                      usd:
+                      - TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t: '1.0004708182757556'
+      x-bd-cu: '60'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /account/v1/portfolio:
+    get:
+      tags:
+      - Account
+      summary: Get User Portfolio
+      description: '!Beta
+
+
+        Provides a snapshot of a wallet’s asset portfolio across supported blockchains, including native tokens and detailed EVM token information. Each token entry includes metadata (name, symbol, decimals, contract address, balance, USD valuation) and optional filtering to hide zero balances, simplifying portfolio management.
+
+
+        > 💡
+
+        **Compute Unit Value:** `95` (Fixed)'
+      operationId: accountV1Portfolio
+      parameters:
+      - name: chainId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+          enum:
+          - '1'
+          - '8217'
+          - '56'
+          - '25'
+          - '43114'
+          - '900'
+          - '901'
+          - '1200'
+          - '42161'
+          - '10'
+          - '1600'
+          - '1601'
+          - '1700'
+          - '1701'
+          - osmosis-1
+          - osmo-test-5
+          - '137'
+          - '250'
+          - '8453'
+          - '1100'
+          - '1500'
+          - '1501'
+          example: '1'
+        description: The unique ID to direct queries or transactions to the correct blockchain. Find more [here](https://docs.blockdaemon.com/docs/defi-api-supported-protocols#supported-chains).
+      - name: chainSymbol
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The abbreviated chain name for queries or transactions.
+          example: ETH
+        description: The abbreviated chain name for queries or transactions.
+      - name: address
+        in: query
+        required: true
+        schema:
+          type: string
+          description: Public address of the user.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        description: Public address of the user.
+      - name: tokens
+        in: query
+        required: false
+        schema:
+          type: string
+          description: Comma-separated values of ERC-20 tokens to retrieve the value of. Maximum 10 at a time.
+          example: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2'
+        description: Comma-separated values of ERC-20 tokens to retrieve the value of. Maximum 10 at a time.
+      - name: pageToken
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A cursor to fetch the next page of a lengthy response.
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwYWdlIjoxLCJjb250cmFjdEFkZHJlc3MiOiIweGZhZThlNjRjZGRlNzM1NTBlN2Q3ZjA0Njk1NTdhMzNhNDE3YjI4NjgiLCJjb250cmFjdFR5cGUiOiJlcmMyMCIsImFwcHJvdmVyQWRkcmVzcyI6IjB4NjVhOGYwN2JkOWE4NTk4ZTFiNWI2YzBhODhmNDc3OWRiYzA3NzY3NSIsInNwZW5kZXJBZGRyZXNzIjoiMHgxMTExMTExMjU0ZmI2YzQ0YmFjMGJlZDI4NTRlNzZmOTA2NDMwOTdkIiwiaWF0IjoxNzMzMzkzODE2fQ.y7FANxpXgtdgk83CIqPHHk2jutj1NZrueTu4XR39jnk
+        description: A cursor to fetch the next page of a lengthy response.
+      - name: assetType
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'Specifies the asset type: ''fungible'' or ''nonFungible''. Default: all.'
+          enum:
+          - fungible
+          - nonFungible
+          - all
+          example: fungible
+        description: 'Specifies the asset type: ''fungible'' or ''nonFungible''. Default: all.'
+      - name: timestamp
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'The timestamp up to which balances will be fetched. Note: Only applicable for assetType set to fungible.'
+          example: '1741869257'
+        description: 'The timestamp up to which balances will be fetched. Note: Only applicable for assetType set to fungible.'
+      - name: blockNumber
+        in: query
+        required: false
+        schema:
+          type: string
+          description: 'The block number up to which balances will be fetched. Note: Only applicable for assetType set to fungible.'
+          example: '100000'
+        description: 'The block number up to which balances will be fetched. Note: Only applicable for assetType set to fungible.'
+      - name: include24hrChange
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: 'If true, return the token data with 24-hour changes. Default: false.'
+          example: false
+        description: 'If true, return the token data with 24-hour changes. Default: false.'
+      - name: vsCurrencies
+        in: query
+        required: false
+        schema:
+          type: string
+          description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+          example: usd,eur,gbp
+        description: A comma-separated list of currency symbols to convert the amount into, such as 'USD,EUR'. This parameter is optional and allows retrieving values in multiple fiat currencies.
+      - name: availableOnly
+        in: query
+        required: false
+        schema:
+          type: boolean
+          description: 'If true, only tokens with balance > 0 will be listed. Default: true.'
+          example: false
+        description: 'If true, only tokens with balance > 0 will be listed. Default: true.'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    description: Numeric status code indicating success or failure of the API call
+                    example: 200
+                  msg:
+                    type: string
+                    description: Human-readable message describing the API result or error
+                  data:
+                    anyOf:
+                    - type: array
+                      items: {}
+                    - type: object
+                      properties:
+                        native:
+                          anyOf:
+                          - type: string
+                          - type: object
+                            properties:
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              USDPrice:
+                                type: string
+                                description: Price of the asset in USD (uppercase P variant)
+                          description: Native token or coin information for a chain
+                        nep141:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Name of a token or asset
+                              symbol:
+                                type: string
+                                description: Symbol of a token (e.g., ETH, BTC)
+                              address:
+                                type: string
+                                description: Blockchain contract or wallet address
+                                example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              USDprice:
+                                type: string
+                                description: Price of the asset in USD (lowercase p variant)
+                              decimals:
+                                type: string
+                                description: Number of decimal places the token supports
+                              USDPrice:
+                                type: string
+                                description: Price of the asset in USD (uppercase P variant)
+                          description: List of NEAR protocol NEP-141 standard tokens
+                        evmTokens:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Name of a token or asset
+                              symbol:
+                                type: string
+                                description: Symbol of a token (e.g., ETH, BTC)
+                              decimals:
+                                type: string
+                                description: Number of decimal places the token supports
+                              address:
+                                type: string
+                                description: Blockchain contract or wallet address
+                                example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              assetType:
+                                type: string
+                                description: Type of asset (native, token, NFT, etc.)
+                                example: '[fungible,nonFungible,all]'
+                              USDPrice:
+                                type: string
+                                description: Price of the asset in USD (uppercase P variant)
+                              logoUrl:
+                                type:
+                                - string
+                                - 'null'
+                                description: URL for the asset's logo
+                              tags:
+                                type:
+                                - array
+                                - 'null'
+                                items:
+                                  type: string
+                                description: List of category or classification tags
+                          description: List of EVM-compatible tokens
+                        assets:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              assetType:
+                                type: string
+                                description: Type of asset (native, token, NFT, etc.)
+                                example: '[fungible,nonFungible,all]'
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              assetCode:
+                                type: string
+                                description: Unique asset code (e.g., for Stellar or other chains)
+                                example: VELO
+                              issuer:
+                                type: string
+                                description: Entity or address issuing the token
+                                example: GDM4RQUQQUVSKQA7S6EM7XBZP3FCGH4Q7CL6TABQ7B2BEJ5ERARM2M5M
+                              USDPrice:
+                                type: string
+                                description: Price of the asset in USD (uppercase P variant)
+                          description: List of general blockchain assets
+                        stxTokens:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              address:
+                                type: string
+                                description: Blockchain contract or wallet address
+                                example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                              symbol:
+                                type: string
+                                description: Symbol of a token (e.g., ETH, BTC)
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              assetType:
+                                type: string
+                                description: Type of asset (native, token, NFT, etc.)
+                                example: '[fungible,nonFungible,all]'
+                              USDPrice:
+                                type: string
+                                description: Price of the asset in USD (uppercase P variant)
+                              decimals:
+                                type: number
+                                description: Number of decimal places the token supports
+                          description: Stacks blockchain tokens
+                        splBalances:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Name of a token or asset
+                              symbol:
+                                type: string
+                                description: Symbol of a token (e.g., ETH, BTC)
+                              assetType:
+                                type: string
+                                description: Type of asset (native, token, NFT, etc.)
+                                example: '[fungible,nonFungible,all]'
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              address:
+                                type: string
+                                description: Blockchain contract or wallet address
+                                example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                              decimals:
+                                type: string
+                                description: Number of decimal places the token supports
+                              USDPrice:
+                                type: string
+                                description: Price of the asset in USD (uppercase P variant)
+                              tags:
+                                type:
+                                - array
+                                - 'null'
+                                items:
+                                  type: string
+                                description: List of category or classification tags
+                              logoUrl:
+                                type:
+                                - string
+                                - 'null'
+                                description: URL for the asset's logo
+                              mint_extensions:
+                                type: object
+                                description: Additional metadata or features for minted tokens
+                          description: Solana Program Library token balances
+                        jettons:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                                description: Name of a token or asset
+                              symbol:
+                                type: string
+                                description: Symbol of a token (e.g., ETH, BTC)
+                              address:
+                                type: string
+                                description: Blockchain contract or wallet address
+                                example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+                              balance:
+                                type: string
+                                description: Account or token balance
+                              USDprice:
+                                type: string
+                                description: Price of the asset in USD (lowercase p variant)
+                          description: TON blockchain token standard jettons
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    native: '0'
+                    evmTokens:
+                    - name: Dai Stablecoin
+                      symbol: DAI
+                      decimals: '18'
+                      address: '0x6b175474e89094c44da98b954eedeac495271d0f'
+                      balance: '1732207021824890025'
+                      assetType: ERC20
+                      USDPrice: '1.0001188795'
+                      logoUrl: https://assetlogo.expand.network/ethereum/DAI.png
+                    - name: USD Coin
+                      symbol: USDC
+                      decimals: '6'
+                      address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'
+                      balance: '997568'
+                      assetType: ERC20
+                      USDPrice: '1.0001282756'
+                      logoUrl: https://assetlogo.expand.network/ethereum/USDC.png
+                    - name: SushiToken
+                      symbol: SUSHI
+                      decimals: '18'
+                      address: '0x6b3595068778dd592e39a122f4f5a5cf09c90fe2'
+                      balance: '234925199478993887'
+                      assetType: ERC20
+                      USDPrice: '1.5005360210'
+                      logoUrl: https://assetlogo.expand.network/ethereum/SUSHI.png
+                    - name: Tether USD
+                      symbol: USDT
+                      decimals: '6'
+                      address: '0xdac17f958d2ee523a2206206994597c13d831ec7'
+                      balance: '10007'
+                      assetType: ERC20
+                      USDPrice: '1.0001404515'
+                      logoUrl: https://assetlogo.expand.network/ethereum/USDT.png
+      x-bd-cu: '95'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

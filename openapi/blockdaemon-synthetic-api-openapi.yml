@@ -1,0 +1,441 @@
+openapi: 3.2.0
+info:
+  contact:
+    name: Blockdaemon
+    email: info@blockdaemon.com
+  description: The Blockdaemon DeFi API provides a single interface to a multitude of DeFi projects and blockchains
+  title: Blockdaemon DeFi Synthetic API
+  version: 1.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://storage.googleapis.com/blockdaemon-app-static-images/marketing/PNG/dark-logo.png
+servers:
+- url: https://svc.blockdaemon.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: synthetic
+paths:
+  /defi/v1/synthetic/depositpeggedtoken:
+    post:
+      tags:
+      - synthetic
+      summary: Deposit Pegged Token
+      description: 'Enables users to deposit synthetic pegged tokens into the Synthetix protocol with customizable gas settings and transaction parameters. Upon a successful transaction, the endpoint returns key details including the chain ID, sender and recipient addresses, gas used, and the raw transaction data, ensuring a secure and efficient deposit process.
+
+
+        > 💡
+
+        **Compute Unit Value:** `130` (Fixed)'
+      operationId: syntheticDepositpeggedtoken
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/synthetic/depositpeggedtoken
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_synthetic_depositpeggedtoken_Request'
+            example:
+              syntheticId: '6000'
+              amount: '1000000000000000000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    value: '0'
+                    gas: '300000'
+                    data: '0xdc8fa6c2000000000000000000000000000000000000000000000000016345785d8a0000'
+                    to: '0xE1f64079aDa6Ef07b03982Ca34f1dD7152AA3b86'
+      x-bd-cu: '130'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/synthetic/getprice:
+    get:
+      tags:
+      - synthetic
+      summary: Get Price
+      description: 'Calculates the exchange rate between synthetic (pegged) tokens and protocol tokens. It accepts a specified synthetic token amount and returns the equivalent number of protocol tokens based on current market conditions, providing accurate and reliable pricing data for Synthetix operations.
+
+
+        > 💡
+
+        **Compute Unit Value:** `40` (Fixed)'
+      operationId: syntheticGetprice
+      parameters:
+      - name: syntheticId
+        in: query
+        required: false
+        schema:
+          type: string
+          description: The unique ID to specify the synthetic protocol for queries or transactions.
+          enum:
+          - '6000'
+          example: '6000'
+        description: The unique ID to specify the synthetic protocol for queries or transactions.
+      - name: amount
+        in: query
+        required: true
+        schema:
+          type: string
+          description: 'Amount of Synth tokens, specified in the token''s smallest denomination (18 decimal wei). Do not send human-readable decimal values. Example: 1 sUSD = "1000000000000000000".'
+          example: '1000000000000000000'
+        description: 'Amount of Synth tokens, specified in the token''s smallest denomination (18 decimal wei). Do not send human-readable decimal values. Example: 1 sUSD = "1000000000000000000".'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    peggedToProtocolToken: '22177'
+      x-bd-cu: '40'
+      x-bd-cu-type: fixed
+      x-internal: false
+  /defi/v1/synthetic/withdrawpeggedtoken:
+    post:
+      tags:
+      - synthetic
+      summary: Withdraw Pegged Token
+      description: 'Processes the withdrawal of synthetic tokens from the Synthetix protocol. It executes a transaction that includes configurable gas priorities and built-in security validations, ensuring that synthetic token withdrawals are handled securely and efficiently on the blockchain.
+
+
+        > 💡
+
+        **Compute Unit Value:** `100` (Fixed)'
+      operationId: syntheticWithdrawpeggedtoken
+      requestBody:
+        required: true
+        description: The request body for a /defi/v1/synthetic/withdrawpeggedtoken
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_synthetic_withdrawpeggedtoken_Request'
+            example:
+              syntheticId: '6000'
+              from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+              gas: '100000'
+              gasPriority: low
+              enableFee: false
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                example:
+                  status: 200
+                  msg: success
+                  data:
+                    chainId: '1'
+                    from: '0x63056E00436Da25BcF48A40dfBbDcc7089351006'
+                    value: '0'
+                    gas: '300000'
+                    data: '0x81b797dc'
+                    to: '0xE1f64079aDa6Ef07b03982Ca34f1dD7152AA3b86'
+      x-bd-cu: '100'
+      x-bd-cu-type: fixed
+      x-internal: false
+components:
+  schemas:
+    _synthetic_withdrawpeggedtoken_Request:
+      type: object
+      properties:
+        syntheticId:
+          type: string
+          description: The unique ID to specify the synthetic protocol for queries or transactions.
+          enum:
+          - '6000'
+          example: '6000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - from
+      description: The request body for a /defi/v1/synthetic/withdrawpeggedtoken
+      example:
+        syntheticId: '6000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+    _synthetic_depositpeggedtoken_Request:
+      type: object
+      properties:
+        syntheticId:
+          type: string
+          description: The unique ID to specify the synthetic protocol for queries or transactions.
+          enum:
+          - '6000'
+          example: '6000'
+        amount:
+          type: string
+          description: 'Amount of Synth tokens, specified in the token''s smallest denomination (18 decimal wei). Do not send human-readable decimal values. Example: 1 sUSD = "1000000000000000000".'
+          example: '1000000000000000000'
+        from:
+          type: string
+          description: Blockchain address of the sender. For EVM chains, use a checksummed hex address (e.g., 0xABCDEF...). This address must hold sufficient balance and will sign the transaction.
+          example: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas:
+          type: string
+          description: 'Maximum number of gas units to allocate for the transaction, as an integer string (e.g., ''200000''). If omitted, gas is estimated automatically. Note: this is gas units, not wei or gwei.'
+          example: '100000'
+        gasPriority:
+          type: string
+          description: Specifies the priority level for gas fees (e.g., 'low', 'medium', or 'high'), which influences the transaction speed and cost.
+          example: low
+        enableFee:
+          type: boolean
+          description: Flag to include a basis points fee transaction alongside the main transaction when set to true.
+          example: false
+      required:
+      - amount
+      - from
+      description: The request body for a /defi/v1/synthetic/depositpeggedtoken
+      example:
+        syntheticId: '6000'
+        amount: '1000000000000000000'
+        from: '0xdAe2F6EdDdA6fb4fb60cc02633DE27e2b431B402'
+        gas: '100000'
+        gasPriority: low
+        enableFee: false
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: '`X-API-Key: <Token>` header must be set to authenticate API requests.You can create tokens in the "Configure" tab of your API access area at https://app.blockdaemon.com.'
+externalDocs:
+  description: Blockdaemon DeFi documentation
+  url: http://www.blockdaemon.com/api/defi
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/aagetpaymasterdata.md
+  - https://docs.blockdaemon.com/reference/aagetsignaturemessage.md
+  - https://docs.blockdaemon.com/reference/aagetuserops.md
+  - https://docs.blockdaemon.com/reference/aasenduserops.md
+  - https://docs.blockdaemon.com/reference/accountv1allowance.md
+  - https://docs.blockdaemon.com/reference/accountv1portfolio.md
+  - https://docs.blockdaemon.com/reference/bridgeaddliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgegetroute.md
+  - https://docs.blockdaemon.com/reference/bridgegetsignature.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedchains.md
+  - https://docs.blockdaemon.com/reference/bridgegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/bridgeprice.md
+  - https://docs.blockdaemon.com/reference/bridgequotes.md
+  - https://docs.blockdaemon.com/reference/bridgeremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/bridgeswap.md
+  - https://docs.blockdaemon.com/reference/bridgeswaps.md
+  - https://docs.blockdaemon.com/reference/bridgeswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/bridgetokens.md
+  - https://docs.blockdaemon.com/reference/bridgetransactions.md
+  - https://docs.blockdaemon.com/reference/bridgeunlock.md
+  - https://docs.blockdaemon.com/reference/chaincreateaccount.md
+  - https://docs.blockdaemon.com/reference/chaincreatefeetransaction.md
+  - https://docs.blockdaemon.com/reference/chaindecodetransaction.md
+  - https://docs.blockdaemon.com/reference/chainestimategas.md
+  - https://docs.blockdaemon.com/reference/chaingenericsmartcontractmethod.md
+  - https://docs.blockdaemon.com/reference/chaingetapprovaldata.md
+  - https://docs.blockdaemon.com/reference/chaingetbalance.md
+  - https://docs.blockdaemon.com/reference/chaingetblock.md
+  - https://docs.blockdaemon.com/reference/chaingetevents.md
+  - https://docs.blockdaemon.com/reference/chaingetgasfees.md
+  - https://docs.blockdaemon.com/reference/chaingetgasprice.md
+  - https://docs.blockdaemon.com/reference/chaingethistoricalrewards.md
+  - https://docs.blockdaemon.com/reference/chaingetlatestledger.md
+  - https://docs.blockdaemon.com/reference/chaingetstakepositions.md
+  - https://docs.blockdaemon.com/reference/chaingetstorage.md
+  - https://docs.blockdaemon.com/reference/chaingetsuibalance.md
+  - https://docs.blockdaemon.com/reference/chaingettokenaddress.md
+  - https://docs.blockdaemon.com/reference/chaingettransaction.md
+  - https://docs.blockdaemon.com/reference/chaingetusertransactions.md
+  - https://docs.blockdaemon.com/reference/chainregistercoin.md
+  - https://docs.blockdaemon.com/reference/chainsendtransaction.md
+  - https://docs.blockdaemon.com/reference/chainsimulatetransaction.md
+  - https://docs.blockdaemon.com/reference/dexaddliquidity.md
+  - https://docs.blockdaemon.com/reference/dexcancelorder.md
+  - https://docs.blockdaemon.com/reference/dexcreateorder.md
+  - https://docs.blockdaemon.com/reference/dexfillorder.md
+  - https://docs.blockdaemon.com/reference/dexgetactiveamount.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltimeseries.md
+  - https://docs.blockdaemon.com/reference/dexgethistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/dexgetindividualposition.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditybytick.md
+  - https://docs.blockdaemon.com/reference/dexgetliquiditysources.md
+  - https://docs.blockdaemon.com/reference/dexgetmakerorders.md
+  - https://docs.blockdaemon.com/reference/dexgetorders.md
+  - https://docs.blockdaemon.com/reference/dexgetpool.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolchartdata.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolindividualliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpoolliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetpooltradedata.md
+  - https://docs.blockdaemon.com/reference/dexgetroute.md
+  - https://docs.blockdaemon.com/reference/dexgettokenidprice.md
+  - https://docs.blockdaemon.com/reference/dexgettokenliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetuserliquidity.md
+  - https://docs.blockdaemon.com/reference/dexgetusertokenids.md
+  - https://docs.blockdaemon.com/reference/dexgetwalletposition.md
+  - https://docs.blockdaemon.com/reference/dexprice.md
+  - https://docs.blockdaemon.com/reference/dexpublishorder.md
+  - https://docs.blockdaemon.com/reference/dexquotes.md
+  - https://docs.blockdaemon.com/reference/dexremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/dexswap.md
+  - https://docs.blockdaemon.com/reference/dexswaps.md
+  - https://docs.blockdaemon.com/reference/dexswapwithapproval.md
+  - https://docs.blockdaemon.com/reference/fungibletokenapprove.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertbasetokentowraptoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokenconvertwraptokentobasetoken.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokendetails.md
+  - https://docs.blockdaemon.com/reference/fungibletokengettokensupply.md
+  - https://docs.blockdaemon.com/reference/fungibletokengetuserbalance.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalusertransactions.md
+  - https://docs.blockdaemon.com/reference/fungibletokenhistoricalweth.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransfer.md
+  - https://docs.blockdaemon.com/reference/fungibletokentransferfrom.md
+  - https://docs.blockdaemon.com/reference/getapimetadatav2.md
+  - https://docs.blockdaemon.com/reference/lendborrowallow.md
+  - https://docs.blockdaemon.com/reference/lendborrowborrow.md
+  - https://docs.blockdaemon.com/reference/lendborrowbundleactions.md
+  - https://docs.blockdaemon.com/reference/lendborrowclaimrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowdeposit.md
+  - https://docs.blockdaemon.com/reference/lendborrowdepositwithapproval.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowentermarketstatus.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitisolationmode.md
+  - https://docs.blockdaemon.com/reference/lendborrowexitmarket.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetassetinfo.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetclaimedrewards.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetgovernordata.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetmaxamounts.md
+  - https://docs.blockdaemon.com/reference/lendborrowgetuseraccountdata.md
+  - https://docs.blockdaemon.com/reference/lendborrowmigrate.md
+  - https://docs.blockdaemon.com/reference/lendborrowpool.md
+  - https://docs.blockdaemon.com/reference/lendborrowpools.md
+  - https://docs.blockdaemon.com/reference/lendborrowrepay.md
+  - https://docs.blockdaemon.com/reference/lendborrowsetuseremode.md
+  - https://docs.blockdaemon.com/reference/lendborrowtransfer.md
+  - https://docs.blockdaemon.com/reference/lendborrowuserpositions.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdraw.md
+  - https://docs.blockdaemon.com/reference/lendborrowwithdrawwithapproval.md
+  - https://docs.blockdaemon.com/reference/liquidstakingapprovewithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingburn.md
+  - https://docs.blockdaemon.com/reference/liquidstakingclaim.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdecreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingdelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetprotocolapr.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetrewards.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalrequests.md
+  - https://docs.blockdaemon.com/reference/liquidstakinggetwithdrawalstatus.md
+  - https://docs.blockdaemon.com/reference/liquidstakingincreaseallowance.md
+  - https://docs.blockdaemon.com/reference/liquidstakingmint.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrequestwithdrawal.md
+  - https://docs.blockdaemon.com/reference/liquidstakingrestake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingstake.md
+  - https://docs.blockdaemon.com/reference/liquidstakingundelegate.md
+  - https://docs.blockdaemon.com/reference/liquidstakingunwrap.md
+  - https://docs.blockdaemon.com/reference/liquidstakingwrap.md
+  - https://docs.blockdaemon.com/reference/nftgetbalance.md
+  - https://docs.blockdaemon.com/reference/nftgetmetadata.md
+  - https://docs.blockdaemon.com/reference/nftgetowner.md
+  - https://docs.blockdaemon.com/reference/nfthistoricallogs.md
+  - https://docs.blockdaemon.com/reference/nfthistoricaltransactions.md
+  - https://docs.blockdaemon.com/reference/oraclegetprice.md
+  - https://docs.blockdaemon.com/reference/oraclegetsupportedtokens.md
+  - https://docs.blockdaemon.com/reference/rwaburn.md
+  - https://docs.blockdaemon.com/reference/rwafreeze.md
+  - https://docs.blockdaemon.com/reference/rwagetallassets.md
+  - https://docs.blockdaemon.com/reference/rwagetasset.md
+  - https://docs.blockdaemon.com/reference/rwagetownerassets.md
+  - https://docs.blockdaemon.com/reference/rwaissue.md
+  - https://docs.blockdaemon.com/reference/rwaregister.md
+  - https://docs.blockdaemon.com/reference/rwasettrustline.md
+  - https://docs.blockdaemon.com/reference/rwatransfer.md
+  - https://docs.blockdaemon.com/reference/rwaunfreeze.md
+  - https://docs.blockdaemon.com/reference/stablecoingetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticdepositpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/syntheticgetprice.md
+  - https://docs.blockdaemon.com/reference/syntheticwithdrawpeggedtoken.md
+  - https://docs.blockdaemon.com/reference/wethgetbalance.md
+  - https://docs.blockdaemon.com/reference/wethhistoricallogs.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatoraddliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatordepositvault.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetbalance.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarketdata.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkets.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetmarkettokens.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorgetvaults.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatormint.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorredeem.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorremoveliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorswap.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatortransferliquidity.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawpool.md
+  - https://docs.blockdaemon.com/reference/yieldaggregatorwithdrawvault.md
+  merge:
+    pages: 168
+    deduped: 167
+    conflicts_kept_first: 0

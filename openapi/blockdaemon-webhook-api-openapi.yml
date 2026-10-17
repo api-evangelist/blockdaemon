@@ -1,8 +1,8 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   version: 1.0.0
-  title: Webhook target API
-  description: 'A reference of a webhook target that can be used in conjunction with Blockdaemon Event Streaming. '
+  title: target Webhook API
+  description: A reference of a webhook target that can be used in conjunction with Blockdaemon Event Streaming.
   contact:
     name: Blockdaemon
     email: info@blockdaemon.com
@@ -15,35 +15,16 @@ servers:
 security:
 - bearerAuth: []
 - apiKeyAuthHeader: []
+tags:
+- name: Webhook
 paths:
   /:
-    get:
-      tags:
-      - webhook
-      summary: Webhook Verification Challenge
-      description: Endpoint that should respond to webhook verification. challenge
-      operationId: webhook verification challenge
-      parameters:
-      - name: token
-        in: query
-        description: The challenge token
-        required: true
-        schema:
-          type: string
-        example: 323i523-058jo3h523uh5234
-      responses:
-        '200':
-          description: Response to webhook verfication request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/WebhookVerificationResponse'
     post:
       tags:
-      - webhook
+      - Webhook
       summary: Receives Webhook Messages
       description: Endpoint that receives webhook messages after passing verification.
-      operationId: webhook receive
+      operationId: webhookReceive
       parameters:
       - in: header
         name: x-bd-webhooks-signature
@@ -62,44 +43,10 @@ paths:
           description: Response to webhook receive
         '400':
           description: Bad request
+      x-operation-id-source: normalized
+      x-operation-id-original: webhook receive
 components:
-  securitySchemes:
-    apiKeyAuthHeader:
-      type: apiKey
-      in: header
-      name: X-API-Key
-      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
-
-        '
-      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: Opaque
-      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
-
-        '
-      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
   schemas:
-    WebhookVerificationResponse:
-      type: object
-      properties:
-        response_token:
-          type: string
-          description: the response token is a HMAC using SHA256. Where the webhook secret is the key, and the challenge token the payload.
-          example: sha256=da0g909egewoqijgq987gfqe98tgyee8t
-    EventType:
-      type: string
-      enum:
-      - unified_block
-      - unified_confirmed_tx
-      - unified_confirmed_balance
-      - unified_confirmed_tx_log
-      - unified_reorg
-      - unified_staking_reward
-      - unified_staking_status
-      - system.connection
-      - system.dropped.messages
     WebhookSendRequest:
       oneOf:
       - $ref: '#/components/schemas/WebhookMessageUnifiedBlockRequest'
@@ -145,6 +92,85 @@ components:
           $ref: '#/components/schemas/EventType'
         data:
           $ref: '#/components/schemas/WebhookMessageUnifiedBlockData'
+    EventType:
+      type: string
+      enum:
+      - unified_block
+      - unified_confirmed_tx
+      - unified_confirmed_balance
+      - unified_confirmed_tx_log
+      - unified_reorg
+      - unified_staking_reward
+      - unified_staking_status
+      - system.connection
+      - system.dropped.messages
+    WebhookMessageUnifiedConfirmedTxRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxData'
+    WebhookMessageUnifiedStakingRewardData:
+      type: object
+      properties:
+        address:
+          type: string
+        start_balance:
+          type: integer
+          x-go-type: '*big.Int'
+        return:
+          type: integer
+          x-go-type: '*big.Int'
+        start_time:
+          type: integer
+          x-go-type: uint64
+        end_time:
+          type: integer
+          x-go-type: uint64
+        period:
+          type: string
+        metadata:
+          type: object
+          x-go-type-skip-optional-pointer: true
+          x-go-type: map[string]any
+      required:
+      - address
+      - start_balance
+      - return
+    WebhookMessageUnifiedStakingStatusData:
+      type: object
+      properties:
+        address:
+          type: string
+        status:
+          type: string
+        timestamp:
+          type: integer
+          x-go-type: uint64
+        metadata:
+          type: object
+          x-go-type-skip-optional-pointer: true
+          x-go-type: map[string]any
+      required:
+      - address
+      - status
+      - timestamp
     WebhookMessageUnifiedBlockData:
       type: object
       properties:
@@ -166,6 +192,121 @@ components:
       - block_hash
       - block_timestamp
       - parent_hash
+    WebhookMessageSystemConnectionRequest:
+      type: object
+      required:
+      - protocol
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageSystemConnectionData'
+    WebhookMessageSystemDroppedMessagesRequest:
+      type: object
+      required:
+      - protocol
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageSystemDroppedMessagesData'
+    WebhookMessageUnifiedStakingStatusRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedStakingStatusData'
+    WebhookMessageUnifiedConfirmedTxLogData:
+      type: object
+      required:
+      - block_number
+      - block_hash
+      - timestamp
+      - tx_id
+      - status
+      properties:
+        block_number:
+          type: integer
+          example: 12345678
+          x-go-type: uint64
+        block_hash:
+          type: string
+          example: 109387459cn81398fd7343195v1983u495yb3491345y
+        tx_id:
+          type: string
+          example: 77d80eb55bc1e99db7617c5b508452306e7049a54e7ec398a25a293339077763
+        tx_hash:
+          type: string
+        timestamp:
+          type: integer
+          example: 1709720523741662000
+          x-go-type: uint64
+        status:
+          type: string
+          example: success
+        transfers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transfer'
+          x-go-type-skip-optional-pointer: true
+    TransactionEvmFee:
+      type: object
+      properties:
+        gas_used:
+          type: integer
+          x-go-type: big.Int
+        gas_price:
+          type: integer
+          x-go-type: big.Int
+        gas_limit:
+          type: integer
+          x-go-type: big.Int
+        value:
+          type: integer
+          x-go-type: big.Int
+        max_fee_per_gas:
+          type: integer
+          x-go-type: big.Int
+        max_priority_fee_per_gas:
+          type: integer
+          x-go-type: big.Int
+    WebhookMessageSystemDroppedMessagesData:
+      type: object
+      properties:
+        target_id:
+          type: string
+        pending_msg_count:
+          type: integer
+        dropped_msg_count:
+          type: integer
+        time:
+          type: string
     WebhookMessageUnifiedConfirmedBalanceRequest:
       type: object
       required:
@@ -188,6 +329,28 @@ components:
           $ref: '#/components/schemas/EventType'
         data:
           $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedBalanceData'
+    WebhookMessageUnifiedStakingRewardRequest:
+      type: object
+      required:
+      - protocol
+      - network
+      - chain_id
+      - event_type
+      - data
+      properties:
+        protocol:
+          type: string
+          example: bitcoin
+        network:
+          type: string
+          example: mainnet
+        chain_id:
+          type: string
+          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
+        event_type:
+          $ref: '#/components/schemas/EventType'
+        data:
+          $ref: '#/components/schemas/WebhookMessageUnifiedStakingRewardData'
     WebhookMessageUnifiedConfirmedBalanceData:
       type: object
       properties:
@@ -218,28 +381,6 @@ components:
       - block_timestamp
       - address
       - asset
-    WebhookMessageUnifiedConfirmedTxRequest:
-      type: object
-      required:
-      - protocol
-      - network
-      - chain_id
-      - event_type
-      - data
-      properties:
-        protocol:
-          type: string
-          example: bitcoin
-        network:
-          type: string
-          example: mainnet
-        chain_id:
-          type: string
-          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
-        event_type:
-          $ref: '#/components/schemas/EventType'
-        data:
-          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxData'
     WebhookMessageUnifiedConfirmedTxData:
       type: object
       properties:
@@ -295,57 +436,8 @@ components:
         value:
           type: integer
           x-go-type: big.Int
-    TransactionEvmFee:
+    WebhookMessageUnifiedReorgData:
       type: object
-      properties:
-        gas_used:
-          type: integer
-          x-go-type: big.Int
-        gas_price:
-          type: integer
-          x-go-type: big.Int
-        gas_limit:
-          type: integer
-          x-go-type: big.Int
-        value:
-          type: integer
-          x-go-type: big.Int
-        max_fee_per_gas:
-          type: integer
-          x-go-type: big.Int
-        max_priority_fee_per_gas:
-          type: integer
-          x-go-type: big.Int
-    WebhookMessageUnifiedConfirmedTxLogRequest:
-      type: object
-      required:
-      - protocol
-      - network
-      - chain_id
-      - event_type
-      - data
-      properties:
-        protocol:
-          type: string
-          example: bitcoin
-        network:
-          type: string
-          example: mainnet
-        chain_id:
-          type: string
-          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
-        event_type:
-          $ref: '#/components/schemas/EventType'
-        data:
-          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxLogData'
-    WebhookMessageUnifiedConfirmedTxLogData:
-      type: object
-      required:
-      - block_number
-      - block_hash
-      - timestamp
-      - tx_id
-      - status
       properties:
         block_number:
           type: integer
@@ -354,23 +446,13 @@ components:
         block_hash:
           type: string
           example: 109387459cn81398fd7343195v1983u495yb3491345y
-        tx_id:
-          type: string
-          example: 77d80eb55bc1e99db7617c5b508452306e7049a54e7ec398a25a293339077763
-        tx_hash:
-          type: string
-        timestamp:
+        block_timestamp:
           type: integer
           example: 1709720523741662000
-          x-go-type: uint64
-        status:
-          type: string
-          example: success
-        transfers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Transfer'
-          x-go-type-skip-optional-pointer: true
+      required:
+      - block_number
+      - block_hash
+      - block_timestamp
     WebhookMessageUnifiedReorgRequest:
       type: object
       required:
@@ -393,24 +475,7 @@ components:
           $ref: '#/components/schemas/EventType'
         data:
           $ref: '#/components/schemas/WebhookMessageUnifiedReorgData'
-    WebhookMessageUnifiedReorgData:
-      type: object
-      properties:
-        block_number:
-          type: integer
-          example: 12345678
-          x-go-type: uint64
-        block_hash:
-          type: string
-          example: 109387459cn81398fd7343195v1983u495yb3491345y
-        block_timestamp:
-          type: integer
-          example: 1709720523741662000
-      required:
-      - block_number
-      - block_hash
-      - block_timestamp
-    WebhookMessageUnifiedStakingRewardRequest:
+    WebhookMessageUnifiedConfirmedTxLogRequest:
       type: object
       required:
       - protocol
@@ -431,88 +496,7 @@ components:
         event_type:
           $ref: '#/components/schemas/EventType'
         data:
-          $ref: '#/components/schemas/WebhookMessageUnifiedStakingRewardData'
-    WebhookMessageUnifiedStakingRewardData:
-      type: object
-      properties:
-        address:
-          type: string
-        start_balance:
-          type: integer
-          x-go-type: '*big.Int'
-        return:
-          type: integer
-          x-go-type: '*big.Int'
-        start_time:
-          type: integer
-          x-go-type: uint64
-        end_time:
-          type: integer
-          x-go-type: uint64
-        period:
-          type: string
-        metadata:
-          type: object
-          x-go-type-skip-optional-pointer: true
-          x-go-type: map[string]any
-      required:
-      - address
-      - start_balance
-      - return
-    WebhookMessageUnifiedStakingStatusRequest:
-      type: object
-      required:
-      - protocol
-      - network
-      - chain_id
-      - event_type
-      - data
-      properties:
-        protocol:
-          type: string
-          example: bitcoin
-        network:
-          type: string
-          example: mainnet
-        chain_id:
-          type: string
-          example: polkadot:91b171bb158e2d3848fa23a9f1c25182
-        event_type:
-          $ref: '#/components/schemas/EventType'
-        data:
-          $ref: '#/components/schemas/WebhookMessageUnifiedStakingStatusData'
-    WebhookMessageUnifiedStakingStatusData:
-      type: object
-      properties:
-        address:
-          type: string
-        status:
-          type: string
-        timestamp:
-          type: integer
-          x-go-type: uint64
-        metadata:
-          type: object
-          x-go-type-skip-optional-pointer: true
-          x-go-type: map[string]any
-      required:
-      - address
-      - status
-      - timestamp
-    WebhookMessageSystemConnectionRequest:
-      type: object
-      required:
-      - protocol
-      - event_type
-      - data
-      properties:
-        protocol:
-          type: string
-          example: bitcoin
-        event_type:
-          $ref: '#/components/schemas/EventType'
-        data:
-          $ref: '#/components/schemas/WebhookMessageSystemConnectionData'
+          $ref: '#/components/schemas/WebhookMessageUnifiedConfirmedTxLogData'
     WebhookMessageSystemConnectionData:
       type: object
       properties:
@@ -526,31 +510,23 @@ components:
           type: string
         new_status:
           type: string
-    WebhookMessageSystemDroppedMessagesRequest:
-      type: object
-      required:
-      - protocol
-      - event_type
-      - data
-      properties:
-        protocol:
-          type: string
-          example: bitcoin
-        event_type:
-          $ref: '#/components/schemas/EventType'
-        data:
-          $ref: '#/components/schemas/WebhookMessageSystemDroppedMessagesData'
-    WebhookMessageSystemDroppedMessagesData:
-      type: object
-      properties:
-        target_id:
-          type: string
-        pending_msg_count:
-          type: integer
-        dropped_msg_count:
-          type: integer
-        time:
-          type: string
+  securitySchemes:
+    apiKeyAuthHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: 'Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Opaque
+      description: '[Legacy Auth] Unlock higher TPS - Create your own API key in the [Blockdaemon App](https://app.blockdaemon.com).
+
+        '
+      x-default: 2go1YqUcuAr4WZ2-3WgSD3c7qpatZqQuNWhTVBldKZnTSUtw
 x-provenance:
   method: searched
   source: https://docs.blockdaemon.com/reference

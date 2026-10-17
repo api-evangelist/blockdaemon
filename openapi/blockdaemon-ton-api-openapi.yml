@@ -1,0 +1,167 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@blockdaemon.com
+    name: Blockdaemon
+    url: https://blockdaemon.com
+  description: 'The Blockdaemon Staking API simplifies and streamlines institutional cryptocurrency staking. The API allows developers to interact with blockchain networks and perform various staking-related operations, such as delegating and undelegating tokens, in a single, unified interface.
+
+
+    With the Staking API, you can quickly and easily build and deploy applications that automate staking activities and increase efficiency in your blockchain operations.'
+  title: Staking TON API
+  version: 2.0.0
+  x-logo:
+    altText: Blockdaemon logo
+    backgroundColor: '#fafafa'
+    url: https://assets-global.website-files.com/633c5e06513fa35f3391a5f9/645d33beb6fa65f6cfb95eb8_BD%20Logo%20Stack%20-%20Purple.svg
+servers:
+- url: https://svc.blockdaemon.com/sia
+tags:
+- name: TON
+  x-displayName: TON
+paths:
+  /v2/ton/{network}/notify:
+    post:
+      description: Issues an exit validator request notification to Blockdaemon
+      operationId: CreateNotification
+      parameters:
+      - description: The target TON network (allowed 'mainnet' or 'testnet').
+        in: path
+        name: network
+        required: true
+        schema:
+          example: mainnet
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/tonCreateNotificationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/tonCreateNotificationResponse'
+          description: OK
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+      security:
+      - ApiKeyAuth: []
+      summary: Create Notification
+      tags:
+      - TON
+components:
+  schemas:
+    Error:
+      description: Error response envelope
+      properties:
+        code:
+          description: Error code
+          example: 500
+          format: int32
+          type: integer
+        message:
+          description: Error Message
+          example: A descriptive error message
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    UnauthorizedError:
+      description: Error response envelope
+      properties:
+        code:
+          description: Error code
+          example: 401
+          format: int32
+          type: integer
+        message:
+          description: Error Message
+          example: A human-readable diagnostic message detailing any authorization failure
+          type: string
+      required:
+      - code
+      - message
+      type: object
+    tonCreateNotificationResponse:
+      type: object
+    tonCreateNotificationRequest:
+      properties:
+        network:
+          description: The target TON network (allowed 'mainnet' or 'testnet').
+          example: mainnet
+          readOnly: true
+          type: string
+        pool_address:
+          description: The customer's TON pool address
+          example: 0QBObTB6xSvahuI__XXtuQiaLwD9sCtdhyIYICM8GXEPPTJJ
+          pattern: ^(?:EQ|UQ|kQ|0Q|Ef|Uf|kf|0f)[A-Za-z0-9_-]{46}$
+          type: string
+      required:
+      - pool_address
+      type: object
+  responses:
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+      description: Internal server error.
+    InvalidRequest:
+      content:
+        application/json:
+          schema:
+            description: Error response envelope
+            properties:
+              code:
+                description: Error code
+                example: 400
+                format: int32
+                type: integer
+              message:
+                description: Error Message
+                example: Detailed human-readable diagnostic message regarding any invalid request parameters
+                type: string
+            required:
+            - code
+            - message
+            type: object
+      description: Invalid request.
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnauthorizedError'
+      description: Header 'X-API-Key' missing.
+  securitySchemes:
+    ApiKeyAuth:
+      description: When signing up for a staking account, you are provided with an API key. To authenticate a Staking API request, pass your API key in the `X-API-Key` header.
+      in: header
+      name: X-API-Key
+      type: apiKey
+x-provenance:
+  method: searched
+  source: https://docs.blockdaemon.com/reference
+  harvested: '2026-10-14'
+  tool: harvest-readme-openapi.py
+  note: Assembled verbatim from the OpenAPI definition ReadMe embeds in each operation page of the provider's developer portal; paths and components merged by API title, nothing authored.
+  assembled_from:
+  - https://docs.blockdaemon.com/reference/builddeactivatetransaction.md
+  - https://docs.blockdaemon.com/reference/buildsplittransaction.md
+  - https://docs.blockdaemon.com/reference/buildstaketransaction.md
+  - https://docs.blockdaemon.com/reference/buildwithdrawtransaction.md
+  - https://docs.blockdaemon.com/reference/createnotification.md
+  - https://docs.blockdaemon.com/reference/getnonceaccount.md
+  - https://docs.blockdaemon.com/reference/getstakes.md
+  - https://docs.blockdaemon.com/reference/getstakesbyaccounts.md
+  merge:
+    pages: 8
+    deduped: 45
+    conflicts_kept_first: 0
