@@ -24,6 +24,22 @@ tags:
 - Indexer
 - Tokenization
 - Institutional
+- Cryptocurrency
+- Ethereum
+tags_raw:
+- Blockchain
+- Web3
+- Staking
+- Validator
+- Custody
+- MPC
+- Wallets
+- Node
+- RPC
+- DeFi
+- Indexer
+- Tokenization
+- Institutional
 - Crypto
 - Ethereum
 
@@ -446,6 +462,13 @@ apis:
   tags:
   - Blockchain
   - DeFi
+  - Decentralized Exchange
+  - Bridge
+  - Lending
+  - Borrowing
+  tags_raw:
+  - Blockchain
+  - DeFi
   - DEX
   - Bridge
   - Lending
@@ -629,6 +652,8 @@ apis:
   description: The pricing API from Blockdaemon — 3 operation(s) for pricing.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Pricing
+  tags_raw:
   - pricing
   properties:
   - type: OpenAPI
@@ -753,6 +778,8 @@ apis:
   description: API endpoints for fetching information about account
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Account
+  tags_raw:
   - account
   properties:
   - type: OpenAPI
@@ -860,6 +887,8 @@ apis:
   description: API key management operations
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - APIKeys
+  tags_raw:
   - API Keys
   properties:
   - type: OpenAPI
@@ -1395,6 +1424,8 @@ apis:
   description: API endpoints for operations related to bridges
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Bridge
+  tags_raw:
   - bridge
   properties:
   - type: OpenAPI
@@ -1717,6 +1748,8 @@ apis:
   description: API endpoints for fetching information about blockchains
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Chain
+  tags_raw:
   - chain
   properties:
   - type: OpenAPI
@@ -2359,7 +2392,8 @@ apis:
   name: Blockdaemon Create API
   description: The Create API from Blockdaemon — 2 operation(s) for create.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
-  tags:
+  tags: []
+  tags_raw:
   - Create
   properties:
   - type: OpenAPI
@@ -2682,6 +2716,8 @@ apis:
   description: API endpoints for operations related to decentralized exchange
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Decentralized Exchange
+  tags_raw:
   - dex
   properties:
   - type: OpenAPI
@@ -3324,7 +3360,8 @@ apis:
   name: Blockdaemon General API
   description: General endpoints
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
-  tags:
+  tags: []
+  tags_raw:
   - General
   properties:
   - type: OpenAPI
@@ -3646,6 +3683,8 @@ apis:
   description: The liquidstaking API from Blockdaemon — 20 operation(s) for liquidstaking.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Liquid Staking
+  tags_raw:
   - liquidstaking
   properties:
   - type: OpenAPI
@@ -3753,6 +3792,8 @@ apis:
   description: Management APIs
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Management
+  tags_raw:
   - management
   properties:
   - type: OpenAPI
@@ -4181,6 +4222,8 @@ apis:
   description: The nft API from Blockdaemon — 5 operation(s) for nft.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - NFT
+  tags_raw:
   - nft
   properties:
   - type: OpenAPI
@@ -4288,6 +4331,8 @@ apis:
   description: The oracle API from Blockdaemon — 2 operation(s) for oracle.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Oracle
+  tags_raw:
   - oracle
   properties:
   - type: OpenAPI
@@ -4395,6 +4440,8 @@ apis:
   description: The organization API from Blockdaemon — 1 operation(s) for organization.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Organization
+  tags_raw:
   - organization
   properties:
   - type: OpenAPI
@@ -4502,6 +4549,8 @@ apis:
   description: The overview API from Blockdaemon — 1 operation(s) for overview.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Overview
+  tags_raw:
   - overview
   properties:
   - type: OpenAPI
@@ -5255,6 +5304,8 @@ apis:
   description: The rwa API from Blockdaemon — 10 operation(s) for rwa.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - RWA
+  tags_raw:
   - rwa
   properties:
   - type: OpenAPI
@@ -5684,6 +5735,8 @@ apis:
   description: The stablecoin API from Blockdaemon — 1 operation(s) for stablecoin.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Stablecoins
+  tags_raw:
   - stablecoin
   properties:
   - type: OpenAPI
@@ -5791,6 +5844,8 @@ apis:
   description: API endpoints for supported chains or protocols
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Support
+  tags_raw:
   - support
   properties:
   - type: OpenAPI
@@ -5898,6 +5953,8 @@ apis:
   description: The synthetic API from Blockdaemon — 3 operation(s) for synthetic.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Synthetic
+  tags_raw:
   - synthetic
   properties:
   - type: OpenAPI
@@ -6005,6 +6062,8 @@ apis:
   description: The target API from Blockdaemon — 5 operation(s) for target.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Target
+  tags_raw:
   - target
   properties:
   - type: OpenAPI
@@ -6326,6 +6385,8 @@ apis:
   description: The Transactions API from Blockdaemon — 3 operation(s) for transactions.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Transaction
+  tags_raw:
   - Transactions
   properties:
   - type: OpenAPI
@@ -6433,6 +6494,8 @@ apis:
   description: The variable API from Blockdaemon — 2 operation(s) for variable.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Variable
+  tags_raw:
   - variable
   properties:
   - type: OpenAPI
@@ -6539,7 +6602,8 @@ apis:
   name: Blockdaemon Variable Values API
   description: The variable_values API from Blockdaemon — 2 operation(s) for variable_values.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
-  tags:
+  tags: []
+  tags_raw:
   - variable_values
   properties:
   - type: OpenAPI
@@ -6754,6 +6818,8 @@ apis:
   description: The webhook API from Blockdaemon — 1 operation(s) for webhook.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Webhook
+  tags_raw:
   - webhook
   properties:
   - type: OpenAPI
@@ -6968,6 +7034,8 @@ apis:
   description: The yieldaggregator API from Blockdaemon — 15 operation(s) for yieldaggregator.
   humanURL: https://docs.blockdaemon.com/reference/data-api-overview
   tags:
+  - Yield Aggregator
+  tags_raw:
   - yieldaggregator
   properties:
   - type: OpenAPI
